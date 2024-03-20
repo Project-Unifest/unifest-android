@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Unifest-Android</string>
+    <string name="app_name">Unifest</string>
+    <string name="app_name_dev">Unifest.dev</string>
 </resources>
