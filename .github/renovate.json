@@ -1,0 +1,35 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        ":timezone(Asia/Seoul)",
+        "config:base",
+        "schedule:daily"
+    ],
+    "labels": [
+        "dependencies",
+        "gradle"
+    ],
+    "packageRules": [
+        {
+            "groupName": "Kotlin and KSP",
+            "groupSlug": "kotlin",
+            "matchPackagePrefixes": [
+                "com.google.devtools.ksp"
+            ],
+            "matchPackagePatterns": [
+                "org.jetbrains.kotlin.*"
+            ]
+        },
+        {
+            "description": "Automatically merge minor and patch-level updates",
+            "matchUpdateTypes": [
+                "minor",
+                "patch",
+                "digest"
+            ],
+            "automerge": true,
+            "automergeStrategy": "rebase",
+            "platformAutomerge": true
+        }
+    ]
+}
