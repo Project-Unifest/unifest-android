@@ -42,7 +42,7 @@ ksp = "1.9.23-1.0.19"
 compose-extensions = "1.6.2"
 accompanist-webview = "0.34.0"
 compose-stable-marker = "1.0.3"
-compose-investigator = "1.5.10-0.1.1"
+compose-investigator = "1.5.10-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
 
