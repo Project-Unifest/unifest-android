@@ -9,6 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.ui.DevicePreview
 
 @Composable
 internal fun WaitingRoute(
@@ -29,5 +32,13 @@ internal fun WaitingScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Text("Waiting Screen")
+    }
+}
+
+@DevicePreview
+@Composable
+fun WaitingScreenPreview() {
+    UnifestTheme {
+        WaitingScreen(padding = PaddingValues(0.dp))
     }
 }
