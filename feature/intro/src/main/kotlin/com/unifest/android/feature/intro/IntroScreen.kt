@@ -26,9 +26,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -40,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -47,6 +50,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun IntroScreen() {
     val selectedSchools = remember { mutableStateListOf<School>() }
+    val initialSelectedSchoolsSnapshot = remember { selectedSchools.toList() }
+    val hasChanges = remember { mutableStateOf(false) }
+    val currentSnapshot = selectedSchools.toList()
+    LaunchedEffect(currentSnapshot) {
+        hasChanges.value = initialSelectedSchoolsSnapshot != currentSnapshot
+    }
     //todo: 유저가 관심 축제 저장하고 가져오는 로직 추가
     Column {
         InformationText()
@@ -57,6 +66,17 @@ fun IntroScreen() {
                 selectedSchools.add(school)
             }
         })
+        if (hasChanges.value) {
+            Button(
+                onClick = {
+                    // 변경사항을 처리하고 이전 화면으로 돌아가는 로직 추가
+//                    navigator?
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("완료")
+            }
+        }
     }
 }
 
@@ -114,11 +134,24 @@ fun SelectedSchoolsGrid(selectedSchools: List<School>) {
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp)
         ) {
-            Text("나의 관심 축제")
-            Button(onClick = { selectedSchools.clear() }, colors = ButtonDefaults.buttonColors(Color.Transparent)) {
-                Text("모두 선택 해제", color = Color.Black)
+            Text(
+                text = "나의 관심 축제",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+            TextButton(
+                onClick = { selectedSchools.clear() },
+                modifier = Modifier.align(Alignment.CenterVertically),
+            ) {
+                Text(
+                    text = "모두 선택 해제",
+                    color = Color.Gray,
+                    textDecoration = TextDecoration.Underline
+                )
             }
         }
         LazyVerticalGrid(
@@ -161,10 +194,10 @@ fun SchoolItem(
             modifier = Modifier.padding(20.dp)
         ) {
             Image(
-                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
+                painter = painterResource(id = com.unifest.android.core.designsystem.R.drawable.ic_waiting),
                 //todo: coil로 학교 마크추가
                 contentDescription = "School Mark",
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(35.dp)
             )
             Text(school.schoolName)
             Text(school.festivalName, fontWeight = FontWeight.Bold)
@@ -214,16 +247,25 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
     // val filteredSchools = schools.filter { }
     // 이후 items(schools) { school -> } 에 filteredSchools를 넣어줄예정.
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(schools) { school ->
-            SchoolItem(school = school, onSchoolSelected = onSchoolSelected)
-        }
+    Column(modifier = Modifier.padding(top = 8.dp)) {
+        // 학교의 수를 표시하는 Text 컴포저블 추가
+        Text(
+            text = "총 ${schools.size}개",
+            modifier = Modifier
+                .padding(start = 20.dp)
+                .align(Alignment.Start),
+        )
 
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            contentPadding = PaddingValues(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(schools) { school ->
+                SchoolItem(school = school, onSchoolSelected = onSchoolSelected)
+            }
+        }
     }
 }
 
