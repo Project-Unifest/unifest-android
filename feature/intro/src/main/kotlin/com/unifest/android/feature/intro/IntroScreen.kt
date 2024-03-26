@@ -138,7 +138,7 @@ fun SearchBar() {
 }
 
 @Composable
-fun SelectedSchoolsGrid(selectedSchools: List<School>) {
+fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -175,14 +175,6 @@ fun SelectedSchoolsGrid(selectedSchools: List<School>) {
     }
 }
 
-private fun <E> List<E>.clear() {
-    this.clear()
-}
-
-private fun <E> List<E>.remove(school: E) {
-    this.remove(school)
-}
-
 @Composable
 fun SchoolItem(
     school: School,
@@ -202,7 +194,7 @@ fun SchoolItem(
             modifier = Modifier.padding(20.dp)
         ) {
             Image(
-                painter = painterResource(id = com.unifest.android.core.designsystem.R.drawable.ic_waiting),
+                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
                 //todo: coil로 학교 마크추가
                 contentDescription = "School Mark",
                 modifier = Modifier.size(35.dp)
