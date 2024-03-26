@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
+import com.unifest.android.core.designsystem.R
 
 @Composable
 internal fun IntroRoute(
@@ -219,15 +220,17 @@ fun SchoolItem(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(24.dp),
         ) {
-//            Image(
-//                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
-//                //todo: coil로 학교 마크추가
-//                contentDescription = "School Mark",
-//                modifier = Modifier.size(35.dp),
-//            )
-            Text(school.schoolName, fontSize = 13.sp)
-            Text(school.festivalName, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            Text(school.festivalDate, color = Color.Gray, fontSize = 12.sp)
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_waiting),
+                //todo: coil로 학교 마크추가
+                contentDescription = "School Mark",
+                modifier = Modifier.size(35.dp)
+            )
+            Text(school.schoolName)
+            Text(school.festivalName, fontWeight = FontWeight.Bold)
+            Text(school.festivalDate, color = Color.Gray)
+
         }
     }
 }
