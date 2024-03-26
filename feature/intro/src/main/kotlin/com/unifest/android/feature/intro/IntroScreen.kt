@@ -45,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
+import com.unifest.android.core.designsystem.R
 
 @Composable
 internal fun IntroRoute(
@@ -194,7 +195,7 @@ fun SchoolItem(
             modifier = Modifier.padding(20.dp)
         ) {
             Image(
-                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
+                painter = painterResource(id = R.drawable.ic_waiting),
                 //todo: coil로 학교 마크추가
                 contentDescription = "School Mark",
                 modifier = Modifier.size(35.dp)
