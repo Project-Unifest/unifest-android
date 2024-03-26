@@ -21,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 
@@ -58,6 +60,7 @@ internal fun IntroRoute(
 @Composable
 fun IntroScreen() {
     val selectedSchools = remember { mutableStateListOf<School>() }
+    var searchText by remember { mutableStateOf("") }
     val initialSelectedSchoolsSnapshot = remember { selectedSchools.toList() }
     val hasChanges = remember { mutableStateOf(false) }
     val currentSnapshot = selectedSchools.toList()
@@ -67,20 +70,28 @@ fun IntroScreen() {
     //todo: 유저가 관심 축제 저장하고 가져오는 로직 추가
     Column {
         InformationText()
-        SearchBar()
+        SearchBar(
+            searchText = searchText, onValueChange = { searchText = it },
+            onSearch = { query ->
+
+                println("검색: $query")
+            },
+        )
         SelectedSchoolsGrid(selectedSchools = selectedSchools)
-        AllSchoolsTabView(onSchoolSelected = { school ->
-            if (!selectedSchools.any { it.schoolName == school.schoolName }) {
-                selectedSchools.add(school)
-            }
-        })
+        AllSchoolsTabView(
+            onSchoolSelected = { school ->
+                if (!selectedSchools.any { it.schoolName == school.schoolName }) {
+                    selectedSchools.add(school)
+                }
+            },
+        )
         if (hasChanges.value) {
             Button(
                 onClick = {
                     // 변경사항을 처리하고 이전 화면으로 돌아가는 로직 추가
 //                    navigator?
                 },
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(16.dp),
             ) {
                 Text("완료")
             }
@@ -92,48 +103,63 @@ data class School(
     val image: String,
     val schoolName: String,
     val festivalName: String,
-    val festivalDate: String
+    val festivalDate: String,
 )
 
 @Composable
 fun InformationText() {
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 64.dp, bottom = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ){
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         Text(
             text = "관심있는 학교 축제를 추가해보세요",
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 18.sp,
         )
-        Text(text = "관심 학교는 언제든지 수정 가능합니다")
+        Text(
+            text = "관심 학교는 언제든지 수정 가능합니다",
+            fontSize = 12.sp,
+            color = Color.Gray,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
-    TextField(
-        value = "",
-        onValueChange = {},
-        placeholder = { Text("학교를 검색해보세요") },
+fun SearchBar(
+    searchText: String,
+    onValueChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+) {
+    var text by remember { mutableStateOf(searchText) }
+    OutlinedTextField(
+        value = text,
+        onValueChange = {
+            text = it
+            onValueChange(it)
+        },
+        placeholder = { Text("학교를 검색해보세요", color = Color.Gray, fontSize = 13.sp) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 16.dp, start = 20.dp, end = 20.dp),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.White,
-            unfocusedIndicatorColor = Color.LightGray,
-            focusedIndicatorColor = Color.LightGray
+            unfocusedIndicatorColor = Color.Gray,
+            focusedIndicatorColor = Color.Gray,
         ),
+        shape = RoundedCornerShape(16.dp),
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search Icon",
-                tint = Color.Gray
+                tint = Color.Gray,
+                modifier = Modifier.size(30.dp)
             )
-        }
+        },
     )
 }
 
@@ -144,12 +170,12 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp)
+                .padding(start = 20.dp, end = 20.dp),
         ) {
             Text(
                 text = "나의 관심 축제",
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
             )
             TextButton(
                 onClick = { selectedSchools.clear() },
@@ -158,7 +184,7 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
                 Text(
                     text = "모두 선택 해제",
                     color = Color.Gray,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
                 )
             }
         }
@@ -166,7 +192,7 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
             columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(selectedSchools) { school ->
                 SchoolItem(school = school, onSchoolSelected = { selectedSchools.remove(school) })
@@ -178,7 +204,7 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
 @Composable
 fun SchoolItem(
     school: School,
-    onSchoolSelected: (School) -> Unit
+    onSchoolSelected: (School) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -186,22 +212,22 @@ fun SchoolItem(
         border = BorderStroke(1.dp, Color.LightGray),
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onSchoolSelected(school) }
+            .clickable { onSchoolSelected(school) },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(24.dp),
         ) {
-            Image(
-                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
-                //todo: coil로 학교 마크추가
-                contentDescription = "School Mark",
-                modifier = Modifier.size(35.dp)
-            )
-            Text(school.schoolName)
-            Text(school.festivalName, fontWeight = FontWeight.Bold)
-            Text(school.festivalDate, color = Color.Gray)
+//            Image(
+//                painter = painterResource(id = com.nexters.ilab.android.core.designsystem.R.drawable.ic_waiting),
+//                //todo: coil로 학교 마크추가
+//                contentDescription = "School Mark",
+//                modifier = Modifier.size(35.dp),
+//            )
+            Text(school.schoolName, fontSize = 13.sp)
+            Text(school.festivalName, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            Text(school.festivalDate, color = Color.Gray, fontSize = 12.sp)
         }
     }
 }
@@ -209,7 +235,7 @@ fun SchoolItem(
 
 @Composable
 fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
-    val tabTitles = listOf("전체", "서울", "경기/인천", "강원", "대전/충청","광주/전라","부산/대구" ,"경상도")
+    val tabTitles = listOf("전체", "서울", "경기/인천", "강원", "대전/충청", "광주/전라", "부산/대구", "경상도")
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val selectedColor = Color(0xFFF5687E) // 선택된 탭의 글자 색
     val unselectedColor = Color.Black
@@ -226,9 +252,11 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
                 text = {
                     Text(
                         title,
-                        color = if (selectedTabIndex == index) selectedColor else unselectedColor
+                        color = if (selectedTabIndex == index) selectedColor else unselectedColor,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
                     )
-                }
+                },
             )
         }
     }
@@ -241,7 +269,7 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
         School("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
         School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
 
-    )
+        )
 
     // todo:선택된 지역탭을 기반으로 필터링된 대학교 목록을 가져오게 구현
     // val filteredSchools = schools.filter { }
@@ -260,7 +288,7 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
             columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(schools) { school ->
                 SchoolItem(school = school, onSchoolSelected = onSchoolSelected)
