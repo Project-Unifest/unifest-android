@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,14 +19,19 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -67,29 +73,45 @@ fun IntroScreen() {
     val selectedSchools = remember { mutableStateListOf<School>() }
     var searchText by remember { mutableStateOf("") }
     //todo: 유저가 관심 축제 저장하고 가져오는 로직 추가
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            InformationText()
-        }
-        item {
-            SearchBar(searchText = searchText, onValueChange = { searchText = it }) { query ->
-                println("검색: $query")
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn {
+            item { InformationText() }
+            item {
+                SearchBar(
+                    searchText = searchText,
+                    onValueChange = { searchText = it }
+                ) { query -> println("검색: $query") }
             }
-        }
-        item {
-            SelectedSchoolsGrid(selectedSchools)
-        }
-        item {
-            AllSchoolsTabView(
-                onSchoolSelected = { school ->
+            item { SelectedSchoolsGrid(selectedSchools) }
+            item {
+                AllSchoolsTabView(onSchoolSelected = { school ->
                     if (!selectedSchools.any { it.schoolName == school.schoolName }) {
                         selectedSchools.add(school)
                     }
-                },
+                })
+            }
+        }
+
+
+        Button(
+            onClick = {  },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            shape = RoundedCornerShape(50),
+            colors = ButtonDefaults.buttonColors(Color(0xFFF5687E)),
+            contentPadding = PaddingValues(vertical = 12.dp)
+        ) {
+            Text(
+                text = "추가 완료",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = Color.White
             )
         }
-        //todo:버튼 추가
     }
+
 }
 
 data class School(
