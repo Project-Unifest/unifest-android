@@ -14,5 +14,6 @@ dependencies {
         libs.kotlinx.collections.immutable,
         libs.androidx.core,
         libs.timber,
+        libs.calendar.compose,
     )
 }

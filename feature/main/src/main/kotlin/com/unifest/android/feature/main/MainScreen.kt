@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -107,7 +106,7 @@ internal fun MainScreen(
             )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.White,
     )
 }
 
@@ -119,7 +118,7 @@ private fun MainBottomBar(
     onTabSelected: (MainTab) -> Unit,
 ) {
     if (visible) {
-        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+        Box(modifier = Modifier.background(Color.White)) {
             Column {
                 HorizontalDivider(color = Color(0xFFEBEBEB))
                 Row(

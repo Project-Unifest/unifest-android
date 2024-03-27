@@ -45,12 +45,7 @@ compose-stable-marker = "1.0.3"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
-
-junit = "4.13.2"
-androidx-junit = "1.1.5"
-espresso-core = "3.5.1"
-appcompat = "1.6.1"
-material = "1.11.0"
+calendar-compose = "2.5.0"
 
 [libraries]
 
@@ -104,12 +99,7 @@ accompanist-webview = { group = "com.google.accompanist", name = "accompanist-we
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist" }
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
-
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
 
 [plugins]
 
