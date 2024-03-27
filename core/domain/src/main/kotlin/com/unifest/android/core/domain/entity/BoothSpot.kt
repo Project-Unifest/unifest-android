@@ -6,5 +6,5 @@ import androidx.compose.runtime.Stable
 data class BoothSpot(
     val lat: Double,
     val lng: Double,
-    val id: Int? = null
+    val id: Int? = null,
 )
