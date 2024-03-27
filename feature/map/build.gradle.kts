@@ -14,5 +14,8 @@ dependencies {
         libs.kotlinx.collections.immutable,
         libs.androidx.core,
         libs.timber,
+        libs.play.service.maps,
+        libs.play.service.location,
+        libs.maps.compose,
     )
 }

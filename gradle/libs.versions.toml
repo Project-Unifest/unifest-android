@@ -6,6 +6,8 @@ gradle-dependency-handler-extensions = "1.1.0"
 
 google-secrets = "2.0.1"
 google-service = "4.4.1"
+play-services-maps = "18.2.0"
+play-services-location = "21.2.0"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
@@ -45,17 +47,15 @@ compose-stable-marker = "1.0.3"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
-
-junit = "4.13.2"
-androidx-junit = "1.1.5"
-espresso-core = "3.5.1"
-appcompat = "1.6.1"
-material = "1.11.0"
+maps-compose = "4.3.3"
 
 [libraries]
 
-gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-core" }
+gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-core" }
+
+play-service-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
+play-service-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -104,12 +104,7 @@ accompanist-webview = { group = "com.google.accompanist", name = "accompanist-we
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist" }
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
-
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
 
 [plugins]
 
