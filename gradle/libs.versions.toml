@@ -41,12 +41,13 @@ timber = "5.0.1"
 firebase-bom = "32.8.0"
 firebase-crashlytics = "2.9.9"
 ksp = "1.9.23-1.0.19"
-compose-extensions = "1.6.3"
+compose-extensions = "1.6.4"
 accompanist-webview = "0.34.0"
 compose-stable-marker = "1.0.3"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
+calendar-compose = "2.5.0"
 maps-compose = "4.3.3"
 
 [libraries]
@@ -104,6 +105,7 @@ accompanist-webview = { group = "com.google.accompanist", name = "accompanist-we
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist" }
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
+calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
 
 [plugins]
