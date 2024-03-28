@@ -6,6 +6,8 @@ gradle-dependency-handler-extensions = "1.1.0"
 
 google-secrets = "2.0.1"
 google-service = "4.4.1"
+play-services-maps = "18.2.0"
+play-services-location = "21.2.0"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
@@ -46,11 +48,15 @@ compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
 calendar-compose = "2.5.0"
+maps-compose = "4.3.3"
 
 [libraries]
 
-gradle-android = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-core" }
+gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-core" }
+
+play-service-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
+play-service-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -100,6 +106,7 @@ compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist" }
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
 
 [plugins]
 
