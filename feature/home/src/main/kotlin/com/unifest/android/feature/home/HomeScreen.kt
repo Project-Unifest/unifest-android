@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ internal fun HomeRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
     padding: PaddingValues,
@@ -37,9 +39,11 @@ internal fun HomeScreen(
             .padding(bottom = padding.calculateBottomPadding()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
         UnifestTopAppBar(
             titleRes = R.string.intro_top_app_bar_title,
             navigationType = TopAppBarNavigationType.None,
+
         )
         Calendar()
     }
@@ -55,3 +59,4 @@ fun HomeScreenPreview() {
         )
     }
 }
+
