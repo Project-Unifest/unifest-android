@@ -97,7 +97,7 @@ fun IntroScreen(navigateToMain: () -> Unit) {
             contentPadding = PaddingValues(vertical = 12.dp),
         ) {
             Text(
-                text = stringResource(id = R.string.add_complete),
+                text = stringResource(id = R.string.intro_add_complete),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = Color.White,
@@ -116,12 +116,12 @@ fun InformationText() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "관심있는 학교 축제를 추가해보세요",
+            text = stringResource(id = R.string.intro_info_title),
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
         )
         Text(
-            text = "관심 학교는 언제든지 수정 가능합니다",
+            text = stringResource(id = R.string.intro_info_description),
             fontSize = 12.sp,
             color = Color.Gray,
         )
@@ -146,7 +146,7 @@ fun SearchBar(
         },
         placeholder = {
             Text(
-                "학교를 검색해보세요",
+                text = stringResource(id = R.string.intro_search_bar_hint),
                 color = Color.Gray,
                 fontSize = 13.sp,
             )
@@ -159,7 +159,7 @@ fun SearchBar(
             unfocusedIndicatorColor = Color.Gray,
             focusedIndicatorColor = Color.Gray,
         ),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(67.dp),
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -182,7 +182,7 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
                 .padding(start = 20.dp, end = 20.dp),
         ) {
             Text(
-                text = "나의 관심 축제",
+                text = stringResource(id = R.string.intro_interested_festivals_title),
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.CenterVertically),
             )
@@ -191,7 +191,7 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
                 modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 Text(
-                    text = "모두 선택 해제",
+                    text = stringResource(id = R.string.intro_clear_item_button_text),
                     color = Color.Gray,
                     textDecoration = TextDecoration.Underline,
                 )
@@ -228,8 +228,8 @@ fun SchoolItem(
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color.LightGray),
         modifier = Modifier
-            .clickable { onSchoolSelected(school) }
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable { onSchoolSelected(school) },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

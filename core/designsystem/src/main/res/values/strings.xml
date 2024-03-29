@@ -6,7 +6,13 @@
     <string name="unknown_error_message">알 수 없는 오류가 발생하였습니다.</string>
 
     <!--    intro-->
-    <string name="add_complete">추가 완료</string>
+    <string name="intro_add_complete">추가 완료</string>
+    <string name="intro_info_title">관심있는 학교 축제를 추가해보세요</string>
+    <string name="intro_info_description">관심 학교는 언제든지 수정 가능합니다</string>
+    <string name="intro_search_bar_hint">학교를 검색해보세요</string>
+    <string name="intro_interested_festivals_title">나의 관심 축제</string>
+    <string name="intro_clear_item_button_text">모두 선택 해제</string>
+
 
     <!--    home-->
     <string name="week_mode">Week mode</string>
