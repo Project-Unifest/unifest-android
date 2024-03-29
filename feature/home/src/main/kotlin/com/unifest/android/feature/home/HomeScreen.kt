@@ -15,13 +15,18 @@ import com.unifest.android.core.ui.DevicePreview
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
+    onNavigateToIntro: () -> Unit,
 ) {
-    HomeScreen(padding = padding)
+    HomeScreen(
+        padding = padding,
+        onNavigateToIntro = onNavigateToIntro,
+    )
 }
 
 @Composable
 internal fun HomeScreen(
     padding: PaddingValues,
+    onNavigateToIntro: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -31,6 +36,7 @@ internal fun HomeScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Calendar()
+
     }
 }
 
@@ -38,6 +44,9 @@ internal fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     UnifestTheme {
-        HomeScreen(padding = PaddingValues(0.dp))
+        HomeScreen(
+            padding = PaddingValues(0.dp),
+            onNavigateToIntro = {},
+        )
     }
 }

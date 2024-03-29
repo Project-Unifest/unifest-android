@@ -1,30 +1,29 @@
-package com.unifest.android.feature.main
+package com.unifest.android.feature.intro
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.feature.navigator.IntroNavigator
+import com.unifest.feature.navigator.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class IntroActivity : ComponentActivity() {
     @Inject
-    lateinit var introNavigator: IntroNavigator
+    lateinit var mainNavigator: MainNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navigator: MainNavController = rememberMainNavController()
             UnifestTheme {
-                MainScreen(
-                    onNavigateToIntro = {
-                        introNavigator.navigateFrom(
+                IntroRoute(
+                    navigateToMain = {
+                        mainNavigator.navigateFrom(
                             activity = this,
-                            withFinish = false,
+                            withFinish = true,
                         )
                     },
-                    navigator = navigator,
                 )
             }
         }
