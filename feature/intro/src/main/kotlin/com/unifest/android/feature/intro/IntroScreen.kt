@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -252,7 +253,7 @@ fun SchoolItem(
 @Composable
 fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
     // 전체 학교 그리드뷰
-    val tabTitles = listOf("전체", "서울", "경기/인천", "강원", "대전/충청", "광주/전라", "부산/대구", "경상도")
+    val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val selectedColor = Color(0xFFF5687E)
     val unselectedColor = Color.Black

@@ -12,6 +12,16 @@
     <string name="intro_search_bar_hint">학교를 검색해보세요</string>
     <string name="intro_interested_festivals_title">나의 관심 축제</string>
     <string name="intro_clear_item_button_text">모두 선택 해제</string>
+    <string-array name="region_tab_titles">
+        <item>전체</item>
+        <item>서울</item>
+        <item>경기/인천</item>
+        <item>강원</item>
+        <item>대전/충청</item>
+        <item>광주/전라</item>
+        <item>부산/대구</item>
+        <item>경상도</item>
+    </string-array>
 
 
     <!--    home-->
