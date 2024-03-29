@@ -15,51 +15,104 @@ val pretendardFamily = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
 )
 
+val Title0 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 24.sp,
+)
+
 val Title1 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Bold,
-    fontSize = 28.sp,
-    lineHeight = 39.sp,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 20.sp,
 )
 
 val Title2 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 20.sp,
-    lineHeight = 28.sp,
+    fontSize = 18.sp,
 )
 
-val Subtitle1 = TextStyle(
+val Title3 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 18.sp,
-    lineHeight = 25.sp,
+    fontSize = 15.sp,
 )
 
-val Subtitle2 = TextStyle(
+val Title4 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 13.sp,
+)
+
+val Title5 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 13.sp,
+)
+
+val BoothTitle1 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 22.sp,
+)
+
+val BoothTitle2 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 20.sp,
+)
+
+val BoothCaution = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 10.sp,
+)
+
+val MenuTitle = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 14.sp,
+)
+
+val MenuPrice = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp,
-    lineHeight = 22.sp,
 )
 
-val Contents1 = TextStyle(
+val BoothLocation = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Medium,
-    fontSize = 16.sp,
-    lineHeight = 24.sp,
+    fontSize = 13.sp,
 )
 
-val Contents2 = TextStyle(
+val BottomMenuBar = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 11.sp,
+)
+
+val Content1 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Normal,
     fontSize = 14.sp,
-    lineHeight = 22.sp,
 )
 
-val Contents3 = TextStyle(
+val Content2 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Normal,
-    fontSize = 11.sp,
-    lineHeight = 16.sp,
+    fontSize = 13.sp,
+)
+
+val Content3 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 12.sp,
+)
+
+val Content4 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
 )
