@@ -11,10 +11,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -60,32 +65,37 @@ internal fun IntroRoute(
 ) {
     IntroScreen(navigateToMain)
 }
-
 @Composable
 fun IntroScreen(navigateToMain: () -> Unit) {
     val selectedSchools = remember { mutableStateListOf<School>() }
     var searchText by remember { mutableStateOf("") }
-    // todo: 유저가 관심 축제 저장하고 가져오는 로직 추가
+
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn {
-            item { InformationText() }
-            item {
-                SearchBar(
-                    searchText = searchText,
-                    onValueChange = { searchText = it },
-                ) { query -> println("검색: $query") }
-            }
-            item { SelectedSchoolsGrid(selectedSchools) }
-            item {
-                AllSchoolsTabView(
-                    onSchoolSelected = { school ->
-                        if (!selectedSchools.any { it.schoolName == school.schoolName }) {
-                            selectedSchools.add(school)
-                        }
-                    },
-                )
-            }
-        } // 추가 완료 버튼을 위해 Box로
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 80.dp) // 추가 완료 버튼에게 공간 주기
+        ) {
+            InformationText()
+            SearchBar(
+                searchText = searchText,
+                onValueChange = { searchText = it },
+                onSearch = { query -> println("검색: $query") }
+            )
+            SelectedSchoolsGrid(
+                selectedSchools = selectedSchools,
+                onSchoolSelected = { school ->
+                    selectedSchools.remove(school)
+                }
+            )
+            AllSchoolsTabView(
+                onSchoolSelected = { school ->
+                    if (!selectedSchools.any { it.schoolName == school.schoolName }) {
+                        selectedSchools.add(school)
+                    }
+                }
+            )
+        }
 
         Button(
             onClick = navigateToMain,
@@ -173,7 +183,10 @@ fun SearchBar(
 }
 
 @Composable
-fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
+fun SelectedSchoolsGrid(
+    selectedSchools: MutableList<School>,
+    onSchoolSelected: (School) -> Unit
+) {
     // 나의 관심 축제
     Column {
         Row(
@@ -199,22 +212,34 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
             }
         }
 
-        selectedSchools.chunked(3).forEach { rowSchools ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                rowSchools.forEach { school ->
-                    SchoolItem(school = school, onSchoolSelected = { selectedSchools.remove(it) })
-                }
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier
+                .padding(8.dp)
+                .height(
+                    when {
+                        selectedSchools.isEmpty() -> 0.dp
+                        else -> {
+                            val rows = ((selectedSchools.size - 1) / 3 + 1) * 180
+                            rows.dp
+                        }
+                    }
+                ),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
 
-                repeat(3 - rowSchools.size) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
+            items(selectedSchools.size) { index ->
+                val school = selectedSchools[index]
+                SchoolItem(school = school, onSchoolSelected = {
+                    onSchoolSelected(it)
+                })
             }
+
         }
+
+
+
     }
 }
 
@@ -229,7 +254,6 @@ fun SchoolItem(
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color.LightGray),
         modifier = Modifier
-            .padding(4.dp)
             .clickable { onSchoolSelected(school) },
     ) {
         Column(
@@ -285,29 +309,31 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
         Text(
             text = "총 ${schools.size}개",
             modifier = Modifier
-                .padding(start = 20.dp)
+                .padding(start = 20.dp, bottom = 16.dp)
                 .align(Alignment.Start),
         )
         // 총 학교수
 
-        val rows = (schools.size + 2) / 3
-        // 학교 수에 따른 행 수
-
-        Column {
-            for (row in 0 until rows) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                ) {
-                    for (col in 0 until 3) {
-                        val index = row * 3 + col
-                        if (index < schools.size) {
-                            val school = schools[index]
-                            SchoolItem(school = school, onSchoolSelected = onSchoolSelected)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .height(
+                    when {
+                        schools.isEmpty() -> 0.dp
+                        else -> {
+                            val rows = ((schools.size - 1) / 3 + 1) * 180
+                            rows.dp
                         }
                     }
-                }
+                ),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(schools.size) { index ->
+
+                val school = schools[index]
+                SchoolItem(school = school, onSchoolSelected = onSchoolSelected)
             }
         }
     }
