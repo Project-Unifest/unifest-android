@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.theme.Contents3
+import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.ComponentPreview
 import com.unifest.android.feature.home.navigation.homeNavGraph
@@ -175,9 +175,9 @@ private fun RowScope.MainBottomBarItem(
             Text(
                 text = tab.label,
                 color = if (selected) Color(0xFFFD067D) else Color(0xFF555555),
-                fontWeight = if (selected) FontWeight.Bold
-                else FontWeight.Medium,
-                style = Contents3,
+                fontWeight = if (selected) FontWeight.SemiBold
+                else FontWeight.Normal,
+                style = BottomMenuBar,
             )
         }
     }

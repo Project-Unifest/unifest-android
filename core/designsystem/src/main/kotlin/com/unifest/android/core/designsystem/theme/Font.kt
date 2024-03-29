@@ -89,7 +89,7 @@ val BoothLocation = TextStyle(
 
 val BottomMenuBar = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Bold,
+    fontWeight = FontWeight.Normal,
     fontSize = 11.sp,
 )
 
