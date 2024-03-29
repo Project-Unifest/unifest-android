@@ -58,18 +58,19 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.domain.entity.School
 
 @Composable
 internal fun IntroRoute(
     navigateToMain: () -> Unit,
     viewModel: IntroViewModel = hiltViewModel(),
 ) {
-    IntroScreen()
+    IntroScreen(navigateToMain)
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun IntroScreen() {
+fun IntroScreen(navigateToMain: () -> Unit) {
     val selectedSchools = remember { mutableStateListOf<School>() }
     var searchText by remember { mutableStateOf("") }
     //todo: 유저가 관심 축제 저장하고 가져오는 로직 추가
@@ -94,12 +95,12 @@ fun IntroScreen() {
 
 
         Button(
-            onClick = {  },
+            onClick = { navigateToMain() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 20.dp),
-            shape = RoundedCornerShape(50),
+            shape = RoundedCornerShape(16),
             colors = ButtonDefaults.buttonColors(Color(0xFFF5687E)),
             contentPadding = PaddingValues(vertical = 12.dp)
         ) {
@@ -113,13 +114,6 @@ fun IntroScreen() {
     }
 
 }
-
-data class School(
-    val image: String,
-    val schoolName: String,
-    val festivalName: String,
-    val festivalDate: String,
-)
 
 @Composable
 fun InformationText() {
@@ -258,6 +252,7 @@ fun SchoolItem(school: School, onSchoolSelected: (School) -> Unit) {
     }
 }
 
+
 @Composable
 fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
     val tabTitles = listOf("전체", "서울", "경기/인천", "강원", "대전/충청", "광주/전라", "부산/대구", "경상도")
@@ -285,16 +280,6 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
             )
         }
     }
-
-    // 임시 데이터
-    val schools = listOf(
-        School("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),
-        School("school_image_url_2", "연세대학교", "연대축제", "05.06-05.08"),
-        School("school_image_url_3", "고려대학교", "고대축제", "05.06-05.08"),
-        School("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
-        School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
-
-        )
 
     // todo:선택된 지역탭을 기반으로 필터링된 대학교 목록을 가져오게 구현
     // val filteredSchools = schools.filter { }
@@ -338,3 +323,12 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
 
 
 
+// 임시 데이터
+val schools = listOf(
+    School("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),
+    School("school_image_url_2", "연세대학교", "연대축제", "05.06-05.08"),
+    School("school_image_url_3", "고려대학교", "고대축제", "05.06-05.08"),
+    School("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
+    School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
+    School("school_image_url_5", "한양대", "한양대축제", "05.06-05.08")
+)
