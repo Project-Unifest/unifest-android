@@ -40,14 +40,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.domain.entity.School
+import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 
 @Composable
@@ -86,7 +87,7 @@ fun IntroScreen(navigateToMain: () -> Unit) {
         } // 추가 완료 버튼을 위해 Box로
 
         Button(
-            onClick = { navigateToMain() },
+            onClick = navigateToMain,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -96,7 +97,7 @@ fun IntroScreen(navigateToMain: () -> Unit) {
             contentPadding = PaddingValues(vertical = 12.dp),
         ) {
             Text(
-                text = "추가 완료",
+                text = stringResource(id = R.string.add_complete),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = Color.White,
@@ -217,7 +218,10 @@ fun SelectedSchoolsGrid(selectedSchools: MutableList<School>) {
 }
 
 @Composable
-fun SchoolItem(school: School, onSchoolSelected: (School) -> Unit) {
+fun SchoolItem(
+    school: School,
+    onSchoolSelected: (School) -> Unit,
+) {
     // 그리드에 들어갈 각 학교별 아이템
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -256,8 +260,9 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
     ScrollableTabRow(
         // 지역 탭
         selectedTabIndex = selectedTabIndex,
-        indicator = {},
+        containerColor = Color.White,
         edgePadding = 0.dp,
+        indicator = {},
     ) {
         tabTitles.forEachIndexed { index, title ->
             Tab(
@@ -316,7 +321,7 @@ val schools = listOf(
     School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
 )
 
-@Preview
+@DevicePreview
 @Composable
 fun PreviewIntroScreen() {
     IntroScreen(navigateToMain = {})
