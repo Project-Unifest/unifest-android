@@ -26,6 +26,7 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     padding: PaddingValues,
+    @Suppress("unused")
     onNavigateToIntro: () -> Unit,
 ) {
     Column(
@@ -36,7 +37,6 @@ internal fun HomeScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         Calendar()
-
     }
 }
 
