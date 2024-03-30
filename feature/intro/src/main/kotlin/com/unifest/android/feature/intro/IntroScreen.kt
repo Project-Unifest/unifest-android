@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -65,35 +63,37 @@ internal fun IntroRoute(
 ) {
     IntroScreen(navigateToMain)
 }
+
 @Composable
 fun IntroScreen(navigateToMain: () -> Unit) {
     val selectedSchools = remember { mutableStateListOf<School>() }
     var searchText by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(bottom = 80.dp) // 추가 완료 버튼에게 공간 주기
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 80.dp), // 추가 완료 버튼에게 공간 주기
         ) {
             InformationText()
             SearchBar(
                 searchText = searchText,
                 onValueChange = { searchText = it },
-                onSearch = { query -> println("검색: $query") }
+                onSearch = { query -> println("검색: $query") },
             )
             SelectedSchoolsGrid(
                 selectedSchools = selectedSchools,
                 onSchoolSelected = { school ->
                     selectedSchools.remove(school)
-                }
+                },
             )
             AllSchoolsTabView(
                 onSchoolSelected = { school ->
                     if (!selectedSchools.any { it.schoolName == school.schoolName }) {
                         selectedSchools.add(school)
                     }
-                }
+                },
             )
         }
 
@@ -185,7 +185,7 @@ fun SearchBar(
 @Composable
 fun SelectedSchoolsGrid(
     selectedSchools: MutableList<School>,
-    onSchoolSelected: (School) -> Unit
+    onSchoolSelected: (School) -> Unit,
 ) {
     // 나의 관심 축제
     Column {
@@ -223,23 +223,18 @@ fun SelectedSchoolsGrid(
                             val rows = ((selectedSchools.size - 1) / 3 + 1) * 180
                             rows.dp
                         }
-                    }
+                    },
                 ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-
             items(selectedSchools.size) { index ->
                 val school = selectedSchools[index]
                 SchoolItem(school = school, onSchoolSelected = {
                     onSchoolSelected(it)
                 })
             }
-
         }
-
-
-
     }
 }
 
@@ -325,10 +320,10 @@ fun AllSchoolsTabView(onSchoolSelected: (School) -> Unit) {
                             val rows = ((schools.size - 1) / 3 + 1) * 180
                             rows.dp
                         }
-                    }
+                    },
                 ),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(schools.size) { index ->
 
