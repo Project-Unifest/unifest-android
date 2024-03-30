@@ -49,6 +49,7 @@ landscapist = "2.3.2"
 balloon = "1.6.4"
 calendar-compose = "2.5.0"
 maps-compose = "4.3.3"
+flexible-bottomsheet = "0.1.2"
 
 [libraries]
 
@@ -107,6 +108,7 @@ landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", v
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
+flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottomsheet-material3", version.ref = "flexible-bottomsheet"}
 
 [plugins]
 
