@@ -50,6 +50,11 @@ balloon = "1.6.4"
 calendar-compose = "2.5.0"
 maps-compose = "4.3.3"
 
+naver-map-sdk = "3.17.0"
+naver-map-compose = "1.4.1"
+naver-map-location = "21.0.1"
+tedclustering-naver = "1.0.2"
+
 [libraries]
 
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
@@ -107,6 +112,11 @@ landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", v
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
+
+naver-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "naver-map-sdk" }
+naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
+naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
+tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
 
 [plugins]
 
