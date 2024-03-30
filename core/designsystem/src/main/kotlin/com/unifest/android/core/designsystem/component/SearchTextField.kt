@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -75,7 +77,7 @@ fun SearchTextField(
                     contentDescription = "Search Icon",
                     modifier = Modifier.clickable {
                         onSearch(searchText.text.toString())
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.width(width = 15.dp))
             }
@@ -92,6 +94,10 @@ fun SearchTextFieldPreview() {
             searchText = TextFieldState(""),
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
+            modifier = Modifier
+                .height(46.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         )
     }
 }

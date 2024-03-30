@@ -112,7 +112,7 @@ fun IntroScreen(
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
             )
             SelectedSchoolsGrid(
                 selectedSchools = selectedSchools,

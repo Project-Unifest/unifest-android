@@ -29,6 +29,6 @@ fun NetworkImage(
             contentScale = contentScale,
             alignment = Alignment.Center,
             contentDescription = contentDescription,
-        )
+        ),
     )
 }
