@@ -104,7 +104,9 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist-webview" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
-landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil", version.ref = "landscapist" }
+landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
+landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil" }
+landscapist-placeholder = { group = "com.github.skydoves", name = "landscapist-placeholder" }
 ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
@@ -141,7 +143,6 @@ unifest-android-library-compose = { id = "unifest.android.library.compose", vers
 unifest-android-feature = { id = "unifest.android.feature", version = "unspecified" }
 unifest-android-hilt = { id = "unifest.android.hilt", version = "unspecified" }
 unifest-android-retrofit = { id = "unifest.android.retrofit", version = "unspecified" }
-unifest-jvm-kotlin = { id = "unifest.jvm.kotlin", version = "unspecified" }
 
 [bundles]
 
@@ -150,4 +151,9 @@ androidx-lifecycle = [
     "androidx-lifecycle-viewmodel-compose",
 ]
 
+landscapist = [
+    "landscapist-bom",
+    "landscapist-coil",
+    "landscapist-placeholder",
+]
 
