@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementations(
+        libs.kotlinx.collections.immutable,
         libs.androidx.core,
         libs.androidx.activity.compose,
         libs.androidx.splash,

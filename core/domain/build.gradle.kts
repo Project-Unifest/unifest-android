@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.nexters.ilab.android.core.designsystem"
+    namespace = "com.unifest.android.core.domain"
 }
 
 dependencies {
