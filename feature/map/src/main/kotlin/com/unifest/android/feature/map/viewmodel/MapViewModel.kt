@@ -3,6 +3,7 @@ package com.unifest.android.feature.map.viewmodel
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothSpot
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     init {
         _uiState.update {
             it.copy(
-                boothSpots = listOf(
+                boothSpots = persistentListOf(
                     BoothSpot(37.54053013863604, 127.07505652524804),
                     BoothSpot(37.54111712868565, 127.07839319326257),
                     BoothSpot(37.5414744247141, 127.07779237844323),
