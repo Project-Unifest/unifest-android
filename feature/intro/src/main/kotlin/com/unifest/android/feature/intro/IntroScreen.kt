@@ -47,9 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.SearchTextField
-import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
-import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
@@ -100,10 +98,6 @@ fun IntroScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 80.dp), // 추가 완료 버튼에게 공간 주기
         ) {
-            UnifestTopAppBar(
-                titleRes = R.string.intro_top_app_bar_title,
-                navigationType = TopAppBarNavigationType.None,
-            )
             InformationText()
             SearchTextField(
                 searchText = uiState.searchText,
