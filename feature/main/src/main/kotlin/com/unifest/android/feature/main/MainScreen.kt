@@ -34,7 +34,7 @@ import androidx.navigation.compose.NavHost
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.ui.ComponentPreview
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph

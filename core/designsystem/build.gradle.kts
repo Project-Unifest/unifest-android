@@ -11,7 +11,11 @@ android {
 
 dependencies {
     implementations(
+        projects.core.common,
+
         libs.androidx.core,
         libs.coil.compose,
+
+        libs.bundles.landscapist,
     )
 }
