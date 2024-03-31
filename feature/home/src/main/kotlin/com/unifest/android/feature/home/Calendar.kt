@@ -80,7 +80,6 @@ fun Calendar(adjacentMonths: Long = 500) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(Color.White),
     ) {
         val monthState = rememberCalendarState(
