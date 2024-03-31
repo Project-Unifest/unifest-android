@@ -16,9 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsCompat
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Title0
@@ -36,6 +39,10 @@ fun UnifestTopAppBar(
     contentColor: Color = Color.Black,
     onNavigationClick: () -> Unit = {},
 ) {
+    val view = LocalView.current
+    val insets = with(LocalDensity.current) {
+        WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
+    }
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         val icon: @Composable (Modifier, imageVector: ImageVector) -> Unit =
             { modifier, imageVector ->
@@ -53,6 +60,7 @@ fun UnifestTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(containerColor)
+                .padding(top = insets)
                 .then(modifier),
         ) {
             if (navigationType == TopAppBarNavigationType.Back) {
