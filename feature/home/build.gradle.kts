@@ -15,5 +15,6 @@ dependencies {
         libs.androidx.core,
         libs.timber,
         libs.calendar.compose,
+        libs.flexible.bottomsheet,
     )
 }

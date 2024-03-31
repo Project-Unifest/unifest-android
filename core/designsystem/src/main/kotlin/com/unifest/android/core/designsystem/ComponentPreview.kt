@@ -1,4 +1,4 @@
-package com.unifest.android.core.ui
+package com.unifest.android.core.designsystem
 
 import androidx.compose.ui.tooling.preview.Preview
 
