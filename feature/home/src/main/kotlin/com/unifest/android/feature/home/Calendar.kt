@@ -1,13 +1,12 @@
 package com.unifest.android.feature.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,18 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarViewMonth
-import androidx.compose.material.icons.filled.CalendarViewWeek
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -63,20 +56,19 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 import java.time.YearMonth
 
 @Composable
 fun Calendar(adjacentMonths: Long = 500) {
     val currentDate = remember { LocalDate.now() }
-    val currentMonth = remember(currentDate) { currentDate.yearMonth }
-    val startMonth = remember(currentDate) { currentMonth.minusMonths(adjacentMonths) }
-    val endMonth = remember(currentDate) { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<LocalDate>() }
+    val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
+    val currentMonth = remember(currentDate) { currentYearMonth.month }
+    val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
+    val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
+    val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     val daysOfWeek = remember { daysOfWeek() }
-
     var isWeekMode by remember { mutableStateOf(false) }
-    var isAnimating by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -85,7 +77,7 @@ fun Calendar(adjacentMonths: Long = 500) {
         val monthState = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
+            firstVisibleMonth = currentYearMonth,
             firstDayOfWeek = daysOfWeek.first(),
         )
         val weekState = rememberWeekCalendarState(
@@ -94,13 +86,13 @@ fun Calendar(adjacentMonths: Long = 500) {
             firstVisibleWeekDate = currentDate,
             firstDayOfWeek = daysOfWeek.first(),
         )
-        CalendarTitle(
+
+        MonthAndWeekCalendarTitle(
             isWeekMode = isWeekMode,
             monthState = monthState,
             weekState = weekState,
-            isAnimating = isAnimating,
         )
-        //2024년 3월
+
         CalendarHeader(daysOfWeek = daysOfWeek)
         //월화수목금토일
         AnimatedVisibility(visible = !isWeekMode) {
@@ -110,14 +102,10 @@ fun Calendar(adjacentMonths: Long = 500) {
                     val isSelectable = day.position == DayPosition.MonthDate
                     Day(
                         day.date,
-                        isSelected = isSelectable && selections.contains(day.date),
+                        isSelected = isSelectable && selectedDate.value == day.date,
                         isSelectable = isSelectable,
                     ) { clicked ->
-                        if (selections.contains(clicked)) {
-                            selections.remove(clicked)
-                        } else {
-                            selections.add(clicked)
-                        }
+                        selectedDate.value = clicked
                     }
                 },
             )
@@ -129,14 +117,10 @@ fun Calendar(adjacentMonths: Long = 500) {
                     val isSelectable = day.position == WeekDayPosition.RangeDate
                     Day(
                         day.date,
-                        isSelected = isSelectable && selections.contains(day.date),
+                        isSelected = isSelectable && selectedDate.value == day.date,
                         isSelectable = isSelectable,
                     ) { clicked ->
-                        if (selections.contains(clicked)) {
-                            selections.remove(clicked)
-                        } else {
-                            selections.add(clicked)
-                        }
+                        selectedDate.value = clicked
                     }
                 },
             )
@@ -151,6 +135,7 @@ fun Calendar(adjacentMonths: Long = 500) {
 
 @Composable
 fun ModeToggleButton(
+    //캘린더 축소 확대
     modifier: Modifier = Modifier,
     isWeekMode: Boolean,
     onModeChange: (Boolean) -> Unit,
@@ -179,6 +164,7 @@ fun ModeToggleButton(
 
 @Composable
 private fun CalendarNavigationIcon(
+    //월 이동 화살표 구현
     icon: Painter,
     contentDescription: String,
     onClick: () -> Unit,
@@ -201,47 +187,52 @@ private fun CalendarNavigationIcon(
         )
 }
 
-
 @Composable
 fun MonthAndWeekCalendarTitle(
+    // 현재 보고 있는 월과 달력 이동 기능을 관리하는 함수. 사용자가 이전 또는 다음 월로 이동할 수 있게 함
     isWeekMode: Boolean,
-    currentMonth: YearMonth,
     monthState: CalendarState,
     weekState: WeekCalendarState,
 ) {
+    val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
+    val currentMonth = visibleMonth.yearMonth.month
+
     val coroutineScope = rememberCoroutineScope()
-    SimpleCalendarTitle(
-        modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
-        currentMonth = currentMonth,
-        goToPrevious = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.first().date.minusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.previousMonth
-                    monthState.animateScrollToMonth(targetMonth)
+    if (!isWeekMode) {
+        SimpleCalendarTitle(
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+            currentMonth = currentMonth,
+            goToPrevious = {
+                coroutineScope.launch {
+                    if (isWeekMode) {
+                        val targetDate = weekState.firstVisibleWeek.days.first().date.minusDays(1)
+                        weekState.animateScrollToWeek(targetDate)
+                    } else {
+                        val targetMonth = monthState.firstVisibleMonth.yearMonth.previousMonth
+                        monthState.animateScrollToMonth(targetMonth)
+                    }
                 }
-            }
-        },
-        goToNext = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.last().date.plusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.nextMonth
-                    monthState.animateScrollToMonth(targetMonth)
+            },
+            goToNext = {
+                coroutineScope.launch {
+                    if (isWeekMode) {
+                        val targetDate = weekState.firstVisibleWeek.days.last().date.plusDays(1)
+                        weekState.animateScrollToWeek(targetDate)
+                    } else {
+                        val targetMonth = monthState.firstVisibleMonth.yearMonth.nextMonth
+                        monthState.animateScrollToMonth(targetMonth)
+                    }
                 }
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
 @Composable
 fun SimpleCalendarTitle(
+    // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
     modifier: Modifier,
-    currentMonth: YearMonth,
+    currentMonth: Month,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
@@ -273,31 +264,11 @@ fun SimpleCalendarTitle(
 }
 
 
-@Composable
-private fun CalendarTitle(
-    isWeekMode: Boolean,
-    monthState: CalendarState,
-    weekState: WeekCalendarState,
-    isAnimating: Boolean,
-) {
-    val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
-    val visibleWeek = rememberFirstVisibleWeekAfterScroll(weekState)
-    val visibleWeekMonth = visibleWeek.days.first().date.yearMonth
-    val currentMonth = if (isWeekMode) {
-        if (isAnimating) visibleMonth.yearMonth else visibleWeekMonth
-    } else {
-        if (isAnimating) visibleWeekMonth else visibleMonth.yearMonth
-    }
-    MonthAndWeekCalendarTitle(
-        isWeekMode = isWeekMode,
-        currentMonth = currentMonth,
-        monthState = monthState,
-        weekState = weekState,
-    )
-}
+
 
 @Composable
 fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
+    //월화수목금토일
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -317,6 +288,7 @@ fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
 
 @Composable
 fun Day(
+    //날짜 선택
     day: LocalDate,
     isSelected: Boolean,
     isSelectable: Boolean,
