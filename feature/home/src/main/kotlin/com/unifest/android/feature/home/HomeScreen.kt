@@ -12,19 +12,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +46,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
+import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.Content4
+import com.unifest.android.core.designsystem.theme.Content5
+import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 
@@ -75,28 +85,139 @@ internal fun HomeScreen(
                 .weight(1f)
                 .padding(bottom = padding.calculateBottomPadding()),
         ) {
-            item { FestivalScheduleText() }
-            items(festivalEvents) { event ->
+            item {
+                FestivalScheduleText()
+            }
+            itemsIndexed(festivalEvents) { index, event ->
                 EventItem(event, selectedEventId) { eventId ->
                     selectedEventId = if (selectedEventId == eventId) -1 else eventId
                 }
+                if (index < festivalEvents.size - 1) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Divider(
+                        color = Color(0xFFDFDFDF),
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp),
+                        thickness = 1.dp
+                    )
+                }
             }
-            item { IncomingScheduleText() }
-            item { FestivalEventCard() }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                IncomingScheduleText()
+            }
+            item {
+                FestivalEventCard()
+            }
         }
     }
 }
 
-@DevicePreview
 @Composable
-fun HomeScreenPreview() {
-    UnifestTheme {
-        HomeScreen(
-            padding = PaddingValues(0.dp),
-            onNavigateToIntro = {},
-        )
+fun FestivalScheduleText() {
+    Text(
+        text = "오늘의 축제 일정",
+        style = Title3,
+        modifier = Modifier.padding(16.dp),
+    )
+}
+
+@Composable
+fun IncomingScheduleText() {
+    Text(
+        text = "다가오는 축제 일정",
+        modifier = Modifier.padding(16.dp),
+        style = Title3,
+    )
+}
+
+@Composable
+fun EventItem(
+    event: FestivalEvent,
+    selectedEventId: Int,
+    onEventClick: (Int) -> Unit,
+) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onEventClick(event.id) },
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
+            ) {
+                Text(text = event.date, style = Content4,modifier = Modifier.padding(5.dp))
+                Text(text = event.name, style = Title2,modifier = Modifier.padding(7.dp))
+                Text(text = event.location, style = Content5)
+                //todo: content5 얘기하기
+            }
+            LazyRow {
+                items(event.celebrityImages) { _ ->
+                    Icon(
+                        imageVector = Icons.Default.Circle,
+                        contentDescription = "Celebrity",
+                        tint = Color(0xFFDFDFDF),
+                        modifier = Modifier
+                            .size(52.dp)
+                            .padding(horizontal = 4.dp),
+                    )
+                }
+            }
+        }
+        AnimatedVisibility(visible = selectedEventId == event.id) {
+            Button(
+                onClick = { /* 관심 축제 추가 */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+            ) {
+                Text("관심 축제로 추가", style = BoothLocation)
+            }
+        }
     }
 }
+
+@Composable
+fun FestivalEventCard() {
+    val imageResource: Painter = painterResource(id = com.unifest.android.core.designsystem.R.drawable.ic_waiting)
+    val eventName = "녹색지대"
+    val eventDates = "05/21(화) - 05/23(목)"
+    val eventLocation = "건국대학교 서울캠퍼스"
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color.Gray),
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = imageResource,
+                contentDescription = "Event Logo",
+                modifier = Modifier.size(48.dp),
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(text = eventDates, style = Content6,modifier = Modifier.padding(5.dp))
+                Text(text = eventName, style = Content4,modifier = Modifier.padding(5.dp))
+                Text(text = eventLocation, style = Content6)
+                //todo: content6 얘기하기
+            }
+        }
+    }
+}
+
 
 
 data class FestivalEvent(
@@ -129,110 +250,14 @@ val festivalEvents = listOf(
         location = "건국대학교 서울캠퍼스",
         celebrityImages = listOf(0, 1, 2),
     ),
-
-    )
-
+)
+@DevicePreview
 @Composable
-fun FestivalScheduleText() {
-    Text(
-        text = "오늘의 축제 일정",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(16.dp),
-    )
-}
-
-@Composable
-fun IncomingScheduleText() {
-    Text(
-        text = "다가오는 축제 일정",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(16.dp),
-    )
-}
-
-@Composable
-fun EventItem(
-    event: FestivalEvent,
-    selectedEventId: Int,
-    onEventClick: (Int) -> Unit,
-) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onEventClick(event.id) },
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
-            ) {
-                Text(text = event.date, fontSize = 20.sp)
-                Text(text = event.name, fontWeight = FontWeight.Bold, fontSize = 24.sp)
-                Text(text = event.location, color = Color.Gray, fontSize = 16.sp)
-            }
-            LazyRow {
-                items(event.celebrityImages) { _ ->
-                    Icon(
-                        imageVector = Icons.Default.Circle,
-                        contentDescription = "Celebrity",
-                        tint = Color.Gray,
-                        modifier = Modifier
-                            .size(52.dp)
-                            .padding(horizontal = 4.dp),
-                    )
-                }
-            }
-        }
-        AnimatedVisibility(visible = selectedEventId == event.id) {
-            Button(
-                onClick = { /* 관심 축제 추가 */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-            ) {
-                Text("관심 축제로 추가")
-            }
-        }
-    }
-}
-
-@Composable
-fun FestivalEventCard() {
-    val imageResource: Painter = painterResource(id = com.unifest.android.core.designsystem.R.drawable.ic_waiting) // 실제 리소스 ID로 변경 필요
-    val eventName = "녹색지대"
-    val eventDates = "05/21(화) - 05/23(목)"
-    val eventLocation = "건국대학교 서울캠퍼스"
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, Color.Gray),
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                painter = imageResource,
-                contentDescription = "Event Logo",
-                modifier = Modifier.size(48.dp),
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = eventDates)
-                Text(text = eventName)
-                Text(text = eventLocation)
-            }
-        }
+fun HomeScreenPreview() {
+    UnifestTheme {
+        HomeScreen(
+            padding = PaddingValues(0.dp),
+            onNavigateToIntro = {},
+        )
     }
 }
