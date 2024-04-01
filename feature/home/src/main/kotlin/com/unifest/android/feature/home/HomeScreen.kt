@@ -36,9 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsCompat
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 
@@ -61,8 +64,11 @@ internal fun HomeScreen(
     onNavigateToIntro: () -> Unit,
 ) {
     var selectedEventId by remember { mutableStateOf(-1) }
-
-    Column {
+    val view = LocalView.current
+    val insets = with(LocalDensity.current) {
+        WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
+    }
+    Column(modifier = Modifier.padding(top = insets)) {
         Calendar()
         LazyColumn(
             modifier = Modifier
