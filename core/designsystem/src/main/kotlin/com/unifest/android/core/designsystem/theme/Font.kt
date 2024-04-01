@@ -116,3 +116,15 @@ val Content4 = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
 )
+
+val Content5 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 11.sp,
+)
+
+val Content6 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 12.sp,
+)
