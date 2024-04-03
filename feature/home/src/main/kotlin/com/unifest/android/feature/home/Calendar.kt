@@ -3,6 +3,7 @@ package com.unifest.android.feature.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +55,9 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.BoothTitle0
+import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -63,7 +69,6 @@ import java.time.YearMonth
 fun Calendar(adjacentMonths: Long = 500) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
-    val currentMonth = remember(currentDate) { currentYearMonth.month }
     val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
     val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
     val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
@@ -142,11 +147,15 @@ fun ModeToggleButton(
 ) {
     val icon = if (isWeekMode) painterResource(id = R.drawable.ic_calender_down) else painterResource(id = R.drawable.ic_calender_up)
     val contentDescription = if (isWeekMode) "Month" else "Week"
+    val backgroundPainter = painterResource(id = R.drawable.calender_bottom)
 
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .requiredHeight(40.dp)
+            .paint(painter = backgroundPainter, contentScale = ContentScale.FillBounds)
+            //todo:리소스 체크
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
@@ -156,7 +165,7 @@ fun ModeToggleButton(
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
-                tint = Color.Gray
+                tint = Color(0xFFD9D9D9),
             )
         }
     }
@@ -200,7 +209,7 @@ fun MonthAndWeekCalendarTitle(
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+            modifier = Modifier.padding(20.dp),//todo: padding 값 수정
             currentMonth = currentMonth,
             goToPrevious = {
                 coroutineScope.launch {
@@ -244,11 +253,9 @@ fun SimpleCalendarTitle(
         Text(
             modifier = Modifier.weight(1f),
             text = currentMonth.displayText(),
-            fontSize = 14.sp,
+            style = BoothTitle0,
             textAlign = TextAlign.Start,
-            fontWeight = FontWeight.Bold,
-
-            )
+        )
         CalendarNavigationIcon(
             icon = painterResource(id = R.drawable.ic_chevron_left),
             contentDescription = "Previous",
@@ -262,8 +269,6 @@ fun SimpleCalendarTitle(
         )
     }
 }
-
-
 
 
 @Composable
@@ -294,31 +299,51 @@ fun Day(
     isSelectable: Boolean,
     onClick: (LocalDate) -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .padding(6.dp)
-            .clip(CircleShape)
-            .background(color = if (isSelected) Color(0xFFF5687E) else Color.Transparent)
-            .clickable(
-                enabled = isSelectable,
-                showRipple = !isSelected,
-                onClick = { onClick(day) },
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        val textColor = when {
-            isSelected -> Color.White
-            isSelectable -> Color.Unspecified
-            else -> colorResource(R.color.inactive_text_color)
+    val currentDate = LocalDate.now()
+    val isToday = day == currentDate
+
+    Column {
+        Box(
+            modifier = Modifier
+                .aspectRatio(1f) // This is important for square-sizing!
+                .padding(12.dp)
+                .clip(CircleShape)
+                .background(color = if (isSelected) Color(0xFFF5687E) else Color.Transparent)
+                .then(
+                    if (day == currentDate) {
+                        Modifier.border(2.dp, Color(0xFFF5687E), CircleShape)
+                    } else Modifier,
+                )
+                .clickable(
+                    enabled = isSelectable,
+                    showRipple = !isSelected,
+                    onClick = { onClick(day) },
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            val textColor = when {
+                isSelected -> Color.White
+                isToday -> Color(0xFFF5687E)
+                isSelectable -> Color.Unspecified
+                else -> colorResource(R.color.inactive_text_color)
+            }
+            Text(
+                text = day.dayOfMonth.toString(),
+                color = textColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+            )
         }
-        Text(
-            text = day.dayOfMonth.toString(),
-            color = textColor,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-        )
+//        Box(
+//            modifier = Modifier
+//                .height(15.dp)
+//                .fillMaxWidth()
+//                .background(Color(0xFF4CAF50))
+//
+//        )
+        //todo:날짜 선택시 하단에 표시되는 부분
     }
+
 }
 
 

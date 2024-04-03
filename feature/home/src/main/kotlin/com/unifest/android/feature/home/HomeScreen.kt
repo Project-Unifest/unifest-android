@@ -1,7 +1,5 @@
 package com.unifest.android.feature.home
 
-import androidx.compose.ui.unit.sp
-
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -26,20 +24,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,8 +42,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.unifest.android.core.designsystem.R
@@ -104,7 +94,7 @@ internal fun HomeScreen(
             itemsIndexed(festivalEvents) { index, event ->
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
-                    EventItem(event, selectedEventId) { eventId ->
+                    FestivalScheduleItem(event, selectedEventId) { eventId ->
                         selectedEventId = if (selectedEventId == eventId) -1 else eventId
                     }
                 }
@@ -135,18 +125,114 @@ internal fun HomeScreen(
             }
 
             item {
-                IncomingScheduleText()
+                IncomingFestivalText()
             }
             items(incomingEvents) { event ->
-                FestivalEventCard(event)
+                IncomingFestivalCard(event)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
 
+
+
+
 @Composable
-fun FestivalEventCard(event: IncomingFestivalEventEntity) {
+fun FestivalScheduleText() {
+    Text(
+        text = stringResource(id = R.string.home_festival_schedule_text),
+        style = Title3,
+        modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+    )
+}
+
+@Composable
+fun FestivalScheduleItem(
+    event: FestivalEventEntity,
+    selectedEventId: Int,
+    onEventClick: (Int) -> Unit,
+) {
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onEventClick(event.id) }
+                .padding(start = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(72.dp)
+                    .background(Color(0xFF1FC0BA))
+                    .align(Alignment.CenterVertically)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+            ) {
+                Text(text = event.date, style = Content4, color = Color(0xFFC0C0C0))
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = event.name, style = Title2)
+                Spacer(modifier = Modifier.height(7.dp))
+                Row {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_location),
+                        contentDescription = "Location Icon",
+                        modifier = Modifier
+                            .size(10.dp)
+                            .align(Alignment.CenterVertically),
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = event.location, style = Content5, color = Color(0xFF848484))
+                }
+
+
+            }
+            Spacer(modifier = Modifier.width(39.dp))
+            LazyRow {
+                items(event.celebrityImages) { _ ->
+                    Icon(
+                        imageVector = Icons.Default.Circle,
+                        contentDescription = "Celebrity",
+                        tint = Color(0xFFDFDFDF),
+                        modifier = Modifier
+                            .size(60.dp)
+                            .padding(horizontal = 5.dp),
+                    )
+                }
+            }
+        }
+        AnimatedVisibility(visible = selectedEventId == event.id) {
+
+            UnifestOutlinedButton(
+                onClick = { /*관심 축제 추가하기 버튼*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
+                    style = BoothLocation,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun IncomingFestivalText() {
+    Text(
+        text = stringResource(id = R.string.home_incoming_festival_text),
+        modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+        style = Title3,
+    )
+}
+
+@Composable
+fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
     val imageResource: Painter = painterResource(id = event.imageRes)
     Card(
         modifier = Modifier
@@ -181,107 +267,16 @@ fun FestivalEventCard(event: IncomingFestivalEventEntity) {
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
-                            .padding(horizontal = 5.dp),
+                            .align(Alignment.CenterVertically),
 
                         )
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(text = event.location, style = Content6, color = Color(0xFF848484))
                 }
 
             }
         }
     }
-}
-
-
-@Composable
-fun FestivalScheduleText() {
-    Text(
-        text = stringResource(id = R.string.home_festival_schedule_text),
-        style = Title3,
-        modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-    )
-}
-
-@Composable
-fun EventItem(
-    event: FestivalEventEntity,
-    selectedEventId: Int,
-    onEventClick: (Int) -> Unit,
-) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onEventClick(event.id) }
-                .padding(start = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(3.dp)
-                    .fillMaxHeight()
-                    .background(Color(0xFF1FC0BA))
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-            ) {
-                Text(text = event.date, style = Content4, color = Color(0xFFC0C0C0))
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(text = event.name, style = Title2)
-                Spacer(modifier = Modifier.height(7.dp))
-                Row {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_location),
-                        contentDescription = "Location Icon",
-                        modifier = Modifier
-                            .size(10.dp)
-                            .padding(horizontal = 5.dp),
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(text = event.location, style = Content5, color = Color(0xFF848484))
-                }
-
-
-            }
-            Spacer(modifier = Modifier.width(39.dp))
-            LazyRow {
-                items(event.celebrityImages) { _ ->
-                    Icon(
-                        imageVector = Icons.Default.Circle,
-                        contentDescription = "Celebrity",
-                        tint = Color(0xFFDFDFDF),
-                        modifier = Modifier
-                            .size(60.dp)
-                            .padding(horizontal = 5.dp),
-                    )
-                }
-            }
-        }
-        AnimatedVisibility(visible = selectedEventId == event.id) {
-            UnifestButton(
-                onClick = { /*관심 축제 추가 버튼*/ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                    style = BoothLocation,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun IncomingScheduleText() {
-    Text(
-        text = stringResource(id = R.string.home_incoming_festival_text),
-        modifier = Modifier.padding(top = 20.dp, start = 20.dp, bottom = 7.dp),
-        style = Title3,
-    )
 }
 
 
