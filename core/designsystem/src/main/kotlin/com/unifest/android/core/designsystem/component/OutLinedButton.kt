@@ -18,7 +18,7 @@ fun UnifestOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     borderColor: Color = Color(0xFFf5678E),
-    contentColor: Color = Color.White,
+    contentColor: Color = Color(0xFFf5678E),
     enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -31,7 +31,6 @@ fun UnifestOutlinedButton(
             contentColor = contentColor
         ),
         border = BorderStroke(1.dp, borderColor),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
         content = content,
     )
 }
