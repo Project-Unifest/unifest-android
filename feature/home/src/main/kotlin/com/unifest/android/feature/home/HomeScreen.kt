@@ -1,8 +1,8 @@
 package com.unifest.android.feature.home
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +45,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -56,15 +59,20 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.FestivalEventEntity
 import com.unifest.android.core.domain.entity.IncomingFestivalEventEntity
+import com.unifest.android.core.domain.entity.School
 import com.unifest.android.core.ui.DevicePreview
-
+import com.unifest.android.feature.home.viewmodel.HomeUiState
+import com.unifest.android.feature.home.viewmodel.HomeViewModel
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
         padding = padding,
+        uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
     )
 }
@@ -72,6 +80,7 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     padding: PaddingValues,
+    uiState: HomeUiState,
     @Suppress("unused")
     onNavigateToIntro: () -> Unit,
 ) {
@@ -91,14 +100,14 @@ internal fun HomeScreen(
             item {
                 FestivalScheduleText()
             }
-            itemsIndexed(festivalEvents) { index, event ->
+            itemsIndexed(uiState.festivalEvents) { index, event ->
                 Column {
                     Spacer(modifier = Modifier.height(16.dp))
                     FestivalScheduleItem(event, selectedEventId) { eventId ->
                         selectedEventId = if (selectedEventId == eventId) -1 else eventId
                     }
                 }
-                if (index < festivalEvents.size - 1) {
+                if (index < uiState.festivalEvents.size - 1) {
                     Spacer(modifier = Modifier.height(16.dp))
                     HorizontalDivider(
                         color = Color(0xFFDFDFDF),
@@ -127,7 +136,7 @@ internal fun HomeScreen(
             item {
                 IncomingFestivalText()
             }
-            items(incomingEvents) { event ->
+            items(uiState.incomingEvents) { event ->
                 IncomingFestivalCard(event)
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -276,55 +285,5 @@ fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
 
             }
         }
-    }
-}
-
-
-val incomingEvents = listOf(
-    IncomingFestivalEventEntity(
-        imageRes = R.drawable.ic_waiting,
-        name = "녹색지대",
-        dates = "05/21(화) - 05/23(목)",
-        location = "건국대학교 서울캠퍼스",
-    ),
-    IncomingFestivalEventEntity(
-        imageRes = R.drawable.ic_waiting,
-        name = "녹색지대",
-        dates = "05/21(화) - 05/23(목)",
-        location = "건국대학교 서울캠퍼스",
-    ),
-)
-val festivalEvents = listOf(
-    FestivalEventEntity(
-        id = 1,
-        date = "5/21(화)",
-        name = "녹색지대 DAY 1",
-        location = "건국대학교 서울캠퍼스",
-        celebrityImages = listOf(0, 1, 2),
-    ),
-    FestivalEventEntity(
-        id = 2,
-        date = "5/21(화)",
-        name = "녹색지대 DAY 1",
-        location = "건국대학교 서울캠퍼스",
-        celebrityImages = listOf(0, 1, 2),
-    ),
-    FestivalEventEntity(
-        id = 3,
-        date = "5/21(화)",
-        name = "녹색지대 DAY 1",
-        location = "건국대학교 서울캠퍼스",
-        celebrityImages = listOf(0, 1, 2),
-    ),
-)
-
-@DevicePreview
-@Composable
-fun HomeScreenPreview() {
-    UnifestTheme {
-        HomeScreen(
-            padding = PaddingValues(0.dp),
-            onNavigateToIntro = {},
-        )
     }
 }
