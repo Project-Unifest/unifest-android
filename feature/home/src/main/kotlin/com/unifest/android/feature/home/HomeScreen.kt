@@ -332,7 +332,7 @@ fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
 @OptIn(ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
-fun PreviewIntroScreen() {
+fun HomeScreenPreview() {
     UnifestTheme {
         HomeScreen(
             uiState = HomeUiState(
