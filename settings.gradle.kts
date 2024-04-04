@@ -42,3 +42,5 @@ include(
     ":feature:navigator",
     ":feature:waiting",
 )
+include(":booth")
+include(":feature:booth")

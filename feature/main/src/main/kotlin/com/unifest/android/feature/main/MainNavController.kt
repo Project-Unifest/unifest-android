@@ -23,6 +23,8 @@ internal class MainNavController(
             .currentBackStackEntryAsState().value?.destination
 
     val startDestination = HOME_ROUTE
+    //하나의 어떤 상수로 두는게 백스택 관리하는데 더 유용
+    //컴포즈 네비게이션 안좋은부분 많음 -> 선호하지 않는사람 많음
 
     val currentTab: MainTab?
         @Composable get() = currentDestination
@@ -32,6 +34,7 @@ internal class MainNavController(
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
+                // https://issuetracker.google.com/issues/142847973
                 saveState = true
             }
             launchSingleTop = true

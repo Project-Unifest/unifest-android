@@ -69,6 +69,10 @@ internal fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    //뷰모델은 컴포즈가 몰라서 unstable로 판단 -> 리컴포지션
+    //스크린에 뷰모델이 있으면 프리뷰를 못봄
+    //프리뷰를 볼려면 임시 뷰모델을 만들어야하고 hilt주입도 못하니까 배보다 배꼽이 커짐
+    //네비게이션 전역관리도 있음
     HomeScreen(
         padding = padding,
         uiState = uiState,
