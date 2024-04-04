@@ -30,6 +30,8 @@
     <string name="home_incoming_festival_text">다가오는 축제 일정</string>
     <string name="home_add_interest_festival_button">관심 축제 추가하기</string>
     <string name="home_add_interest_festival_in_item_button">관심 축제로 추가</string>
+    <string name='home_empty_festival_text'>축제 일정 없음</string>
+    <string name="home_empty_festival_schedule_description_text">오늘은 축제가 열리는 학교가 없어요</string>
 
 
 

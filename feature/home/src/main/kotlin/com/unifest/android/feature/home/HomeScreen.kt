@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -94,26 +95,59 @@ internal fun HomeScreen(
             item {
                 FestivalScheduleText()
             }
-            itemsIndexed(uiState.festivalEvents) { index, event ->
-                Column {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    FestivalScheduleItem(event, selectedEventId) { eventId ->
-                        selectedEventId = if (selectedEventId == eventId) -1 else eventId
+            if (uiState.festivalEvents.isEmpty()) {
+                item {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(64.dp),
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_schedule),
+                                contentDescription = "축제 없음",
+                                modifier = Modifier
+                                    .size(23.dp),
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_empty_festival_text),
+                                style = Title2,
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(modifier = Modifier.height(9.dp))
+                            Text(
+                                text = stringResource(id = R.string.home_empty_festival_schedule_description_text),
+                                style = Content6,
+                                textAlign = TextAlign.Center,
+                                color = Color(0xFF848484),
+                            )
+                        }
                     }
                 }
-                if (index < uiState.festivalEvents.size - 1) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider(
-                        color = Color(0xFFDFDFDF),
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp),
-                        thickness = 1.dp,
-                    )
+            } else {
+                itemsIndexed(uiState.festivalEvents) { index, event ->
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        FestivalScheduleItem(event, selectedEventId) { eventId ->
+                            selectedEventId = if (selectedEventId == eventId) -1 else eventId
+                        }
+                    }
+                    if (index < uiState.festivalEvents.size - 1) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        HorizontalDivider(
+                            color = Color(0xFFDFDFDF),
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp),
+                            thickness = 1.dp,
+                        )
+                    }
                 }
             }
             item {
                 UnifestOutlinedButton(
-                    onClick = { /*관심 축제 추가하기 버튼*/ },
+                    onClick = { onNavigateToIntro() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -126,7 +160,6 @@ internal fun HomeScreen(
                     )
                 }
             }
-
             item {
                 IncomingFestivalText()
             }
