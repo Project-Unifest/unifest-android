@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                         date = "5/21(화)",
                         name = "녹색지대 DAY 1",
                         location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                     ),
                     FestivalEventEntity(
                         id = 2,
