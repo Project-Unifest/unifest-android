@@ -7,24 +7,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.MarkerState
+import com.naver.maps.geometry.LatLng
+import com.unifest.android.core.designsystem.R
 
 @Composable
 internal fun MapRoute(
@@ -39,15 +39,12 @@ internal fun MapRoute(
     )
 }
 
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
 ) {
-    val uiSettings = remember {
-        MapUiSettings(zoomControlsEnabled = false)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,27 +53,14 @@ internal fun MapScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(LatLng(37.540470588662664, 127.0765263757882), 16.5f)
+            position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
         }
 
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            properties = uiState.properties,
-            uiSettings = uiSettings,
-            onMapClick = {},
-        ) {
+        NaverMap(cameraPositionState = cameraPositionState) {
             uiState.boothSpots.forEach { spot ->
                 Marker(
-                    state = MarkerState(
-                        position = LatLng(spot.lat, spot.lng),
-                    ),
-                    title = "Booth spot (${spot.lat}, ${spot.lng})",
-                    snippet = "click",
-                    onClick = { true },
-                    icon = BitmapDescriptorFactory.defaultMarker(
-                        BitmapDescriptorFactory.HUE_GREEN,
-                    ),
+                    state = MarkerState(position = LatLng(spot.lat, spot.lng)),
+                    icon = OverlayImage.fromResource(R.drawable.ic_general),
                 )
             }
         }

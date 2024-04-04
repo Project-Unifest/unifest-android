@@ -17,5 +17,9 @@ dependencies {
         libs.play.service.maps,
         libs.play.service.location,
         libs.maps.compose,
+        libs.naver.map.sdk,
+        libs.naver.map.compose,
+        libs.naver.map.location,
+        libs.tedclustering.naver,
     )
 }
