@@ -20,7 +20,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     init {
         _uiState.update {
             it.copy(
-            // 임시 데이터
                 incomingEvents = persistentListOf(
                     IncomingFestivalEventEntity(
                         imageRes = R.drawable.ic_waiting,
@@ -62,4 +61,3 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 }
-

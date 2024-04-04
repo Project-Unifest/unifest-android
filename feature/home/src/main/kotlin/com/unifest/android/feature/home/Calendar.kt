@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,15 +53,12 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle0
-import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
-import java.time.YearMonth
 
 @Composable
 fun Calendar(adjacentMonths: Long = 500) {
@@ -99,7 +94,6 @@ fun Calendar(adjacentMonths: Long = 500) {
         )
 
         CalendarHeader(daysOfWeek = daysOfWeek)
-        //월화수목금토일
         AnimatedVisibility(visible = !isWeekMode) {
             HorizontalCalendar(
                 state = monthState,
@@ -140,7 +134,6 @@ fun Calendar(adjacentMonths: Long = 500) {
 
 @Composable
 fun ModeToggleButton(
-    //캘린더 축소 확대
     modifier: Modifier = Modifier,
     isWeekMode: Boolean,
     onModeChange: (Boolean) -> Unit,
@@ -149,13 +142,11 @@ fun ModeToggleButton(
     val contentDescription = if (isWeekMode) "Month" else "Week"
     val backgroundPainter = painterResource(id = R.drawable.calender_bottom)
 
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .requiredHeight(40.dp)
             .paint(painter = backgroundPainter, contentScale = ContentScale.FillBounds)
-            //todo:리소스 체크
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
@@ -173,7 +164,6 @@ fun ModeToggleButton(
 
 @Composable
 private fun CalendarNavigationIcon(
-    //월 이동 화살표 구현
     icon: Painter,
     contentDescription: String,
     onClick: () -> Unit,
@@ -192,13 +182,11 @@ private fun CalendarNavigationIcon(
         painter = icon,
         contentDescription = contentDescription,
         tint = Color.Gray,
-
-        )
+    )
 }
 
 @Composable
 fun MonthAndWeekCalendarTitle(
-    // 현재 보고 있는 월과 달력 이동 기능을 관리하는 함수. 사용자가 이전 또는 다음 월로 이동할 수 있게 함
     isWeekMode: Boolean,
     monthState: CalendarState,
     weekState: WeekCalendarState,
@@ -209,7 +197,7 @@ fun MonthAndWeekCalendarTitle(
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
-            modifier = Modifier.padding(20.dp),//todo: padding 값 수정
+            modifier = Modifier.padding(20.dp),
             currentMonth = currentMonth,
             goToPrevious = {
                 coroutineScope.launch {
@@ -249,7 +237,6 @@ fun SimpleCalendarTitle(
         modifier = modifier.height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Text(
             modifier = Modifier.weight(1f),
             text = currentMonth.displayText(),
@@ -261,7 +248,6 @@ fun SimpleCalendarTitle(
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
-
         CalendarNavigationIcon(
             icon = painterResource(id = R.drawable.ic_chevron_right),
             contentDescription = "Next",
@@ -270,10 +256,8 @@ fun SimpleCalendarTitle(
     }
 }
 
-
 @Composable
 fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
-    //월화수목금토일
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -293,7 +277,6 @@ fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
 
 @Composable
 fun Day(
-    //날짜 선택
     day: LocalDate,
     isSelected: Boolean,
     isSelectable: Boolean,
@@ -334,25 +317,13 @@ fun Day(
                 fontWeight = FontWeight.Bold,
             )
         }
-//        Box(
-//            modifier = Modifier
-//                .height(15.dp)
-//                .fillMaxWidth()
-//                .background(Color(0xFF4CAF50))
-//
-//        )
-        //todo:날짜 선택시 하단에 표시되는 부분
     }
-
 }
-
 
 @Preview
 @Composable
 private fun CalendarPreview() {
     UnifestTheme {
         Calendar()
-
     }
 }
-

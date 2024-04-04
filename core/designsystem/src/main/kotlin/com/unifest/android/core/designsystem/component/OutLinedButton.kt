@@ -1,7 +1,6 @@
 package com.unifest.android.core.designsystem.component
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -28,7 +27,7 @@ fun UnifestOutlinedButton(
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = contentColor
+            contentColor = contentColor,
         ),
         border = BorderStroke(1.dp, borderColor),
         content = content,

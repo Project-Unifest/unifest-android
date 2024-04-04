@@ -2,7 +2,6 @@ package com.unifest.android.feature.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,7 +45,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -56,13 +52,11 @@ import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
-import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.FestivalEventEntity
 import com.unifest.android.core.domain.entity.IncomingFestivalEventEntity
-import com.unifest.android.core.domain.entity.School
-import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
+
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
@@ -125,7 +119,7 @@ internal fun HomeScreen(
                         .padding(20.dp),
                     contentColor = Color(0xFF585858),
                     borderColor = Color(0xFFD2D2D2),
-                    ) {
+                ) {
                     Text(
                         text = stringResource(id = R.string.home_add_interest_festival_button),
                         style = BoothLocation,
@@ -143,9 +137,6 @@ internal fun HomeScreen(
         }
     }
 }
-
-
-
 
 @Composable
 fun FestivalScheduleText() {
@@ -175,7 +166,7 @@ fun FestivalScheduleItem(
                     .width(3.dp)
                     .height(72.dp)
                     .background(Color(0xFF1FC0BA))
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
@@ -197,8 +188,6 @@ fun FestivalScheduleItem(
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = event.location, style = Content5, color = Color(0xFF848484))
                 }
-
-
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
@@ -215,7 +204,6 @@ fun FestivalScheduleItem(
             }
         }
         AnimatedVisibility(visible = selectedEventId == event.id) {
-
             UnifestOutlinedButton(
                 onClick = { /*관심 축제 추가하기 버튼*/ },
                 modifier = Modifier
@@ -277,12 +265,10 @@ fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
                         modifier = Modifier
                             .size(10.dp)
                             .align(Alignment.CenterVertically),
-
-                        )
+                    )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = event.location, style = Content6, color = Color(0xFF848484))
                 }
-
             }
         }
     }
