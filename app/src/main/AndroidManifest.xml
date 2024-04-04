@@ -31,7 +31,7 @@
                 android:value="androidx.startup" />
 
         </provider>
-        
+
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="${NAVER_MAP_CLIENT_ID}" />

@@ -60,7 +60,7 @@ internal fun MapScreen(
             uiState.boothSpots.forEach { spot ->
                 Marker(
                     state = MarkerState(position = LatLng(spot.lat, spot.lng)),
-                    icon = OverlayImage.fromResource(R.drawable.ic_general)
+                    icon = OverlayImage.fromResource(R.drawable.ic_general),
                 )
             }
         }
