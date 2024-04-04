@@ -50,6 +50,11 @@ val Title5 = TextStyle(
     fontWeight = FontWeight.SemiBold,
     fontSize = 13.sp,
 )
+val BoothTitle0 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 24.sp,
+)
 
 val BoothTitle1 = TextStyle(
     fontFamily = pretendardFamily,
@@ -114,5 +119,17 @@ val Content3 = TextStyle(
 val Content4 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
+)
+
+val Content5 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 11.sp,
+)
+
+val Content6 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
 )

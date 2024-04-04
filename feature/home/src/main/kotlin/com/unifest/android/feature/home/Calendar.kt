@@ -2,27 +2,24 @@ package com.unifest.android.feature.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,11 +27,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,34 +53,31 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
+import java.time.Month
 
 @Composable
 fun Calendar(adjacentMonths: Long = 500) {
     val currentDate = remember { LocalDate.now() }
-    val currentMonth = remember(currentDate) { currentDate.yearMonth }
-    val startMonth = remember(currentDate) { currentMonth.minusMonths(adjacentMonths) }
-    val endMonth = remember(currentDate) { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<LocalDate>() }
+    val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
+    val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
+    val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
+    val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     val daysOfWeek = remember { daysOfWeek() }
-
     var isWeekMode by remember { mutableStateOf(false) }
-    var isAnimating by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(Color.White),
     ) {
         val monthState = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
+            firstVisibleMonth = currentYearMonth,
             firstDayOfWeek = daysOfWeek.first(),
         )
         val weekState = rememberWeekCalendarState(
@@ -91,12 +86,13 @@ fun Calendar(adjacentMonths: Long = 500) {
             firstVisibleWeekDate = currentDate,
             firstDayOfWeek = daysOfWeek.first(),
         )
-        CalendarTitle(
+
+        MonthAndWeekCalendarTitle(
             isWeekMode = isWeekMode,
             monthState = monthState,
             weekState = weekState,
-            isAnimating = isAnimating,
         )
+
         CalendarHeader(daysOfWeek = daysOfWeek)
         AnimatedVisibility(visible = !isWeekMode) {
             HorizontalCalendar(
@@ -105,14 +101,10 @@ fun Calendar(adjacentMonths: Long = 500) {
                     val isSelectable = day.position == DayPosition.MonthDate
                     Day(
                         day.date,
-                        isSelected = isSelectable && selections.contains(day.date),
+                        isSelected = isSelectable && selectedDate.value == day.date,
                         isSelectable = isSelectable,
                     ) { clicked ->
-                        if (selections.contains(clicked)) {
-                            selections.remove(clicked)
-                        } else {
-                            selections.add(clicked)
-                        }
+                        selectedDate.value = clicked
                     }
                 },
             )
@@ -124,105 +116,49 @@ fun Calendar(adjacentMonths: Long = 500) {
                     val isSelectable = day.position == WeekDayPosition.RangeDate
                     Day(
                         day.date,
-                        isSelected = isSelectable && selections.contains(day.date),
+                        isSelected = isSelectable && selectedDate.value == day.date,
                         isSelectable = isSelectable,
                     ) { clicked ->
-                        if (selections.contains(clicked)) {
-                            selections.remove(clicked)
-                        } else {
-                            selections.add(clicked)
-                        }
+                        selectedDate.value = clicked
                     }
                 },
             )
         }
-        Spacer(modifier = Modifier.weight(1f))
-        WeekModeToggle(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+
+        ModeToggleButton(
             isWeekMode = isWeekMode,
-        ) { weekMode ->
-            isAnimating = true
-            isWeekMode = weekMode
-            coroutineScope.launch {
-                if (weekMode) {
-                    val targetDate = monthState.firstVisibleMonth.weekDays.last().last().date
-                    weekState.scrollToWeek(targetDate)
-                    weekState.animateScrollToWeek(targetDate) // Trigger a layout pass for title update
-                } else {
-                    val targetMonth = weekState.firstVisibleWeek.days.first().date.yearMonth
-                    monthState.scrollToMonth(targetMonth)
-                    monthState.animateScrollToMonth(targetMonth) // Trigger a layout pass for title update
-                }
-                isAnimating = false
-            }
-        }
+            onModeChange = { isWeekMode = it },
+        )
     }
 }
 
 @Composable
-fun MonthAndWeekCalendarTitle(
+fun ModeToggleButton(
+    modifier: Modifier = Modifier,
     isWeekMode: Boolean,
-    currentMonth: YearMonth,
-    monthState: CalendarState,
-    weekState: WeekCalendarState,
+    onModeChange: (Boolean) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    SimpleCalendarTitle(
-        modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
-        currentMonth = currentMonth,
-        goToPrevious = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.first().date.minusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.previousMonth
-                    monthState.animateScrollToMonth(targetMonth)
-                }
-            }
-        },
-        goToNext = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.last().date.plusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.nextMonth
-                    monthState.animateScrollToMonth(targetMonth)
-                }
-            }
-        },
-    )
-}
+    val icon = if (isWeekMode) painterResource(id = R.drawable.ic_calender_down) else painterResource(id = R.drawable.ic_calender_up)
+    val contentDescription = if (isWeekMode) "Month" else "Week"
+    val backgroundPainter = painterResource(id = R.drawable.calender_bottom)
 
-@Composable
-fun SimpleCalendarTitle(
-    modifier: Modifier,
-    currentMonth: YearMonth,
-    goToPrevious: () -> Unit,
-    goToNext: () -> Unit,
-) {
-    Row(
-        modifier = modifier.height(40.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .requiredHeight(40.dp)
+            .paint(painter = backgroundPainter, contentScale = ContentScale.FillBounds)
+            .then(modifier),
+        contentAlignment = Alignment.Center,
     ) {
-        CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_left),
-            contentDescription = "Previous",
-            onClick = goToPrevious,
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = currentMonth.displayText(),
-            fontSize = 22.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
-        )
-        CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_right),
-            contentDescription = "Next",
-            onClick = goToNext,
-        )
+        IconButton(
+            onClick = { onModeChange(!isWeekMode) },
+        ) {
+            Icon(
+                painter = icon,
+                contentDescription = contentDescription,
+                tint = Color(0xFFD9D9D9),
+            )
+        }
     }
 }
 
@@ -245,32 +181,79 @@ private fun CalendarNavigationIcon(
             .align(Alignment.Center),
         painter = icon,
         contentDescription = contentDescription,
+        tint = Color.Gray,
     )
 }
 
 @Composable
-private fun CalendarTitle(
+fun MonthAndWeekCalendarTitle(
     isWeekMode: Boolean,
     monthState: CalendarState,
     weekState: WeekCalendarState,
-    isAnimating: Boolean,
 ) {
     val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
-    val visibleWeek = rememberFirstVisibleWeekAfterScroll(weekState)
-    val visibleWeekMonth = visibleWeek.days.first().date.yearMonth
-    // Track animation state to prevent updating the title too early before
-    // the correct value is available (after the animation).
-    val currentMonth = if (isWeekMode) {
-        if (isAnimating) visibleMonth.yearMonth else visibleWeekMonth
-    } else {
-        if (isAnimating) visibleWeekMonth else visibleMonth.yearMonth
+    val currentMonth = visibleMonth.yearMonth.month
+
+    val coroutineScope = rememberCoroutineScope()
+    if (!isWeekMode) {
+        SimpleCalendarTitle(
+            modifier = Modifier.padding(20.dp),
+            currentMonth = currentMonth,
+            goToPrevious = {
+                coroutineScope.launch {
+                    if (isWeekMode) {
+                        val targetDate = weekState.firstVisibleWeek.days.first().date.minusDays(1)
+                        weekState.animateScrollToWeek(targetDate)
+                    } else {
+                        val targetMonth = monthState.firstVisibleMonth.yearMonth.previousMonth
+                        monthState.animateScrollToMonth(targetMonth)
+                    }
+                }
+            },
+            goToNext = {
+                coroutineScope.launch {
+                    if (isWeekMode) {
+                        val targetDate = weekState.firstVisibleWeek.days.last().date.plusDays(1)
+                        weekState.animateScrollToWeek(targetDate)
+                    } else {
+                        val targetMonth = monthState.firstVisibleMonth.yearMonth.nextMonth
+                        monthState.animateScrollToMonth(targetMonth)
+                    }
+                }
+            },
+        )
     }
-    MonthAndWeekCalendarTitle(
-        isWeekMode = isWeekMode,
-        currentMonth = currentMonth,
-        monthState = monthState,
-        weekState = weekState,
-    )
+}
+
+@Composable
+fun SimpleCalendarTitle(
+    // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
+    modifier: Modifier,
+    currentMonth: Month,
+    goToPrevious: () -> Unit,
+    goToNext: () -> Unit,
+) {
+    Row(
+        modifier = modifier.height(40.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = currentMonth.displayText(),
+            style = BoothTitle0,
+            textAlign = TextAlign.Start,
+        )
+        CalendarNavigationIcon(
+            icon = painterResource(id = R.drawable.ic_chevron_left),
+            contentDescription = "Previous",
+            onClick = goToPrevious,
+        )
+        CalendarNavigationIcon(
+            icon = painterResource(id = R.drawable.ic_chevron_right),
+            contentDescription = "Next",
+            onClick = goToNext,
+        )
+    }
 }
 
 @Composable
@@ -285,7 +268,8 @@ fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
                 textAlign = TextAlign.Center,
                 fontSize = 15.sp,
                 text = dayOfWeek.displayText(),
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
             )
         }
     }
@@ -298,54 +282,41 @@ fun Day(
     isSelectable: Boolean,
     onClick: (LocalDate) -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .padding(6.dp)
-            .clip(CircleShape)
-            .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
-            .clickable(
-                enabled = isSelectable,
-                showRipple = !isSelected,
-                onClick = { onClick(day) },
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        val textColor = when {
-            isSelected -> Color.White
-            isSelectable -> Color.Unspecified
-            else -> colorResource(R.color.inactive_text_color)
-        }
-        Text(
-            text = day.dayOfMonth.toString(),
-            color = textColor,
-            fontSize = 14.sp,
-        )
-    }
-}
+    val currentDate = LocalDate.now()
+    val isToday = day == currentDate
 
-@Composable
-fun WeekModeToggle(
-    modifier: Modifier,
-    isWeekMode: Boolean,
-    weekModeToggled: (isWeekMode: Boolean) -> Unit,
-) {
-    // We want the entire content to be clickable, not just the checkbox.
-    Row(
-        modifier = modifier
-            .padding(10.dp)
-            .clip(MaterialTheme.shapes.small)
-            .clickable { weekModeToggled(!isWeekMode) }
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-    ) {
-        Checkbox(
-            checked = isWeekMode,
-            onCheckedChange = null, // Check is handled by parent.
-            colors = CheckboxDefaults.colors(checkedColor = colorResource(R.color.example_1_selection_color)),
-        )
-        Text(text = stringResource(R.string.week_mode))
+    Column {
+        Box(
+            modifier = Modifier
+                .aspectRatio(1f) // This is important for square-sizing!
+                .padding(12.dp)
+                .clip(CircleShape)
+                .background(color = if (isSelected) Color(0xFFF5687E) else Color.Transparent)
+                .then(
+                    if (day == currentDate) {
+                        Modifier.border(2.dp, Color(0xFFF5687E), CircleShape)
+                    } else Modifier,
+                )
+                .clickable(
+                    enabled = isSelectable,
+                    showRipple = !isSelected,
+                    onClick = { onClick(day) },
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            val textColor = when {
+                isSelected -> Color.White
+                isToday -> Color(0xFFF5687E)
+                isSelectable -> Color.Unspecified
+                else -> colorResource(R.color.inactive_text_color)
+            }
+            Text(
+                text = day.dayOfMonth.toString(),
+                color = textColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        }
     }
 }
 
