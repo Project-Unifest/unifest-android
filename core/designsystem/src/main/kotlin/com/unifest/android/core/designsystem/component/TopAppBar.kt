@@ -1,11 +1,14 @@
 package com.unifest.android.core.designsystem.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -18,22 +21,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.theme.Title0
+import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
-enum class TopAppBarNavigationType { None, Back }
+enum class TopAppBarNavigationType { None, Back, Search }
 
 @Composable
 fun UnifestTopAppBar(
-    @StringRes titleRes: Int,
     navigationType: TopAppBarNavigationType,
     modifier: Modifier = Modifier,
+    title: String = "",
+    titleStyle: TextStyle = Title1,
     navigationIconContentDescription: String? = null,
     containerColor: Color = Color.White,
     contentColor: Color = Color.Black,
@@ -69,19 +73,39 @@ fun UnifestTopAppBar(
                     ImageVector.vectorResource(id = R.drawable.ic_arrow_back),
                 )
             }
-            Text(
-                text = stringResource(id = titleRes),
-                modifier = if (navigationType == TopAppBarNavigationType.Back) {
-                    Modifier
-                        .align(Alignment.Center)
-                        .padding(top = 18.dp, bottom = 18.dp)
-                } else {
-                    Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 20.dp, top = 18.dp, bottom = 18.dp)
-                },
-                style = Title0,
-            )
+            if (navigationType == TopAppBarNavigationType.Search) {
+                Row(
+                    modifier = Modifier
+                        .padding(start = 22.dp, top = 10.dp, bottom = 10.dp)
+                        .clickable {},
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = title,
+                        style = Title1,
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
+                        contentDescription = "Search School",
+                        tint = Color.Unspecified,
+                    )
+                }
+            } else {
+                Text(
+                    text = title,
+                    modifier = if (navigationType == TopAppBarNavigationType.Back) {
+                        Modifier
+                            .align(Alignment.Center)
+                            .padding(vertical = 18.dp)
+                    } else {
+                        Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 20.dp, top = 18.dp, bottom = 18.dp)
+                    },
+                    style = titleStyle,
+                )
+            }
         }
     }
 }
@@ -91,8 +115,8 @@ fun UnifestTopAppBar(
 fun UnifestTopAppBarPreview() {
     UnifestTheme {
         UnifestTopAppBar(
-            titleRes = android.R.string.untitled,
             navigationType = TopAppBarNavigationType.None,
+            title = "UniFest",
         )
     }
 }
@@ -102,7 +126,6 @@ fun UnifestTopAppBarPreview() {
 fun UnifestTopAppBarWithBackButtonPreview() {
     UnifestTheme {
         UnifestTopAppBar(
-            titleRes = android.R.string.untitled,
             navigationType = TopAppBarNavigationType.Back,
             navigationIconContentDescription = "Navigation back icon",
         )
