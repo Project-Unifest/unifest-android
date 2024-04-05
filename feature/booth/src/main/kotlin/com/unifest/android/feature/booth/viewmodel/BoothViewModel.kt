@@ -16,6 +16,7 @@ import javax.inject.Inject
 class BoothViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    @Suppress("unused")
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 
     private val _uiState = MutableStateFlow(BoothUiState())

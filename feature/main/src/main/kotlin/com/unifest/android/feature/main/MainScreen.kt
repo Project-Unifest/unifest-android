@@ -95,7 +95,7 @@ internal fun MainScreen(
                 boothNavGraph(
                     navController = navigator.navController,
                     onBackClick = navigator::popBackStackIfNotHome,
-                    onNavigateToBoothLocation = navigator::navigateToBoothLocation
+                    onNavigateToBoothLocation = navigator::navigateToBoothLocation,
                 )
 
                 waitingNavGraph(

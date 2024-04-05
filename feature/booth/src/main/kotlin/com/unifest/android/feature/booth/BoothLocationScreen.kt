@@ -23,7 +23,6 @@ fun BoothLocationRoute(
     )
 }
 
-
 @Composable
 @Suppress("unused")
 fun BoothLocationScreen(
