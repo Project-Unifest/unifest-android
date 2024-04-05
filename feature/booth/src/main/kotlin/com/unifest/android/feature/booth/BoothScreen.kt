@@ -42,6 +42,7 @@ internal fun BoothRoute(
 }
 
 @Composable
+@Suppress("unused")
 fun BoothScreen(
     padding: PaddingValues,
 ) {
@@ -91,8 +92,8 @@ fun BoothDescription() {
         Text(
             text = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
             modifier = Modifier.padding(top = 8.dp),
-            style = Content2.copy(lineHeight = 18.sp)
-            //todo: 줄간격 논의
+            style = Content2.copy(lineHeight = 18.sp),
+            // todo: 줄간격 논의
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -132,7 +133,7 @@ fun MenuText() {
 @Composable
 fun MenuItem(menu: BoothMenu) {
     Row(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
         Image(
             painter = painterResource(id = menu.imageResource),

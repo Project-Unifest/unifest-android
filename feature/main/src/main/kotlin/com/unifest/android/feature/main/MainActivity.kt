@@ -28,9 +28,7 @@ class MainActivity : ComponentActivity() {
                             withFinish = false,
                         )
                     },
-                    onNavigateToBooth = {
-
-                    },
+                    onNavigateToBooth = { /* 네비게이션 */ },
                     navigator = navigator,
                 )
             }
