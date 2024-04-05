@@ -29,7 +29,7 @@ import com.unifest.android.core.designsystem.R
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
-    onNavigateToBooth: () -> Unit,
+    onNavigateToBooth: (Long) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,7 +47,7 @@ internal fun MapRoute(
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
-    onNavigateToBooth: () -> Unit,
+    onNavigateToBooth: (Long) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -65,6 +65,10 @@ internal fun MapScreen(
                 Marker(
                     state = MarkerState(position = LatLng(spot.lat, spot.lng)),
                     icon = OverlayImage.fromResource(R.drawable.ic_general),
+                    onClick = {
+                        onNavigateToBooth(spot.id)
+                        true
+                    },
                 )
             }
         }

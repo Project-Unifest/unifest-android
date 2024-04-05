@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementations(
+        projects.feature.booth,
         projects.feature.home,
         projects.feature.intro,
         projects.feature.map,

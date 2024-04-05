@@ -35,6 +35,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.feature.booth.navigation.boothNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
@@ -48,7 +49,6 @@ import java.net.UnknownHostException
 @Composable
 internal fun MainScreen(
     onNavigateToIntro: () -> Unit,
-    onNavigateToBooth: () -> Unit,
     navigator: MainNavController = rememberMainNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -89,7 +89,13 @@ internal fun MainScreen(
 
                 mapNavGraph(
                     padding = padding,
-                    onNavigateToBooth = onNavigateToBooth,
+                    onNavigateToBooth = navigator::navigateToBoothDetail,
+                )
+
+                boothNavGraph(
+                    navController = navigator.navController,
+                    onBackClick = navigator::popBackStackIfNotHome,
+                    onNavigateToBoothLocation = navigator::navigateToBoothLocation
                 )
 
                 waitingNavGraph(

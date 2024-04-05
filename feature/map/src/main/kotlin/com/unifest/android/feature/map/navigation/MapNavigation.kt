@@ -15,7 +15,7 @@ fun NavController.navigateToMap(navOptions: NavOptions) {
 
 fun NavGraphBuilder.mapNavGraph(
     padding: PaddingValues,
-    onNavigateToBooth: () -> Unit,
+    onNavigateToBooth: (Long) -> Unit,
 ) {
     composable(route = MAP_ROUTE) {
         MapRoute(

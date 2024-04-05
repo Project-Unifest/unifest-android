@@ -9,6 +9,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.unifest.android.feature.booth.navigation.navigateToBoothDetail
+import com.unifest.android.feature.booth.navigation.navigateToBoothLocation
 import com.unifest.android.feature.home.navigation.HOME_ROUTE
 import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.map.navigation.navigateToMap
@@ -44,6 +46,14 @@ internal class MainNavController(
             MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
+    }
+
+    fun navigateToBoothDetail(boothId: Long) {
+        navController.navigateToBoothDetail(boothId)
+    }
+
+    fun navigateToBoothLocation() {
+        navController.navigateToBoothLocation()
     }
 
     private fun popBackStack() {
