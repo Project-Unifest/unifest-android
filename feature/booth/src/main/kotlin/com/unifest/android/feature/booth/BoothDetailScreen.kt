@@ -151,9 +151,9 @@ fun BoothDescription(
             modifier = Modifier.padding(top = 8.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
                 contentDescription = "location icon",
-                tint = Color(0xFF1FC0BA),
+                tint = Color.Unspecified,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
