@@ -218,7 +218,7 @@ fun FestivalScheduleItem(
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_gray),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
@@ -310,7 +310,7 @@ fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_gray),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
