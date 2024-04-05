@@ -33,8 +33,7 @@
     <string name='home_empty_festival_text'>축제 일정 없음</string>
     <string name="home_empty_festival_schedule_description_text">오늘은 축제가 열리는 학교가 없어요</string>
 
-
-
-    <!--    home-->
-    <string name="week_mode">Week mode</string>
+    <!--    Booth-->
+    <string name="booth_check_locaiton">위치 확인하기</string>
+    <string name="booth_menu">메뉴</string>
 </resources>
