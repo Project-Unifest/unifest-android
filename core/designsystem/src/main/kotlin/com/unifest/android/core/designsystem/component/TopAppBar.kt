@@ -1,5 +1,6 @@
 package com.unifest.android.core.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,9 +32,10 @@ enum class TopAppBarNavigationType { None, Back }
 
 @Composable
 fun UnifestTopAppBar(
-    @StringRes titleRes: Int,
     navigationType: TopAppBarNavigationType,
     modifier: Modifier = Modifier,
+    @StringRes titleRes: Int? = null,
+    @DrawableRes navigationIcon: Int = R.drawable.ic_arrow_back_dark_gray,
     navigationIconContentDescription: String? = null,
     containerColor: Color = Color.White,
     contentColor: Color = Color.Black,
@@ -66,11 +68,11 @@ fun UnifestTopAppBar(
             if (navigationType == TopAppBarNavigationType.Back) {
                 icon(
                     Modifier.align(Alignment.CenterStart),
-                    ImageVector.vectorResource(id = R.drawable.ic_arrow_back),
+                    ImageVector.vectorResource(id = navigationIcon),
                 )
             }
             Text(
-                text = stringResource(id = titleRes),
+                text = if (titleRes != null) stringResource(id = titleRes) else "",
                 modifier = if (navigationType == TopAppBarNavigationType.Back) {
                     Modifier
                         .align(Alignment.Center)
