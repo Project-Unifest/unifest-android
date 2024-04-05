@@ -15,10 +15,12 @@ fun NavController.navigateToMap(navOptions: NavOptions) {
 
 fun NavGraphBuilder.mapNavGraph(
     padding: PaddingValues,
+    onNavigateToBooth: () -> Unit,
 ) {
     composable(route = MAP_ROUTE) {
         MapRoute(
             padding = padding,
+            onNavigateToBooth = onNavigateToBooth,
         )
     }
 }

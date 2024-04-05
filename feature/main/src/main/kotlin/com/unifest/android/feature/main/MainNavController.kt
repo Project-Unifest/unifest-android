@@ -34,7 +34,6 @@ internal class MainNavController(
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
-                // https://issuetracker.google.com/issues/142847973
                 saveState = true
             }
             launchSingleTop = true

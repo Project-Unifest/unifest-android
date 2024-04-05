@@ -48,6 +48,7 @@ import java.net.UnknownHostException
 @Composable
 internal fun MainScreen(
     onNavigateToIntro: () -> Unit,
+    onNavigateToBooth: () -> Unit,
     navigator: MainNavController = rememberMainNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -88,6 +89,7 @@ internal fun MainScreen(
 
                 mapNavGraph(
                     padding = padding,
+                    onNavigateToBooth = onNavigateToBooth,
                 )
 
                 waitingNavGraph(

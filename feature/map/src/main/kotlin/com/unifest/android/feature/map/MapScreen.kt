@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import com.unifest.android.core.designsystem.R
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
+    onNavigateToBooth: () -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,6 +38,7 @@ internal fun MapRoute(
     MapScreen(
         padding = padding,
         uiState = uiState,
+        onNavigateToBooth = onNavigateToBooth,
     )
 }
 
@@ -44,6 +47,7 @@ internal fun MapRoute(
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
+    onNavigateToBooth: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -74,6 +78,7 @@ fun MapScreenPreview() {
         MapScreen(
             padding = PaddingValues(0.dp),
             uiState = MapUiState(),
+            onNavigateToBooth = {},
         )
     }
 }
