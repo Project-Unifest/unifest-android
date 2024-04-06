@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @HiltViewModel
 class MapViewModel @Inject constructor() : ViewModel() {

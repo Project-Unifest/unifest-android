@@ -25,7 +25,7 @@ fun BoothFilterChips(
         ) {
             BoothFilterChip(
                 filterName = it,
-                onChipClick = onChipClick
+                onChipClick = onChipClick,
             )
         }
     }

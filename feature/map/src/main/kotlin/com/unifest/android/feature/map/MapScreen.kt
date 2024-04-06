@@ -181,7 +181,7 @@ fun BoothCards(
 @Composable
 fun MapScreenPreview() {
     val boothList = mutableListOf<BoothDetailEntity>()
-    for (i in 1..5)
+    repeat(5) {
         boothList.add(
             BoothDetailEntity(
                 id = 1L,
@@ -195,6 +195,7 @@ fun MapScreenPreview() {
                 menus = emptyList(),
             ),
         )
+    }
     UnifestTheme {
         MapScreen(
             padding = PaddingValues(0.dp),
@@ -233,7 +234,7 @@ fun MapTopAppBarPreview() {
 @Composable
 fun BoothCardsPreview() {
     val boothList = mutableListOf<BoothDetailEntity>()
-    for (i in 1..5)
+    repeat(5) {
         boothList.add(
             BoothDetailEntity(
                 id = 1L,
@@ -247,6 +248,7 @@ fun BoothCardsPreview() {
                 menus = emptyList(),
             ),
         )
+    }
 
     UnifestTheme {
         BoothCards(
