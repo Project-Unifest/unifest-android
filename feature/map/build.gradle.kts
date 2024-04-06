@@ -21,5 +21,7 @@ dependencies {
         libs.naver.map.compose,
         libs.naver.map.location,
         libs.tedclustering.naver,
+        libs.flexible.bottomsheet,
+        libs.ballon,
     )
 }
