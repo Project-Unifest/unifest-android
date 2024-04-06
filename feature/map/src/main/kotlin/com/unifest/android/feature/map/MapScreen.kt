@@ -125,7 +125,8 @@ fun MapTopAppBar(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(
-            bottomStart = 34.dp,
+            bottomStart = 32.dp,
+            bottomEnd = 32.dp,
         ),
     ) {
         Column(
