@@ -53,13 +53,8 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.Title1
-import com.unifest.android.core.designsystem.theme.Title3
-import com.unifest.android.core.designsystem.theme.Title5
-import com.unifest.android.core.designsystem.theme.WaitingTeam
+import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
+import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import kotlinx.coroutines.launch
 
 @Composable
@@ -118,7 +113,7 @@ fun BoothDetailScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
-        BoothContent(uiState, onNavigateToBoothLocation, innerPadding)
+        BoothContent(uiState, onNavigateToBoothLocation, innerPadding, onBackClick)
 //        if (showWaitingDialog) {
 //            WaitingDialog(
 //                boothName = uiState.boothDetailInfo.name,
@@ -152,13 +147,25 @@ fun BoothContent(
     uiState: BoothUiState,
     onNavigateToBoothLocation: () -> Unit,
     paddingValues: PaddingValues,
+    onBackClick: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize(),
     ) {
-        item { BoothImage() }
+
+        item {
+            Box {
+                BoothImage()
+                UnifestTopAppBar(
+                    navigationType = TopAppBarNavigationType.Back,
+                    navigationIcon = R.drawable.ic_arrow_back_gray,
+                    onNavigationClick = onBackClick,
+                    containerColor = Color.Transparent,
+                )
+            }
+        }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
             BoothDescription(

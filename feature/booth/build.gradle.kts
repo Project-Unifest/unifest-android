@@ -16,5 +16,8 @@ dependencies {
         libs.timber,
         libs.calendar.compose,
         libs.system.ui.controller,
+        libs.naver.map.sdk,
+        libs.naver.map.compose,
+        libs.naver.map.location,
     )
 }
