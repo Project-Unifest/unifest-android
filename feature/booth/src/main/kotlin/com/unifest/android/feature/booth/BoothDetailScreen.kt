@@ -156,7 +156,6 @@ fun BoothContent(
                 BoothImage()
                 UnifestTopAppBar(
                     navigationType = TopAppBarNavigationType.Back,
-                    navigationIcon = R.drawable.ic_arrow_back_gray,
                     onNavigationClick = onBackClick,
                     containerColor = Color.Transparent,
                 )

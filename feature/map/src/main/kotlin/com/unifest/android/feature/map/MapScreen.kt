@@ -66,11 +66,11 @@ internal fun MapRoute(
     )
 }
 
-
 @OptIn(
     ExperimentalNaverMapApi::class,
     ExperimentalFoundationApi::class,
 )
+@Suppress("unused")
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,

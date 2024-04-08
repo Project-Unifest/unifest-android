@@ -1,8 +1,5 @@
 package com.unifest.android.core.designsystem.component
 
-
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -73,7 +70,7 @@ fun UnifestTopAppBar(
             if (navigationType == TopAppBarNavigationType.Back) {
                 icon(
                     Modifier.align(Alignment.CenterStart),
-                    ImageVector.vectorResource(id = navigationIcon),
+                    ImageVector.vectorResource(id = R.drawable.ic_arrow_back_gray),
                 )
             }
             if (navigationType == TopAppBarNavigationType.Search) {
