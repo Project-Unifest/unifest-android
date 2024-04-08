@@ -55,7 +55,7 @@ fun UnifestTopAppBar(
     containerColor: Color = Color.White,
     contentColor: Color = Color.Black,
     onNavigationClick: () -> Unit = {},
-    onTitleClick: () -> Unit = {},
+    onTitleClick: (Boolean) -> Unit = {},
 ) {
     val view = LocalView.current
     val insets = with(LocalDensity.current) {
@@ -115,7 +115,7 @@ fun UnifestTopAppBar(
 @Composable
 fun SchoolSearchTitleWithToolTip(
     title: String,
-    onTitleClick: () -> Unit,
+    onTitleClick: (Boolean) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val builder = rememberBalloonBuilder {
@@ -147,7 +147,7 @@ fun SchoolSearchTitleWithToolTip(
             modifier = Modifier
                 .padding(start = 22.dp, top = 10.dp, bottom = 10.dp, end = 9.dp)
                 .clickable {
-                    onTitleClick()
+                    onTitleClick(true)
                 },
             verticalAlignment = Alignment.CenterVertically,
         ) {

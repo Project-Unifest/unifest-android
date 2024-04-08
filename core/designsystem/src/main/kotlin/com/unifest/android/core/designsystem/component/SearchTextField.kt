@@ -57,7 +57,7 @@ fun SearchTextField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = Color(0xFF848484)),
         decorator = { innerTextField ->
             Row(

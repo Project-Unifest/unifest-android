@@ -45,6 +45,7 @@ import com.unifest.android.core.domain.entity.BoothSpot
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothCard
 import com.unifest.android.core.ui.component.BoothFilterChips
+import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -61,6 +62,11 @@ internal fun MapRoute(
     MapScreen(
         padding = padding,
         uiState = uiState,
+        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
+        initSearchText = viewModel::initSearchText,
+        setEnableSearchMode = viewModel::setEnableSearchMode,
+        setEnableEditMode = viewModel::setEnableEditMode,
+        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
     )
 }
 
@@ -72,6 +78,11 @@ internal fun MapRoute(
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    initSearchText: () -> Unit,
+    setEnableSearchMode: () -> Unit,
+    setEnableEditMode: () -> Unit,
+    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -99,6 +110,9 @@ internal fun MapScreen(
             MapTopAppBar(
                 title = uiState.selectedSchoolName,
                 searchText = uiState.searchText,
+                onTitleClick = setFestivalSearchBottomSheetVisible,
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter),
@@ -111,6 +125,19 @@ internal fun MapScreen(
                     .padding(bottom = 21.dp),
                 boothList = uiState.boothList,
             )
+            if (uiState.isFestivalSearchBottomSheetVisible) {
+                FestivalSearchBottomSheet(
+                    searchTextHintRes = R.string.festival_search_text_field_hint,
+                    setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
+                    interestedFestivals = uiState.interestedFestivals,
+                    initSearchText = initSearchText,
+                    setEnableSearchMode = setEnableSearchMode,
+                    setEnableEditMode = setEnableEditMode,
+                    isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
+                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                    isEditMode = uiState.isEditMode,
+                )
+            }
         }
     }
 }
@@ -120,6 +147,9 @@ internal fun MapScreen(
 fun MapTopAppBar(
     title: String,
     searchText: TextFieldState,
+    onTitleClick: (Boolean) -> Unit,
+    initSearchText: () -> Unit,
+    setEnableSearchMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -135,11 +165,14 @@ fun MapTopAppBar(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
+                onTitleClick = onTitleClick,
             )
             SearchTextField(
                 searchText = searchText,
-                searchTextHintRes = R.string.map_search_text_field_hint,
+                searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = {},
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -213,6 +246,11 @@ fun MapScreenPreview() {
                 ),
                 boothList = boothList.toImmutableList(),
             ),
+            setFestivalSearchBottomSheetVisible = {},
+            initSearchText = {},
+            setEnableSearchMode = {},
+            setEnableEditMode = {},
+            setInterestedFestivalDeleteDialogVisible = {},
         )
     }
 }
@@ -225,6 +263,9 @@ fun MapTopAppBarPreview() {
         MapTopAppBar(
             title = "건국대학교",
             searchText = TextFieldState(),
+            initSearchText = {},
+            setEnableSearchMode = {},
+            onTitleClick = {},
         )
     }
 }
