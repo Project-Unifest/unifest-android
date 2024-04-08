@@ -59,6 +59,8 @@ import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.School
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.SchoolItem
+import com.unifest.android.core.ui.component.SelectedSchoolsGrid
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -165,115 +167,6 @@ fun InformationText() {
 }
 
 @Composable
-fun SelectedSchoolsGrid(
-    selectedSchools: MutableList<School>,
-    onSchoolSelected: (School) -> Unit,
-) {
-    // 나의 관심 축제
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.intro_interested_festivals_title),
-                style = Title3,
-            )
-            TextButton(
-                onClick = { selectedSchools.clear() },
-            ) {
-                Text(
-                    text = stringResource(id = R.string.intro_clear_item_button_text),
-                    color = Color(0xFF848484),
-                    textDecoration = TextDecoration.Underline,
-                    style = BoothLocation,
-                    fontSize = 12.sp,
-                )
-            }
-        }
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .padding(8.dp)
-                .height(
-                    when {
-                        selectedSchools.isEmpty() -> 0.dp
-                        else -> {
-                            val rows = ((selectedSchools.size - 1) / 3 + 1) * 180
-                            rows.dp
-                        }
-                    },
-                ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(selectedSchools.size) { index ->
-                val school = selectedSchools[index]
-                SchoolItem(
-                    school = school,
-                    onSchoolSelected = {
-                        onSchoolSelected(it)
-                    },
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SchoolItem(
-    school: School,
-    onSchoolSelected: (School) -> Unit,
-) {
-    // 그리드에 들어갈 각 학교별 아이템
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier.clickable {
-            onSchoolSelected(school)
-        },
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_map),
-                contentDescription = null,
-                modifier = Modifier.size(50.dp),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            // todo:coil로 이미지 넣기
-            Text(
-                text = school.schoolName,
-                color = Color.Black,
-                style = Content2,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = school.festivalName,
-                color = Color.Black,
-                style = Content4,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                school.festivalDate,
-                color = Color(0xFF979797),
-                style = Content3,
-            )
-        }
-    }
-}
-
-@Composable
 fun AllSchoolsTabView(
     schools: ImmutableList<School>,
     onSchoolSelected: (School) -> Unit,
@@ -319,7 +212,6 @@ fun AllSchoolsTabView(
             fontSize = 12.sp,
         )
         // 총 학교수
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier

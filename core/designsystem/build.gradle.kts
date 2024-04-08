@@ -16,6 +16,7 @@ dependencies {
         libs.androidx.core,
         libs.coil.compose,
         libs.timber,
+        libs.ballon.compose,
 
         libs.bundles.landscapist,
     )

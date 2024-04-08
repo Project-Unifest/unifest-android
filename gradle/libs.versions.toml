@@ -42,13 +42,11 @@ firebase-bom = "32.8.0"
 firebase-crashlytics = "2.9.9"
 ksp = "1.9.23-1.0.20"
 compose-extensions = "1.6.5"
-accompanist-webview = "0.34.0"
 compose-stable-marker = "1.0.3"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.2"
 balloon = "1.6.4"
 calendar-compose = "2.5.0"
-maps-compose = "4.3.3"
 flexible-bottomsheet = "0.1.2"
 
 naver-map-sdk = "3.18.0"
@@ -60,9 +58,6 @@ tedclustering-naver = "1.0.2"
 
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-core" }
-
-play-service-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
-play-service-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -107,15 +102,13 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
-accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist-webview" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil" }
 landscapist-placeholder = { group = "com.github.skydoves", name = "landscapist-placeholder" }
-ballon = { group = "com.github.skydoves", name = "balloon", version.ref = "balloon" }
-calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose"}
-maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
-flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottomsheet-material3", version.ref = "flexible-bottomsheet"}
+ballon-compose = { group = "com.github.skydoves", name = "balloon-compose", version.ref = "balloon" }
+calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose" }
+flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottomsheet-material3", version.ref = "flexible-bottomsheet" }
 
 naver-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "naver-map-sdk" }
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
@@ -165,5 +158,12 @@ landscapist = [
     "landscapist-bom",
     "landscapist-coil",
     "landscapist-placeholder",
+]
+
+naver-map-compose = [
+    "naver-map-sdk",
+    "naver-map-compose",
+    "naver-map-location",
+    "tedclustering-naver",
 ]
 
