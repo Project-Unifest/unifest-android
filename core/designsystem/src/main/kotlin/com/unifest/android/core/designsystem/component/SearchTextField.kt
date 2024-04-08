@@ -20,8 +20,11 @@ import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -40,14 +43,20 @@ fun SearchTextField(
     searchText: TextFieldState,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
+    initSearchText: () -> Unit,
     modifier: Modifier = Modifier,
+    setEnableSearchMode: () -> Unit = {},
     backgroundColor: Color = Color.White,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
-    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFD9D9D9)),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     BasicTextField2(
-        modifier = Modifier.fillMaxWidth(),
         state = searchText,
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         textStyle = TextStyle(color = Color(0xFF848484)),
         decorator = { innerTextField ->
@@ -72,13 +81,24 @@ fun SearchTextField(
                     innerTextField()
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                    contentDescription = "Search Icon",
-                    modifier = Modifier.clickable {
-                        onSearch(searchText.text.toString())
-                    },
-                )
+                if (searchText.text.isEmpty()) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.clickable {
+                            onSearch(searchText.text.toString())
+                        },
+                    )
+                } else {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                        contentDescription = "Delete Icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.clickable {
+                            initSearchText()
+                        },
+                    )
+                }
                 Spacer(modifier = Modifier.width(width = 15.dp))
             }
         },
@@ -94,6 +114,8 @@ fun SearchTextFieldPreview() {
             searchText = TextFieldState(""),
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
+            initSearchText = {},
+            setEnableSearchMode = {},
             modifier = Modifier
                 .height(46.dp)
                 .fillMaxWidth()
