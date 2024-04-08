@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -38,8 +40,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
@@ -53,10 +57,8 @@ import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import androidx.compose.ui.res.painterResource
-import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import kotlinx.coroutines.launch
+import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 
 @Composable
 internal fun BoothDetailRoute(
@@ -65,6 +67,16 @@ internal fun BoothDetailRoute(
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val systemUiController = rememberExSystemUiController()
+
+    DisposableEffect(systemUiController) {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = false,
+            isNavigationBarContrastEnforced = false,
+        )
+        onDispose {}
+    }
 
     BoothDetailScreen(
         uiState = uiState,
@@ -111,7 +123,12 @@ fun BoothDetailScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
-        BoothContent(uiState, onNavigateToBoothLocation, innerPadding, onBackClick)
+        BoothContent(
+            uiState = uiState,
+            onNavigateToBoothLocation = onNavigateToBoothLocation,
+            paddingValues = innerPadding,
+            onBackClick = onBackClick
+        )
 //        if (showWaitingDialog) {
 //            WaitingDialog(
 //                boothName = uiState.boothDetailInfo.name,

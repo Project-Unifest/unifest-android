@@ -15,6 +15,7 @@ dependencies {
         libs.androidx.core,
         libs.androidx.activity.compose,
         libs.androidx.splash,
+        libs.system.ui.controller,
         libs.timber,
     )
 }
