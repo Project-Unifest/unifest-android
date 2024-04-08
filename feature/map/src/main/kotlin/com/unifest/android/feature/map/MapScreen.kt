@@ -205,18 +205,17 @@ fun MapScreenPreview() {
             padding = PaddingValues(0.dp),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
-                boothSpots = persistentListOf(
-                    BoothSpot(37.54053013863604, 127.07505652524804),
-                    BoothSpot(37.54111712868565, 127.07839319326257),
-                    BoothSpot(37.5414744247141, 127.07779237844323),
-                    BoothSpot(37.54224856023523, 127.07605430700158),
-                    BoothSpot(37.54003672313541, 127.07653710462426),
-                    BoothSpot(37.53998567996623, 37.53998567996623),
-                    BoothSpot(37.54152546686414, 127.07353303052759),
-                    BoothSpot(37.54047909580466, 127.07398364164209),
-                ),
+                searchText = TextFieldState(),
                 boothList = boothList.toImmutableList(),
+                boothSpots = persistentListOf(
+                    BoothSpot(
+                        lat = 37.540470588662664,
+                        lng = 127.0765263757882,
+                        id = 1L,
+                    ),
+                ),
             ),
+            onNavigateToBooth = {},
         )
     }
 }
