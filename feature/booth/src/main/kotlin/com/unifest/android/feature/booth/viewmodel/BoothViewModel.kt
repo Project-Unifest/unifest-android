@@ -43,4 +43,18 @@ class BoothViewModel @Inject constructor(
             )
         }
     }
+
+    fun toggleBookmark() {
+        _uiState.update { currentState ->
+            val newBookmarkState = !currentState.isBookmarked
+            currentState.copy(
+                isBookmarked = newBookmarkState,
+                bookmarkCount = currentState.bookmarkCount + if(newBookmarkState) 1 else -1
+            )
+        }
+    }
+
+    fun addToWaitingList() {
+
+    }
 }
