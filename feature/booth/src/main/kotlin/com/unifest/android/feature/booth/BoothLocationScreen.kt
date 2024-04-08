@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,34 +68,27 @@ fun BoothLocationScreen(
     latitude: Double,
     longitude: Double,
 ) {
-    Scaffold(
-        topBar = {
-            BoothLocationAppBar(
-                onBackClick = onBackClick,
-                boothName = uiState.boothDetailInfo.name,
-                boothLocation = uiState.boothDetailInfo.location,
-            )
-        },
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition(LatLng(latitude, longitude), 14.0)
-            }
-
-            NaverMap(cameraPositionState = cameraPositionState) {
-                Marker(
-                    state = MarkerState(position = LatLng(latitude, longitude)),
-                    icon = OverlayImage.fromResource(R.drawable.ic_general),
-                    onClick = { true },
-                )
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition(LatLng(latitude, longitude), 14.0)
         }
+        NaverMap(
+            cameraPositionState = cameraPositionState,
+            modifier = Modifier.matchParentSize(),
+        ) {
+            Marker(
+                state = MarkerState(position = LatLng(latitude, longitude)),
+                icon = OverlayImage.fromResource(R.drawable.ic_general),
+                onClick = { true },
+            )
+        }
+
+        BoothLocationAppBar(
+            onBackClick = onBackClick,
+            boothName = uiState.boothDetailInfo.name,
+            boothLocation = uiState.boothDetailInfo.location,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }
 
@@ -104,13 +98,16 @@ fun BoothLocationAppBar(
     onBackClick: () -> Unit,
     boothName: String,
     boothLocation: String,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 7.dp)
-            .background(Color.White.copy(alpha = 0.95f), RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
-            .border(1.dp, Color.White.copy(alpha = 0.95f), RoundedCornerShape(32.dp)),
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
+            )
+            .padding(8.dp),
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -120,20 +117,26 @@ fun BoothLocationAppBar(
             }
         },
         title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center,
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(boothName, style = Title1)
-                    Text(boothLocation, style = BoothLocation, color = Color(0xFF545454))
-                }
+                Text(
+                    text = boothName,
+                    style = Title1,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = boothLocation,
+                    style = BoothLocation,
+                    color = Color(0xFF545454),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(Color.White.copy(alpha = 0.95f)),
+        colors = TopAppBarDefaults.topAppBarColors(Color.White),
         actions = {
             Spacer(modifier = Modifier.width(48.dp))
         },

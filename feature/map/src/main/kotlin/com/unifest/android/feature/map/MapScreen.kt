@@ -97,6 +97,10 @@ internal fun MapScreen(
                     Marker(
                         state = MarkerState(position = LatLng(spot.lat, spot.lng)),
                         icon = OverlayImage.fromResource(R.drawable.ic_general),
+                        onClick = {
+                            onNavigateToBooth(spot.id)
+                            true
+                        },
                     )
                 }
             }
