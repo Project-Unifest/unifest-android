@@ -174,8 +174,9 @@ fun BoothDetailContent(
                 BoothImage()
                 UnifestTopAppBar(
                     navigationType = TopAppBarNavigationType.Back,
-                    onNavigationClick = onBackClick,
+                    navigationIconRes = R.drawable.ic_arrow_back_gray,
                     containerColor = Color.Transparent,
+                    onNavigationClick = onBackClick,
                 )
             }
         }
