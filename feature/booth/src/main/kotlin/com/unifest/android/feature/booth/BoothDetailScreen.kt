@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -123,11 +124,11 @@ fun BoothDetailScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
-        BoothContent(
+        BoothDetailContent(
             uiState = uiState,
             onNavigateToBoothLocation = onNavigateToBoothLocation,
-            paddingValues = innerPadding,
-            onBackClick = onBackClick
+            padding = innerPadding,
+            onBackClick = onBackClick,
         )
 //        if (showWaitingDialog) {
 //            WaitingDialog(
@@ -157,15 +158,15 @@ fun BoothDetailScreen(
 }
 
 @Composable
-fun BoothContent(
+fun BoothDetailContent(
     uiState: BoothUiState,
     onNavigateToBoothLocation: () -> Unit,
-    paddingValues: PaddingValues,
+    padding: PaddingValues,
     onBackClick: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = Modifier
-            .padding(paddingValues)
+            .padding(bottom = padding.calculateBottomPadding())
             .fillMaxSize(),
     ) {
         item {
@@ -252,14 +253,19 @@ fun BottomBar(
 
 @Composable
 fun BoothImage() {
-    Image(
-        painter = painterResource(id = R.drawable.booth_image_example),
+//    Image(
+//        painter = painterResource(id = R.drawable.booth_image_example),
+//        modifier = Modifier
+//            .height(260.dp)
+//            .fillMaxWidth(),
+//        contentDescription = "Booth Image",
+//    )
+    NetworkImage(
+        imageUrl = "https://picsum.photos/200/300",
         modifier = Modifier
-            .height(237.dp)
-            .fillMaxWidth()
-            .width(394.dp)
+            .height(260.dp)
             .fillMaxWidth(),
-        contentDescription = "Booth",
+        contentDescription = "Booth Image",
     )
 }
 
