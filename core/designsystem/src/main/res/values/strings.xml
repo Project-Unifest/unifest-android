@@ -36,4 +36,11 @@
     <!--    Booth-->
     <string name="booth_check_locaiton">위치 확인하기</string>
     <string name="booth_menu">메뉴</string>
+    <string name="booth_waiting_button">웨이팅 하기</string>
+    <string name="booth_waiting_button_invalid">웨이팅 기능을 지원하지 않는 부스입니다</string>
+    <string name="booth_bookmarked_message">관심 주점으로 저장했습니다.</string>
+    <string name="booth_bookmark_removed_message">관심 주점에서 삭제했습니다.</string>
+
+
+
 </resources>
