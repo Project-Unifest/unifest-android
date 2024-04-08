@@ -10,6 +10,4 @@ data class BoothUiState(
     val bookmarkCount: Int = 0,
     val isBookmarked: Boolean = false,
     val boothSpots: ImmutableList<BoothSpot> = persistentListOf(),
-) {
-
-}
+)

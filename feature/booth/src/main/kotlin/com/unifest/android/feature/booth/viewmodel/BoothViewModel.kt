@@ -49,12 +49,8 @@ class BoothViewModel @Inject constructor(
             val newBookmarkState = !currentState.isBookmarked
             currentState.copy(
                 isBookmarked = newBookmarkState,
-                bookmarkCount = currentState.bookmarkCount + if(newBookmarkState) 1 else -1
+                bookmarkCount = currentState.bookmarkCount + if (newBookmarkState) 1 else -1,
             )
         }
-    }
-
-    fun addToWaitingList() {
-
     }
 }

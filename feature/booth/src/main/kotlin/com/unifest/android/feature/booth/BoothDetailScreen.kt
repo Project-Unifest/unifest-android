@@ -16,19 +16,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -51,8 +53,7 @@ import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.ui.res.painterResource
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import kotlinx.coroutines.launch
@@ -75,7 +76,6 @@ internal fun BoothDetailRoute(
     )
 }
 
-
 @Composable
 fun BoothDetailScreen(
     uiState: BoothUiState,
@@ -87,22 +87,20 @@ fun BoothDetailScreen(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val bookmarkAddedMessage = stringResource(id = R.string.booth_bookmarked_message)
+    val bookmarkRemovedMessage = stringResource(id = R.string.booth_bookmark_removed_message)
 //    var showWaitingDialog by remember { mutableStateOf(false) }
 //    var showConfirmationDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
-            BottomBarWithBookmarkAndWaiting(
+            BottomBar(
                 bookmarkCount = bookmarkCount,
                 isBookmarked = isBookmarked,
                 onBookmarkClick = {
                     scope.launch {
                         snackBarHostState.showSnackbar(
-                            message = if (isBookmarked) {
-                                "관심 주점에서 삭제되었습니다."
-                            } else {
-                                "관심 주점으로 저장되었습니다."
-                            },
+                            message = if (isBookmarked) bookmarkRemovedMessage else bookmarkAddedMessage,
                             duration = SnackbarDuration.Short,
                         )
                     }
@@ -141,7 +139,6 @@ fun BoothDetailScreen(
     }
 }
 
-
 @Composable
 fun BoothContent(
     uiState: BoothUiState,
@@ -154,7 +151,6 @@ fun BoothContent(
             .padding(paddingValues)
             .fillMaxSize(),
     ) {
-
         item {
             Box {
                 BoothImage()
@@ -184,9 +180,8 @@ fun BoothContent(
     }
 }
 
-
 @Composable
-fun BottomBarWithBookmarkAndWaiting(
+fun BottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
     onBookmarkClick: () -> Unit,
@@ -209,7 +204,7 @@ fun BottomBarWithBookmarkAndWaiting(
             ) {
                 IconButton(onClick = onBookmarkClick) {
                     Icon(
-                        painter = painterResource(id = if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
                         tint = bookMarkColor,
                     )
@@ -226,9 +221,11 @@ fun BottomBarWithBookmarkAndWaiting(
                     .fillMaxWidth()
                     .padding(end = 20.dp),
                 contentPadding = PaddingValues(vertical = 15.dp),
+                enabled = false,
+                containerColor = Color(0xFF777777),
             ) {
                 Text(
-                    text = stringResource(id = R.string.booth_waiting_button),
+                    text = stringResource(id = R.string.booth_waiting_button_invalid),
                     style = Title4,
                     fontSize = 14.sp,
                 )
@@ -236,8 +233,6 @@ fun BottomBarWithBookmarkAndWaiting(
         }
     }
 }
-
-
 
 @Composable
 fun BoothImage() {
@@ -343,7 +338,6 @@ fun MenuItem(menu: MenuEntity) {
     }
 }
 
-
 @DevicePreview
 @Composable
 fun BoothScreenPreview() {
@@ -375,12 +369,12 @@ fun BoothScreenPreview() {
     }
 }
 
-//@Composable
-//fun WaitingDialog(
+// @Composable
+// fun WaitingDialog(
 //    boothName: String,
 //    onDismissRequest: () -> Unit,
 //    onWaitingConfirm: (Int, String) -> Unit,
-//) {
+// ) {
 //    var waitingCount by remember { mutableIntStateOf(0) }
 //    var phoneNumber by remember { mutableStateOf("") }
 //    //https://stackoverflow.com/questions/65243956/jetpack-compose-fullscreen-dialog
@@ -463,15 +457,15 @@ fun BoothScreenPreview() {
 //            }
 //        }
 //    }
-//}
+// }
 //
 //
-//@Composable
-//fun WaitingConfirmDialog(
+// @Composable
+// fun WaitingConfirmDialog(
 //    boothName: String,
 //    onDismissRequest: () -> Unit,
 //    onWaitingConfirm: (Int, String) -> Unit,
-//) {
+// ) {
 //    //https://stackoverflow.com/questions/65243956/jetpack-compose-fullscreen-dialog
 //    Dialog(
 //        properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -542,4 +536,4 @@ fun BoothScreenPreview() {
 //            }
 //        }
 //    }
-//}
+// }
