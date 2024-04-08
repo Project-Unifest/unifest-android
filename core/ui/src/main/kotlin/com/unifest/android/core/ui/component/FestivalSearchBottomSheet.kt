@@ -30,8 +30,8 @@ import com.skydoves.flexible.core.FlexibleSheetSize
 import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.InterestedFestivalDeleteDialog
-import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
@@ -44,6 +44,7 @@ fun FestivalSearchBottomSheet(
     interestedFestivals: MutableList<Festival>,
     initSearchText: () -> Unit,
     setEnableSearchMode: () -> Unit,
+    isSearchMode: Boolean,
     setEnableEditMode: () -> Unit,
     isInterestedFestivalDeleteDialogVisible: Boolean,
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
@@ -91,41 +92,44 @@ fun FestivalSearchBottomSheet(
                     .background(Color.White),
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
-                SearchTextField(
+                FestivalSearchTextField(
                     searchText = TextFieldState(),
                     searchTextHintRes = searchTextHintRes,
                     onSearch = {},
                     initSearchText = initSearchText,
                     setEnableSearchMode = setEnableSearchMode,
+                    isSearchMode = isSearchMode,
                     modifier = Modifier
                         .height(46.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                 )
-                Spacer(modifier = Modifier.height(39.dp))
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .background(Color(0xFFF1F3F7)),
-                )
-                Spacer(modifier = Modifier.height(21.dp))
-                InterestedFestivalsGrid(
-                    selectedFestivals = interestedFestivals,
-                    onFestivalSelected = { school ->
-                        selectedFestivals.remove(school)
-                    },
-                    isEditMode = isEditMode,
-                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
-                ) {
-                    TextButton(
-                        onClick = setEnableEditMode,
+                if (!isSearchMode) {
+                    Spacer(modifier = Modifier.height(39.dp))
+                    VerticalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .background(Color(0xFFF1F3F7)),
+                    )
+                    Spacer(modifier = Modifier.height(21.dp))
+                    InterestedFestivalsGrid(
+                        selectedFestivals = interestedFestivals,
+                        onFestivalSelected = { school ->
+                            selectedFestivals.remove(school)
+                        },
+                        isEditMode = isEditMode,
+                        setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.edit),
-                            color = Color.Black,
-                            style = Content3,
-                        )
+                        TextButton(
+                            onClick = setEnableEditMode,
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.edit),
+                                color = Color.Black,
+                                style = Content3,
+                            )
+                        }
                     }
                 }
             }
@@ -159,6 +163,7 @@ fun SchoolSearchBottomSheetPreview() {
             ),
             initSearchText = {},
             setEnableSearchMode = {},
+            isSearchMode = false,
             setEnableEditMode = {},
             isInterestedFestivalDeleteDialogVisible = false,
             isEditMode = false,

@@ -112,7 +112,6 @@ internal fun MapScreen(
                 searchText = uiState.searchText,
                 onTitleClick = setFestivalSearchBottomSheetVisible,
                 initSearchText = initSearchText,
-                setEnableSearchMode = setEnableSearchMode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter),
@@ -132,6 +131,7 @@ internal fun MapScreen(
                     interestedFestivals = uiState.interestedFestivals,
                     initSearchText = initSearchText,
                     setEnableSearchMode = setEnableSearchMode,
+                    isSearchMode = uiState.isSearchMode,
                     setEnableEditMode = setEnableEditMode,
                     isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
                     setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
@@ -149,7 +149,6 @@ fun MapTopAppBar(
     searchText: TextFieldState,
     onTitleClick: (Boolean) -> Unit,
     initSearchText: () -> Unit,
-    setEnableSearchMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -172,7 +171,6 @@ fun MapTopAppBar(
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = {},
                 initSearchText = initSearchText,
-                setEnableSearchMode = setEnableSearchMode,
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -264,7 +262,6 @@ fun MapTopAppBarPreview() {
             title = "건국대학교",
             searchText = TextFieldState(),
             initSearchText = {},
-            setEnableSearchMode = {},
             onTitleClick = {},
         )
     }

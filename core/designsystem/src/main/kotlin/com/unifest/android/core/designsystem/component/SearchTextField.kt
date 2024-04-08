@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -45,20 +46,15 @@ fun SearchTextField(
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
     modifier: Modifier = Modifier,
-    setEnableSearchMode: () -> Unit = {},
     backgroundColor: Color = Color.White,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
-    val focusRequester = remember { FocusRequester() }
-
     BasicTextField2(
         state = searchText,
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
+        modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        textStyle = TextStyle(color = Color(0xFF848484)),
+        textStyle = TextStyle(color = Color.Black),
         decorator = { innerTextField ->
             Row(
                 modifier = modifier
@@ -106,6 +102,91 @@ fun SearchTextField(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun FestivalSearchTextField(
+    searchText: TextFieldState,
+    @StringRes searchTextHintRes: Int,
+    onSearch: (String) -> Unit,
+    initSearchText: () -> Unit,
+    modifier: Modifier = Modifier,
+    setEnableSearchMode: () -> Unit = {},
+    isSearchMode: Boolean,
+    backgroundColor: Color = Color.White,
+    cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    BasicTextField2(
+        state = searchText,
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                if (it.isFocused) {
+                    setEnableSearchMode()
+                }
+            },
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        textStyle = TextStyle(color = Color.Black),
+        decorator = { innerTextField ->
+            Row(
+                modifier = modifier
+                    .background(color = backgroundColor, shape = cornerShape)
+                    .border(
+                        border = borderStroke,
+                        shape = cornerShape,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Spacer(modifier = Modifier.width(14.dp))
+                if (isSearchMode) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back),
+                        contentDescription = "Search Icon",
+                        tint = Color(0xFF767676),
+                        modifier = Modifier.clickable {
+                            setEnableSearchMode()
+                        },
+                    )
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Box {
+                    if (searchText.text.isEmpty()) {
+                        Text(
+                            text = stringResource(id = searchTextHintRes),
+                            color = Color(0xFF848484),
+                            style = BoothLocation,
+                        )
+                    }
+                    innerTextField()
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                if (searchText.text.isEmpty()) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.clickable {
+                            onSearch(searchText.text.toString())
+                        },
+                    )
+                } else {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                        contentDescription = "Delete Icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.clickable {
+                            initSearchText()
+                        },
+                    )
+                }
+                Spacer(modifier = Modifier.width(width = 15.dp))
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun SearchTextFieldPreview() {
@@ -115,7 +196,26 @@ fun SearchTextFieldPreview() {
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
             initSearchText = {},
+            modifier = Modifier
+                .height(46.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@ComponentPreview
+@Composable
+fun FestivalSearchTextFieldPreview() {
+    UnifestTheme {
+        FestivalSearchTextField(
+            searchText = TextFieldState("건국대학교"),
+            searchTextHintRes = R.string.intro_search_text_hint,
+            onSearch = {},
+            initSearchText = {},
             setEnableSearchMode = {},
+            isSearchMode = true,
             modifier = Modifier
                 .height(46.dp)
                 .fillMaxWidth()
