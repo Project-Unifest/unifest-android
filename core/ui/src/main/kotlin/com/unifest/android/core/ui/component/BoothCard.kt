@@ -57,14 +57,14 @@ fun BoothCard(
                     text = boothInfo.name,
                     style = Title2,
                 )
-                Spacer(modifier = modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(3.dp))
                 Text(
                     text = boothInfo.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = Content2,
                 )
-                Spacer(modifier = modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(3.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
