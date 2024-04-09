@@ -2,6 +2,7 @@ package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -102,27 +104,22 @@ fun BoothDetailScreen(
     bookmarkCount: Int,
     onShowSnackBar: (message: Int) -> Unit
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
-
-    Scaffold(
-        bottomBar = {
-            BottomBar(
-                bookmarkCount = bookmarkCount,
-                isBookmarked = isBookmarked,
-                onBookmarkClick = {
-                    onShowSnackBar(if (isBookmarked) R.string.booth_bookmark_removed_message else R.string.booth_bookmarked_message)
-                    onBookmarkClick()
-                },
-                onWaitingClick = { /*showWaitingDialog = true*/ },
-            )
-        },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-    ) { innerPadding ->
+    Box(modifier = Modifier.fillMaxSize()) {
         BoothDetailContent(
             uiState = uiState,
             onNavigateToBoothLocation = onNavigateToBoothLocation,
-            padding = innerPadding,
             onBackClick = onBackClick,
+            bottomPadding = 116.dp
+        )
+        BottomBar(
+            isBookmarked = isBookmarked,
+            bookmarkCount = bookmarkCount,
+            onBookmarkClick = {
+                onBookmarkClick()
+                onShowSnackBar(if (isBookmarked) R.string.booth_bookmark_removed_message else R.string.booth_bookmarked_message)
+            },
+            onWaitingClick = { /*showWaitingDialog = true*/ },
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
@@ -131,13 +128,13 @@ fun BoothDetailScreen(
 fun BoothDetailContent(
     uiState: BoothUiState,
     onNavigateToBoothLocation: () -> Unit,
-    padding: PaddingValues,
     onBackClick: () -> Unit = {},
+    bottomPadding: Dp
 ) {
     LazyColumn(
         modifier = Modifier
-            .padding(bottom = padding.calculateBottomPadding())
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(bottom = bottomPadding),
     ) {
         item {
             Box {
@@ -187,27 +184,30 @@ fun BottomBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
+                modifier = Modifier
+                    .clickable(onClick = onBookmarkClick)
+                    .padding(start = 15.dp, top = 15.dp, end = 15.dp)
+                    .background(Color.Transparent),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.Center
             ) {
-                IconButton(onClick = onBookmarkClick) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                        contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                        tint = bookMarkColor,
-                    )
-                }
+                Icon(
+                    imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                    contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
+                    tint = bookMarkColor
+                )
+                Spacer(modifier = Modifier.height(1.dp))
                 Text(
                     text = "$bookmarkCount",
-                    color = bookMarkColor,
+                    color = bookMarkColor
                 )
             }
-
+            Spacer(modifier =Modifier.width(5.dp))
             UnifestButton(
                 onClick = onWaitingClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 20.dp),
+                    .padding(end = 15.dp),
                 contentPadding = PaddingValues(vertical = 15.dp),
                 enabled = false,
                 containerColor = Color(0xFF777777),
@@ -324,7 +324,7 @@ fun MenuItem(menu: MenuEntity) {
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = "${menu.price.formatAsCurrency()}원",
+                text = menu.price.formatAsCurrency(),
                 style = MenuPrice,
             )
         }
