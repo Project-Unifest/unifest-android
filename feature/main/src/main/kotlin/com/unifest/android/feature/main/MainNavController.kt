@@ -48,7 +48,7 @@ internal class MainNavController(
         }
     }
 
-    fun navigateToBoothDetail(boothId: Long, onShowSnackBar: (Int) -> Unit  ) {
+    fun navigateToBoothDetail(boothId: Long, onShowSnackBar: (Int) -> Unit) {
         navController.navigateToBoothDetail(boothId, onShowSnackBar)
     }
 

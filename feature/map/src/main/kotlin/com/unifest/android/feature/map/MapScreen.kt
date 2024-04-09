@@ -50,12 +50,11 @@ import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlin.reflect.KFunction1
 
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
-    onShowSnackBar: (message:Int) -> Unit,
+    onShowSnackBar: (message: Int) -> Unit,
     onNavigateToBooth: (Long, (Int) -> Unit) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
@@ -79,7 +78,7 @@ internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
     onNavigateToBooth: (Long, (Int) -> Unit) -> Unit,
-    onShowSnackBar: (message: Int) -> Unit
+    onShowSnackBar: (message: Int) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -102,7 +101,7 @@ internal fun MapScreen(
                         state = MarkerState(position = LatLng(spot.lat, spot.lng)),
                         icon = OverlayImage.fromResource(R.drawable.ic_general),
                         onClick = {
-                            onNavigateToBooth(spot.id,onShowSnackBar)
+                            onNavigateToBooth(spot.id, onShowSnackBar)
                             true
                         },
                     )

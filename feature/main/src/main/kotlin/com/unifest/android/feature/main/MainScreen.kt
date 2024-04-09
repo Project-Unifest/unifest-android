@@ -45,12 +45,12 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 
 @Composable
-    internal fun MainScreen(
-        onNavigateToIntro: () -> Unit,
-        navigator: MainNavController = rememberMainNavController(),
-    ) {
-        val snackBarHostState = remember { SnackbarHostState() }
-        val scope = rememberCoroutineScope()
+internal fun MainScreen(
+    onNavigateToIntro: () -> Unit,
+    navigator: MainNavController = rememberMainNavController(),
+) {
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     val resource = LocalContext.current.resources
 
     @Suppress("unused")

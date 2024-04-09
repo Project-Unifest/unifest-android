@@ -17,6 +17,7 @@ const val BOOTH_ROUTE = "booth_route/{$BOOTH_ID}"
 const val BOOTH_DETAIL_ROUTE = "booth_detail_route"
 const val BOOTH_LOCATION_ROUTE = "booth_location_route"
 
+@Suppress("unused")
 fun NavController.navigateToBoothDetail(
     boothId: Long,
     onShowSnackBar: (Int) -> Unit,
