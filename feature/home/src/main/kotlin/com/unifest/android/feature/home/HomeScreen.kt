@@ -64,13 +64,11 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun HomeRoute(
-    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
-        padding = padding,
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
     )
@@ -78,22 +76,16 @@ internal fun HomeRoute(
 
 @Composable
 internal fun HomeScreen(
-    padding: PaddingValues,
     uiState: HomeUiState,
     @Suppress("unused")
     onNavigateToIntro: () -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
-    val view = LocalView.current
-    val insets = with(LocalDensity.current) {
-        WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
-    }
-
-    Column(modifier = Modifier.padding(top = insets)) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .padding(bottom = padding.calculateBottomPadding()),
+            modifier = Modifier.weight(1f),
         ) {
             item { Calendar() }
             item {
@@ -374,8 +366,6 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
-
-            padding = PaddingValues(0.dp),
             onNavigateToIntro = {},
         )
     }

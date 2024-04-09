@@ -14,13 +14,9 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
-        HomeRoute(
-            padding = padding,
-            onNavigateToIntro = onNavigateToIntro,
-        )
+        HomeRoute(onNavigateToIntro = onNavigateToIntro,)
     }
 }

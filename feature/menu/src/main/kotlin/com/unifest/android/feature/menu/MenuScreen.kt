@@ -15,19 +15,14 @@ import com.unifest.android.core.ui.DevicePreview
 
 @Composable
 internal fun MenuRoute(
-    padding: PaddingValues,
 ) {
-    MenuScreen(padding = padding)
+    MenuScreen()
 }
 
 @Composable
-fun MenuScreen(
-    padding: PaddingValues,
-) {
+fun MenuScreen() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = padding.calculateBottomPadding()),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -39,6 +34,6 @@ fun MenuScreen(
 @Composable
 fun MenuScreenPreview() {
     UnifestTheme {
-        MenuScreen(padding = PaddingValues(0.dp))
+        MenuScreen()
     }
 }

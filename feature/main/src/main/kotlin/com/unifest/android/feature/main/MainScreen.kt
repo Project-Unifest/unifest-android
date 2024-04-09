@@ -35,6 +35,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
@@ -74,29 +75,17 @@ internal fun MainScreen(
         }
     }
 
-    Scaffold(
-        content = { padding ->
+    UnifestScaffold(
+        content = {
             NavHost(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                homeNavGraph(
-                    padding = padding,
-                    onNavigateToIntro = onNavigateToIntro,
-                )
-
-                mapNavGraph(
-                    padding = padding,
-                )
-
-                waitingNavGraph(
-                    padding = padding,
-                )
-
-                menuNavGraph(
-                    padding = padding,
-                )
+                homeNavGraph(onNavigateToIntro = onNavigateToIntro)
+                mapNavGraph()
+                waitingNavGraph()
+                menuNavGraph()
             }
         },
         bottomBar = {

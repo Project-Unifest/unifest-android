@@ -13,12 +13,8 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
     navigate(MENU_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.menuNavGraph(
-    padding: PaddingValues,
-) {
+fun NavGraphBuilder.menuNavGraph() {
     composable(route = MENU_ROUTE) {
-        MenuRoute(
-            padding = padding,
-        )
+        MenuRoute()
     }
 }
