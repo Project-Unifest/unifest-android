@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -92,6 +93,7 @@ fun FestivalSearchBottomSheet(
                 )
             }
         },
+        windowInsets = WindowInsets(0, 0, 0, 0)
     ) {
         Column(
             modifier = Modifier
