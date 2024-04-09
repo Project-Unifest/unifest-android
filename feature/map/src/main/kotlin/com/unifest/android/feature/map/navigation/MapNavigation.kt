@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.unifest.android.feature.map.MapRoute
+import kotlin.reflect.KFunction1
 
 const val MAP_ROUTE = "map_route"
 
@@ -15,11 +16,13 @@ fun NavController.navigateToMap(navOptions: NavOptions) {
 
 fun NavGraphBuilder.mapNavGraph(
     padding: PaddingValues,
-    onNavigateToBooth: (Long) -> Unit,
+    onShowSnackBar: (message: Int) -> Unit,
+    onNavigateToBooth: (Long, (Int) -> Unit) -> Unit,
 ) {
     composable(route = MAP_ROUTE) {
         MapRoute(
             padding = padding,
+            onShowSnackBar = onShowSnackBar,
             onNavigateToBooth = onNavigateToBooth,
         )
     }

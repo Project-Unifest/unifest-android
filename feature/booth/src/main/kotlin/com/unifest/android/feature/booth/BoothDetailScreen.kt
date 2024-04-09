@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -64,6 +65,7 @@ import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiContro
 @Composable
 internal fun BoothDetailRoute(
     onBackClick: () -> Unit,
+    onShowSnackBar: (message: Int) -> Unit,
     onNavigateToBoothLocation: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
@@ -86,7 +88,8 @@ internal fun BoothDetailRoute(
         onBookmarkClick = { viewModel.toggleBookmark() },
         isBookmarked = uiState.isBookmarked,
         bookmarkCount = uiState.bookmarkCount,
-    )
+        onShowSnackBar = onShowSnackBar,
+        )
 }
 
 @Composable
@@ -97,13 +100,9 @@ fun BoothDetailScreen(
     onBookmarkClick: () -> Unit,
     isBookmarked: Boolean,
     bookmarkCount: Int,
+    onShowSnackBar: (message: Int) -> Unit
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    val bookmarkAddedMessage = stringResource(id = R.string.booth_bookmarked_message)
-    val bookmarkRemovedMessage = stringResource(id = R.string.booth_bookmark_removed_message)
-//    var showWaitingDialog by remember { mutableStateOf(false) }
-//    var showConfirmationDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -111,12 +110,7 @@ fun BoothDetailScreen(
                 bookmarkCount = bookmarkCount,
                 isBookmarked = isBookmarked,
                 onBookmarkClick = {
-                    scope.launch {
-                        snackBarHostState.showSnackbar(
-                            message = if (isBookmarked) bookmarkRemovedMessage else bookmarkAddedMessage,
-                            duration = SnackbarDuration.Short,
-                        )
-                    }
+                    onShowSnackBar(if (isBookmarked) R.string.booth_bookmark_removed_message else R.string.booth_bookmarked_message)
                     onBookmarkClick()
                 },
                 onWaitingClick = { /*showWaitingDialog = true*/ },
@@ -130,30 +124,6 @@ fun BoothDetailScreen(
             padding = innerPadding,
             onBackClick = onBackClick,
         )
-//        if (showWaitingDialog) {
-//            WaitingDialog(
-//                boothName = uiState.boothDetailInfo.name,
-//                onDismissRequest = { showWaitingDialog = false },
-//                onWaitingConfirm = { waitingCount, phoneNumber ->
-//
-//                    viewModel.addToWaitingList(waitingCount, phoneNumber)
-//                    showWaitingDialog = false
-//                    showConfirmationDialog = true
-//                },
-//            )
-//        }
-//
-//        if (showConfirmationDialog) {
-//            WaitingConfirmDialog(
-//                boothName = uiState.boothDetailInfo.name,
-//                onDismissRequest = { showConfirmationDialog = false },
-//                onWaitingConfirm = { waitingCount, phoneNumber ->
-//
-//                    showConfirmationDialog = false
-//
-//                }
-//            )
-//        }
     }
 }
 
@@ -354,7 +324,7 @@ fun MenuItem(menu: MenuEntity) {
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = "${menu.price}원",
+                text = "${menu.price.formatAsCurrency()}원",
                 style = MenuPrice,
             )
         }
@@ -388,6 +358,7 @@ fun BoothScreenPreview() {
             onBookmarkClick = {},
             isBookmarked = false,
             bookmarkCount = 0,
+            onShowSnackBar = {},
         )
     }
 }

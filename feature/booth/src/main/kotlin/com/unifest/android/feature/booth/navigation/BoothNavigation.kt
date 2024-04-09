@@ -19,6 +19,7 @@ const val BOOTH_LOCATION_ROUTE = "booth_location_route"
 
 fun NavController.navigateToBoothDetail(
     boothId: Long,
+    onShowSnackBar: (Int) -> Unit,
 ) {
     navigate("booth_route/$boothId")
 }
@@ -31,6 +32,7 @@ fun NavGraphBuilder.boothNavGraph(
     navController: NavHostController,
     onBackClick: () -> Unit,
     onNavigateToBoothLocation: () -> Unit,
+    onShowSnackBar: (Int) -> Unit,
 ) {
     navigation(
         startDestination = BOOTH_DETAIL_ROUTE,
@@ -46,6 +48,7 @@ fun NavGraphBuilder.boothNavGraph(
             BoothDetailRoute(
                 onBackClick = onBackClick,
                 onNavigateToBoothLocation = onNavigateToBoothLocation,
+                onShowSnackBar = onShowSnackBar,
                 viewModel = viewModel,
             )
         }
