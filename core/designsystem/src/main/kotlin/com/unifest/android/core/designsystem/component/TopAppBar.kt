@@ -22,14 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowInsetsCompat
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
@@ -57,11 +54,6 @@ fun UnifestTopAppBar(
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
 ) {
-    val view = LocalView.current
-    val insets = with(LocalDensity.current) {
-        WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
-    }
-
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         val icon: @Composable (Modifier, imageVector: ImageVector) -> Unit =
             { modifier, imageVector ->
@@ -79,7 +71,6 @@ fun UnifestTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(containerColor)
-                .padding(top = insets)
                 .then(modifier),
         ) {
             if (navigationType == TopAppBarNavigationType.Back) {

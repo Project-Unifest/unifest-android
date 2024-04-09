@@ -1,6 +1,5 @@
 package com.unifest.android.feature.waiting.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,12 +12,8 @@ fun NavController.navigateToWaiting(navOptions: NavOptions) {
     navigate(WAITING_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.waitingNavGraph(
-    padding: PaddingValues,
-) {
+fun NavGraphBuilder.waitingNavGraph() {
     composable(route = WAITING_ROUTE) {
-        WaitingRoute(
-            padding = padding,
-        )
+        WaitingRoute()
     }
 }

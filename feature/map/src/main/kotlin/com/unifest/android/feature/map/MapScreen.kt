@@ -54,13 +54,11 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun MapRoute(
-    padding: PaddingValues,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MapScreen(
-        padding = padding,
         uiState = uiState,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         initSearchText = viewModel::initSearchText,
@@ -76,7 +74,6 @@ internal fun MapRoute(
 )
 @Composable
 internal fun MapScreen(
-    padding: PaddingValues,
     uiState: MapUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     initSearchText: () -> Unit,
@@ -85,9 +82,7 @@ internal fun MapScreen(
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = padding.calculateBottomPadding()),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -229,7 +224,6 @@ fun MapScreenPreview() {
     }
     UnifestTheme {
         MapScreen(
-            padding = PaddingValues(0.dp),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
                 boothSpots = persistentListOf(

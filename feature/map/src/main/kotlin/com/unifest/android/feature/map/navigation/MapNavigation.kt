@@ -1,6 +1,5 @@
 package com.unifest.android.feature.map.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,12 +12,8 @@ fun NavController.navigateToMap(navOptions: NavOptions) {
     navigate(MAP_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.mapNavGraph(
-    padding: PaddingValues,
-) {
+fun NavGraphBuilder.mapNavGraph() {
     composable(route = MAP_ROUTE) {
-        MapRoute(
-            padding = padding,
-        )
+        MapRoute()
     }
 }

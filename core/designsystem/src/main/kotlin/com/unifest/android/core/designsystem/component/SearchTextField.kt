@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -101,6 +100,7 @@ fun SearchTextField(
     )
 }
 
+// TODO SearchMode 가 켜지는 조건 생각
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchTextField(
@@ -121,12 +121,7 @@ fun FestivalSearchTextField(
         state = searchText,
         modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(focusRequester)
-            .onFocusChanged {
-                if (it.isFocused) {
-                    setEnableSearchMode()
-                }
-            },
+            .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = Color.Black),
         decorator = { innerTextField ->
