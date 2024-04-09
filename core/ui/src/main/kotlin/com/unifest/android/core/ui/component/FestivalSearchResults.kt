@@ -1,5 +1,6 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -27,6 +29,7 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.designsystem.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -34,36 +37,53 @@ import kotlinx.collections.immutable.persistentListOf
 fun FestivalSearchResults(
     searchResults: ImmutableList<Festival>,
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(top = 16.dp, start = 20.dp, end = 20.dp),
-    ) {
-        item {
-            Row {
+    if (searchResults.isEmpty()) {
+        Column {
+            Spacer(modifier = Modifier.height(212.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    text = "검색결과",
-                    color = Color(0xFFABABAB),
-                    style = Content6,
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(
-                    text = "총 ${searchResults.size}개",
-                    color = Color(0xFF191919),
-                    style = Content6,
+                    text = stringResource(id = R.string.no_result),
+                    color = Color(0xFF7E7E7E),
+                    style = Content3,
                 )
             }
         }
-        items(
-            count = searchResults.size,
-            key = { index -> searchResults[index].schoolName },
+    } else {
+        LazyColumn(
+            contentPadding = PaddingValues(top = 16.dp, start = 20.dp, end = 20.dp),
         ) {
-            Column {
-                FestivalSearchResultItem(
-                    festival = searchResults[it],
-                )
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color(0xFFDFDFDF),
-                )
+            item {
+                Row {
+                    Text(
+                        text = stringResource(id = R.string.search_result),
+                        color = Color(0xFFABABAB),
+                        style = Content6,
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = "총 ${searchResults.size}개",
+                        color = Color(0xFF191919),
+                        style = Content6,
+                    )
+                }
+            }
+            items(
+                count = searchResults.size,
+                key = { index -> searchResults[index].schoolName },
+            ) {
+                Column {
+                    FestivalSearchResultItem(
+                        festival = searchResults[it],
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color(0xFFDFDFDF),
+                    )
+                }
             }
         }
     }
@@ -112,7 +132,7 @@ fun FestivalSearchResultItem(
             contentPadding = PaddingValues(horizontal = 17.dp, vertical = 7.dp),
         ) {
             Text(
-                text = "추가",
+                text = stringResource(id = R.string.add),
                 style = Content3,
             )
         }
