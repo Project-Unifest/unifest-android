@@ -39,6 +39,7 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Title1
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
@@ -52,8 +53,6 @@ fun BoothLocationRoute(
 
     BoothLocationScreen(
         uiState = uiState,
-        latitude = uiState.boothDetailInfo.latitude.toDouble(),
-        longitude = uiState.boothDetailInfo.longitude.toDouble(),
         onBackClick = onBackClick,
     )
 }
@@ -63,19 +62,17 @@ fun BoothLocationRoute(
 fun BoothLocationScreen(
     uiState: BoothUiState,
     onBackClick: () -> Unit,
-    latitude: Double,
-    longitude: Double,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(latitude, longitude), 14.0)
+            position = CameraPosition(LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble()), 14.0)
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
             modifier = Modifier.matchParentSize(),
         ) {
             Marker(
-                state = MarkerState(position = LatLng(latitude, longitude)),
+                state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
                 icon = OverlayImage.fromResource(R.drawable.ic_general),
                 onClick = { true },
             )
@@ -144,20 +141,20 @@ fun BoothLocationAppBar(
 @Preview
 @Composable
 fun BoothLocationScreenPreview() {
-    BoothLocationScreen(
-        uiState = BoothUiState(
-            boothDetailInfo = BoothDetailEntity(
-                id = 0L,
-                name = "컴공 주점",
-                category = "컴퓨터공학부 전용 부스",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                location = "청심대 앞",
-                latitude = 37.54224856023523f,
-                longitude = 127.07605430700158f,
+    UnifestTheme {
+        BoothLocationScreen(
+            uiState = BoothUiState(
+                boothDetailInfo = BoothDetailEntity(
+                    id = 0L,
+                    name = "컴공 주점",
+                    category = "컴퓨터공학부 전용 부스",
+                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
+                    location = "청심대 앞",
+                    latitude = 37.54224856023523f,
+                    longitude = 127.07605430700158f,
+                ),
             ),
-        ),
-        onBackClick = {},
-        latitude = 37.54224856023523,
-        longitude = 127.07605430700158,
-    )
+            onBackClick = {},
+        )
+    }
 }
