@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -21,12 +22,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.skydoves.balloon.ArrowOrientation
 import com.skydoves.balloon.BalloonAnimation
@@ -55,6 +58,7 @@ fun UnifestTopAppBar(
     contentColor: Color = Color.Black,
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
+    elevation: Dp = 0.dp,
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         val icon: @Composable (Modifier, imageVector: ImageVector) -> Unit =
@@ -72,6 +76,7 @@ fun UnifestTopAppBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .shadow(elevation, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
                 .background(containerColor)
                 .then(modifier),
         ) {
