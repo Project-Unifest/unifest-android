@@ -3,30 +3,22 @@ package com.unifest.android.core.ui.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +35,6 @@ import com.unifest.android.core.designsystem.component.InterestedFestivalDeleteD
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -60,27 +51,29 @@ fun FestivalSearchBottomSheet(
     isEditMode: Boolean = false,
 ) {
     val selectedFestivals = remember { mutableStateListOf<Festival>() }
-    val scope = rememberCoroutineScope()
-//    val bottomSheetState = rememberFlexibleBottomSheetState(
-//        containSystemBars = true,
-//        flexibleSheetSize = FlexibleSheetSize(),
-//        isModal = true,
-//        skipSlightlyExpanded = false,
-//    )
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
+//    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberFlexibleBottomSheetState(
+        containSystemBars = true,
+        flexibleSheetSize = FlexibleSheetSize(
+            fullyExpanded = 1.0f,
+            intermediatelyExpanded = 1.0f,
+        ),
+        isModal = true,
+        skipSlightlyExpanded = true,
     )
-    LaunchedEffect(key1 = Unit) {
-        scope.launch {
-            bottomSheetState.expand()
-        }
-    }
+//    val bottomSheetState = rememberModalBottomSheetState(
+//        skipPartiallyExpanded = true,
+//    )
+//    LaunchedEffect(key1 = Unit) {
+//        scope.launch {
+//            bottomSheetState.expand()
+//        }
+//    }
 
-    ModalBottomSheet(
+    FlexibleBottomSheet(
         onDismissRequest = {
             setFestivalSearchBottomSheetVisible(false)
         },
-        modifier = Modifier.fillMaxSize(),
         sheetState = bottomSheetState,
         containerColor = Color.White,
         dragHandle = {
@@ -100,69 +93,62 @@ fun FestivalSearchBottomSheet(
             }
         },
     ) {
-        Box {
-            Column(
+        Column(
+            modifier = Modifier
+                .background(Color.White)
+                .navigationBarsPadding(),
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+            FestivalSearchTextField(
+                searchText = TextFieldState(),
+                searchTextHintRes = searchTextHintRes,
+                onSearch = {},
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
+                isSearchMode = isSearchMode,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-                    .padding(
-                        bottom = WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateBottomPadding(),
-                    ),
-            ) {
-                Spacer(modifier = Modifier.height(24.dp))
-                FestivalSearchTextField(
-                    searchText = TextFieldState(),
-                    searchTextHintRes = searchTextHintRes,
-                    onSearch = {},
-                    initSearchText = initSearchText,
-                    setEnableSearchMode = setEnableSearchMode,
-                    isSearchMode = isSearchMode,
+                    .height(46.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+            )
+            if (!isSearchMode) {
+                Spacer(modifier = Modifier.height(39.dp))
+                VerticalDivider(
                     modifier = Modifier
-                        .height(46.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .height(8.dp)
+                        .background(Color(0xFFF1F3F7)),
                 )
-                if (!isSearchMode) {
-                    Spacer(modifier = Modifier.height(39.dp))
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(Color(0xFFF1F3F7)),
-                    )
-                    Spacer(modifier = Modifier.height(21.dp))
-                    InterestedFestivalsGrid(
-                        selectedFestivals = interestedFestivals,
-                        onFestivalSelected = { school ->
-                            selectedFestivals.remove(school)
-                        },
-                        isEditMode = isEditMode,
-                        setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                Spacer(modifier = Modifier.height(21.dp))
+                InterestedFestivalsGrid(
+                    selectedFestivals = interestedFestivals,
+                    onFestivalSelected = { school ->
+                        selectedFestivals.remove(school)
+                    },
+                    isEditMode = isEditMode,
+                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                ) {
+                    TextButton(
+                        onClick = setEnableEditMode,
                     ) {
-                        TextButton(
-                            onClick = setEnableEditMode,
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.edit),
-                                color = Color.Black,
-                                style = Content3,
-                            )
-                        }
+                        Text(
+                            text = stringResource(id = R.string.edit),
+                            color = Color.Black,
+                            style = Content3,
+                        )
                     }
                 }
             }
-            if (isInterestedFestivalDeleteDialogVisible) {
-                InterestedFestivalDeleteDialog(
-                    onCancelClick = {
-                        setInterestedFestivalDeleteDialogVisible(false)
-                    },
-                    onConfirmClick = {
-                        setInterestedFestivalDeleteDialogVisible(false)
-                    },
-                )
-            }
+        }
+        if (isInterestedFestivalDeleteDialogVisible) {
+            InterestedFestivalDeleteDialog(
+                onCancelClick = {
+                    setInterestedFestivalDeleteDialogVisible(false)
+                },
+                onConfirmClick = {
+                    setInterestedFestivalDeleteDialogVisible(false)
+                },
+            )
         }
     }
 }
