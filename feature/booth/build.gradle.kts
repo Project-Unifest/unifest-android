@@ -6,16 +6,18 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.intro"
+    namespace = "com.unifest.android.feature.booth"
 }
 
 dependencies {
     implementations(
         libs.kotlinx.collections.immutable,
         libs.androidx.core,
-        libs.androidx.activity.compose,
-        libs.androidx.splash,
-        libs.system.ui.controller,
         libs.timber,
+        libs.calendar.compose,
+        libs.system.ui.controller,
+        libs.naver.map.sdk,
+        libs.naver.map.compose,
+        libs.naver.map.location,
     )
 }

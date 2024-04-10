@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -31,10 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.booth.navigation.boothNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
@@ -42,8 +43,6 @@ import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.net.UnknownHostException
 
 @Composable
 internal fun MainScreen(
@@ -51,25 +50,15 @@ internal fun MainScreen(
     navigator: MainNavController = rememberMainNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     val resource = LocalContext.current.resources
 
     @Suppress("unused")
-    val onShowErrorSnackBar: (throwable: Throwable?) -> Unit = { throwable ->
-        coroutineScope.launch {
+    val onShowSnackBar: (message: Int) -> Unit = { message ->
+        scope.launch {
             snackBarHostState.showSnackbar(
-                when (throwable) {
-                    is UnknownHostException -> resource.getString(R.string.network_error_message)
-                    is HttpException -> {
-                        if (throwable.code() == 500) {
-                            resource.getString(R.string.server_error_message)
-                        } else {
-                            resource.getString(R.string.unknown_error_message)
-                        }
-                    }
-
-                    else -> resource.getString(R.string.unknown_error_message)
-                },
+                message = resource.getString(message),
+                duration = SnackbarDuration.Short,
             )
         }
     }
@@ -81,8 +70,19 @@ internal fun MainScreen(
                 startDestination = navigator.startDestination,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                homeNavGraph(onNavigateToIntro = onNavigateToIntro)
-                mapNavGraph()
+                homeNavGraph(
+                    onNavigateToIntro = onNavigateToIntro
+                )
+                mapNavGraph(
+                    onShowSnackBar = onShowSnackBar,
+                    onNavigateToBooth = navigator::navigateToBoothDetail,
+                )
+                boothNavGraph(
+                    navController = navigator.navController,
+                    onBackClick = navigator::popBackStackIfNotHome,
+                    onNavigateToBoothLocation = navigator::navigateToBoothLocation,
+                    onShowSnackBar = onShowSnackBar,
+                )
                 waitingNavGraph()
                 menuNavGraph()
             }

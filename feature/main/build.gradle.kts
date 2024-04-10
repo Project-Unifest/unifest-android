@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementations(
+        projects.feature.booth,
         projects.feature.home,
         projects.feature.intro,
         projects.feature.map,
@@ -22,5 +23,6 @@ dependencies {
         libs.androidx.activity.compose,
         libs.kotlinx.collections.immutable,
         libs.coil.compose,
+        libs.system.ui.controller,
     )
 }
