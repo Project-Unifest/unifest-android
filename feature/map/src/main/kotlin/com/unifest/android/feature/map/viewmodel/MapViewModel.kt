@@ -60,13 +60,20 @@ class MapViewModel @Inject constructor() : ViewModel() {
                     Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
                     Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
                 ),
+                festivalSearchResults = persistentListOf(
+                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                ),
             )
         }
     }
 
     fun initSearchText() {
         _uiState.update {
-            it.copy(searchText = TextFieldState(""))
+            it.copy(festivalSearchText = TextFieldState(""))
         }
     }
 
@@ -76,9 +83,9 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun setEnableSearchMode() {
+    fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
-            it.copy(isSearchMode = !_uiState.value.isSearchMode)
+            it.copy(isSearchMode = flag)
         }
     }
 

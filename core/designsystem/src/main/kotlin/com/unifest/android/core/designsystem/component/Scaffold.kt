@@ -25,10 +25,10 @@ fun UnifestScaffold(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalMutableExKeyboardStateSourceOwner provides MutableExKeyboardStateSource()
+        LocalMutableExKeyboardStateSourceOwner provides MutableExKeyboardStateSource(),
     ) {
         Scaffold(
             topBar = topBar,
@@ -38,10 +38,10 @@ fun UnifestScaffold(
             containerColor = containerColor,
             contentColor = contentColor,
             contentWindowInsets = contentWindowInsets,
-            modifier = modifier.removeFocusWhenKeyboardIsHidden()
+            modifier = modifier.removeFocusWhenKeyboardIsHidden(),
         ) { innerPadding ->
             Box(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
             ) {
                 content()
             }

@@ -108,7 +108,7 @@ fun IntroScreen(
                 },
             ) {
                 TextButton(
-                   onClick = { selectedFestivals.clear()}
+                    onClick = { selectedFestivals.clear() },
                 ) {
                     Text(
                         text = stringResource(id = R.string.intro_clear_item_button_text),

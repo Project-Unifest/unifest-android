@@ -20,11 +20,9 @@ import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -89,9 +87,10 @@ fun SearchTextField(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
                         contentDescription = "Delete Icon",
                         tint = Color.Unspecified,
-                        modifier = Modifier.clickable {
-                            initSearchText()
-                        },
+                        modifier = Modifier
+                            .clickable {
+                                initSearchText()
+                            },
                     )
                 }
                 Spacer(modifier = Modifier.width(width = 15.dp))
@@ -108,20 +107,20 @@ fun FestivalSearchTextField(
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
-    modifier: Modifier = Modifier,
-    setEnableSearchMode: () -> Unit = {},
+    setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
+    modifier: Modifier = Modifier,
     backgroundColor: Color = Color.White,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
-    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(key1 = searchText.text) {
+        setEnableSearchMode(searchText.text.isNotEmpty())
+    }
 
     BasicTextField2(
         state = searchText,
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
+        modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = Color.Black),
         decorator = { innerTextField ->
@@ -141,7 +140,7 @@ fun FestivalSearchTextField(
                         contentDescription = "Search Icon",
                         tint = Color(0xFF767676),
                         modifier = Modifier.clickable {
-                            setEnableSearchMode()
+                            initSearchText()
                         },
                     )
                 }

@@ -77,7 +77,7 @@ internal fun MapScreen(
     uiState: MapUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     initSearchText: () -> Unit,
-    setEnableSearchMode: () -> Unit,
+    setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
@@ -104,7 +104,7 @@ internal fun MapScreen(
             }
             MapTopAppBar(
                 title = uiState.selectedSchoolName,
-                searchText = uiState.searchText,
+                searchText = uiState.boothSearchText,
                 onTitleClick = setFestivalSearchBottomSheetVisible,
                 initSearchText = initSearchText,
                 modifier = Modifier
@@ -124,6 +124,8 @@ internal fun MapScreen(
                     searchTextHintRes = R.string.festival_search_text_field_hint,
                     setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                     interestedFestivals = uiState.interestedFestivals,
+                    festivalSearchResults = uiState.festivalSearchResults,
+                    searchText = uiState.festivalSearchText,
                     initSearchText = initSearchText,
                     setEnableSearchMode = setEnableSearchMode,
                     isSearchMode = uiState.isSearchMode,

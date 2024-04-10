@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -129,7 +131,11 @@ fun FestivalSearchResultItem(
             cornerRadius = 17.dp,
             borderColor = Color(0xFFDDDDDD),
             contentColor = Color(0xFF666666),
-            contentPadding = PaddingValues(horizontal = 17.dp, vertical = 7.dp),
+            contentPadding = PaddingValues(horizontal = 17.dp),
+            modifier = Modifier.defaultMinSize(
+                minWidth = ButtonDefaults.MinWidth,
+                minHeight = 29.dp,
+            ),
         ) {
             Text(
                 text = stringResource(id = R.string.add),

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text2.input.TextFieldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -36,15 +35,19 @@ import com.unifest.android.core.designsystem.component.InterestedFestivalDeleteD
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    searchText: TextFieldState,
     interestedFestivals: MutableList<Festival>,
+    festivalSearchResults: ImmutableList<Festival>,
     initSearchText: () -> Unit,
-    setEnableSearchMode: () -> Unit,
+    setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     setEnableEditMode: () -> Unit,
     isInterestedFestivalDeleteDialogVisible: Boolean,
@@ -93,7 +96,7 @@ fun FestivalSearchBottomSheet(
                 )
             }
         },
-        windowInsets = WindowInsets(0, 0, 0, 0)
+        windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         Column(
             modifier = Modifier
@@ -102,7 +105,7 @@ fun FestivalSearchBottomSheet(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
-                searchText = TextFieldState(),
+                searchText = searchText,
                 searchTextHintRes = searchTextHintRes,
                 onSearch = {},
                 initSearchText = initSearchText,
@@ -140,6 +143,10 @@ fun FestivalSearchBottomSheet(
                         )
                     }
                 }
+            } else {
+                FestivalSearchResults(
+                    searchResults = festivalSearchResults,
+                )
             }
         }
         if (isInterestedFestivalDeleteDialogVisible) {
@@ -155,6 +162,7 @@ fun FestivalSearchBottomSheet(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun SchoolSearchBottomSheetPreview() {
@@ -162,7 +170,15 @@ fun SchoolSearchBottomSheetPreview() {
         FestivalSearchBottomSheet(
             searchTextHintRes = R.string.festival_search_text_field_hint,
             setFestivalSearchBottomSheetVisible = {},
+            searchText = TextFieldState(),
             interestedFestivals = mutableListOf(
+                Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+            ),
+            festivalSearchResults = persistentListOf(
                 Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
                 Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
                 Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),

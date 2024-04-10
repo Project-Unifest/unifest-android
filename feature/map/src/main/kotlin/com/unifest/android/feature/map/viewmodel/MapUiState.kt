@@ -11,11 +11,13 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalFoundationApi::class)
 data class MapUiState(
     val selectedSchoolName: String = "",
-    val searchText: TextFieldState = TextFieldState(""),
+    val boothSearchText: TextFieldState = TextFieldState(""),
+    val festivalSearchText: TextFieldState = TextFieldState(""),
     val boothSpots: ImmutableList<BoothSpot> = persistentListOf(),
     val boothList: ImmutableList<BoothDetailEntity> = persistentListOf(),
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val interestedFestivals: MutableList<Festival> = mutableListOf(),
+    val festivalSearchResults: ImmutableList<Festival> = persistentListOf(),
     val isSearchMode: Boolean = false,
     val isEditMode: Boolean = false,
     val isPopularMode: Boolean = false,
