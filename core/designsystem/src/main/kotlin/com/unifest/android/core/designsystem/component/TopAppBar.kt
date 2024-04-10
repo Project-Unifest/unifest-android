@@ -1,5 +1,6 @@
 package com.unifest.android.core.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -38,12 +39,14 @@ fun UnifestTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     titleStyle: TextStyle = Title1,
+    @DrawableRes navigationIconRes: Int = R.drawable.ic_arrow_back_dark_gray,
     navigationIconContentDescription: String? = null,
     containerColor: Color = Color.White,
     contentColor: Color = Color.Black,
     onNavigationClick: () -> Unit = {},
 ) {
     val view = LocalView.current
+    // TODO: 해당 코드의 존재 의의 고민
     val insets = with(LocalDensity.current) {
         WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
     }
@@ -70,7 +73,7 @@ fun UnifestTopAppBar(
             if (navigationType == TopAppBarNavigationType.Back) {
                 icon(
                     Modifier.align(Alignment.CenterStart),
-                    ImageVector.vectorResource(id = R.drawable.ic_arrow_back),
+                    ImageVector.vectorResource(id = navigationIconRes),
                 )
             }
             if (navigationType == TopAppBarNavigationType.Search) {
