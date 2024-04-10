@@ -99,7 +99,6 @@ fun SearchTextField(
     )
 }
 
-// TODO SearchMode 가 켜지는 조건 생각
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchTextField(

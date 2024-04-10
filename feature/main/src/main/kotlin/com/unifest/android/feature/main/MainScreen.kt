@@ -71,7 +71,7 @@ internal fun MainScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 homeNavGraph(
-                    onNavigateToIntro = onNavigateToIntro
+                    onNavigateToIntro = onNavigateToIntro,
                 )
                 mapNavGraph(
                     onShowSnackBar = onShowSnackBar,
