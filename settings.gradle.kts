@@ -34,7 +34,9 @@ include(
     ":core:datastore",
     ":core:ui",
 
+    ":feature:booth",
     ":feature:home",
+    ":feature:interested-booth",
     ":feature:intro",
     ":feature:main",
     ":feature:map",
@@ -42,5 +44,3 @@ include(
     ":feature:navigator",
     ":feature:waiting",
 )
-include(":booth")
-include(":feature:booth")
