@@ -13,11 +13,9 @@ dependencies {
     implementations(
         libs.kotlinx.collections.immutable,
         libs.androidx.core,
-        libs.timber,
-        libs.calendar.compose,
         libs.compose.system.ui.controller,
-        libs.naver.map.sdk,
-        libs.naver.map.compose,
-        libs.naver.map.location,
+        libs.timber,
+
+        libs.bundles.naver.map.compose,
     )
 }
