@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.navigation.boothNavGraph
@@ -63,38 +63,28 @@ internal fun MainScreen(
         }
     }
 
-    Scaffold(
-        content = { padding ->
+    UnifestScaffold(
+        content = {
             NavHost(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 homeNavGraph(
-                    padding = padding,
                     onNavigateToIntro = onNavigateToIntro,
                 )
-
                 mapNavGraph(
-                    padding = padding,
                     onShowSnackBar = onShowSnackBar,
                     onNavigateToBooth = navigator::navigateToBoothDetail,
                 )
-
                 boothNavGraph(
                     navController = navigator.navController,
                     onBackClick = navigator::popBackStackIfNotHome,
                     onNavigateToBoothLocation = navigator::navigateToBoothLocation,
                     onShowSnackBar = onShowSnackBar,
                 )
-
-                waitingNavGraph(
-                    padding = padding,
-                )
-
-                menuNavGraph(
-                    padding = padding,
-                )
+                waitingNavGraph()
+                menuNavGraph()
             }
         },
         bottomBar = {

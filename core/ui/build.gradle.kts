@@ -17,5 +17,7 @@ dependencies {
 
         libs.kotlinx.collections.immutable,
         libs.coil.compose,
+        libs.flexible.bottomsheet,
+        libs.timber,
     )
 }

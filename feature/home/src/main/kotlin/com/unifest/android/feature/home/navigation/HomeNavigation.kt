@@ -1,6 +1,5 @@
 package com.unifest.android.feature.home.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,13 +13,9 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
-        HomeRoute(
-            padding = padding,
-            onNavigateToIntro = onNavigateToIntro,
-        )
+        HomeRoute(onNavigateToIntro = onNavigateToIntro)
     }
 }

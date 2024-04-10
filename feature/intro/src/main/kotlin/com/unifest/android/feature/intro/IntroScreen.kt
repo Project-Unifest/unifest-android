@@ -1,28 +1,20 @@
 package com.unifest.android.feature.intro
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -37,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -50,15 +41,14 @@ import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
-import com.unifest.android.core.designsystem.theme.Content2
-import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.Content4
+import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
-import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.School
+import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.core.ui.component.InterestedFestivalsGrid
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -68,7 +58,6 @@ import timber.log.Timber
 @Composable
 internal fun IntroRoute(
     navigateToMain: () -> Unit,
-    @Suppress("unused")
     viewModel: IntroViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,6 +65,7 @@ internal fun IntroRoute(
     IntroScreen(
         uiState = uiState,
         navigateToMain = navigateToMain,
+        initSearchText = viewModel::initSearchText,
     )
 }
 
@@ -84,8 +74,9 @@ internal fun IntroRoute(
 fun IntroScreen(
     uiState: IntroUiState,
     navigateToMain: () -> Unit,
+    initSearchText: () -> Unit,
 ) {
-    val selectedSchools = remember { mutableStateListOf<School>() }
+    val selectedFestivals = remember { mutableStateListOf<Festival>() }
 
     Box(
         modifier = Modifier
@@ -103,27 +94,39 @@ fun IntroScreen(
                 searchText = uiState.searchText,
                 searchTextHintRes = R.string.intro_search_text_hint,
                 onSearch = { query -> Timber.d("검색: $query") },
+                initSearchText = initSearchText,
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
             )
-            SelectedSchoolsGrid(
-                selectedSchools = selectedSchools,
-                onSchoolSelected = { school ->
-                    selectedSchools.remove(school)
+            Spacer(modifier = Modifier.height(18.dp))
+            InterestedFestivalsGrid(
+                selectedFestivals = selectedFestivals,
+                onFestivalSelected = { school ->
+                    selectedFestivals.remove(school)
                 },
-            )
+            ) {
+                TextButton(
+                    onClick = { selectedFestivals.clear() },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.intro_clear_item_button_text),
+                        color = Color(0xFF848484),
+                        textDecoration = TextDecoration.Underline,
+                        style = Content6,
+                    )
+                }
+            }
             AllSchoolsTabView(
                 schools = uiState.schools,
                 onSchoolSelected = { school ->
-                    if (!selectedSchools.any { it.schoolName == school.schoolName }) {
-                        selectedSchools.add(school)
+                    if (!selectedFestivals.any { it.schoolName == school.schoolName }) {
+                        selectedFestivals.add(school)
                     }
                 },
             )
         }
-
         UnifestButton(
             onClick = navigateToMain,
             modifier = Modifier
@@ -165,120 +168,10 @@ fun InformationText() {
 }
 
 @Composable
-fun SelectedSchoolsGrid(
-    selectedSchools: MutableList<School>,
-    onSchoolSelected: (School) -> Unit,
-) {
-    // 나의 관심 축제
-    Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.intro_interested_festivals_title),
-                style = Title3,
-            )
-            TextButton(
-                onClick = { selectedSchools.clear() },
-            ) {
-                Text(
-                    text = stringResource(id = R.string.intro_clear_item_button_text),
-                    color = Color(0xFF848484),
-                    textDecoration = TextDecoration.Underline,
-                    style = BoothLocation,
-                    fontSize = 12.sp,
-                )
-            }
-        }
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .padding(8.dp)
-                .height(
-                    when {
-                        selectedSchools.isEmpty() -> 0.dp
-                        else -> {
-                            val rows = ((selectedSchools.size - 1) / 3 + 1) * 180
-                            rows.dp
-                        }
-                    },
-                ),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(selectedSchools.size) { index ->
-                val school = selectedSchools[index]
-                SchoolItem(
-                    school = school,
-                    onSchoolSelected = {
-                        onSchoolSelected(it)
-                    },
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SchoolItem(
-    school: School,
-    onSchoolSelected: (School) -> Unit,
-) {
-    // 그리드에 들어갈 각 학교별 아이템
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier.clickable {
-            onSchoolSelected(school)
-        },
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_map),
-                contentDescription = null,
-                modifier = Modifier.size(50.dp),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            // todo:coil로 이미지 넣기
-            Text(
-                text = school.schoolName,
-                color = Color.Black,
-                style = Content2,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = school.festivalName,
-                color = Color.Black,
-                style = Content4,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                school.festivalDate,
-                color = Color(0xFF979797),
-                style = Content3,
-            )
-        }
-    }
-}
-
-@Composable
 fun AllSchoolsTabView(
-    schools: ImmutableList<School>,
-    onSchoolSelected: (School) -> Unit,
+    schools: ImmutableList<Festival>,
+    onSchoolSelected: (Festival) -> Unit,
 ) {
-    // 전체 학교 그리드뷰
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val selectedColor = Color(0xFFF5687E)
@@ -318,8 +211,6 @@ fun AllSchoolsTabView(
             style = BoothLocation,
             fontSize = 12.sp,
         )
-        // 총 학교수
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier
@@ -337,7 +228,10 @@ fun AllSchoolsTabView(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(schools.size) { index ->
-                SchoolItem(school = schools[index], onSchoolSelected = onSchoolSelected)
+                FestivalItem(
+                    festival = schools[index],
+                    onFestivalSelected = onSchoolSelected,
+                )
             }
         }
     }
@@ -351,14 +245,15 @@ fun PreviewIntroScreen() {
         IntroScreen(
             uiState = IntroUiState(
                 schools = persistentListOf(
-                    School("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),
-                    School("school_image_url_2", "연세대학교", "연대축제", "05.06-05.08"),
-                    School("school_image_url_3", "고려대학교", "고대축제", "05.06-05.08"),
-                    School("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
-                    School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "성균관대", "성대축제", "05.06-05.08"),
                 ),
             ),
             navigateToMain = {},
+            initSearchText = {},
         )
     }
 }

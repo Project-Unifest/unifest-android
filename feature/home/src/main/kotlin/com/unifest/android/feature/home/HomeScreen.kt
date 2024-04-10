@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,13 +36,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
@@ -64,13 +60,11 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun HomeRoute(
-    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
-        padding = padding,
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
     )
@@ -78,22 +72,16 @@ internal fun HomeRoute(
 
 @Composable
 internal fun HomeScreen(
-    padding: PaddingValues,
     uiState: HomeUiState,
     @Suppress("unused")
     onNavigateToIntro: () -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
-    val view = LocalView.current
-    val insets = with(LocalDensity.current) {
-        WindowInsetsCompat.toWindowInsetsCompat(view.rootWindowInsets, view).getInsets(WindowInsetsCompat.Type.statusBars()).top.toDp()
-    }
-
-    Column(modifier = Modifier.padding(top = insets)) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+    ) {
         LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .padding(bottom = padding.calculateBottomPadding()),
+            modifier = Modifier.weight(1f),
         ) {
             item { Calendar() }
             item {
@@ -374,8 +362,6 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
-
-            padding = PaddingValues(0.dp),
             onNavigateToIntro = {},
         )
     }

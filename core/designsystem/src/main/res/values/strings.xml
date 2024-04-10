@@ -42,7 +42,17 @@
     <string name="booth_bookmark_removed_message">관심 주점에서 삭제했습니다.</string>
 
     <!--    Map    -->
-    <string name="map_search_text_field_hint"> 부스 / 주점을 검색해보세요.</string>
+    <string name="map_booth_search_text_field_hint"> 부스 / 주점을 검색해보세요.</string>
+    <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
+
+    <!--    Festival Search BottomSheet-->
+    <string name="festival_search_text_field_hint"> 학교 / 축제 이름을 검색해보세요.</string>
+    <string name="interested_festival">나의 관심 축제</string>
+    <string name="edit">편집</string>
+    <string name="finish">완료</string>
+    <string name="add">추가</string>
+    <string name="search_result">검색결과</string>
+    <string name="no_result">검색 결과가 없어요</string>
 
     <!--    Dialog-->
     <string name="server_error_title">서버 문제 발생</string>
@@ -50,8 +60,8 @@
     <string name="retry">다시 시도</string>
     <string name="network_error_title">네트워크 문제</string>
     <string name="network_error_description">와이파이와 데이터 접속을 확인해주세요</string>
-    <string name="interested_school_delete_title">관심 축제를 삭제합니다</string>
-    <string name="interested_school_delete_description">정말 삭제하실 건가요?</string>
+    <string name="interested_festival_delete_title">관심 축제를 삭제합니다</string>
+    <string name="interested_festival_delete_description">정말 삭제하실 건가요?</string>
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 

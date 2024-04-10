@@ -155,15 +155,15 @@ fun NetworkErrorDialog(
 }
 
 @Composable
-fun InterestedSchoolDeleteDialog(
+fun InterestedFestivalDeleteDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit,
 ) {
     UnifestDialog(
-        titleResId = R.string.interested_school_delete_title,
+        titleResId = R.string.interested_festival_delete_title,
         iconResId = R.drawable.ic_caution,
         iconDescription = "Caution Icon",
-        descriptionResId = R.string.interested_school_delete_description,
+        descriptionResId = R.string.interested_festival_delete_description,
         confirmTextResId = R.string.confirm,
         cancelTextResId = R.string.cancel,
         onCancelClick = onCancelClick,
@@ -189,9 +189,9 @@ fun NetworkErrorDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun InterestedSchoolDeleteDialogPreview() {
+fun InterestedFestivalDeleteDialogPreview() {
     UnifestTheme {
-        InterestedSchoolDeleteDialog(
+        InterestedFestivalDeleteDialog(
             onCancelClick = {},
             onConfirmClick = {},
         )

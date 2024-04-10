@@ -1,8 +1,9 @@
 package com.unifest.android.feature.intro.viewmodel
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.lifecycle.ViewModel
-import com.unifest.android.core.domain.entity.School
+import com.unifest.android.core.domain.entity.Festival
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,15 +21,20 @@ class IntroViewModel @Inject constructor() : ViewModel() {
     init {
         _uiState.update {
             it.copy(
-                // 임시 데이터
                 schools = persistentListOf(
-                    School("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),
-                    School("school_image_url_2", "연세대학교", "연대축제", "05.06-05.08"),
-                    School("school_image_url_3", "고려대학교", "고대축제", "05.06-05.08"),
-                    School("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
-                    School("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
                 ),
             )
+        }
+    }
+
+    fun initSearchText() {
+        _uiState.update {
+            it.copy(searchText = TextFieldState(""))
         }
     }
 }
