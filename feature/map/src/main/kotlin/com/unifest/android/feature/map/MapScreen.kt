@@ -31,12 +31,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,11 +49,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.Marker
-import com.naver.maps.map.compose.MarkerState
+import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
@@ -62,17 +67,17 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.BoothSpot
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.feature.map.model.BoothDetailModel
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import ted.gun0912.clustering.naver.TedNaverClustering
 
 @Composable
 internal fun MapRoute(
@@ -103,6 +108,8 @@ internal fun MapRoute(
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setEnablePopularMode = viewModel::setEnablePopularMode,
+        setBoothSelectionMode = viewModel::setBoothSelectionMode,
+        updateSelectedBooths = viewModel::updateSelectedBooths,
         setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
     )
 }
@@ -123,6 +130,8 @@ internal fun MapScreen(
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setEnablePopularMode: () -> Unit,
+    setBoothSelectionMode: (Boolean) -> Unit,
+    updateSelectedBooths: (List<BoothDetailModel>) -> Unit,
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
@@ -137,18 +146,46 @@ internal fun MapScreen(
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
         }
-        val pagerState = rememberPagerState(pageCount = { uiState.boothList.size })
+        val pagerState = rememberPagerState(pageCount = { uiState.selectedBooths.size })
         Box {
+            // TODO 지도 중앙 위치 조정
+            // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
+            // TODO 클러스터링 마커 커스텀
             NaverMap(
                 cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    isZoomControlEnabled = false,
+                    isScaleBarEnabled = false,
+                    isLogoClickEnabled = false,
+                ),
                 modifier = Modifier.fillMaxSize(),
             ) {
-                uiState.boothSpots.forEach { spot ->
-                    Marker(
-                        state = MarkerState(position = LatLng(spot.lat, spot.lng)),
-                        icon = OverlayImage.fromResource(R.drawable.ic_general),
-                        onClick = { true },
-                    )
+                val context = LocalContext.current
+                var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailModel>?>(null) }
+                DisposableMapEffect(uiState.booths) { map ->
+                    if (clusterManager == null) {
+                        clusterManager = TedNaverClustering.with<BoothDetailModel>(context, map)
+                            .customMarker {
+                                Marker().apply {
+                                    icon = OverlayImage.fromResource(R.drawable.ic_general)
+                                }
+                            }
+                            .markerClickListener { booth ->
+                                setBoothSelectionMode(true)
+                                updateSelectedBooths(listOf(booth))
+                            }
+                            .clusterClickListener { booths ->
+                                setBoothSelectionMode(true)
+                                updateSelectedBooths(booths.items.toList())
+                            }
+                            // 마커를 클릭 했을 경우 지도의 가운데가 마커로 이동 비활성화
+                            .clickToCenter(false)
+                            .make()
+                    }
+                    clusterManager?.addItems(uiState.booths)
+                    onDispose {
+                        clusterManager?.clearItems()
+                    }
                 }
             }
             MapTopAppBar(
@@ -202,13 +239,13 @@ internal fun MapScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                AnimatedVisibility(uiState.isPopularMode) {
+                AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
                     BoothCards(
                         pagerState = pagerState,
-                        boothList = uiState.boothList,
+                        booths = uiState.booths,
                         onNavigateToBooth = onNavigateToBooth,
                         isPopularMode = uiState.isPopularMode,
-                        modifier = Modifier.wrapContentHeight()
+                        modifier = Modifier.wrapContentHeight(),
                     )
                 }
                 Spacer(modifier = Modifier.height(21.dp))
@@ -283,7 +320,7 @@ fun MapTopAppBar(
 @Composable
 fun BoothCards(
     pagerState: PagerState,
-    boothList: ImmutableList<BoothDetailEntity>,
+    booths: ImmutableList<BoothDetailModel>,
     onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     modifier: Modifier = Modifier,
@@ -294,7 +331,7 @@ fun BoothCards(
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { page ->
         BoothCard(
-            boothInfo = boothList[page],
+            boothInfo = booths[page],
             onNavigateToBooth = onNavigateToBooth,
             isPopularMode = isPopularMode,
             ranking = page + 1,
@@ -307,7 +344,7 @@ fun BoothCards(
 
 @Composable
 fun BoothCard(
-    boothInfo: BoothDetailEntity,
+    boothInfo: BoothDetailModel,
     onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     ranking: Int,
@@ -391,33 +428,34 @@ fun RankingBadge(ranking: Int) {
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
-    val boothList = mutableListOf<BoothDetailEntity>()
+    val boothList = mutableListOf<BoothDetailModel>()
     repeat(5) {
         boothList.add(
-            BoothDetailEntity(
+            BoothDetailModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
                 description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
                 warning = "",
                 location = "청심대 앞",
-                latitude = 0f,
-                longitude = 0f,
-                menus = emptyList(),
             ),
         )
     }
+
     UnifestTheme {
         MapScreen(
             padding = PaddingValues(0.dp),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
-                boothList = boothList.toImmutableList(),
-                boothSpots = persistentListOf(
-                    BoothSpot(
-                        lat = 37.540470588662664,
-                        lng = 127.0765263757882,
+                booths = persistentListOf(
+                    BoothDetailModel(
                         id = 1L,
+                        name = "컴공 주점",
+                        category = "",
+                        description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
+                        location = "청심대 앞",
+                        latitude = 37.540470588662664,
+                        longitude = 127.0765263757882,
                     ),
                 ),
             ),
@@ -429,6 +467,8 @@ fun MapScreenPreview() {
             setEnableSearchMode = {},
             setEnableEditMode = {},
             setEnablePopularMode = {},
+            setBoothSelectionMode = {},
+            updateSelectedBooths = {},
             setInterestedFestivalDeleteDialogVisible = {},
         )
     }
@@ -452,19 +492,18 @@ fun MapTopAppBarPreview() {
 @ComponentPreview
 @Composable
 fun BoothCardsPreview() {
-    val boothList = mutableListOf<BoothDetailEntity>()
+    val boothList = mutableListOf<BoothDetailModel>()
     repeat(5) {
         boothList.add(
-            BoothDetailEntity(
+            BoothDetailModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
                 description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
                 warning = "",
                 location = "청심대 앞",
-                latitude = 0f,
-                longitude = 0f,
-                menus = emptyList(),
+                latitude = 0.toDouble(),
+                longitude = 0.toDouble(),
             ),
         )
     }
@@ -472,7 +511,7 @@ fun BoothCardsPreview() {
     UnifestTheme {
         BoothCards(
             pagerState = rememberPagerState(pageCount = { boothList.size }),
-            boothList = boothList.toImmutableList(),
+            booths = boothList.toImmutableList(),
             onNavigateToBooth = {},
             isPopularMode = false,
             modifier = Modifier.height(116.dp),
@@ -485,16 +524,13 @@ fun BoothCardsPreview() {
 fun BoothCardPreview() {
     UnifestTheme {
         BoothCard(
-            boothInfo = BoothDetailEntity(
+            boothInfo = BoothDetailModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
                 description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
                 warning = "",
                 location = "청심대 앞",
-                latitude = 0f,
-                longitude = 0f,
-                menus = emptyList(),
             ),
             onNavigateToBooth = {},
             isPopularMode = true,
