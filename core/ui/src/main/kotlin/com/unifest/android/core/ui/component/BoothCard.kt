@@ -1,5 +1,6 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,10 +34,13 @@ import com.unifest.android.core.domain.entity.BoothDetailEntity
 @Composable
 fun BoothCard(
     boothInfo: BoothDetailEntity,
+    onNavigateToBooth: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable {
+            onNavigateToBooth(boothInfo.id)
+        },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -100,6 +104,7 @@ fun BoothCardPreview() {
                 longitude = 0f,
                 menus = emptyList(),
             ),
+            onNavigateToBooth = {}
         )
     }
 }

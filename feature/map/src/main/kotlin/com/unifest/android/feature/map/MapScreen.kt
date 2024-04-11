@@ -123,10 +123,7 @@ internal fun MapScreen(
                     Marker(
                         state = MarkerState(position = LatLng(spot.lat, spot.lng)),
                         icon = OverlayImage.fromResource(R.drawable.ic_general),
-                        onClick = {
-                            onNavigateToBooth(spot.id)
-                            true
-                        },
+                        onClick = { true },
                     )
                 }
             }
@@ -142,11 +139,12 @@ internal fun MapScreen(
             )
             BoothCards(
                 pagerState = pagerState,
+                boothList = uiState.boothList,
+                onNavigateToBooth = onNavigateToBooth,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .wrapContentHeight()
                     .padding(bottom = 21.dp),
-                boothList = uiState.boothList,
             )
             if (uiState.isFestivalSearchBottomSheetVisible) {
                 FestivalSearchBottomSheet(
@@ -169,7 +167,6 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MapTopAppBar(
     title: String,
@@ -220,6 +217,7 @@ fun MapTopAppBar(
 fun BoothCards(
     pagerState: PagerState,
     boothList: ImmutableList<BoothDetailEntity>,
+    onNavigateToBooth: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HorizontalPager(
@@ -229,6 +227,7 @@ fun BoothCards(
     ) { page ->
         BoothCard(
             boothInfo = boothList[page],
+            onNavigateToBooth = onNavigateToBooth,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
@@ -236,7 +235,6 @@ fun BoothCards(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
@@ -282,7 +280,6 @@ fun MapScreenPreview() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun MapTopAppBarPreview() {
@@ -321,8 +318,9 @@ fun BoothCardsPreview() {
     UnifestTheme {
         BoothCards(
             pagerState = rememberPagerState(pageCount = { boothList.size }),
-            modifier = Modifier.height(116.dp),
             boothList = boothList.toImmutableList(),
+            onNavigateToBooth = {},
+            modifier = Modifier.height(116.dp),
         )
     }
 }
