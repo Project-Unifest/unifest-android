@@ -1,6 +1,5 @@
 package com.unifest.android.feature.menu
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -85,7 +85,7 @@ fun MenuScreen(
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.None,
-                title = "메뉴",
+                title = stringResource(id = R.string.menu_title),
                 elevation = 8.dp,
                 modifier = Modifier
                     .background(
@@ -105,7 +105,7 @@ fun MenuScreen(
                             .padding(top = 10.dp, start = 20.dp),
                     ) {
                         Text(
-                            text = "나의 관심학교",
+                            text = stringResource(id = R.string.menu_my_interested_festival),
                             style = Title3,
                         )
                         TextButton(
@@ -113,7 +113,7 @@ fun MenuScreen(
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
-                                text = "추가하기>",
+                                text = stringResource(id = R.string.menu_add),
                                 style = Content7,
                                 color = Color(0xFF545454),
                             )
@@ -161,13 +161,13 @@ fun MenuScreen(
                             .fillMaxWidth()
                             .padding(start = 20.dp, top = 10.dp),
                     ) {
-                        Text(text = "관심부스", style = Title3)
+                        Text(text = stringResource(id = R.string.menu_interested_booths))
                         TextButton(
                             onClick = { onNavigateToInterestedBooths() },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
-                                text = "더보기>",
+                                text = stringResource(id = R.string.menu_watch_more),
                                 style = Content7,
                                 color = Color(0xFF545454),
                             )
@@ -188,7 +188,7 @@ fun MenuScreen(
                 item {
                     MenuItem(
                         ImageVector.vectorResource(R.drawable.ic_inquiry),
-                        title = "이용 문의",
+                        title = stringResource(id = R.string.menu_questions),
                         onClick = { /* 구현 */ },
                     )
                 }
@@ -203,7 +203,7 @@ fun MenuScreen(
                 item {
                     MenuItem(
                         ImageVector.vectorResource(R.drawable.ic_admin_mode),
-                        title = "운영자 모드 진입",
+                        title = stringResource(id = R.string.menu_admin_mode),
                         onClick = { /* 구현 */ },
                     )
                 }
