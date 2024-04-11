@@ -14,6 +14,7 @@ dependencies {
         libs.kotlinx.collections.immutable,
         libs.androidx.core,
         libs.timber,
+        libs.compose.system.ui.controller,
 
         libs.bundles.naver.map.compose,
     )

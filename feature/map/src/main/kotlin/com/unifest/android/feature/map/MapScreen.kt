@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 
 @Composable
 internal fun MapRoute(
@@ -58,6 +60,16 @@ internal fun MapRoute(
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val systemUiController = rememberExSystemUiController()
+
+    DisposableEffect(systemUiController) {
+        systemUiController.setSystemBarsColor(
+            color = Color.White,
+            darkIcons = true,
+            isNavigationBarContrastEnforced = false,
+        )
+        onDispose {}
+    }
 
     MapScreen(
         uiState = uiState,
