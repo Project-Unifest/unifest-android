@@ -2,23 +2,30 @@ package com.unifest.android.feature.menu
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 
 @Composable
-internal fun MenuRoute() {
-    MenuScreen()
+internal fun MenuRoute(padding: PaddingValues) {
+    MenuScreen(padding = padding)
 }
 
 @Composable
-fun MenuScreen() {
+fun MenuScreen(
+    padding: PaddingValues,
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -30,6 +37,6 @@ fun MenuScreen() {
 @Composable
 fun MenuScreenPreview() {
     UnifestTheme {
-        MenuScreen()
+        MenuScreen(padding = PaddingValues(0.dp))
     }
 }

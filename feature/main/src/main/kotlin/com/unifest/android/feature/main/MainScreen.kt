@@ -63,16 +63,18 @@ internal fun MainScreen(
     }
 
     UnifestScaffold(
-        content = {
+        content = { innerPadding ->
             NavHost(
                 navController = navigator.navController,
                 startDestination = navigator.startDestination,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 homeNavGraph(
+                    padding = innerPadding,
                     onNavigateToIntro = onNavigateToIntro,
                 )
                 mapNavGraph(
+                    padding = innerPadding,
                     onNavigateToBooth = navigator::navigateToBoothDetail,
                 )
                 boothNavGraph(
@@ -81,8 +83,12 @@ internal fun MainScreen(
                     onNavigateToBoothLocation = navigator::navigateToBoothLocation,
                     onShowSnackBar = onShowSnackBar,
                 )
-                waitingNavGraph()
-                menuNavGraph()
+                waitingNavGraph(
+                    padding = innerPadding,
+                )
+                menuNavGraph(
+                    padding = innerPadding,
+                )
             }
         },
         bottomBar = {

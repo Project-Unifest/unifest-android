@@ -56,6 +56,7 @@ import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiContro
 
 @Composable
 internal fun MapRoute(
+    padding: PaddingValues,
     onNavigateToBooth: (Long) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
@@ -72,6 +73,7 @@ internal fun MapRoute(
     }
 
     MapScreen(
+        padding = padding,
         uiState = uiState,
         onNavigateToBooth = onNavigateToBooth,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
@@ -90,6 +92,7 @@ internal fun MapRoute(
 )
 @Composable
 internal fun MapScreen(
+    padding: PaddingValues,
     uiState: MapUiState,
     onNavigateToBooth: (Long) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
@@ -101,7 +104,9 @@ internal fun MapScreen(
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -253,6 +258,7 @@ fun MapScreenPreview() {
     }
     UnifestTheme {
         MapScreen(
+            padding = PaddingValues(0.dp),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
                 boothList = boothList.toImmutableList(),
