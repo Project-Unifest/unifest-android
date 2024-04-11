@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -63,35 +65,6 @@ internal fun MainScreen(
     }
 
     UnifestScaffold(
-        content = { innerPadding ->
-            NavHost(
-                navController = navigator.navController,
-                startDestination = navigator.startDestination,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                homeNavGraph(
-                    padding = innerPadding,
-                    onNavigateToIntro = onNavigateToIntro,
-                )
-                mapNavGraph(
-                    padding = innerPadding,
-                    onNavigateToBooth = navigator::navigateToBoothDetail,
-                )
-                boothNavGraph(
-                    padding = innerPadding,
-                    navController = navigator.navController,
-                    onBackClick = navigator::popBackStackIfNotHome,
-                    onNavigateToBoothLocation = navigator::navigateToBoothLocation,
-                    onShowSnackBar = onShowSnackBar,
-                )
-                waitingNavGraph(
-                    padding = innerPadding,
-                )
-                menuNavGraph(
-                    padding = innerPadding,
-                )
-            }
-        },
         bottomBar = {
             MainBottomBar(
                 visible = navigator.shouldShowBottomBar(),
@@ -100,10 +73,44 @@ internal fun MainScreen(
                 onTabSelected = { navigator.navigate(it) },
             )
         },
-        snackbarHost = { SnackbarHost(snackBarHostState) },
-        containerColor = Color.White,
-    )
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                modifier = Modifier.padding(bottom = 64.dp),
+            )
+        },
+        containerColor = White,
+    ) { innerPadding ->
+        NavHost(
+            navController = navigator.navController,
+            startDestination = navigator.startDestination,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            homeNavGraph(
+                padding = innerPadding,
+                onNavigateToIntro = onNavigateToIntro,
+            )
+            mapNavGraph(
+                padding = innerPadding,
+                onNavigateToBooth = navigator::navigateToBoothDetail,
+            )
+            boothNavGraph(
+                padding = innerPadding,
+                navController = navigator.navController,
+                onBackClick = navigator::popBackStackIfNotHome,
+                onNavigateToBoothLocation = navigator::navigateToBoothLocation,
+                onShowSnackBar = onShowSnackBar,
+            )
+            waitingNavGraph(
+                padding = innerPadding,
+            )
+            menuNavGraph(
+                padding = innerPadding,
+            )
+        }
+    }
 }
+
 
 @Composable
 private fun MainBottomBar(
@@ -113,7 +120,7 @@ private fun MainBottomBar(
     onTabSelected: (MainTab) -> Unit,
 ) {
     if (visible) {
-        Box(modifier = Modifier.background(Color.White)) {
+        Box(modifier = Modifier.background(White)) {
             Column {
                 HorizontalDivider(color = Color(0xFFEBEBEB))
                 Row(
