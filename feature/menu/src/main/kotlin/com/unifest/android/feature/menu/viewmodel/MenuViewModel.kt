@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.domain.entity.Festival
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -12,22 +11,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(private val application: Application) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
-
     init {
-
         val appVersion = try {
             application.packageManager.getPackageInfo(application.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
+            Timber.tag("AppVersion").e(e, "Failed to get package info")
             "Unknown"
         }
-
-        _uiState.update {currentState ->
+        _uiState.update { currentState ->
             currentState.copy(
                 appVersion = appVersion,
                 // 임시 데이터
@@ -38,7 +36,6 @@ class MenuViewModel @Inject constructor(private val application: Application) : 
                     Festival("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
                     Festival("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
                 ),
-
                 interestedBooths = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
@@ -77,5 +74,4 @@ class MenuViewModel @Inject constructor(private val application: Application) : 
             )
         }
     }
-
 }

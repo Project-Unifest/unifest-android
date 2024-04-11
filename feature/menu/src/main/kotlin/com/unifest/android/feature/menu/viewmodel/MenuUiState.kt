@@ -8,5 +8,5 @@ import kotlinx.collections.immutable.persistentListOf
 data class MenuUiState(
     val festivals: ImmutableList<Festival> = persistentListOf(),
     val interestedBooths: ImmutableList<BoothDetailEntity> = persistentListOf(),
-    val appVersion: String = ""
+    val appVersion: String = "",
 )
