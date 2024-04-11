@@ -82,7 +82,9 @@ internal fun MainScreen(
                     onShowSnackBar = onShowSnackBar,
                 )
                 waitingNavGraph()
-                menuNavGraph()
+                menuNavGraph(
+                    onNavigateToIntro = onNavigateToIntro,
+                )
             }
         },
         bottomBar = {
