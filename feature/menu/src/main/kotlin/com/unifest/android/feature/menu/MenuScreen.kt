@@ -24,8 +24,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -38,16 +36,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content6
@@ -251,10 +250,11 @@ fun FestivalItem(
                 .padding(5.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_waiting),
-                contentDescription = null,
-                modifier = Modifier.size(60.dp),
+            NetworkImage(
+                imageUrl = "https://picsum.photos/86",
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape),
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -285,10 +285,11 @@ fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
         Row(
             modifier = Modifier.fillMaxSize(),
         ) {
-            Icon(
-                imageVector = Icons.Outlined.CheckBoxOutlineBlank,
-                contentDescription = "Example Image Icon",
-                modifier = Modifier.size(86.dp),
+            NetworkImage(
+                imageUrl = "https://picsum.photos/86",
+                modifier = Modifier
+                    .size(86.dp)
+                    .clip(RoundedCornerShape(16.dp)),
             )
             Spacer(modifier = Modifier.width(14.dp))
             Column(

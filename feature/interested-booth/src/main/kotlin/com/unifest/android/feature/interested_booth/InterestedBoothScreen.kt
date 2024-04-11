@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Title2
@@ -93,10 +95,11 @@ fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
         Row(
             modifier = Modifier.fillMaxSize(),
         ) {
-            Icon(
-                imageVector = Icons.Outlined.CheckBoxOutlineBlank,
-                contentDescription = "Example Image Icon",
-                modifier = Modifier.size(86.dp),
+            NetworkImage(
+                imageUrl = "https://picsum.photos/86",
+                modifier = Modifier
+                    .size(86.dp)
+                    .clip(RoundedCornerShape(16.dp)),
             )
             Spacer(modifier = Modifier.width(14.dp))
             Column(
