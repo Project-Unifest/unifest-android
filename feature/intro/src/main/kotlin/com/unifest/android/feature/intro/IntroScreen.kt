@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,15 +66,16 @@ internal fun IntroRoute(
     IntroScreen(
         uiState = uiState,
         navigateToMain = navigateToMain,
+        updateSearchText = viewModel::updateSearchText,
         initSearchText = viewModel::initSearchText,
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IntroScreen(
     uiState: IntroUiState,
     navigateToMain: () -> Unit,
+    updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<Festival>() }
@@ -92,6 +94,7 @@ fun IntroScreen(
             InformationText()
             SearchTextField(
                 searchText = uiState.searchText,
+                updateSearchText = updateSearchText,
                 searchTextHintRes = R.string.intro_search_text_hint,
                 onSearch = { query -> Timber.d("검색: $query") },
                 initSearchText = initSearchText,
@@ -253,6 +256,7 @@ fun PreviewIntroScreen() {
                 ),
             ),
             navigateToMain = {},
+            updateSearchText = {},
             initSearchText = {},
         )
     }

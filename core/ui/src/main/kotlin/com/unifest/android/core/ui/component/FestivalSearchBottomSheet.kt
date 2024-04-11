@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -24,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.skydoves.flexible.bottomsheet.material3.FlexibleBottomSheet
 import com.skydoves.flexible.core.FlexibleSheetSize
@@ -43,7 +43,8 @@ import kotlinx.collections.immutable.persistentListOf
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     interestedFestivals: MutableList<Festival>,
     festivalSearchResults: ImmutableList<Festival>,
     initSearchText: () -> Unit,
@@ -105,6 +106,7 @@ fun FestivalSearchBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
                 searchText = searchText,
+                updateSearchText = updateSearchText,
                 searchTextHintRes = searchTextHintRes,
                 onSearch = {},
                 initSearchText = initSearchText,
@@ -169,7 +171,8 @@ fun SchoolSearchBottomSheetPreview() {
         FestivalSearchBottomSheet(
             searchTextHintRes = R.string.festival_search_text_field_hint,
             setFestivalSearchBottomSheetVisible = {},
-            searchText = TextFieldState(),
+            searchText = TextFieldValue(),
+            updateSearchText = {},
             interestedFestivals = mutableListOf(
                 Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
                 Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),

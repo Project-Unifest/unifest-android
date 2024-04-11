@@ -14,9 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,16 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchTextField(
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
@@ -47,12 +47,13 @@ fun SearchTextField(
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
-    BasicTextField2(
-        state = searchText,
+    BasicTextField(
+        value = searchText,
+        onValueChange = updateSearchText,
         modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = Color.Black),
-        decorator = { innerTextField ->
+        decorationBox = { innerTextField ->
             Row(
                 modifier = modifier
                     .background(color = backgroundColor, shape = cornerShape)
@@ -79,7 +80,7 @@ fun SearchTextField(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                         contentDescription = "Search Icon",
                         modifier = Modifier.clickable {
-                            onSearch(searchText.text.toString())
+                            onSearch(searchText.text)
                         },
                     )
                 } else {
@@ -102,7 +103,8 @@ fun SearchTextField(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchTextField(
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
@@ -117,12 +119,13 @@ fun FestivalSearchTextField(
         setEnableSearchMode(searchText.text.isNotEmpty())
     }
 
-    BasicTextField2(
-        state = searchText,
+    BasicTextField(
+        value = searchText,
+        onValueChange = updateSearchText,
         modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = Color.Black),
-        decorator = { innerTextField ->
+        decorationBox = { innerTextField ->
             Row(
                 modifier = modifier
                     .background(color = backgroundColor, shape = cornerShape)
@@ -160,7 +163,7 @@ fun FestivalSearchTextField(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                         contentDescription = "Search Icon",
                         modifier = Modifier.clickable {
-                            onSearch(searchText.text.toString())
+                            onSearch(searchText.text)
                         },
                     )
                 } else {
@@ -185,7 +188,8 @@ fun FestivalSearchTextField(
 fun SearchTextFieldPreview() {
     UnifestTheme {
         SearchTextField(
-            searchText = TextFieldState(""),
+            searchText = TextFieldValue(),
+            updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
             initSearchText = {},
@@ -203,7 +207,8 @@ fun SearchTextFieldPreview() {
 fun FestivalSearchTextFieldPreview() {
     UnifestTheme {
         FestivalSearchTextField(
-            searchText = TextFieldState("건국대학교"),
+            searchText = TextFieldValue("건국대학교"),
+            updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
             initSearchText = {},

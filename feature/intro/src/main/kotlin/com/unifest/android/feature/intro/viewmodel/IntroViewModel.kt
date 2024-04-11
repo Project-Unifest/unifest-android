@@ -1,7 +1,6 @@
 package com.unifest.android.feature.intro.viewmodel
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.Festival
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@OptIn(ExperimentalFoundationApi::class)
 @HiltViewModel
 class IntroViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(IntroUiState())
@@ -32,9 +30,15 @@ class IntroViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun updateSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(searchText = text)
+        }
+    }
+
     fun initSearchText() {
         _uiState.update {
-            it.copy(searchText = TextFieldState(""))
+            it.copy(searchText = TextFieldValue())
         }
     }
 }

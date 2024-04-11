@@ -16,13 +16,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,6 +63,8 @@ internal fun MapRoute(
         uiState = uiState,
         onNavigateToBooth = onNavigateToBooth,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
+        updateBoothSearchText = viewModel::updateBoothSearchText,
+        updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
@@ -79,6 +81,8 @@ internal fun MapScreen(
     uiState: MapUiState,
     onNavigateToBooth: (Long) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    updateBoothSearchText: (TextFieldValue) -> Unit,
+    updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
@@ -112,6 +116,7 @@ internal fun MapScreen(
             MapTopAppBar(
                 title = uiState.selectedSchoolName,
                 searchText = uiState.boothSearchText,
+                updateSearchText = updateBoothSearchText,
                 onTitleClick = setFestivalSearchBottomSheetVisible,
                 initSearchText = initSearchText,
                 modifier = Modifier
@@ -128,11 +133,12 @@ internal fun MapScreen(
             )
             if (uiState.isFestivalSearchBottomSheetVisible) {
                 FestivalSearchBottomSheet(
+                    searchText = uiState.festivalSearchText,
+                    updateSearchText = updateFestivalSearchText,
                     searchTextHintRes = R.string.festival_search_text_field_hint,
                     setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                     interestedFestivals = uiState.interestedFestivals,
                     festivalSearchResults = uiState.festivalSearchResults,
-                    searchText = uiState.festivalSearchText,
                     initSearchText = initSearchText,
                     setEnableSearchMode = setEnableSearchMode,
                     isSearchMode = uiState.isSearchMode,
@@ -150,7 +156,8 @@ internal fun MapScreen(
 @Composable
 fun MapTopAppBar(
     title: String,
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     onTitleClick: (Boolean) -> Unit,
     initSearchText: () -> Unit,
     modifier: Modifier = Modifier,
@@ -172,6 +179,7 @@ fun MapTopAppBar(
             )
             SearchTextField(
                 searchText = searchText,
+                updateSearchText = updateSearchText,
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = {},
                 initSearchText = initSearchText,
@@ -246,6 +254,8 @@ fun MapScreenPreview() {
             ),
             onNavigateToBooth = {},
             setFestivalSearchBottomSheetVisible = {},
+            updateBoothSearchText = {},
+            updateFestivalSearchText = {},
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
@@ -261,7 +271,8 @@ fun MapTopAppBarPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",
-            searchText = TextFieldState(),
+            searchText = TextFieldValue(),
+            updateSearchText = {},
             initSearchText = {},
             onTitleClick = {},
         )

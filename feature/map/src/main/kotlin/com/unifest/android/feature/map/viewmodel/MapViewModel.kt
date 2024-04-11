@@ -1,7 +1,6 @@
 package com.unifest.android.feature.map.viewmodel
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.BoothSpot
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@OptIn(ExperimentalFoundationApi::class)
 @HiltViewModel
 class MapViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(MapUiState())
@@ -71,9 +69,21 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun updateBoothSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(boothSearchText = text)
+        }
+    }
+
+    fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
     fun initSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldState(""))
+            it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
