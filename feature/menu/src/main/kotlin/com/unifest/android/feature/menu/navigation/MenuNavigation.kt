@@ -19,7 +19,7 @@ fun NavGraphBuilder.menuNavGraph(
     composable(route = MENU_ROUTE) {
         MenuRoute(
             onNavigateToIntro = onNavigateToIntro,
-            onNavigateToInterestedBooths = onNavigateToInterestedBooths
+            onNavigateToInterestedBooths = onNavigateToInterestedBooths,
         )
     }
 }
