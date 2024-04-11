@@ -105,9 +105,9 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun setEnablePopularMode() {
+    fun setEnablePopularMode(flag: Boolean) {
         _uiState.update {
-            it.copy(isPopularMode = !_uiState.value.isPopularMode)
+            it.copy(isPopularMode = flag)
         }
     }
 
