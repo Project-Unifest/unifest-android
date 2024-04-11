@@ -128,7 +128,7 @@ class InterestedBoothViewModel @Inject constructor() : ViewModel() {
                             ),
                         ),
                     ),
-                )
+                ),
             )
         }
     }
