@@ -78,6 +78,7 @@ internal fun MainScreen(
                     onNavigateToBooth = navigator::navigateToBoothDetail,
                 )
                 boothNavGraph(
+                    padding = innerPadding,
                     navController = navigator.navController,
                     onBackClick = navigator::popBackStackIfNotHome,
                     onNavigateToBoothLocation = navigator::navigateToBoothLocation,
