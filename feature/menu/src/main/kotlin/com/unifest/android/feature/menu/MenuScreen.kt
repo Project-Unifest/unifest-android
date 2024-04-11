@@ -93,7 +93,7 @@ fun MenuScreen(
                         Color.White,
                         shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp),
                     )
-                    .padding(top = 5.dp, bottom = 5.dp),
+                    .padding(top = 13.dp, bottom = 5.dp),
             )
             LazyColumn {
                 item { Spacer(modifier = Modifier.height(5.dp)) }

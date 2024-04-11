@@ -2,6 +2,7 @@ package com.unifest.android.feature.interested_booth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
+import com.unifest.android.core.domain.entity.MenuEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,12 +20,115 @@ class InterestedBoothViewModel @Inject constructor() : ViewModel() {
         _uiState.update {
             it.copy(
                 interestedBooths = persistentListOf(
-                    BoothDetailEntity(1L, "컴공 주점", "컴퓨터공학부 전용 부스"),
-                    BoothDetailEntity(2L, "학생회 부스", "건국대학교 학생회 부스"),
-                    BoothDetailEntity(3L, "컴공 주점", "컴퓨터공학부 전용 부스"),
-                    BoothDetailEntity(4L, "학생회 부스", "건국대학교 학생회 부스"),
-                    BoothDetailEntity(5L, "컴공 주점", "컴퓨터공학부 전용 부스"),
-                ),
+                    BoothDetailEntity(
+                        id = 1,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                    BoothDetailEntity(
+                        id = 2,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                    BoothDetailEntity(
+                        id = 3,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                    BoothDetailEntity(
+                        id = 4,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                    BoothDetailEntity(
+                        id = 5,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                    BoothDetailEntity(
+                        id = 6,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        warning = "주의사항",
+                        location = "부스 위치",
+                        latitude = 0.0f,
+                        longitude = 0.0f,
+                        menus = listOf(
+                            MenuEntity(
+                                id = 1,
+                                name = "메뉴 이름",
+                                price = 1000,
+                                imgUrl = "",
+                            ),
+                        ),
+                    ),
+                )
             )
         }
     }
