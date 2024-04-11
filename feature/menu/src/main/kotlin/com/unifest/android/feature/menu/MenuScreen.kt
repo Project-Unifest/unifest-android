@@ -65,12 +65,14 @@ import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 @Composable
 internal fun MenuRoute(
     onNavigateToIntro: () -> Unit,
+    onNavigateToInterestedBooths: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     MenuScreen(
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
+        onNavigateToInterestedBooths = onNavigateToInterestedBooths,
     )
 }
 
@@ -78,6 +80,7 @@ internal fun MenuRoute(
 fun MenuScreen(
     uiState: MenuUiState,
     onNavigateToIntro: () -> Unit,
+    onNavigateToInterestedBooths: () -> Unit,
 ) {
     Box {
         Column {
@@ -161,7 +164,7 @@ fun MenuScreen(
                     ) {
                         Text(text = "관심부스", style = Title3)
                         TextButton(
-                            onClick = { /*TODO*/ },
+                            onClick = { onNavigateToInterestedBooths() },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -364,6 +367,7 @@ fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
             onNavigateToIntro = { },
+            onNavigateToInterestedBooths = { },
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     Festival(

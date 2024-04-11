@@ -14,8 +14,12 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
 
 fun NavGraphBuilder.menuNavGraph(
     onNavigateToIntro: () -> Unit,
+    onNavigateToInterestedBooths: () -> Unit,
 ) {
     composable(route = MENU_ROUTE) {
-        MenuRoute(onNavigateToIntro = onNavigateToIntro)
+        MenuRoute(
+            onNavigateToIntro = onNavigateToIntro,
+            onNavigateToInterestedBooths = onNavigateToInterestedBooths
+        )
     }
 }
