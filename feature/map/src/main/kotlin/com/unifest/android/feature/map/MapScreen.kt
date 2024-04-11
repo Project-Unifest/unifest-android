@@ -1,7 +1,10 @@
 package com.unifest.android.feature.map
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -55,6 +59,7 @@ import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
@@ -97,6 +102,7 @@ internal fun MapRoute(
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
+        setEnablePopularMode = viewModel::setEnablePopularMode,
         setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
     )
 }
@@ -116,8 +122,11 @@ internal fun MapScreen(
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
+    setEnablePopularMode: () -> Unit,
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
+    val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -152,16 +161,58 @@ internal fun MapScreen(
                     .fillMaxWidth()
                     .align(Alignment.TopCenter),
             )
-            BoothCards(
-                pagerState = pagerState,
-                boothList = uiState.boothList,
-                onNavigateToBooth = onNavigateToBooth,
-                isPopularMode = uiState.isPopularMode,
+            Column(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .wrapContentHeight()
-                    .padding(bottom = 21.dp),
-            )
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(116.dp)
+                        .height(36.dp)
+                        .clip(RoundedCornerShape(39.dp))
+                        .background(Color.White)
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFF5687E),
+                            shape = RoundedCornerShape(39.dp),
+                        )
+                        .clickable {
+                            setEnablePopularMode()
+                        },
+                ) {
+                    Row(
+                        modifier = Modifier.align(Alignment.Center),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            text = "인기 부스",
+                            color = Color(0xFFF5687E),
+                            style = Title4,
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_dropdown),
+                            contentDescription = "Dropdown Icon",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.rotate(rotationState),
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                AnimatedVisibility(uiState.isPopularMode) {
+                    BoothCards(
+                        pagerState = pagerState,
+                        boothList = uiState.boothList,
+                        onNavigateToBooth = onNavigateToBooth,
+                        isPopularMode = uiState.isPopularMode,
+                        modifier = Modifier.wrapContentHeight()
+                    )
+                }
+                Spacer(modifier = Modifier.height(21.dp))
+            }
             if (uiState.isFestivalSearchBottomSheetVisible) {
                 FestivalSearchBottomSheet(
                     searchText = uiState.festivalSearchText,
@@ -377,6 +428,7 @@ fun MapScreenPreview() {
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
+            setEnablePopularMode = {},
             setInterestedFestivalDeleteDialogVisible = {},
         )
     }
