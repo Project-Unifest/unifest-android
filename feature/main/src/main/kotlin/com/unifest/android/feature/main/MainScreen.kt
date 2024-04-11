@@ -111,7 +111,6 @@ internal fun MainScreen(
     }
 }
 
-
 @Composable
 private fun MainBottomBar(
     visible: Boolean,

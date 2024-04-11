@@ -39,7 +39,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 val unifestTextSelectionColors = TextSelectionColors(
     handleColor = Color(0xFFF5687E),
-    backgroundColor = Color(0xFFFAB3BE)
+    backgroundColor = Color(0xFFFAB3BE),
 )
 
 @Composable
