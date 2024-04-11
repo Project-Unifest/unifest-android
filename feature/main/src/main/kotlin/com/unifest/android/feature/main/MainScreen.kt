@@ -53,7 +53,6 @@ internal fun MainScreen(
     val scope = rememberCoroutineScope()
     val resource = LocalContext.current.resources
 
-    @Suppress("unused")
     val onShowSnackBar: (message: Int) -> Unit = { message ->
         scope.launch {
             snackBarHostState.showSnackbar(
@@ -74,7 +73,6 @@ internal fun MainScreen(
                     onNavigateToIntro = onNavigateToIntro,
                 )
                 mapNavGraph(
-                    onShowSnackBar = onShowSnackBar,
                     onNavigateToBooth = navigator::navigateToBoothDetail,
                 )
                 boothNavGraph(

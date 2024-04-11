@@ -59,7 +59,6 @@ fun FestivalSearchBottomSheet(
     val bottomSheetState = rememberFlexibleBottomSheetState(
         containSystemBars = true,
         flexibleSheetSize = FlexibleSheetSize(
-            fullyExpanded = 1.0f,
             intermediatelyExpanded = 1.0f,
         ),
         isModal = true,

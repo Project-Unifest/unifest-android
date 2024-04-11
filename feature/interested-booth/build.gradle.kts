@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.booth"
+    namespace = "com.unifest.android.feature.interested_booth"
 }
 
 dependencies {
@@ -15,7 +15,5 @@ dependencies {
         libs.androidx.core,
         libs.compose.system.ui.controller,
         libs.timber,
-
-        libs.bundles.naver.map.compose,
     )
 }

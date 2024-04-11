@@ -54,15 +54,13 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun MapRoute(
-    onShowSnackBar: (message: Int) -> Unit,
-    onNavigateToBooth: (Long, (Int) -> Unit) -> Unit,
+    onNavigateToBooth: (Long) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MapScreen(
         uiState = uiState,
-        onShowSnackBar = onShowSnackBar,
         onNavigateToBooth = onNavigateToBooth,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         initSearchText = viewModel::initSearchText,
@@ -79,8 +77,7 @@ internal fun MapRoute(
 @Composable
 internal fun MapScreen(
     uiState: MapUiState,
-    onShowSnackBar: (message: Int) -> Unit,
-    onNavigateToBooth: (Long, (Int) -> Unit) -> Unit,
+    onNavigateToBooth: (Long) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
@@ -106,7 +103,7 @@ internal fun MapScreen(
                         state = MarkerState(position = LatLng(spot.lat, spot.lng)),
                         icon = OverlayImage.fromResource(R.drawable.ic_general),
                         onClick = {
-                            onNavigateToBooth(spot.id, onShowSnackBar)
+                            onNavigateToBooth(spot.id)
                             true
                         },
                     )
@@ -247,8 +244,7 @@ fun MapScreenPreview() {
                     ),
                 ),
             ),
-            onShowSnackBar = {},
-            onNavigateToBooth = { _, _ -> },
+            onNavigateToBooth = {},
             setFestivalSearchBottomSheetVisible = {},
             initSearchText = {},
             setEnableSearchMode = {},
