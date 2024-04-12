@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
@@ -63,12 +64,14 @@ import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 
 @Composable
 internal fun MenuRoute(
+    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
     onNavigateToInterestedBooths: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     MenuScreen(
+        padding = padding,
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
         onNavigateToInterestedBooths = onNavigateToInterestedBooths,
@@ -77,11 +80,16 @@ internal fun MenuRoute(
 
 @Composable
 fun MenuScreen(
+    padding: PaddingValues,
     uiState: MenuUiState,
     onNavigateToIntro: () -> Unit,
     onNavigateToInterestedBooths: () -> Unit,
 ) {
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+    ) {
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.None,
@@ -367,6 +375,7 @@ fun MenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
 fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
+            padding = PaddingValues(0.dp),
             onNavigateToIntro = { },
             onNavigateToInterestedBooths = { },
             uiState = MenuUiState(

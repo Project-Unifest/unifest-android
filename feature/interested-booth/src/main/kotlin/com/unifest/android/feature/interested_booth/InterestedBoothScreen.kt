@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,17 +50,23 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun InterestedBoothRoute(
+    padding: PaddingValues,
     viewModel: InterestedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    InterestedBoothScreen(uiState = uiState)
+    InterestedBoothScreen(padding = padding, uiState = uiState)
 }
 
 @Composable
 internal fun InterestedBoothScreen(
+    padding: PaddingValues,
     uiState: InterestedBoothUiState,
 ) {
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+    ) {
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Back,
@@ -157,6 +164,7 @@ fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
 fun InterestedBoothScreenPreview() {
     UnifestTheme {
         InterestedBoothScreen(
+            padding = PaddingValues(),
             uiState = InterestedBoothUiState(
                 interestedBooths = persistentListOf(
                     BoothDetailEntity(
