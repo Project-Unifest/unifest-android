@@ -66,6 +66,7 @@ fun UnifestTopAppBar(
                     Icon(
                         imageVector = imageVector,
                         contentDescription = navigationIconContentDescription,
+                        tint = Color.Unspecified,
                     )
                 }
             }
