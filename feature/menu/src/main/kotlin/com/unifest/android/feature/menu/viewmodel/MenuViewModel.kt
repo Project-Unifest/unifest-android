@@ -1,7 +1,5 @@
 package com.unifest.android.feature.menu.viewmodel
 
-import android.app.Application
-import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
@@ -11,23 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MenuViewModel @Inject constructor(private val application: Application) : ViewModel() {
+class MenuViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
     init {
-        val appVersion = try {
-            application.packageManager.getPackageInfo(application.packageName, 0).versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            Timber.tag("AppVersion").e(e, "Failed to get package info")
-            "Unknown"
-        }
         _uiState.update { currentState ->
             currentState.copy(
-                appVersion = appVersion,
                 // 임시 데이터
                 festivals = persistentListOf(
                     Festival("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),

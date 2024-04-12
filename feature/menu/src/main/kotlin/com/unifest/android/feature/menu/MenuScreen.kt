@@ -1,5 +1,6 @@
 package com.unifest.android.feature.menu
 
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -61,6 +63,7 @@ import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
+import timber.log.Timber
 
 @Composable
 internal fun MenuRoute(
@@ -85,6 +88,15 @@ fun MenuScreen(
     onNavigateToIntro: () -> Unit,
     onNavigateToInterestedBooths: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val appVersion = remember {
+        try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            Timber.tag("AppVersion").e(e, "Failed to get package info")
+            "Unknown"
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -145,10 +157,12 @@ fun MenuScreen(
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        items(uiState.festivals.size) { index ->
-                            val festival = uiState.festivals[index]
+                        items(
+                            uiState.festivals.size,
+                            key = { index -> uiState.festivals[index].schoolName },
+                        ) { index ->
                             FestivalItem(
-                                festival = festival,
+                                festival = uiState.festivals[index],
                             )
                         }
                     }
@@ -182,7 +196,7 @@ fun MenuScreen(
                         }
                     }
                 }
-                itemsIndexed(uiState.interestedBooths.take(3)) { index, booth ->
+                itemsIndexed(uiState.interestedBooths.take(3), key = { _, booth -> booth.id }) { index, booth ->
                     InterestedBoothsItems(booth, index, uiState.interestedBooths.size)
                 }
                 item {
@@ -230,7 +244,7 @@ fun MenuScreen(
                             .fillMaxWidth()
                             .padding(vertical = 13.dp),
                     ) {
-                        Text("UniFest ${uiState.appVersion}", textAlign = TextAlign.Center, color = Color(0xFFC5C5C5))
+                        Text("UniFest v$appVersion", textAlign = TextAlign.Center, color = Color(0xFFC5C5C5))
                     }
                 }
             }
