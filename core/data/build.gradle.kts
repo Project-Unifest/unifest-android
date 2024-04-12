@@ -15,6 +15,7 @@ dependencies {
     implementations(
         projects.core.network,
         projects.core.datastore,
+        projects.core.database,
 
         libs.timber,
     )
