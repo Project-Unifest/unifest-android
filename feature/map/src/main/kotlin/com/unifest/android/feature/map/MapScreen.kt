@@ -148,9 +148,9 @@ internal fun MapScreen(
         }
         val pagerState = rememberPagerState(pageCount = { uiState.selectedBooths.size })
         Box {
-            // TODO 지도 중앙 위치 조정
             // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
             // TODO 클러스터링 마커 커스텀
+            // TODO 지도 중앙 위치 조정
             NaverMap(
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapUiSettings(
@@ -410,9 +410,9 @@ fun BoothCard(
 fun RankingBadge(ranking: Int) {
     Box(
         modifier = Modifier
-            .size(36.dp)
-            .clip(CircleShape)
+            .size(width = 43.dp, height = 45.dp)
             .padding(start = 7.dp, top = 9.dp)
+            .clip(CircleShape)
             .background(Color(0xFFF5687E), CircleShape),
         contentAlignment = Alignment.TopStart,
     ) {
