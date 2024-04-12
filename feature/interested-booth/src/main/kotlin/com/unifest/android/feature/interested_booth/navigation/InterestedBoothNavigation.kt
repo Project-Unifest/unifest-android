@@ -1,5 +1,6 @@
 package com.unifest.android.feature.interested_booth.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -11,8 +12,14 @@ fun NavController.navigateToInterestedBooth() {
     navigate(INTERESTED_BOOTH_ROUTE)
 }
 
-fun NavGraphBuilder.interestedBoothNavGraph() {
+fun NavGraphBuilder.interestedBoothNavGraph(
+    padding: PaddingValues,
+    onBackClick: () -> Unit,
+) {
     composable(route = INTERESTED_BOOTH_ROUTE) {
-        InterestedBoothRoute()
+        InterestedBoothRoute(
+            padding = padding,
+            onBackClick = onBackClick,
+        )
     }
 }

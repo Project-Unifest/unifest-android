@@ -39,6 +39,7 @@ import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.navigation.boothNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
+import com.unifest.android.feature.interested_booth.navigation.interestedBoothNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
@@ -106,6 +107,11 @@ internal fun MainScreen(
             )
             menuNavGraph(
                 padding = innerPadding,
+                onNavigateToInterestedBooths = navigator::navigateToInterestedBooth,
+            )
+            interestedBoothNavGraph(
+                padding = innerPadding,
+                onBackClick = navigator::popBackStackIfNotHome,
             )
         }
     }

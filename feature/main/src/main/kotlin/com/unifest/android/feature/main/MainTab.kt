@@ -32,7 +32,7 @@ internal enum class MainTab(
     ),
     MENU(
         iconResId = R.drawable.ic_menu,
-        selectedIconResId = R.drawable.ic_menu,
+        selectedIconResId = R.drawable.ic_selected_menu,
         contentDescription = "Menu Icon",
         label = "메뉴",
         route = "menu_route",

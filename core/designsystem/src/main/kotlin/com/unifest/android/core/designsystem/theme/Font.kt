@@ -134,6 +134,18 @@ val Content6 = TextStyle(
     fontSize = 12.sp,
 )
 
+val Content7 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 11.sp,
+)
+
+val Content8 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 15.sp,
+)
+
 val WaitingTeam = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Bold,
