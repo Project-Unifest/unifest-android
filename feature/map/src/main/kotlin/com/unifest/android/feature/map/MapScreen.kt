@@ -29,7 +29,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,7 +75,6 @@ import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import ted.gun0912.clustering.naver.TedNaverClustering
 
 @Composable
@@ -86,16 +84,6 @@ internal fun MapRoute(
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val systemUiController = rememberExSystemUiController()
-
-    DisposableEffect(systemUiController) {
-        systemUiController.setSystemBarsColor(
-            color = Color.White,
-            darkIcons = true,
-            isNavigationBarContrastEnforced = false,
-        )
-        onDispose {}
-    }
 
     MapScreen(
         padding = padding,
