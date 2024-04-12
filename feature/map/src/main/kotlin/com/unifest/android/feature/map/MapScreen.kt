@@ -309,7 +309,11 @@ fun MapTopAppBar(
             Spacer(modifier = Modifier.height(10.dp))
             BoothFilterChips(
                 onChipClick = {},
-                modifier = Modifier.padding(start = 22.dp),
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .clip(
+                        RoundedCornerShape(16.dp),
+                    ),
             )
             Spacer(modifier = Modifier.height(10.dp))
         }
