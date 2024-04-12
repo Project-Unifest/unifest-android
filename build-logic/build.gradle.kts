@@ -16,8 +16,7 @@ gradlePlugin {
         "android.feature" to "AndroidFeatureConventionPlugin",
         "android.hilt" to "AndroidHiltConventionPlugin",
         "android.retrofit" to "AndroidRetrofitConventionPlugin",
-        "jvm.kotlin" to "JvmKotlinConventionPlugin",
-        "test.kotest" to "TestKotestConventionPlugin",
+        "android.room" to "AndroidRoomConventionPlugin",
     )
 
     plugins {
@@ -45,6 +44,7 @@ kotlin {
 dependencies {
     compileOnly(libs.gradle.android)
     compileOnly(libs.gradle.kotlin)
+    compileOnly(libs.gradle.androidx.room)
 
     compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

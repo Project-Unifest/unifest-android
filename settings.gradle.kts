@@ -27,11 +27,11 @@ include(
 
     ":core:common",
     ":core:data",
-    ":core:designsystem",
+    ":core:database",
     ":core:datastore",
+    ":core:designsystem",
     ":core:domain",
     ":core:network",
-    ":core:datastore",
     ":core:ui",
 
     ":feature:booth",
