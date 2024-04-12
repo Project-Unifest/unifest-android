@@ -222,7 +222,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     fun setBoothSelectionMode(flag: Boolean) {
         _uiState.update {
             it.copy(
-                isPopularMode = false,
+                isPopularMode = flag,
                 isBoothSelectionMode = flag,
             )
         }
