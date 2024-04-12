@@ -58,6 +58,7 @@ import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiContro
 
 @Composable
 internal fun BoothDetailRoute(
+    padding: PaddingValues,
     onBackClick: () -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
     onNavigateToBoothLocation: () -> Unit,
@@ -76,6 +77,7 @@ internal fun BoothDetailRoute(
     }
 
     BoothDetailScreen(
+        padding = padding,
         uiState = uiState,
         onBackClick = onBackClick,
         onNavigateToBoothLocation = onNavigateToBoothLocation,
@@ -88,6 +90,7 @@ internal fun BoothDetailRoute(
 
 @Composable
 fun BoothDetailScreen(
+    padding: PaddingValues,
     uiState: BoothUiState,
     onBackClick: () -> Unit,
     onNavigateToBoothLocation: () -> Unit,
@@ -100,8 +103,16 @@ fun BoothDetailScreen(
         BoothDetailContent(
             uiState = uiState,
             onNavigateToBoothLocation = onNavigateToBoothLocation,
-            onBackClick = onBackClick,
             bottomPadding = 116.dp,
+        )
+        UnifestTopAppBar(
+            navigationType = TopAppBarNavigationType.Back,
+            navigationIconRes = R.drawable.ic_arrow_back_gray,
+            containerColor = Color.Transparent,
+            onNavigationClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(padding),
         )
         BottomBar(
             isBookmarked = isBookmarked,
@@ -120,7 +131,6 @@ fun BoothDetailScreen(
 fun BoothDetailContent(
     uiState: BoothUiState,
     onNavigateToBoothLocation: () -> Unit,
-    onBackClick: () -> Unit = {},
     bottomPadding: Dp,
 ) {
     LazyColumn(
@@ -129,15 +139,7 @@ fun BoothDetailContent(
             .padding(bottom = bottomPadding),
     ) {
         item {
-            Box {
-                BoothImage()
-                UnifestTopAppBar(
-                    navigationType = TopAppBarNavigationType.Back,
-                    navigationIconRes = R.drawable.ic_arrow_back_gray,
-                    containerColor = Color.Transparent,
-                    onNavigationClick = onBackClick,
-                )
-            }
+            BoothImage()
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
@@ -328,6 +330,7 @@ fun MenuItem(menu: MenuEntity) {
 fun BoothScreenPreview() {
     UnifestTheme {
         BoothDetailScreen(
+            padding = PaddingValues(0.dp),
             uiState = BoothUiState(
                 boothDetailInfo = BoothDetailEntity(
                     id = 0L,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,11 +61,13 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun HomeRoute(
+    padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
+        padding = padding,
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
     )
@@ -72,13 +75,16 @@ internal fun HomeRoute(
 
 @Composable
 internal fun HomeScreen(
+    padding: PaddingValues,
     uiState: HomeUiState,
     @Suppress("unused")
     onNavigateToIntro: () -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
     ) {
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -323,6 +329,7 @@ fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
 fun HomeScreenPreview() {
     UnifestTheme {
         HomeScreen(
+            padding = PaddingValues(0.dp),
             uiState = HomeUiState(
                 festivalEvents = persistentListOf(
                     FestivalEventEntity(

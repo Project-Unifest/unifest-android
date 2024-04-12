@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -29,6 +30,7 @@ fun NavController.navigateToBoothLocation() {
 }
 
 fun NavGraphBuilder.boothNavGraph(
+    padding: PaddingValues,
     navController: NavHostController,
     onBackClick: () -> Unit,
     onNavigateToBoothLocation: () -> Unit,
@@ -46,6 +48,7 @@ fun NavGraphBuilder.boothNavGraph(
         composable(route = BOOTH_DETAIL_ROUTE) { entry ->
             val viewModel = entry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(
+                padding = padding,
                 onBackClick = onBackClick,
                 onNavigateToBoothLocation = onNavigateToBoothLocation,
                 onShowSnackBar = onShowSnackBar,

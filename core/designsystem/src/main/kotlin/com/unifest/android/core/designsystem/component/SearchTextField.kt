@@ -2,7 +2,6 @@ package com.unifest.android.core.designsystem.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,12 +13,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,16 +30,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
-@OptIn(ExperimentalFoundationApi::class)
+val unifestTextSelectionColors = TextSelectionColors(
+    handleColor = Color(0xFFF5687E),
+    backgroundColor = Color(0xFFFAB3BE),
+)
+
 @Composable
 fun SearchTextField(
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
@@ -47,62 +54,65 @@ fun SearchTextField(
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
-    BasicTextField2(
-        state = searchText,
-        modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        textStyle = TextStyle(color = Color.Black),
-        decorator = { innerTextField ->
-            Row(
-                modifier = modifier
-                    .background(color = backgroundColor, shape = cornerShape)
-                    .border(
-                        border = borderStroke,
-                        shape = cornerShape,
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Spacer(modifier = Modifier.width(17.dp))
-                Box {
+    CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
+        BasicTextField(
+            value = searchText,
+            onValueChange = updateSearchText,
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            textStyle = TextStyle(color = Color.Black),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = modifier
+                        .background(color = backgroundColor, shape = cornerShape)
+                        .border(
+                            border = borderStroke,
+                            shape = cornerShape,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(modifier = Modifier.width(17.dp))
+                    Box {
+                        if (searchText.text.isEmpty()) {
+                            Text(
+                                text = stringResource(id = searchTextHintRes),
+                                color = Color(0xFF848484),
+                                style = BoothLocation,
+                            )
+                        }
+                        innerTextField()
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
                     if (searchText.text.isEmpty()) {
-                        Text(
-                            text = stringResource(id = searchTextHintRes),
-                            color = Color(0xFF848484),
-                            style = BoothLocation,
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                            contentDescription = "Search Icon",
+                            modifier = Modifier.clickable {
+                                onSearch(searchText.text)
+                            },
+                        )
+                    } else {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                            contentDescription = "Delete Icon",
+                            tint = Color.Unspecified,
+                            modifier = Modifier
+                                .clickable {
+                                    initSearchText()
+                                },
                         )
                     }
-                    innerTextField()
+                    Spacer(modifier = Modifier.width(width = 15.dp))
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                if (searchText.text.isEmpty()) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                        contentDescription = "Search Icon",
-                        modifier = Modifier.clickable {
-                            onSearch(searchText.text.toString())
-                        },
-                    )
-                } else {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
-                        contentDescription = "Delete Icon",
-                        tint = Color.Unspecified,
-                        modifier = Modifier
-                            .clickable {
-                                initSearchText()
-                            },
-                    )
-                }
-                Spacer(modifier = Modifier.width(width = 15.dp))
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchTextField(
-    searchText: TextFieldState,
+    searchText: TextFieldValue,
+    updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
     initSearchText: () -> Unit,
@@ -117,75 +127,78 @@ fun FestivalSearchTextField(
         setEnableSearchMode(searchText.text.isNotEmpty())
     }
 
-    BasicTextField2(
-        state = searchText,
-        modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        textStyle = TextStyle(color = Color.Black),
-        decorator = { innerTextField ->
-            Row(
-                modifier = modifier
-                    .background(color = backgroundColor, shape = cornerShape)
-                    .border(
-                        border = borderStroke,
-                        shape = cornerShape,
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Spacer(modifier = Modifier.width(14.dp))
-                if (isSearchMode) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
-                        contentDescription = "Search Icon",
-                        tint = Color(0xFF767676),
-                        modifier = Modifier.clickable {
-                            initSearchText()
-                        },
-                    )
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                Box {
-                    if (searchText.text.isEmpty()) {
-                        Text(
-                            text = stringResource(id = searchTextHintRes),
-                            color = Color(0xFF848484),
-                            style = BoothLocation,
+    CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
+        BasicTextField(
+            value = searchText,
+            onValueChange = updateSearchText,
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            textStyle = TextStyle(color = Color.Black),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = modifier
+                        .background(color = backgroundColor, shape = cornerShape)
+                        .border(
+                            border = borderStroke,
+                            shape = cornerShape,
+                        ),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(modifier = Modifier.width(14.dp))
+                    if (isSearchMode) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
+                            contentDescription = "Search Icon",
+                            tint = Color(0xFF767676),
+                            modifier = Modifier.clickable {
+                                initSearchText()
+                            },
                         )
                     }
-                    innerTextField()
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Box {
+                        if (searchText.text.isEmpty()) {
+                            Text(
+                                text = stringResource(id = searchTextHintRes),
+                                color = Color(0xFF848484),
+                                style = BoothLocation,
+                            )
+                        }
+                        innerTextField()
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    if (searchText.text.isEmpty()) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_search),
+                            contentDescription = "Search Icon",
+                            modifier = Modifier.clickable {
+                                onSearch(searchText.text)
+                            },
+                        )
+                    } else {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                            contentDescription = "Delete Icon",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.clickable {
+                                initSearchText()
+                            },
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(width = 15.dp))
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                if (searchText.text.isEmpty()) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_search),
-                        contentDescription = "Search Icon",
-                        modifier = Modifier.clickable {
-                            onSearch(searchText.text.toString())
-                        },
-                    )
-                } else {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
-                        contentDescription = "Delete Icon",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.clickable {
-                            initSearchText()
-                        },
-                    )
-                }
-                Spacer(modifier = Modifier.width(width = 15.dp))
-            }
-        },
-    )
+            },
+        )
+    }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun SearchTextFieldPreview() {
     UnifestTheme {
         SearchTextField(
-            searchText = TextFieldState(""),
+            searchText = TextFieldValue(),
+            updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
             initSearchText = {},
@@ -197,13 +210,13 @@ fun SearchTextFieldPreview() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun FestivalSearchTextFieldPreview() {
     UnifestTheme {
         FestivalSearchTextField(
-            searchText = TextFieldState("건국대학교"),
+            searchText = TextFieldValue("건국대학교"),
+            updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
             initSearchText = {},

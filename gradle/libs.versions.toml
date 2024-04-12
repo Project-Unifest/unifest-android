@@ -28,6 +28,7 @@ androidx-datastore = "1.0.0"
 androidx-activity-compose = "1.8.2"
 androidx-compose-compiler = "1.5.11"
 androidx-compose-bom = "2024.04.00"
+#androidx-compose-foundation = "1.7.0-alpha06"
 androidx-compose-material3 = "1.2.1"
 androidx-hilt-navigation-compose = "1.2.0"
 
@@ -83,7 +84,6 @@ androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "l
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
-androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }

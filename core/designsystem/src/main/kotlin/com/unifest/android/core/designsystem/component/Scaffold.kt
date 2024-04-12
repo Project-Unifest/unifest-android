@@ -1,8 +1,7 @@
 package com.unifest.android.core.designsystem.component
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -25,7 +24,7 @@ fun UnifestScaffold(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
-    content: @Composable () -> Unit,
+    content: @Composable (PaddingValues) -> Unit,
 ) {
     CompositionLocalProvider(
         LocalMutableExKeyboardStateSourceOwner provides MutableExKeyboardStateSource(),
@@ -40,11 +39,7 @@ fun UnifestScaffold(
             contentWindowInsets = contentWindowInsets,
             modifier = modifier.removeFocusWhenKeyboardIsHidden(),
         ) { innerPadding ->
-            Box(
-                modifier = Modifier.padding(innerPadding),
-            ) {
-                content()
-            }
+            content(innerPadding)
         }
     }
 }
