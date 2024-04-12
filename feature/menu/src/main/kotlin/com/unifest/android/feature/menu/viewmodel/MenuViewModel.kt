@@ -1,5 +1,6 @@
 package com.unifest.android.feature.menu.viewmodel
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
@@ -18,6 +19,20 @@ class MenuViewModel @Inject constructor() : ViewModel() {
     init {
         _uiState.update { currentState ->
             currentState.copy(
+                interestedFestivals = mutableListOf(
+                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                ),
+                festivalSearchResults = persistentListOf(
+                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                ),
                 // 임시 데이터
                 festivals = persistentListOf(
                     Festival("school_image_url_1", "서울대학교", "설대축제", "05.06-05.08"),
@@ -62,6 +77,42 @@ class MenuViewModel @Inject constructor() : ViewModel() {
                     ),
                 ),
             )
+        }
+    }
+
+    fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
+    fun initSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
+    }
+
+    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
+    }
+
+    fun setEnableSearchMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isSearchMode = flag)
+        }
+    }
+
+    fun setEnableEditMode() {
+        _uiState.update {
+            it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
+    }
+
+    fun setInterestedFestivalDeleteDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isInterestedFestivalDeleteDialogVisible = flag)
         }
     }
 }

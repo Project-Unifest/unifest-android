@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,6 +62,7 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 import timber.log.Timber
@@ -68,7 +70,6 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
-    onNavigateToIntro: () -> Unit,
     onNavigateToInterestedBooths: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
@@ -76,8 +77,13 @@ internal fun MenuRoute(
     MenuScreen(
         padding = padding,
         uiState = uiState,
-        onNavigateToIntro = onNavigateToIntro,
+        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         onNavigateToInterestedBooths = onNavigateToInterestedBooths,
+        updateFestivalSearchText = viewModel::updateFestivalSearchText,
+        initSearchText = viewModel::initSearchText,
+        setEnableSearchMode = viewModel::setEnableSearchMode,
+        setEnableEditMode = viewModel::setEnableEditMode,
+        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
     )
 }
 
@@ -85,8 +91,13 @@ internal fun MenuRoute(
 fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
-    onNavigateToIntro: () -> Unit,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     onNavigateToInterestedBooths: () -> Unit,
+    updateFestivalSearchText: (TextFieldValue) -> Unit,
+    initSearchText: () -> Unit,
+    setEnableSearchMode: (Boolean) -> Unit,
+    setEnableEditMode: () -> Unit,
+    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val appVersion = remember {
@@ -129,7 +140,7 @@ fun MenuScreen(
                             style = Title3,
                         )
                         TextButton(
-                            onClick = { onNavigateToIntro() },
+                            onClick = { setFestivalSearchBottomSheetVisible(true) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -248,6 +259,23 @@ fun MenuScreen(
                     }
                 }
             }
+        }
+        if (uiState.isFestivalSearchBottomSheetVisible) {
+            FestivalSearchBottomSheet(
+                searchText = uiState.festivalSearchText,
+                updateSearchText = updateFestivalSearchText,
+                searchTextHintRes = R.string.festival_search_text_field_hint,
+                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
+                interestedFestivals = uiState.interestedFestivals,
+                festivalSearchResults = uiState.festivalSearchResults,
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
+                isSearchMode = uiState.isSearchMode,
+                setEnableEditMode = setEnableEditMode,
+                isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
+                setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                isEditMode = uiState.isEditMode,
+            )
         }
     }
 }
@@ -390,7 +418,12 @@ fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
             padding = PaddingValues(0.dp),
-            onNavigateToIntro = { },
+            setFestivalSearchBottomSheetVisible = { },
+            updateFestivalSearchText = { },
+            initSearchText = { },
+            setEnableSearchMode = { },
+            setEnableEditMode = { },
+            setInterestedFestivalDeleteDialogVisible = { },
             onNavigateToInterestedBooths = { },
             uiState = MenuUiState(
                 festivals = persistentListOf(

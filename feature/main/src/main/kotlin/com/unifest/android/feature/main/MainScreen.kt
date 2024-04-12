@@ -107,7 +107,6 @@ internal fun MainScreen(
             )
             menuNavGraph(
                 padding = innerPadding,
-                onNavigateToIntro = onNavigateToIntro,
                 onNavigateToInterestedBooths = navigator::navigateToInterestedBooth,
             )
             interestedBoothNavGraph(
