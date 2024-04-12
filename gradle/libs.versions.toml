@@ -33,6 +33,7 @@ androidx-hilt-navigation-compose = "1.2.0"
 
 desugar-jdk-libs = "2.0.4"
 hilt = "2.51.1"
+javax-inject = "1"
 retrofit = "2.11.0"
 okhttp = "5.0.0-alpha.12"
 coil-compose = "2.6.0"
@@ -100,6 +101,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "kotlin-detekt" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
