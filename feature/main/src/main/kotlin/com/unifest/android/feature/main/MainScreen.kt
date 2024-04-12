@@ -112,6 +112,7 @@ internal fun MainScreen(
             )
             interestedBoothNavGraph(
                 padding = innerPadding,
+                onBackClick = navigator::popBackStackIfNotHome,
             )
         }
     }

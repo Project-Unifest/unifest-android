@@ -51,16 +51,22 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun InterestedBoothRoute(
     padding: PaddingValues,
+    onBackClick: () -> Unit,
     viewModel: InterestedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    InterestedBoothScreen(padding = padding, uiState = uiState)
+    InterestedBoothScreen(
+        padding = padding,
+        uiState = uiState,
+        onBackClick = onBackClick,
+    )
 }
 
 @Composable
 internal fun InterestedBoothScreen(
     padding: PaddingValues,
     uiState: InterestedBoothUiState,
+    onBackClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -70,6 +76,7 @@ internal fun InterestedBoothScreen(
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Back,
+                onNavigationClick = onBackClick,
                 title = stringResource(id = R.string.interested_booths_title),
                 elevation = 8.dp,
                 modifier = Modifier
@@ -80,7 +87,10 @@ internal fun InterestedBoothScreen(
                     .padding(top = 13.dp, bottom = 5.dp),
             )
             LazyColumn {
-                itemsIndexed(uiState.interestedBooths) { index, booth ->
+                itemsIndexed(
+                    uiState.interestedBooths,
+                    key = { _, booth -> booth.id },
+                ) { index, booth ->
                     InterestedBoothsItems(booth, index, uiState.interestedBooths.size)
                 }
             }
@@ -165,6 +175,7 @@ fun InterestedBoothScreenPreview() {
     UnifestTheme {
         InterestedBoothScreen(
             padding = PaddingValues(),
+            onBackClick = {},
             uiState = InterestedBoothUiState(
                 interestedBooths = persistentListOf(
                     BoothDetailEntity(

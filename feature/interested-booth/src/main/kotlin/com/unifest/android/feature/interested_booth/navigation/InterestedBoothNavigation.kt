@@ -12,8 +12,14 @@ fun NavController.navigateToInterestedBooth() {
     navigate(INTERESTED_BOOTH_ROUTE)
 }
 
-fun NavGraphBuilder.interestedBoothNavGraph(padding: PaddingValues) {
+fun NavGraphBuilder.interestedBoothNavGraph(
+    padding: PaddingValues,
+    onBackClick: () -> Unit,
+) {
     composable(route = INTERESTED_BOOTH_ROUTE) {
-        InterestedBoothRoute(padding = padding)
+        InterestedBoothRoute(
+            padding = padding,
+            onBackClick = onBackClick,
+        )
     }
 }
