@@ -63,6 +63,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun HomeRoute(
     padding: PaddingValues,
     onNavigateToIntro: () -> Unit,
+    onShowSnackBar: (message: Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,6 +71,7 @@ internal fun HomeRoute(
         padding = padding,
         uiState = uiState,
         onNavigateToIntro = onNavigateToIntro,
+        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -79,6 +81,7 @@ internal fun HomeScreen(
     uiState: HomeUiState,
     @Suppress("unused")
     onNavigateToIntro: () -> Unit,
+    onShowSnackBar: (message: Int) -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
     Column(
@@ -127,7 +130,7 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.festivalEvents) { index, event ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(event, selectedEventId) { eventId ->
+                        FestivalScheduleItem(event, selectedEventId, onShowSnackBar) { eventId ->
                             selectedEventId = if (selectedEventId == eventId) -1 else eventId
                         }
                     }
@@ -181,6 +184,7 @@ fun FestivalScheduleItem(
     event: FestivalEventEntity,
     selectedEventId: Int,
     onEventClick: (Int) -> Unit,
+    onShowSnackBar: (message: Int) -> Unit
 ) {
     Column {
         Row(
@@ -243,7 +247,7 @@ fun FestivalScheduleItem(
         }
         AnimatedVisibility(visible = selectedEventId == event.id) {
             UnifestOutlinedButton(
-                onClick = { /*관심 축제 추가하기 버튼*/ },
+                onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar ) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, start = 20.dp, end = 20.dp),
@@ -370,6 +374,7 @@ fun HomeScreenPreview() {
                 ),
             ),
             onNavigateToIntro = {},
+            onShowSnackBar = {},
         )
     }
 }

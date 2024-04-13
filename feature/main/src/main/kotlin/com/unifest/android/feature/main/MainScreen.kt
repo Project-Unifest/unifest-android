@@ -90,6 +90,7 @@ internal fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 onNavigateToIntro = onNavigateToIntro,
+                onShowSnackBar = onShowSnackBar,
             )
             mapNavGraph(
                 padding = innerPadding,
