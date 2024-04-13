@@ -130,9 +130,9 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.festivalEvents) { index, event ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(event, selectedEventId, onShowSnackBar) { eventId ->
+                        FestivalScheduleItem(event, selectedEventId, { eventId ->
                             selectedEventId = if (selectedEventId == eventId) -1 else eventId
-                        }
+                        }, onShowSnackBar)
                     }
                     if (index < uiState.festivalEvents.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
