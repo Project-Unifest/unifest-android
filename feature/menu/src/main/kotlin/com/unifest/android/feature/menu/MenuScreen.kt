@@ -57,6 +57,7 @@ import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.core.ui.component.LikedBoothItem
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
@@ -211,16 +212,26 @@ fun MenuScreen(
                         }
                     }
                 }
-                itemsIndexed(
-                    items = uiState.likedBoothList.take(3),
-                    key = { _, booth -> booth.id }
-                ) { index, booth ->
-                    LikedBoothItem(
-                        booth = booth,
-                        index = index,
-                        totalCount = uiState.likedBoothList.size,
-                        deleteLikedBooth = { deleteLikedBooth(booth) },
-                    )
+                if (uiState.likedBoothList.isEmpty()) {
+                    item {
+                        EmptyLikedBoothItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(248.dp),
+                        )
+                    }
+                } else {
+                    itemsIndexed(
+                        items = uiState.likedBoothList.take(3),
+                        key = { _, booth -> booth.id },
+                    ) { index, booth ->
+                        LikedBoothItem(
+                            booth = booth,
+                            index = index,
+                            totalCount = uiState.likedBoothList.size,
+                            deleteLikedBooth = { deleteLikedBooth(booth) },
+                        )
+                    }
                 }
                 item {
                     VerticalDivider(
@@ -270,7 +281,7 @@ fun MenuScreen(
                         Text(
                             text = "UniFest v$appVersion",
                             textAlign = TextAlign.Center,
-                            color = Color(0xFFC5C5C5)
+                            color = Color(0xFFC5C5C5),
                         )
                     }
                 }

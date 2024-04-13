@@ -53,10 +53,11 @@
     <string name="menu_watch_more">더보기></string>
     <string name="menu_questions">이용 문의</string>
     <string name="menu_admin_mode">운영자 모드 진입</string>
+    <string name="menu_liked_booth_empty">관심 부스 없음</string>
+    <string name="menu_insert_liked_booth">지도에서 관심있는 부스를 추가해주세요</string>
 
     <!--    Liked Booth List   -->
     <string name="liked_booth_title">관심 부스</string>
-
 
     <!--    Festival Search BottomSheet-->
     <string name="festival_search_text_field_hint"> 학교 / 축제 이름을 검색해보세요.</string>

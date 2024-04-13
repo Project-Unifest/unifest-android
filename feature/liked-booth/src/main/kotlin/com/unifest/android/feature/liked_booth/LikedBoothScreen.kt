@@ -24,6 +24,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothViewModel
@@ -70,6 +71,9 @@ internal fun LikedBoothScreen(
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
             )
+            if (uiState.likedBoothList.isEmpty()) {
+                EmptyLikedBoothItem(modifier = Modifier.fillMaxSize())
+            }
             LazyColumn {
                 itemsIndexed(
                     uiState.likedBoothList,
