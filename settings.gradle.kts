@@ -36,7 +36,7 @@ include(
 
     ":feature:booth",
     ":feature:home",
-    ":feature:interested-booth",
+    ":feature:liked-booth",
     ":feature:intro",
     ":feature:main",
     ":feature:map",

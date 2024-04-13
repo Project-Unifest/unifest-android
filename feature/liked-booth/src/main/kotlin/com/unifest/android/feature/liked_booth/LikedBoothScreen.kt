@@ -1,4 +1,4 @@
-package com.unifest.android.feature.interested_booth
+package com.unifest.android.feature.liked_booth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,18 +44,18 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.feature.interested_booth.viewmodel.InterestedBoothUiState
-import com.unifest.android.feature.interested_booth.viewmodel.InterestedBoothViewModel
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothViewModel
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-internal fun InterestedBoothRoute(
+internal fun LikedBoothRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
-    viewModel: InterestedBoothViewModel = hiltViewModel(),
+    viewModel: LikedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    InterestedBoothScreen(
+    LikedBoothScreen(
         padding = padding,
         uiState = uiState,
         onBackClick = onBackClick,
@@ -63,9 +63,9 @@ internal fun InterestedBoothRoute(
 }
 
 @Composable
-internal fun InterestedBoothScreen(
+internal fun LikedBoothScreen(
     padding: PaddingValues,
-    uiState: InterestedBoothUiState,
+    uiState: LikedBoothUiState,
     onBackClick: () -> Unit,
 ) {
     Box(
@@ -77,7 +77,7 @@ internal fun InterestedBoothScreen(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Back,
                 onNavigationClick = onBackClick,
-                title = stringResource(id = R.string.interested_booths_title),
+                title = stringResource(id = R.string.liked_booth_title),
                 elevation = 8.dp,
                 modifier = Modifier
                     .background(
@@ -88,10 +88,10 @@ internal fun InterestedBoothScreen(
             )
             LazyColumn {
                 itemsIndexed(
-                    uiState.interestedBooths,
+                    uiState.likedBoothList,
                     key = { _, booth -> booth.id },
                 ) { index, booth ->
-                    InterestedBoothsItems(booth, index, uiState.interestedBooths.size)
+                    LikedBoothItems(booth, index, uiState.likedBoothList.size)
                 }
             }
         }
@@ -99,7 +99,11 @@ internal fun InterestedBoothScreen(
 }
 
 @Composable
-fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
+fun LikedBoothItems(
+    booth: BoothDetailEntity,
+    index: Int,
+    total: Int,
+) {
     var isBookmarked by remember { mutableStateOf(true) }
     val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
@@ -171,13 +175,13 @@ fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
 
 @DevicePreview
 @Composable
-fun InterestedBoothScreenPreview() {
+fun LikedBoothScreenPreview() {
     UnifestTheme {
-        InterestedBoothScreen(
+        LikedBoothScreen(
             padding = PaddingValues(),
             onBackClick = {},
-            uiState = InterestedBoothUiState(
-                interestedBooths = persistentListOf(
+            uiState = LikedBoothUiState(
+                likedBoothList = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
                         name = "부스 이름",

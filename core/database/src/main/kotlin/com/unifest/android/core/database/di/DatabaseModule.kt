@@ -2,7 +2,7 @@ package com.unifest.android.core.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.unifest.android.core.database.InterestedBoothDatabase
+import com.unifest.android.core.database.LikedBoothDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,10 +16,10 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideInterestedBoothDatabase(@ApplicationContext context: Context): InterestedBoothDatabase =
+    fun provideLikedBoothDatabase(@ApplicationContext context: Context): LikedBoothDatabase =
         Room.databaseBuilder(
             context.applicationContext,
-            InterestedBoothDatabase::class.java,
-            "interested_booth_database",
+            LikedBoothDatabase::class.java,
+            "liked_booth_database",
         ).build()
 }

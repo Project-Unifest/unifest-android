@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Entity(tableName = "interested_booth")
-data class InterestedBoothEntity(
+@Entity(tableName = "liked_booth")
+data class LikedBoothEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Long,
@@ -26,7 +26,7 @@ data class InterestedBoothEntity(
     @ColumnInfo(name = "longitude")
     val longitude: Float,
     @ColumnInfo(name = "menus")
-    val menus: List<MenuEntity> = emptyList(),
+    val menus: List<MenuEntity>,
 )
 
 @Serializable

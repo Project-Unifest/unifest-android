@@ -8,12 +8,12 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class MenuUiState(
     val festivals: ImmutableList<Festival> = persistentListOf(),
-    val interestedBooths: ImmutableList<BoothDetailEntity> = persistentListOf(),
+    val likedBoothList: ImmutableList<BoothDetailEntity> = persistentListOf(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
-    val interestedFestivals: MutableList<Festival> = mutableListOf(),
+    val likedFestivals: MutableList<Festival> = mutableListOf(),
     val festivalSearchResults: ImmutableList<Festival> = persistentListOf(),
     val isSearchMode: Boolean = false,
     val isEditMode: Boolean = false,
     val isFestivalSearchBottomSheetVisible: Boolean = false,
-    val isInterestedFestivalDeleteDialogVisible: Boolean = false,
+    val isLikedFestivalDeleteDialogVisible: Boolean = false,
 )

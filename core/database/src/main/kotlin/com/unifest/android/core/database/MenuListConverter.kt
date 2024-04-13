@@ -5,16 +5,16 @@ import com.unifest.android.core.database.entity.MenuEntity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class OrmConverter {
+class MenuListConverter {
     private val json = Json
 
     @TypeConverter
-    fun fromMenu(menu: MenuEntity?): String? {
-        return menu?.let { json.encodeToString(it) }
+    fun fromMenuList(menuList: List<MenuEntity>): String {
+        return json.encodeToString(menuList)
     }
 
     @TypeConverter
-    fun toMenu(menuString: String?): MenuEntity? {
-        return menuString?.let { json.decodeFromString(it) }
+    fun toMenuList(menuListString: String): List<MenuEntity> {
+        return json.decodeFromString(menuListString)
     }
 }

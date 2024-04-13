@@ -21,7 +21,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<MapUiState> = this._uiState.asStateFlow()
 
     init {
-        val booths = listOf(
+        val boothList = listOf(
             BoothDetailEntity(
                 id = 1L,
                 name = "컴공 주점",
@@ -100,11 +100,11 @@ class MapViewModel @Inject constructor() : ViewModel() {
         _uiState.update {
             it.copy(
                 selectedSchoolName = "건국대학교",
-                booths = booths
+                boothList = boothList
                     .map { booth -> booth.toModel() }
                     .toImmutableList(),
-                selectedBooths = persistentListOf(),
-                interestedFestivals = mutableListOf(
+                selectedBoothList = persistentListOf(),
+                likedFestivals = mutableListOf(
                     Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
                     Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
                     Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
@@ -159,7 +159,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setEnablePopularMode() {
-        val popularBooths = listOf(
+        val popularBoothList = listOf(
             BoothDetailEntity(
                 id = 1L,
                 name = "컴공 주점",
@@ -210,7 +210,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
 
         _uiState.update {
             it.copy(
-                selectedBooths = popularBooths
+                selectedBoothList = popularBoothList
                     .map { popularBooth -> popularBooth.toModel() }
                     .toImmutableList(),
                 isPopularMode = !_uiState.value.isPopularMode,
@@ -228,15 +228,15 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun updateSelectedBooths(booths: List<BoothDetailModel>) {
+    fun updateSelectedBoothList(boothList: List<BoothDetailModel>) {
         _uiState.update {
-            it.copy(selectedBooths = booths.toImmutableList())
+            it.copy(selectedBoothList = boothList.toImmutableList())
         }
     }
 
-    fun setInterestedFestivalDeleteDialogVisible(flag: Boolean) {
+    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
-            it.copy(isInterestedFestivalDeleteDialogVisible = flag)
+            it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }
     }
 }

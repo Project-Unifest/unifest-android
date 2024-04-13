@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.interested_booth"
+    namespace = "com.unifest.android.feature.liked_booth"
 }
 
 dependencies {

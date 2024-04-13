@@ -40,11 +40,11 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
 
 @Composable
-fun InterestedFestivalsGrid(
+fun LikedFestivalsGrid(
     selectedFestivals: MutableList<Festival>,
     onFestivalSelected: (Festival) -> Unit,
     isEditMode: Boolean = false,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
     optionTextButton: @Composable () -> Unit,
 ) {
     Column {
@@ -56,7 +56,7 @@ fun InterestedFestivalsGrid(
                 .padding(horizontal = 20.dp),
         ) {
             Text(
-                text = stringResource(id = R.string.intro_interested_festivals_title),
+                text = stringResource(id = R.string.intro_liked_festivals_title),
                 style = Title3,
             )
             optionTextButton()
@@ -88,7 +88,7 @@ fun InterestedFestivalsGrid(
                         onFestivalSelected(it)
                     },
                     isEditMode = isEditMode,
-                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 )
             }
         }
@@ -100,7 +100,7 @@ fun FestivalItem(
     festival: Festival,
     onFestivalSelected: (Festival) -> Unit,
     isEditMode: Boolean = false,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -112,7 +112,7 @@ fun FestivalItem(
             modifier = Modifier
                 .clickable {
                     if (isEditMode) {
-                        setInterestedFestivalDeleteDialogVisible(true)
+                        setLikedFestivalDeleteDialogVisible(true)
                     } else {
                         onFestivalSelected(festival)
                     }
@@ -166,7 +166,7 @@ fun FestivalItem(
 
 @ComponentPreview
 @Composable
-fun InterestedFestivalsGridPreview() {
+fun LikedFestivalsGridPreview() {
     val selectedFestivals = mutableListOf<Festival>()
     repeat(5) {
         selectedFestivals.add(
@@ -179,7 +179,7 @@ fun InterestedFestivalsGridPreview() {
         )
     }
     UnifestTheme {
-        InterestedFestivalsGrid(
+        LikedFestivalsGrid(
             selectedFestivals = mutableListOf(
                 Festival(
                     schoolName = "건국대학교",
@@ -225,7 +225,7 @@ fun InterestedFestivalsGridPreview() {
 
 @ComponentPreview
 @Composable
-fun InterestedFestivalsGridEditModePreview() {
+fun LikedFestivalsGridEditModePreview() {
     val selectedFestivals = mutableListOf<Festival>()
     repeat(5) {
         selectedFestivals.add(
@@ -238,7 +238,7 @@ fun InterestedFestivalsGridEditModePreview() {
         )
     }
     UnifestTheme {
-        InterestedFestivalsGrid(
+        LikedFestivalsGrid(
             selectedFestivals = mutableListOf(
                 Festival(
                     schoolName = "건국대학교",

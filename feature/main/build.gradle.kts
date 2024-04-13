@@ -14,7 +14,7 @@ dependencies {
     implementations(
         projects.feature.booth,
         projects.feature.home,
-        projects.feature.interestedBooth,
+        projects.feature.likedBooth,
         projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,

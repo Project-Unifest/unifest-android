@@ -97,8 +97,8 @@ internal fun MapRoute(
         setEnableEditMode = viewModel::setEnableEditMode,
         setEnablePopularMode = viewModel::setEnablePopularMode,
         setBoothSelectionMode = viewModel::setBoothSelectionMode,
-        updateSelectedBooths = viewModel::updateSelectedBooths,
-        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
+        updateSelectedBoothList = viewModel::updateSelectedBoothList,
+        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
     )
 }
 
@@ -119,8 +119,8 @@ internal fun MapScreen(
     setEnableEditMode: () -> Unit,
     setEnablePopularMode: () -> Unit,
     setBoothSelectionMode: (Boolean) -> Unit,
-    updateSelectedBooths: (List<BoothDetailModel>) -> Unit,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    updateSelectedBoothList: (List<BoothDetailModel>) -> Unit,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
 
@@ -134,7 +134,7 @@ internal fun MapScreen(
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
         }
-        val pagerState = rememberPagerState(pageCount = { uiState.selectedBooths.size })
+        val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
         Box {
             // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
             // TODO 클러스터링 마커 커스텀
@@ -150,7 +150,7 @@ internal fun MapScreen(
             ) {
                 val context = LocalContext.current
                 var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailModel>?>(null) }
-                DisposableMapEffect(uiState.booths) { map ->
+                DisposableMapEffect(uiState.boothList) { map ->
                     if (clusterManager == null) {
                         clusterManager = TedNaverClustering.with<BoothDetailModel>(context, map)
                             .customMarker {
@@ -160,17 +160,17 @@ internal fun MapScreen(
                             }
                             .markerClickListener { booth ->
                                 setBoothSelectionMode(true)
-                                updateSelectedBooths(listOf(booth))
+                                updateSelectedBoothList(listOf(booth))
                             }
                             .clusterClickListener { booths ->
                                 setBoothSelectionMode(true)
-                                updateSelectedBooths(booths.items.toList())
+                                updateSelectedBoothList(booths.items.toList())
                             }
-                            // 마커를 클릭 했을 경우 지도의 가운데가 마커로 이동 비활성화
+                            // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
                             .clickToCenter(false)
                             .make()
                     }
-                    clusterManager?.addItems(uiState.booths)
+                    clusterManager?.addItems(uiState.boothList)
                     onDispose {
                         clusterManager?.clearItems()
                     }
@@ -230,7 +230,7 @@ internal fun MapScreen(
                 AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
                     BoothCards(
                         pagerState = pagerState,
-                        booths = uiState.booths,
+                        boothList = uiState.boothList,
                         onNavigateToBooth = onNavigateToBooth,
                         isPopularMode = uiState.isPopularMode,
                         modifier = Modifier.wrapContentHeight(),
@@ -244,14 +244,14 @@ internal fun MapScreen(
                     updateSearchText = updateFestivalSearchText,
                     searchTextHintRes = R.string.festival_search_text_field_hint,
                     setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                    interestedFestivals = uiState.interestedFestivals,
+                    likedFestivals = uiState.likedFestivals,
                     festivalSearchResults = uiState.festivalSearchResults,
                     initSearchText = initSearchText,
                     setEnableSearchMode = setEnableSearchMode,
                     isSearchMode = uiState.isSearchMode,
                     setEnableEditMode = setEnableEditMode,
-                    isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
-                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                    isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                     isEditMode = uiState.isEditMode,
                 )
             }
@@ -312,7 +312,7 @@ fun MapTopAppBar(
 @Composable
 fun BoothCards(
     pagerState: PagerState,
-    booths: ImmutableList<BoothDetailModel>,
+    boothList: ImmutableList<BoothDetailModel>,
     onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     modifier: Modifier = Modifier,
@@ -323,7 +323,7 @@ fun BoothCards(
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { page ->
         BoothCard(
-            boothInfo = booths[page],
+            boothInfo = boothList[page],
             onNavigateToBooth = onNavigateToBooth,
             isPopularMode = isPopularMode,
             ranking = page + 1,
@@ -439,7 +439,7 @@ fun MapScreenPreview() {
             padding = PaddingValues(0.dp),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
-                booths = persistentListOf(
+                boothList = persistentListOf(
                     BoothDetailModel(
                         id = 1L,
                         name = "컴공 주점",
@@ -460,8 +460,8 @@ fun MapScreenPreview() {
             setEnableEditMode = {},
             setEnablePopularMode = {},
             setBoothSelectionMode = {},
-            updateSelectedBooths = {},
-            setInterestedFestivalDeleteDialogVisible = {},
+            updateSelectedBoothList = {},
+            setLikedFestivalDeleteDialogVisible = {},
         )
     }
 }
@@ -503,7 +503,7 @@ fun BoothCardsPreview() {
     UnifestTheme {
         BoothCards(
             pagerState = rememberPagerState(pageCount = { boothList.size }),
-            booths = boothList.toImmutableList(),
+            boothList = boothList.toImmutableList(),
             onNavigateToBooth = {},
             isPopularMode = false,
             modifier = Modifier.height(116.dp),

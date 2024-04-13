@@ -19,7 +19,7 @@ class MenuViewModel @Inject constructor() : ViewModel() {
     init {
         _uiState.update { currentState ->
             currentState.copy(
-                interestedFestivals = mutableListOf(
+                likedFestivals = mutableListOf(
                     Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
                     Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
                     Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
@@ -41,7 +41,7 @@ class MenuViewModel @Inject constructor() : ViewModel() {
                     Festival("school_image_url_4", "건국대학교", "녹색지대", "05.06-05.08"),
                     Festival("school_image_url_5", "성균관대", "성대축제", "05.06-05.08"),
                 ),
-                interestedBooths = persistentListOf(
+                likedBoothList = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
                         name = "부스1",
@@ -110,9 +110,9 @@ class MenuViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun setInterestedFestivalDeleteDialogVisible(flag: Boolean) {
+    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
-            it.copy(isInterestedFestivalDeleteDialogVisible = flag)
+            it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }
     }
 }

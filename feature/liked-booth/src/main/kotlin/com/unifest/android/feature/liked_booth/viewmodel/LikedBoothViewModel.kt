@@ -1,4 +1,4 @@
-package com.unifest.android.feature.interested_booth.viewmodel
+package com.unifest.android.feature.liked_booth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.domain.entity.BoothDetailEntity
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class InterestedBoothViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow(InterestedBoothUiState())
-    val uiState: StateFlow<InterestedBoothUiState> = _uiState.asStateFlow()
+class LikedBoothViewModel @Inject constructor() : ViewModel() {
+    private val _uiState = MutableStateFlow(LikedBoothUiState())
+    val uiState: StateFlow<LikedBoothUiState> = _uiState.asStateFlow()
 
     init {
         _uiState.update {
             it.copy(
-                interestedBooths = persistentListOf(
+                likedBoothList = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
                         name = "부스 이름",

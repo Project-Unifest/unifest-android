@@ -70,7 +70,7 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
-    onNavigateToInterestedBooths: () -> Unit,
+    onNavigateToLikedBooth: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -78,12 +78,12 @@ internal fun MenuRoute(
         padding = padding,
         uiState = uiState,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToInterestedBooths = onNavigateToInterestedBooths,
+        onNavigateToLikedBoothList = onNavigateToLikedBooth,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
-        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
+        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
     )
 }
 
@@ -92,12 +92,12 @@ fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToInterestedBooths: () -> Unit,
+    onNavigateToLikedBoothList: () -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val appVersion = remember {
@@ -136,7 +136,7 @@ fun MenuScreen(
                             .padding(top = 10.dp, start = 20.dp),
                     ) {
                         Text(
-                            text = stringResource(id = R.string.menu_my_interested_festival),
+                            text = stringResource(id = R.string.menu_my_liked_festival),
                             style = Title3,
                         )
                         TextButton(
@@ -194,9 +194,9 @@ fun MenuScreen(
                             .fillMaxWidth()
                             .padding(start = 20.dp, top = 10.dp),
                     ) {
-                        Text(text = stringResource(id = R.string.menu_interested_booths))
+                        Text(text = stringResource(id = R.string.menu_liked_booth))
                         TextButton(
-                            onClick = { onNavigateToInterestedBooths() },
+                            onClick = { onNavigateToLikedBoothList() },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -207,8 +207,8 @@ fun MenuScreen(
                         }
                     }
                 }
-                itemsIndexed(uiState.interestedBooths.take(3), key = { _, booth -> booth.id }) { index, booth ->
-                    InterestedBoothsItems(booth, index, uiState.interestedBooths.size)
+                itemsIndexed(uiState.likedBoothList.take(3), key = { _, booth -> booth.id }) { index, booth ->
+                    LikedBoothItems(booth, index, uiState.likedBoothList.size)
                 }
                 item {
                     VerticalDivider(
@@ -220,7 +220,7 @@ fun MenuScreen(
                 }
                 item {
                     MenuItem(
-                        ImageVector.vectorResource(R.drawable.ic_inquiry),
+                        icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
                         onClick = { /* 구현 */ },
                     )
@@ -266,14 +266,14 @@ fun MenuScreen(
                 updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
                 setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                interestedFestivals = uiState.interestedFestivals,
+                likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
                 initSearchText = initSearchText,
                 setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
                 setEnableEditMode = setEnableEditMode,
-                isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
-                setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
             )
         }
@@ -323,7 +323,11 @@ fun FestivalItem(
 }
 
 @Composable
-fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
+fun LikedBoothItems(
+    booth: BoothDetailEntity,
+    index: Int,
+    total: Int,
+) {
     var isBookmarked by remember { mutableStateOf(true) }
     val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
@@ -394,7 +398,11 @@ fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
 }
 
 @Composable
-fun MenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
+fun MenuItem(
+    icon: ImageVector,
+    title: String,
+    onClick: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -403,9 +411,9 @@ fun MenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
             .padding(25.dp),
     ) {
         Icon(
-            icon,
-            contentDescription = null,
-            tint = Color(0xFF7A7A7C),
+            imageVector = icon,
+            contentDescription = "Menu Icon",
+            tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(title, style = Content8)
@@ -423,8 +431,8 @@ fun MenuScreenPreview() {
             initSearchText = { },
             setEnableSearchMode = { },
             setEnableEditMode = { },
-            setInterestedFestivalDeleteDialogVisible = { },
-            onNavigateToInterestedBooths = { },
+            setLikedFestivalDeleteDialogVisible = { },
+            onNavigateToLikedBoothList = { },
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     Festival(
@@ -440,7 +448,7 @@ fun MenuScreenPreview() {
                         imgUrl = "",
                     ),
                 ),
-                interestedBooths = persistentListOf(
+                likedBoothList = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
                         name = "부스 이름",

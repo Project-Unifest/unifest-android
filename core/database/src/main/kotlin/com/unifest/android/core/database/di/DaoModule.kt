@@ -1,7 +1,7 @@
 package com.unifest.android.core.database.di
 
-import com.unifest.android.core.database.InterestedBoothDao
-import com.unifest.android.core.database.InterestedBoothDatabase
+import com.unifest.android.core.database.LikedBoothDao
+import com.unifest.android.core.database.LikedBoothDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DaoModule {
     @Provides
-    fun provideInterestedBoothDao(
-        database: InterestedBoothDatabase,
-    ): InterestedBoothDao = database.interestedBoothDao()
+    fun provideLikedBoothDao(
+        database: LikedBoothDatabase,
+    ): LikedBoothDao = database.likedBoothDao()
 }

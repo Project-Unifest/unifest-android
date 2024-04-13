@@ -49,7 +49,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
-import com.unifest.android.core.ui.component.InterestedFestivalsGrid
+import com.unifest.android.core.ui.component.LikedFestivalsGrid
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -104,7 +104,7 @@ fun IntroScreen(
                     .padding(horizontal = 20.dp),
             )
             Spacer(modifier = Modifier.height(18.dp))
-            InterestedFestivalsGrid(
+            LikedFestivalsGrid(
                 selectedFestivals = selectedFestivals,
                 onFestivalSelected = { school ->
                     selectedFestivals.remove(school)
