@@ -408,7 +408,7 @@ fun MenuScreenPreview() {
                     BoothDetailEntity(
                         id = 1,
                         name = "부스 이름",
-                        category = "음식",
+                        category = "부스 카테고리",
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
@@ -416,7 +416,7 @@ fun MenuScreenPreview() {
                     BoothDetailEntity(
                         id = 2,
                         name = "부스 이름",
-                        category = "음식",
+                        category = "부스 카테고리",
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
