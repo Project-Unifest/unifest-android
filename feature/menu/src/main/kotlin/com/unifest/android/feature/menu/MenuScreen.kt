@@ -1,6 +1,9 @@
 package com.unifest.android.feature.menu
 
 import android.content.pm.PackageManager
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +58,6 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
-import com.unifest.android.core.domain.entity.MenuEntity
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -86,6 +88,7 @@ internal fun MenuRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenuScreen(
     padding: PaddingValues,
@@ -230,6 +233,12 @@ fun MenuScreen(
                             index = index,
                             totalCount = uiState.likedBoothList.size,
                             deleteLikedBooth = { deleteLikedBooth(booth) },
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 500,
+                                    easing = LinearOutSlowInEasing,
+                                ),
+                            ),
                         )
                     }
                 }
@@ -401,16 +410,6 @@ fun MenuScreenPreview() {
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
-                        latitude = 0.0f,
-                        longitude = 0.0f,
-                        menus = listOf(
-                            MenuEntity(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
                     BoothDetailEntity(
                         id = 2,
@@ -419,16 +418,6 @@ fun MenuScreenPreview() {
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
-                        latitude = 0.0f,
-                        longitude = 0.0f,
-                        menus = listOf(
-                            MenuEntity(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
                 ),
             ),

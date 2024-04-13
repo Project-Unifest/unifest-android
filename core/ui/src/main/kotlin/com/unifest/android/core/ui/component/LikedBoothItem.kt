@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
@@ -35,10 +36,11 @@ fun LikedBoothItem(
     index: Int,
     totalCount: Int,
     deleteLikedBooth: (BoothDetailEntity) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
-        modifier = Modifier
+        modifier = modifier
             .clickable { /* 클릭 이벤트 처리 */ }
             .padding(horizontal = 20.dp),
     ) {
@@ -110,4 +112,23 @@ fun LikedBoothItem(
             )
         }
     }
+}
+
+@ComponentPreview
+@Composable
+fun LikedBoothItemPreview() {
+    LikedBoothItem(
+        booth = BoothDetailEntity(
+            id = 1,
+            name = "부스 이름",
+            category = "부스 카테고리",
+            description = "부스 설명",
+            warning = "",
+            location = "부스 위치",
+            isLiked = true,
+        ),
+        index = 0,
+        totalCount = 1,
+        deleteLikedBooth = {},
+    )
 }

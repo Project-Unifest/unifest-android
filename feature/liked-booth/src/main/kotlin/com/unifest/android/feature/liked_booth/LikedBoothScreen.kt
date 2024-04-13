@@ -1,5 +1,8 @@
 package com.unifest.android.feature.liked_booth
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +49,7 @@ internal fun LikedBoothRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun LikedBoothScreen(
     padding: PaddingValues,
@@ -84,6 +88,12 @@ internal fun LikedBoothScreen(
                         index = index,
                         totalCount = uiState.likedBoothList.size,
                         deleteLikedBooth = { deleteLikedBooth(booth) },
+                        modifier = Modifier.animateItemPlacement(
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing,
+                            ),
+                        ),
                     )
                 }
             }
