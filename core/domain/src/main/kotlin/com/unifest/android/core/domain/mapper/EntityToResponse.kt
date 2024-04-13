@@ -5,8 +5,8 @@ import com.unifest.android.core.data.response.MenuResponse
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.MenuEntity
 
-fun BoothDetailResponse.toEntity(): BoothDetailEntity {
-    return BoothDetailEntity(
+fun BoothDetailEntity.toResponse(): BoothDetailResponse {
+    return BoothDetailResponse(
         id = id,
         name = name,
         category = category,
@@ -15,13 +15,12 @@ fun BoothDetailResponse.toEntity(): BoothDetailEntity {
         location = location,
         latitude = latitude,
         longitude = longitude,
-        menus = menus.map { it.toEntity() },
-        isLiked = false,
+        menus = menus.map { it.toResponse() }
     )
 }
 
-fun MenuResponse.toEntity(): MenuEntity {
-    return MenuEntity(
+fun MenuEntity.toResponse(): MenuResponse {
+    return MenuResponse(
         id = id,
         name = name,
         price = price,

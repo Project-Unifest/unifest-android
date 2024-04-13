@@ -27,6 +27,8 @@ data class LikedBoothEntity(
     val longitude: Float,
     @ColumnInfo(name = "menus")
     val menus: List<MenuEntity>,
+    @ColumnInfo(name = "is_liked")
+    val isLiked: Boolean,
 )
 
 @Serializable

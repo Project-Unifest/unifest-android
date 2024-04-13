@@ -18,4 +18,7 @@ interface LikedBoothDao {
 
     @Query("SELECT * FROM liked_booth")
     fun getLikedBoothList(): Flow<List<LikedBoothEntity>>
+
+    @Query("UPDATE liked_booth SET is_liked = :isLiked WHERE id = :id")
+    suspend fun updateLikedBooth(id: Long, isLiked: Boolean)
 }

@@ -21,9 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,10 +52,12 @@ internal fun LikedBoothRoute(
     viewModel: LikedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     LikedBoothScreen(
         padding = padding,
         uiState = uiState,
         onBackClick = onBackClick,
+        deleteLikedBooth = viewModel::deleteLikedBooth,
     )
 }
 
@@ -67,6 +66,7 @@ internal fun LikedBoothScreen(
     padding: PaddingValues,
     uiState: LikedBoothUiState,
     onBackClick: () -> Unit,
+    deleteLikedBooth: (BoothDetailEntity) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -91,7 +91,12 @@ internal fun LikedBoothScreen(
                     uiState.likedBoothList,
                     key = { _, booth -> booth.id },
                 ) { index, booth ->
-                    LikedBoothItems(booth, index, uiState.likedBoothList.size)
+                    LikedBoothItems(
+                        booth = booth,
+                        index = index,
+                        totalCount = uiState.likedBoothList.size,
+                        deleteLikedBooth = { deleteLikedBooth(booth) },
+                    )
                 }
             }
         }
@@ -102,10 +107,11 @@ internal fun LikedBoothScreen(
 fun LikedBoothItems(
     booth: BoothDetailEntity,
     index: Int,
-    total: Int,
+    totalCount: Int,
+    deleteLikedBooth: (BoothDetailEntity) -> Unit
 ) {
-    var isBookmarked by remember { mutableStateOf(true) }
-    val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
+    // var isBookmarked by remember { mutableStateOf(true) }
+     val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
         modifier = Modifier
             .clickable { /* 클릭 이벤트 처리 */ }
@@ -154,16 +160,20 @@ fun LikedBoothItems(
                 }
             }
             Icon(
-                imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
+                imageVector = ImageVector.vectorResource(if (booth.isLiked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                contentDescription = "Bookmark Icon",
                 tint = bookMarkColor,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = { isBookmarked = !isBookmarked }),
+                    .clickable(
+                        onClick = {
+                            deleteLikedBooth(booth)
+                        }
+                    ),
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        if (index < total - 1) {
+        if (index < totalCount - 1) {
             HorizontalDivider(
                 color = Color(0xFFDFDFDF),
                 thickness = 1.dp,
@@ -179,7 +189,6 @@ fun LikedBoothScreenPreview() {
     UnifestTheme {
         LikedBoothScreen(
             padding = PaddingValues(),
-            onBackClick = {},
             uiState = LikedBoothUiState(
                 likedBoothList = persistentListOf(
                     BoothDetailEntity(
@@ -292,6 +301,8 @@ fun LikedBoothScreenPreview() {
                     ),
                 ),
             ),
+            onBackClick = {},
+            deleteLikedBooth = {},
         )
     }
 }

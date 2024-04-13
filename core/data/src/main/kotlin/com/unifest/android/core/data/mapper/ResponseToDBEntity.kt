@@ -15,7 +15,8 @@ internal fun BoothDetailResponse.toDBEntity(): LikedBoothEntity {
         location = location,
         latitude = latitude,
         longitude = longitude,
-        menus = menus.map { it.toDBEntity() }
+        menus = menus.map { it.toDBEntity() },
+        isLiked = false,
     )
 }
 

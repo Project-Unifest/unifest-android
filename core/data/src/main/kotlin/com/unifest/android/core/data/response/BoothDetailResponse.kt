@@ -23,6 +23,7 @@ data class BoothDetailResponse(
     val longitude: Float,
     @SerialName("menus")
     val menus: List<MenuResponse>,
+    val isLiked: Boolean = false,
 )
 
 @Serializable

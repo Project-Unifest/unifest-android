@@ -2,18 +2,23 @@ package com.unifest.android.feature.booth.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.MenuEntity
+import com.unifest.android.core.domain.mapper.toResponse
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
+    private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     @Suppress("unused")
@@ -45,12 +50,19 @@ class BoothViewModel @Inject constructor(
     }
 
     fun toggleBookmark() {
-        _uiState.update { currentState ->
-            val newBookmarkState = !currentState.isBookmarked
-            currentState.copy(
-                isBookmarked = newBookmarkState,
-                bookmarkCount = currentState.bookmarkCount + if (newBookmarkState) 1 else -1,
-            )
+        viewModelScope.launch {
+            if (_uiState.value.isBookmarked) {
+                likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo.toResponse())
+            } else {
+                likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo.toResponse())
+            }
+            _uiState.update { currentState ->
+                val newBookmarkState = !currentState.isBookmarked
+                currentState.copy(
+                    isBookmarked = newBookmarkState,
+                    bookmarkCount = currentState.bookmarkCount + if (newBookmarkState) 1 else -1,
+                )
+            }
         }
     }
 }
