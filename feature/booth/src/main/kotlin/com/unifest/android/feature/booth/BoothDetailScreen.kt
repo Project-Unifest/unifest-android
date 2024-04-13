@@ -73,7 +73,13 @@ internal fun BoothDetailRoute(
             darkIcons = false,
             isNavigationBarContrastEnforced = false,
         )
-        onDispose {}
+        onDispose {
+            systemUiController.setSystemBarsColor(
+                color = Color.White,
+                darkIcons = true,
+                isNavigationBarContrastEnforced = false,
+            )
+        }
     }
 
     BoothDetailScreen(

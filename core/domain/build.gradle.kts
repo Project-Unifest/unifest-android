@@ -13,6 +13,8 @@ dependencies {
         libs.compose.stable.marker,
     )
     implementations(
-        libs.androidx.core,
+        projects.core.data,
+
+        libs.javax.inject,
     )
 }

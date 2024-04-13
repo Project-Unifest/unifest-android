@@ -6,8 +6,6 @@ gradle-dependency-handler-extensions = "1.1.0"
 
 google-secrets = "2.0.1"
 google-service = "4.4.1"
-play-services-maps = "18.2.0"
-play-services-location = "21.2.0"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
@@ -20,11 +18,12 @@ kotlinx-serialization-converter = "1.0.0"
 kotlinx-collections-immutable = "0.3.7"
 
 androidx-core = "1.12.0"
-androidx-lifecycle = "2.8.0-alpha04"
+androidx-lifecycle = "2.8.0-alpha02"
 androidx-splash = "1.0.1"
 androidx-startup = "1.1.1"
 androidx-navigation = "2.7.7"
 androidx-datastore = "1.0.0"
+androidx-room = "2.6.1"
 androidx-activity-compose = "1.8.2"
 androidx-compose-compiler = "1.5.11"
 androidx-compose-bom = "2024.04.00"
@@ -54,16 +53,12 @@ naver-map-sdk = "3.18.0"
 naver-map-compose = "1.5.5"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
-junit = "4.13.2"
-androidx-test-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
-appcompat = "1.6.1"
-material = "1.11.0"
 
 [libraries]
 
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-core" }
+gradle-androidx-room = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -93,6 +88,10 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+
 compose-system-ui-controller = { group = "tech.thdev", name = "extensions-compose-system-ui-controller", version.ref = "compose-extensions" }
 compose-keyboard-state = { group = "tech.thdev", name = "extensions-compose-keyboard-state", version.ref = "compose-extensions" }
 
@@ -120,11 +119,6 @@ naver-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "nav
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 
@@ -135,13 +129,14 @@ google-service = { id = "com.google.gms.google-services", version.ref = "google-
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-core" }
 kotlin-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "kotlin-detekt" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-core" }
 kotlin-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "kotlin-ktlint-gradle" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-core" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-core" }
 
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+
+androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
@@ -157,6 +152,7 @@ unifest-android-library-compose = { id = "unifest.android.library.compose", vers
 unifest-android-feature = { id = "unifest.android.feature", version = "unspecified" }
 unifest-android-hilt = { id = "unifest.android.hilt", version = "unspecified" }
 unifest-android-retrofit = { id = "unifest.android.retrofit", version = "unspecified" }
+unifest-android-room = { id = "unifest.android.room", version = "unspecified" }
 
 [bundles]
 

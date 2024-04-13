@@ -1,16 +1,15 @@
 package com.unifest.android.feature.menu
 
 import android.content.pm.PackageManager
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.MenuEntity
-import com.unifest.android.core.ui.DevicePreview
-import kotlinx.collections.immutable.persistentListOf
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,16 +24,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,48 +54,26 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.MenuTitle
-import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
-import com.unifest.android.core.designsystem.theme.Title5
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.BoothDetailEntity
 import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.core.ui.component.LikedBoothItem
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
+import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
-    onNavigateToInterestedBooths: () -> Unit,
+    onNavigateToLikedBooth: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    MenuScreen(
-        padding = padding,
-        uiState = uiState,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToInterestedBooths = onNavigateToInterestedBooths,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        initSearchText = viewModel::initSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
-    )
-}
-
-@Composable
-fun MenuScreen(
-    padding: PaddingValues,
-    uiState: MenuUiState,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToInterestedBooths: () -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-) {
     val context = LocalContext.current
     val appVersion = remember {
         try {
@@ -108,6 +83,36 @@ fun MenuScreen(
             "Unknown"
         }
     }
+    MenuScreen(
+        padding = padding,
+        uiState = uiState,
+        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
+        onNavigateToLikedBoothList = onNavigateToLikedBooth,
+        updateFestivalSearchText = viewModel::updateFestivalSearchText,
+        initSearchText = viewModel::initSearchText,
+        setEnableSearchMode = viewModel::setEnableSearchMode,
+        setEnableEditMode = viewModel::setEnableEditMode,
+        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
+        deleteLikedBooth = viewModel::deleteLikedBooth,
+        appVersion = appVersion,
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MenuScreen(
+    padding: PaddingValues,
+    uiState: MenuUiState,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    onNavigateToLikedBoothList: () -> Unit,
+    updateFestivalSearchText: (TextFieldValue) -> Unit,
+    initSearchText: () -> Unit,
+    setEnableSearchMode: (Boolean) -> Unit,
+    setEnableEditMode: () -> Unit,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    deleteLikedBooth: (BoothDetailEntity) -> Unit,
+    appVersion: String,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -136,7 +141,7 @@ fun MenuScreen(
                             .padding(top = 10.dp, start = 20.dp),
                     ) {
                         Text(
-                            text = stringResource(id = R.string.menu_my_interested_festival),
+                            text = stringResource(id = R.string.menu_my_liked_festival),
                             style = Title3,
                         )
                         TextButton(
@@ -194,9 +199,14 @@ fun MenuScreen(
                             .fillMaxWidth()
                             .padding(start = 20.dp, top = 10.dp),
                     ) {
-                        Text(text = stringResource(id = R.string.menu_interested_booths))
+                        Text(
+                            text = stringResource(id = R.string.menu_liked_booth),
+                            style = Title3,
+                            color = Color(0xFF161616),
+                            fontWeight = FontWeight.Bold,
+                        )
                         TextButton(
-                            onClick = { onNavigateToInterestedBooths() },
+                            onClick = { onNavigateToLikedBoothList() },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -207,8 +217,32 @@ fun MenuScreen(
                         }
                     }
                 }
-                itemsIndexed(uiState.interestedBooths.take(3), key = { _, booth -> booth.id }) { index, booth ->
-                    InterestedBoothsItems(booth, index, uiState.interestedBooths.size)
+                if (uiState.likedBoothList.isEmpty()) {
+                    item {
+                        EmptyLikedBoothItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(248.dp),
+                        )
+                    }
+                } else {
+                    itemsIndexed(
+                        items = uiState.likedBoothList.take(3),
+                        key = { _, booth -> booth.id },
+                    ) { index, booth ->
+                        LikedBoothItem(
+                            booth = booth,
+                            index = index,
+                            totalCount = uiState.likedBoothList.size,
+                            deleteLikedBooth = { deleteLikedBooth(booth) },
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 500,
+                                    easing = LinearOutSlowInEasing,
+                                ),
+                            ),
+                        )
+                    }
                 }
                 item {
                     VerticalDivider(
@@ -220,7 +254,7 @@ fun MenuScreen(
                 }
                 item {
                     MenuItem(
-                        ImageVector.vectorResource(R.drawable.ic_inquiry),
+                        icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
                         onClick = { /* 구현 */ },
                     )
@@ -235,7 +269,7 @@ fun MenuScreen(
                 }
                 item {
                     MenuItem(
-                        ImageVector.vectorResource(R.drawable.ic_admin_mode),
+                        icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
                         title = stringResource(id = R.string.menu_admin_mode),
                         onClick = { /* 구현 */ },
                     )
@@ -255,7 +289,11 @@ fun MenuScreen(
                             .fillMaxWidth()
                             .padding(vertical = 13.dp),
                     ) {
-                        Text("UniFest v$appVersion", textAlign = TextAlign.Center, color = Color(0xFFC5C5C5))
+                        Text(
+                            text = "UniFest v$appVersion",
+                            textAlign = TextAlign.Center,
+                            color = Color(0xFFC5C5C5),
+                        )
                     }
                 }
             }
@@ -266,14 +304,14 @@ fun MenuScreen(
                 updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
                 setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                interestedFestivals = uiState.interestedFestivals,
+                likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
                 initSearchText = initSearchText,
                 setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
                 setEnableEditMode = setEnableEditMode,
-                isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
-                setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
             )
         }
@@ -323,78 +361,11 @@ fun FestivalItem(
 }
 
 @Composable
-fun InterestedBoothsItems(booth: BoothDetailEntity, index: Int, total: Int) {
-    var isBookmarked by remember { mutableStateOf(true) }
-    val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
-    Column(
-        modifier = Modifier
-            .clickable { /* 클릭 이벤트 처리 */ }
-            .padding(horizontal = 20.dp),
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            NetworkImage(
-                imageUrl = "https://picsum.photos/86",
-                modifier = Modifier
-                    .size(86.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-            )
-            Spacer(modifier = Modifier.width(14.dp))
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-            ) {
-                Text(
-                    text = booth.name,
-                    style = Title2,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = booth.description,
-                    style = Title5,
-                    color = Color(0xFF545454),
-                )
-                Spacer(modifier = Modifier.height(13.dp))
-                Row {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
-                        contentDescription = "Location Icon",
-                        tint = Color.Unspecified,
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
-                    Text(
-                        text = booth.location,
-                        style = Title5,
-                        color = Color(0xFF545454),
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                    )
-                }
-            }
-            Icon(
-                imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                tint = bookMarkColor,
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable(onClick = { isBookmarked = !isBookmarked }),
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        if (index < total - 1) {
-            HorizontalDivider(
-                color = Color(0xFFDFDFDF),
-                thickness = 1.dp,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-    }
-}
-
-@Composable
-fun MenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
+fun MenuItem(
+    icon: ImageVector,
+    title: String,
+    onClick: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -403,9 +374,9 @@ fun MenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
             .padding(25.dp),
     ) {
         Icon(
-            icon,
-            contentDescription = null,
-            tint = Color(0xFF7A7A7C),
+            imageVector = icon,
+            contentDescription = "Menu Icon",
+            tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(title, style = Content8)
@@ -418,13 +389,6 @@ fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
             padding = PaddingValues(0.dp),
-            setFestivalSearchBottomSheetVisible = { },
-            updateFestivalSearchText = { },
-            initSearchText = { },
-            setEnableSearchMode = { },
-            setEnableEditMode = { },
-            setInterestedFestivalDeleteDialogVisible = { },
-            onNavigateToInterestedBooths = { },
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     Festival(
@@ -434,51 +398,40 @@ fun MenuScreenPreview() {
                         imgUrl = "",
                     ),
                     Festival(
-                        schoolName = "건국대",
+                        schoolName = "서울대",
                         festivalName = "녹색지대",
                         festivalDate = "2021.11.11",
                         imgUrl = "",
                     ),
                 ),
-                interestedBooths = persistentListOf(
+                likedBoothList = persistentListOf(
                     BoothDetailEntity(
                         id = 1,
                         name = "부스 이름",
-                        category = "음식",
+                        category = "부스 카테고리",
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
-                        latitude = 0.0f,
-                        longitude = 0.0f,
-                        menus = listOf(
-                            MenuEntity(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
                     BoothDetailEntity(
                         id = 2,
                         name = "부스 이름",
-                        category = "음식",
+                        category = "부스 카테고리",
                         description = "부스 설명",
                         warning = "주의사항",
                         location = "부스 위치",
-                        latitude = 0.0f,
-                        longitude = 0.0f,
-                        menus = listOf(
-                            MenuEntity(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
                 ),
             ),
+            setFestivalSearchBottomSheetVisible = {},
+            updateFestivalSearchText = {},
+            initSearchText = {},
+            setEnableSearchMode = {},
+            setEnableEditMode = { },
+            setLikedFestivalDeleteDialogVisible = {},
+            onNavigateToLikedBoothList = {},
+            deleteLikedBooth = {},
+            appVersion = "1.0.0",
         )
     }
 }

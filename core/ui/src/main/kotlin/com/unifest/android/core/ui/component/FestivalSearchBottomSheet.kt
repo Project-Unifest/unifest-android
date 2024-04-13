@@ -31,7 +31,7 @@ import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
-import com.unifest.android.core.designsystem.component.InterestedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
@@ -45,14 +45,14 @@ fun FestivalSearchBottomSheet(
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     searchText: TextFieldValue,
     updateSearchText: (TextFieldValue) -> Unit,
-    interestedFestivals: MutableList<Festival>,
+    likedFestivals: MutableList<Festival>,
     festivalSearchResults: ImmutableList<Festival>,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     setEnableEditMode: () -> Unit,
-    isInterestedFestivalDeleteDialogVisible: Boolean,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    isLikedFestivalDeleteDialogVisible: Boolean,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     isEditMode: Boolean = false,
 ) {
     val selectedFestivals = remember { mutableStateListOf<Festival>() }
@@ -126,13 +126,13 @@ fun FestivalSearchBottomSheet(
                         .background(Color(0xFFF1F3F7)),
                 )
                 Spacer(modifier = Modifier.height(21.dp))
-                InterestedFestivalsGrid(
-                    selectedFestivals = interestedFestivals,
+                LikedFestivalsGrid(
+                    selectedFestivals = likedFestivals,
                     onFestivalSelected = { school ->
                         selectedFestivals.remove(school)
                     },
                     isEditMode = isEditMode,
-                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 ) {
                     TextButton(
                         onClick = setEnableEditMode,
@@ -150,13 +150,13 @@ fun FestivalSearchBottomSheet(
                 )
             }
         }
-        if (isInterestedFestivalDeleteDialogVisible) {
-            InterestedFestivalDeleteDialog(
+        if (isLikedFestivalDeleteDialogVisible) {
+            LikedFestivalDeleteDialog(
                 onCancelClick = {
-                    setInterestedFestivalDeleteDialogVisible(false)
+                    setLikedFestivalDeleteDialogVisible(false)
                 },
                 onConfirmClick = {
-                    setInterestedFestivalDeleteDialogVisible(false)
+                    setLikedFestivalDeleteDialogVisible(false)
                 },
             )
         }
@@ -173,7 +173,7 @@ fun SchoolSearchBottomSheetPreview() {
             setFestivalSearchBottomSheetVisible = {},
             searchText = TextFieldValue(),
             updateSearchText = {},
-            interestedFestivals = mutableListOf(
+            likedFestivals = mutableListOf(
                 Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
                 Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
                 Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
@@ -191,9 +191,9 @@ fun SchoolSearchBottomSheetPreview() {
             setEnableSearchMode = {},
             isSearchMode = false,
             setEnableEditMode = {},
-            isInterestedFestivalDeleteDialogVisible = false,
+            isLikedFestivalDeleteDialogVisible = false,
             isEditMode = false,
-            setInterestedFestivalDeleteDialogVisible = {},
+            setLikedFestivalDeleteDialogVisible = {},
         )
     }
 }

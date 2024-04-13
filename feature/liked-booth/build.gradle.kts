@@ -6,13 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.interested_booth"
+    namespace = "com.unifest.android.feature.liked_booth"
 }
 
 dependencies {
     implementations(
+        projects.core.data,
+        projects.core.domain,
+
         libs.kotlinx.collections.immutable,
-        libs.androidx.core,
         libs.compose.system.ui.controller,
         libs.timber,
     )
