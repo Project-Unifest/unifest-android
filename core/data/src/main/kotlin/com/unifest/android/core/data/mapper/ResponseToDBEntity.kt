@@ -25,6 +25,6 @@ internal fun MenuResponse.toDBEntity(): MenuEntity {
         id = id,
         name = name,
         price = price,
-        imgUrl = imgUrl
+        imgUrl = imgUrl,
     )
 }

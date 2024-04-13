@@ -74,6 +74,15 @@ internal fun MenuRoute(
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val appVersion = remember {
+        try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            Timber.tag("AppVersion").e(e, "Failed to get package info")
+            "Unknown"
+        }
+    }
     MenuScreen(
         padding = padding,
         uiState = uiState,
@@ -85,6 +94,7 @@ internal fun MenuRoute(
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         deleteLikedBooth = viewModel::deleteLikedBooth,
+        appVersion = appVersion,
     )
 }
 
@@ -101,16 +111,8 @@ fun MenuScreen(
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     deleteLikedBooth: (BoothDetailEntity) -> Unit,
+    appVersion: String,
 ) {
-    val context = LocalContext.current
-    val appVersion = remember {
-        try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            Timber.tag("AppVersion").e(e, "Failed to get package info")
-            "Unknown"
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -396,7 +398,7 @@ fun MenuScreenPreview() {
                         imgUrl = "",
                     ),
                     Festival(
-                        schoolName = "건국대",
+                        schoolName = "서울대",
                         festivalName = "녹색지대",
                         festivalDate = "2021.11.11",
                         imgUrl = "",
@@ -429,6 +431,7 @@ fun MenuScreenPreview() {
             setLikedFestivalDeleteDialogVisible = {},
             onNavigateToLikedBoothList = {},
             deleteLikedBooth = {},
+            appVersion = "1.0.0",
         )
     }
 }

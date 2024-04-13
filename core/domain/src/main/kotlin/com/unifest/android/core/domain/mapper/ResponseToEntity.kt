@@ -25,6 +25,6 @@ fun MenuResponse.toEntity(): MenuEntity {
         id = id,
         name = name,
         price = price,
-        imgUrl = imgUrl
+        imgUrl = imgUrl,
     )
 }

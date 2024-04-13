@@ -15,7 +15,7 @@ internal fun LikedBoothEntity.toResponse(): BoothDetailResponse {
         location = location,
         latitude = latitude,
         longitude = longitude,
-        menus = menus.map { it.toResponse() }
+        menus = menus.map { it.toResponse() },
     )
 }
 
@@ -24,6 +24,6 @@ internal fun MenuEntity.toResponse(): MenuResponse {
         id = id,
         name = name,
         price = price,
-        imgUrl = imgUrl
+        imgUrl = imgUrl,
     )
 }
