@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -108,10 +109,9 @@ fun LikedBoothItems(
     booth: BoothDetailEntity,
     index: Int,
     totalCount: Int,
-    deleteLikedBooth: (BoothDetailEntity) -> Unit
+    deleteLikedBooth: (BoothDetailEntity) -> Unit,
 ) {
-    // var isBookmarked by remember { mutableStateOf(true) }
-     val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
+    val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
         modifier = Modifier
             .clickable { /* 클릭 이벤트 처리 */ }
@@ -136,12 +136,16 @@ fun LikedBoothItems(
                 Text(
                     text = booth.name,
                     style = Title2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.description,
+                    text = booth.category,
                     style = Title5,
                     color = Color(0xFF545454),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(13.dp))
                 Row {
@@ -168,7 +172,7 @@ fun LikedBoothItems(
                     .clickable(
                         onClick = {
                             deleteLikedBooth(booth)
-                        }
+                        },
                     ),
             )
         }
