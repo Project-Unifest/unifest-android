@@ -44,7 +44,7 @@ internal class MainNavController(
         when (tab) {
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.MAP -> navController.navigateToMap(navOptions)
-            MainTab.WAITING -> navController.navigateToWaiting(navOptions)
+//            MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
     }
