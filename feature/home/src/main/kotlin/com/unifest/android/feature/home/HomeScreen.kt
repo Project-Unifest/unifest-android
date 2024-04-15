@@ -139,9 +139,7 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.festivalEvents) { index, event ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(event, selectedEventId, { eventId ->
-                            selectedEventId = if (selectedEventId == eventId) -1 else eventId
-                        }, onShowSnackBar)
+                        FestivalScheduleItem(event, onShowSnackBar)
                     }
                     if (index < uiState.festivalEvents.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -208,15 +206,12 @@ fun FestivalScheduleText() {
 @Composable
 fun FestivalScheduleItem(
     event: FestivalEventEntity,
-    selectedEventId: Int,
-    onEventClick: (Int) -> Unit,
     onShowSnackBar: (message: Int) -> Unit
 ) {
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onEventClick(event.id) }
                 .padding(start = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -271,18 +266,16 @@ fun FestivalScheduleItem(
                 }
             }
         }
-        AnimatedVisibility(visible = selectedEventId == event.id) {
-            UnifestOutlinedButton(
-                onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar ) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                    style = BoothLocation,
-                )
-            }
+        UnifestOutlinedButton(
+            onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar ) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+        ) {
+            Text(
+                text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
+                style = BoothLocation,
+            )
         }
     }
 }
