@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.model.BoothDetail
 import com.unifest.android.core.model.Festival
+import com.unifest.android.core.model.FestivalSearch
 import com.unifest.android.feature.map.mapper.toModel
 import com.unifest.android.feature.map.model.BoothDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,12 +24,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
+    private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
-    val uiState: StateFlow<MapUiState> = this._uiState.asStateFlow()
+    val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
     init {
+        getAllFestivals()
         getPopularBooths()
 
         val boothList = listOf(
@@ -143,6 +147,32 @@ class MapViewModel @Inject constructor(
                     Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
                 ),
             )
+        }
+    }
+
+    fun getAllFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getAllFestivals()
+                .onSuccess { result ->
+                    _uiState.update {
+                        it.copy(
+                            festivalList = result.data.map {
+                                FestivalSearch(
+                                    thumbnail = it.thumbnail,
+                                    schoolName = it.schoolName,
+                                    festivalName = it.festivalName,
+                                    beginDate = it.beginDate,
+                                    endDate = it.endDate,
+                                    latitude = it.latitude,
+                                    longitude = it.longitude,
+                                )
+                            }.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@MapViewModel)
+                }
         }
     }
 

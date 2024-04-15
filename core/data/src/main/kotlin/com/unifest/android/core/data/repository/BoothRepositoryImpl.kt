@@ -1,6 +1,6 @@
 package com.unifest.android.core.data.repository
 
-import com.unifest.android.core.data.service.UnifestService
+import com.unifest.android.core.network.service.UnifestService
 import com.unifest.android.core.data.util.runSuspendCatching
 import javax.inject.Inject
 

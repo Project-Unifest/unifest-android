@@ -92,6 +92,7 @@ internal fun MapRoute(
         padding = padding,
         uiState = uiState,
         onNavigateToBooth = onNavigateToBooth,
+        getAllFestivals = viewModel::getAllFestivals,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         updateBoothSearchText = viewModel::updateBoothSearchText,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
@@ -115,6 +116,7 @@ internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
     onNavigateToBooth: (Long) -> Unit,
+    getAllFestivals:() -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     updateBoothSearchText: (TextFieldValue) -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
@@ -160,6 +162,7 @@ internal fun MapScreen(
             ServerErrorDialog(
                 onRetryClick = {
                     setServerErrorDialogVisible(false)
+                    getAllFestivals()
                 },
             )
         }
@@ -168,6 +171,7 @@ internal fun MapScreen(
             NetworkErrorDialog(
                 onRetryClick = {
                     setNetworkErrorDialogVisible(false)
+                    getAllFestivals()
                 },
             )
         }
@@ -507,6 +511,7 @@ fun MapScreenPreview() {
                 ),
             ),
             onNavigateToBooth = {},
+            getAllFestivals = {},
             setFestivalSearchBottomSheetVisible = {},
             updateBoothSearchText = {},
             updateFestivalSearchText = {},
