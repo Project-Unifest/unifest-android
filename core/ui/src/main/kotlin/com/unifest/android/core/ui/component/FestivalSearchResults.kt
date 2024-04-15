@@ -31,13 +31,13 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.Festival
+import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun FestivalSearchResults(
-    searchResults: ImmutableList<Festival>,
+    searchResults: ImmutableList<FestivalModel>,
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -93,7 +93,7 @@ fun FestivalSearchResults(
 
 @Composable
 fun FestivalSearchResultItem(
-    festival: Festival,
+    festival: FestivalModel,
 ) {
     Row(
         modifier = Modifier
@@ -150,31 +150,31 @@ fun FestivalSearchResultItem(
 fun FestivalSearchResultsPreview() {
     FestivalSearchResults(
         searchResults = persistentListOf(
-            Festival(
+            FestivalModel(
                 "https://picsum.photos/86",
                 "서울대학교",
                 "설대축제",
                 "05.06-05.08",
             ),
-            Festival(
+            FestivalModel(
                 "https://picsum.photos/86",
                 "연세대학교",
                 "연대축제",
                 "05.06-05.08",
             ),
-            Festival(
+            FestivalModel(
                 "https://picsum.photos/86",
                 "고려대학교",
                 "고대축제",
                 "05.06-05.08",
             ),
-            Festival(
+            FestivalModel(
                 "https://picsum.photos/86",
                 "건국대학교",
                 "녹색지대",
                 "05.06-05.08",
             ),
-            Festival(
+            FestivalModel(
                 "https://picsum.photos/86",
                 "성균관대학교",
                 "성대축제",

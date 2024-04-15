@@ -1,9 +1,8 @@
 package com.unifest.android.core.data.repository
 
-import com.unifest.android.core.network.response.BoothDetailResponse
-import com.unifest.android.core.network.response.PopularBoothsResponse
+import com.unifest.android.core.model.BoothDetailModel
 
 interface BoothRepository {
-    suspend fun getPopularBooths(festivalId: Long): Result<PopularBoothsResponse>
-    suspend fun getBoothDetail(boothId: Long): Result<BoothDetailResponse>
+    suspend fun getPopularBooths(festivalId: Long): Result<List<BoothDetailModel>>
+    suspend fun getBoothDetail(boothId: Long): Result<BoothDetailModel>
 }

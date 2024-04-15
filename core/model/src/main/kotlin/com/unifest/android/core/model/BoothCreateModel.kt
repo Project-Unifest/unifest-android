@@ -1,6 +1,6 @@
 package com.unifest.android.core.model
 
-data class BoothCreate(
+data class BoothCreateModel(
     val name: String,
     val category: String,
     val description: String,

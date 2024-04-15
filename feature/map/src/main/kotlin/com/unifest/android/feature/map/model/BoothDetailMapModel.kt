@@ -6,7 +6,7 @@ import ted.gun0912.clustering.clustering.TedClusterItem
 import ted.gun0912.clustering.geometry.TedLatLng
 
 @Parcelize
-data class BoothDetailModel(
+data class BoothDetailMapModel(
     val id: Long = 0L,
     val name: String = "",
     val category: String = "",
@@ -15,7 +15,7 @@ data class BoothDetailModel(
     val location: String = "",
     val latitude: Double = 0.toDouble(),
     val longitude: Double = 0.toDouble(),
-    val menus: List<MenuModel> = emptyList(),
+    val menus: List<MenuMapModel> = emptyList(),
 ) : Parcelable, TedClusterItem {
     override fun getTedLatLng(): TedLatLng {
         return TedLatLng(latitude, longitude)
@@ -23,7 +23,7 @@ data class BoothDetailModel(
 }
 
 @Parcelize
-data class MenuModel(
+data class MenuMapModel(
     val id: Long = 0L,
     val name: String = "",
     val price: Int = 0,

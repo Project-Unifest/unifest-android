@@ -34,7 +34,7 @@ import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.Festival
+import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -44,8 +44,8 @@ fun FestivalSearchBottomSheet(
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     searchText: TextFieldValue,
     updateSearchText: (TextFieldValue) -> Unit,
-    likedFestivals: MutableList<Festival>,
-    festivalSearchResults: ImmutableList<Festival>,
+    likedFestivals: MutableList<FestivalModel>,
+    festivalSearchResults: ImmutableList<FestivalModel>,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
@@ -54,7 +54,7 @@ fun FestivalSearchBottomSheet(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     isEditMode: Boolean = false,
 ) {
-    val selectedFestivals = remember { mutableStateListOf<Festival>() }
+    val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 //    val scope = rememberCoroutineScope()
     val bottomSheetState = rememberFlexibleBottomSheetState(
         containSystemBars = true,
@@ -173,31 +173,31 @@ fun SchoolSearchBottomSheetPreview() {
             searchText = TextFieldValue(),
             updateSearchText = {},
             likedFestivals = mutableListOf(
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "서울대학교",
                     "설대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "연세대학교",
                     "연대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "고려대학교",
                     "고대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "건국대학교",
                     "녹색지대",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "성균관대학교",
                     "성대축제",
@@ -205,31 +205,31 @@ fun SchoolSearchBottomSheetPreview() {
                 ),
             ),
             festivalSearchResults = persistentListOf(
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "서울대학교",
                     "설대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "연세대학교",
                     "연대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "고려대학교",
                     "고대축제",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "건국대학교",
                     "녹색지대",
                     "05.06-05.08",
                 ),
-                Festival(
+                FestivalModel(
                     "https://picsum.photos/36",
                     "성균관대학교",
                     "성대축제",

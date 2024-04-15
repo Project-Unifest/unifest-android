@@ -72,7 +72,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
-import com.unifest.android.feature.map.model.BoothDetailModel
+import com.unifest.android.feature.map.model.BoothDetailMapModel
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -125,7 +125,7 @@ internal fun MapScreen(
     setEnableEditMode: () -> Unit,
     setEnablePopularMode: () -> Unit,
     setBoothSelectionMode: (Boolean) -> Unit,
-    updateSelectedBoothList: (List<BoothDetailModel>) -> Unit,
+    updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     setServerErrorDialogVisible: (Boolean) -> Unit,
     setNetworkErrorDialogVisible: (Boolean) -> Unit,
@@ -208,7 +208,7 @@ fun MapContent(
     initSearchText: () -> Unit,
     setEnablePopularMode: () -> Unit,
     setBoothSelectionMode: (Boolean) -> Unit,
-    updateSelectedBoothList: (List<BoothDetailModel>) -> Unit,
+    updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
     rotationState: Float,
 ) {
     Box {
@@ -225,10 +225,10 @@ fun MapContent(
             modifier = Modifier.fillMaxSize(),
         ) {
             val context = LocalContext.current
-            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailModel>?>(null) }
+            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
             DisposableMapEffect(uiState.boothList) { map ->
                 if (clusterManager == null) {
-                    clusterManager = TedNaverClustering.with<BoothDetailModel>(context, map)
+                    clusterManager = TedNaverClustering.with<BoothDetailMapModel>(context, map)
                         .customMarker {
                             Marker().apply {
                                 icon = OverlayImage.fromResource(R.drawable.ic_general)
@@ -371,7 +371,7 @@ fun MapTopAppBar(
 @Composable
 fun BoothCards(
     pagerState: PagerState,
-    boothList: ImmutableList<BoothDetailModel>,
+    boothList: ImmutableList<BoothDetailMapModel>,
     onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     modifier: Modifier = Modifier,
@@ -395,7 +395,7 @@ fun BoothCards(
 
 @Composable
 fun BoothCard(
-    boothInfo: BoothDetailModel,
+    boothInfo: BoothDetailMapModel,
     onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     ranking: Int,
@@ -479,10 +479,10 @@ fun RankingBadge(ranking: Int) {
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
-    val boothList = mutableListOf<BoothDetailModel>()
+    val boothList = mutableListOf<BoothDetailMapModel>()
     repeat(5) {
         boothList.add(
-            BoothDetailModel(
+            BoothDetailMapModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
@@ -499,7 +499,7 @@ fun MapScreenPreview() {
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
                 boothList = persistentListOf(
-                    BoothDetailModel(
+                    BoothDetailMapModel(
                         id = 1L,
                         name = "컴공 주점",
                         category = "",
@@ -546,10 +546,10 @@ fun MapTopAppBarPreview() {
 @ComponentPreview
 @Composable
 fun BoothCardsPreview() {
-    val boothList = mutableListOf<BoothDetailModel>()
+    val boothList = mutableListOf<BoothDetailMapModel>()
     repeat(5) {
         boothList.add(
-            BoothDetailModel(
+            BoothDetailMapModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
@@ -578,7 +578,7 @@ fun BoothCardsPreview() {
 fun BoothCardPreview() {
     UnifestTheme {
         BoothCard(
-            boothInfo = BoothDetailModel(
+            boothInfo = BoothDetailMapModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",

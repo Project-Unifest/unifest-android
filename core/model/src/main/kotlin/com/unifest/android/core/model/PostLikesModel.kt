@@ -1,6 +1,6 @@
 package com.unifest.android.core.model
 
-data class PostLikes(
+data class PostLikesModel(
     val boothId: Float,
     val token: String,
 )

@@ -49,8 +49,8 @@ import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetail
-import com.unifest.android.core.model.Menu
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
@@ -302,7 +302,7 @@ fun MenuText() {
 }
 
 @Composable
-fun MenuItem(menu: Menu) {
+fun MenuItem(menu: MenuModel) {
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
@@ -336,7 +336,7 @@ fun BoothScreenPreview() {
         BoothDetailScreen(
             padding = PaddingValues(0.dp),
             uiState = BoothUiState(
-                boothDetailInfo = BoothDetail(
+                boothDetailInfo = BoothDetailModel(
                     id = 0L,
                     name = "컴공 주점",
                     category = "컴퓨터공학부 전용 부스",
@@ -346,10 +346,10 @@ fun BoothScreenPreview() {
                     latitude = 37.54224856023523f,
                     longitude = 127.07605430700158f,
                     menus = listOf(
-                        Menu(1L, "모둠 사시미", 45000, ""),
-                        Menu(2L, "모둠 사시미", 45000, ""),
-                        Menu(3L, "모둠 사시미", 45000, ""),
-                        Menu(4L, "모둠 사시미", 45000, ""),
+                        MenuModel(1L, "모둠 사시미", 45000, ""),
+                        MenuModel(2L, "모둠 사시미", 45000, ""),
+                        MenuModel(3L, "모둠 사시미", 45000, ""),
+                        MenuModel(4L, "모둠 사시미", 45000, ""),
                     ),
                 ),
             ),

@@ -2,11 +2,11 @@ package com.unifest.android.core.data.mapper
 
 import com.unifest.android.core.database.entity.LikedBoothEntity
 import com.unifest.android.core.database.entity.MenuEntity
-import com.unifest.android.core.model.BoothDetail
-import com.unifest.android.core.model.Menu
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.MenuModel
 
-internal fun LikedBoothEntity.toModel(): BoothDetail {
-    return BoothDetail(
+internal fun LikedBoothEntity.toModel(): BoothDetailModel {
+    return BoothDetailModel(
         id = id,
         name = name,
         category = category,
@@ -19,8 +19,8 @@ internal fun LikedBoothEntity.toModel(): BoothDetail {
     )
 }
 
-internal fun MenuEntity.toModel(): Menu {
-    return Menu(
+internal fun MenuEntity.toModel(): MenuModel {
+    return MenuModel(
         id = id,
         name = name,
         price = price,
@@ -28,7 +28,7 @@ internal fun MenuEntity.toModel(): Menu {
     )
 }
 
-internal fun BoothDetail.toEntity(): LikedBoothEntity {
+internal fun BoothDetailModel.toEntity(): LikedBoothEntity {
     return LikedBoothEntity(
         id = id,
         name = name,
@@ -43,7 +43,7 @@ internal fun BoothDetail.toEntity(): LikedBoothEntity {
     )
 }
 
-internal fun Menu.toEntity(): MenuEntity {
+internal fun MenuModel.toEntity(): MenuEntity {
     return MenuEntity(
         id = id,
         name = name,

@@ -1,6 +1,9 @@
 package com.unifest.android
 
 internal object Plugins {
+    const val JavaLibrary = "java-library"
+    const val KotlinJvm = "org.jetbrains.kotlin.jvm"
+
     const val KotlinAndroid = "org.jetbrains.kotlin.android"
 
     const val KotlinxSerialization = "org.jetbrains.kotlin.plugin.serialization"

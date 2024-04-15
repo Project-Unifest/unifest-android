@@ -56,8 +56,8 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetail
-import com.unifest.android.core.model.Festival
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -110,7 +110,7 @@ fun MenuScreen(
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    deleteLikedBooth: (BoothDetail) -> Unit,
+    deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
 ) {
     Box(
@@ -320,7 +320,7 @@ fun MenuScreen(
 
 @Composable
 fun FestivalItem(
-    festival: Festival,
+    festival: FestivalModel,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -391,13 +391,13 @@ fun MenuScreenPreview() {
             padding = PaddingValues(0.dp),
             uiState = MenuUiState(
                 festivals = persistentListOf(
-                    Festival(
+                    FestivalModel(
                         schoolName = "건국대",
                         festivalName = "녹색지대",
                         festivalDate = "2021.11.11",
                         imgUrl = "",
                     ),
-                    Festival(
+                    FestivalModel(
                         schoolName = "서울대",
                         festivalName = "녹색지대",
                         festivalDate = "2021.11.11",
@@ -405,7 +405,7 @@ fun MenuScreenPreview() {
                     ),
                 ),
                 likedBoothList = persistentListOf(
-                    BoothDetail(
+                    BoothDetailModel(
                         id = 1,
                         name = "부스 이름",
                         category = "부스 카테고리",
@@ -413,7 +413,7 @@ fun MenuScreenPreview() {
                         warning = "주의사항",
                         location = "부스 위치",
                     ),
-                    BoothDetail(
+                    BoothDetailModel(
                         id = 2,
                         name = "부스 이름",
                         category = "부스 카테고리",

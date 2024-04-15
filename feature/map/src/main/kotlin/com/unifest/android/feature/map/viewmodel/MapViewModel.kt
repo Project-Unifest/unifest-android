@@ -7,11 +7,10 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.model.BoothDetail
-import com.unifest.android.core.model.Festival
-import com.unifest.android.core.model.FestivalSearch
-import com.unifest.android.feature.map.mapper.toModel
-import com.unifest.android.feature.map.model.BoothDetailModel
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.map.mapper.toMapModel
+import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -35,7 +34,7 @@ class MapViewModel @Inject constructor(
         getPopularBooths()
 
         val boothList = listOf(
-            BoothDetail(
+            BoothDetailModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
@@ -46,7 +45,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07505652524804F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 2L,
                 name = "학생회 부스",
                 category = "",
@@ -57,7 +56,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07839319326257F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 3L,
                 name = "컴공 주점",
                 category = "",
@@ -68,7 +67,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07779237844323F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 4L,
                 name = "학생회 부스",
                 category = "",
@@ -79,7 +78,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07605430700158F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 5L,
                 name = "컴공 주점",
                 category = "",
@@ -90,7 +89,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07653710462426F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 6L,
                 name = "학생회 부스",
                 category = "",
@@ -101,7 +100,7 @@ class MapViewModel @Inject constructor(
                 longitude = 37.53998567996623F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 7L,
                 name = "컴공 주점",
                 category = "",
@@ -112,7 +111,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07353303052759F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 8L,
                 name = "학생회 부스",
                 category = "",
@@ -129,22 +128,22 @@ class MapViewModel @Inject constructor(
             it.copy(
                 selectedSchoolName = "건국대학교",
                 boothList = boothList
-                    .map { booth -> booth.toModel() }
+                    .map { booth -> booth.toMapModel() }
                     .toImmutableList(),
                 selectedBoothList = persistentListOf(),
                 likedFestivals = mutableListOf(
-                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
                 ),
                 festivalSearchResults = persistentListOf(
-                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
+                    FestivalModel("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
                 ),
             )
         }
@@ -153,20 +152,10 @@ class MapViewModel @Inject constructor(
     fun getAllFestivals() {
         viewModelScope.launch {
             festivalRepository.getAllFestivals()
-                .onSuccess { result ->
+                .onSuccess { festivals ->
                     _uiState.update {
                         it.copy(
-                            festivalList = result.data.map {
-                                FestivalSearch(
-                                    thumbnail = it.thumbnail,
-                                    schoolName = it.schoolName,
-                                    festivalName = it.festivalName,
-                                    beginDate = it.beginDate,
-                                    endDate = it.endDate,
-                                    latitude = it.latitude,
-                                    longitude = it.longitude,
-                                )
-                            }.toImmutableList(),
+                            festivalList = festivals.toImmutableList(),
                         )
                     }
                 }
@@ -179,9 +168,11 @@ class MapViewModel @Inject constructor(
     fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(_uiState.value.festivalId)
-                .onSuccess { result ->
+                .onSuccess { booths ->
                     _uiState.update {
-                        it.copy(popularBoothList = result.data.map { booth -> booth.toModel() }.toImmutableList())
+                        it.copy(
+                            popularBoothList = booths.toImmutableList(),
+                        )
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -227,7 +218,7 @@ class MapViewModel @Inject constructor(
 
     fun setEnablePopularMode() {
         val popularBoothList = listOf(
-            BoothDetail(
+            BoothDetailModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
@@ -238,7 +229,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07505652524804F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 2L,
                 name = "학생회 부스",
                 category = "",
@@ -249,7 +240,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07839319326257F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 3L,
                 name = "컴공 주점",
                 category = "",
@@ -260,7 +251,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07779237844323F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 4L,
                 name = "학생회 부스",
                 category = "",
@@ -271,7 +262,7 @@ class MapViewModel @Inject constructor(
                 longitude = 127.07605430700158F,
                 menus = emptyList(),
             ),
-            BoothDetail(
+            BoothDetailModel(
                 id = 5L,
                 name = "컴공 주점",
                 category = "",
@@ -286,9 +277,7 @@ class MapViewModel @Inject constructor(
 
         _uiState.update {
             it.copy(
-                selectedBoothList = popularBoothList
-                    .map { popularBooth -> popularBooth.toModel() }
-                    .toImmutableList(),
+                selectedBoothList = popularBoothList.map { it.toMapModel() }.toImmutableList(),
                 isPopularMode = !_uiState.value.isPopularMode,
                 isBoothSelectionMode = false,
             )
@@ -298,13 +287,13 @@ class MapViewModel @Inject constructor(
     fun setBoothSelectionMode(flag: Boolean) {
         _uiState.update {
             it.copy(
-                isPopularMode = flag,
+                isPopularMode = false,
                 isBoothSelectionMode = flag,
             )
         }
     }
 
-    fun updateSelectedBoothList(boothList: List<BoothDetailModel>) {
+    fun updateSelectedBoothList(boothList: List<BoothDetailMapModel>) {
         _uiState.update {
             it.copy(selectedBoothList = boothList.toImmutableList())
         }

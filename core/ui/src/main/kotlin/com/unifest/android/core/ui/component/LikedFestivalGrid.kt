@@ -37,12 +37,12 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.Festival
+import com.unifest.android.core.model.FestivalModel
 
 @Composable
 fun LikedFestivalsGrid(
-    selectedFestivals: MutableList<Festival>,
-    onFestivalSelected: (Festival) -> Unit,
+    selectedFestivals: MutableList<FestivalModel>,
+    onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
     optionTextButton: @Composable () -> Unit,
@@ -97,8 +97,8 @@ fun LikedFestivalsGrid(
 
 @Composable
 fun FestivalItem(
-    festival: Festival,
-    onFestivalSelected: (Festival) -> Unit,
+    festival: FestivalModel,
+    onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
 ) {
@@ -167,10 +167,10 @@ fun FestivalItem(
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridPreview() {
-    val selectedFestivals = mutableListOf<Festival>()
+    val selectedFestivals = mutableListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
-            Festival(
+            FestivalModel(
                 schoolName = "건국대학교",
                 festivalName = "녹색지대",
                 festivalDate = "05.06-05.08",
@@ -181,31 +181,31 @@ fun LikedFestivalsGridPreview() {
     UnifestTheme {
         LikedFestivalsGrid(
             selectedFestivals = mutableListOf(
-                Festival(
+                FestivalModel(
                     schoolName = "건국대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "홍익대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "중앙대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "서울과기대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "서울시립대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
@@ -226,10 +226,10 @@ fun LikedFestivalsGridPreview() {
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridEditModePreview() {
-    val selectedFestivals = mutableListOf<Festival>()
+    val selectedFestivals = mutableListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
-            Festival(
+            FestivalModel(
                 schoolName = "건국대학교",
                 festivalName = "녹색지대",
                 festivalDate = "05.06-05.08",
@@ -240,31 +240,31 @@ fun LikedFestivalsGridEditModePreview() {
     UnifestTheme {
         LikedFestivalsGrid(
             selectedFestivals = mutableListOf(
-                Festival(
+                FestivalModel(
                     schoolName = "건국대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "홍익대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "중앙대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "서울과기대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",
                     imgUrl = "https://picsum.photos/36",
                 ),
-                Festival(
+                FestivalModel(
                     schoolName = "서울시립대학교",
                     festivalName = "녹색지대",
                     festivalDate = "05.06-05.08",

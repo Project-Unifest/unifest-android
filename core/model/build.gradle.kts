@@ -1,11 +1,6 @@
-
 plugins {
-    alias(libs.plugins.unifest.android.library)
+    alias(libs.plugins.unifest.jvm.kotlin)
     id("kotlinx-serialization")
-}
-
-android {
-    namespace = "com.unifest.android.core.model"
 }
 
 dependencies {

@@ -1,11 +1,11 @@
 package com.unifest.android.feature.home.viewmodel
 
-import com.unifest.android.core.model.FestivalEvent
-import com.unifest.android.core.model.IncomingFestivalEvent
+import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.IncomingFestivalEventModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class HomeUiState(
-    val incomingEvents: ImmutableList<IncomingFestivalEvent> = persistentListOf(),
-    val festivalEvents: ImmutableList<FestivalEvent> = persistentListOf(),
+    val incomingEvents: ImmutableList<IncomingFestivalEventModel> = persistentListOf(),
+    val festivalEvents: ImmutableList<FestivalEventModel> = persistentListOf(),
 )
