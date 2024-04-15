@@ -13,9 +13,10 @@ android {
 
 dependencies {
     implementations(
-        projects.core.network,
-        projects.core.datastore,
         projects.core.database,
+        projects.core.datastore,
+        projects.core.model,
+        projects.core.network,
 
         libs.timber,
     )

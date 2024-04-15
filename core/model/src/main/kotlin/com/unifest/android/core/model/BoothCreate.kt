@@ -1,6 +1,6 @@
-package com.unifest.android.core.domain.entity
+package com.unifest.android.core.model
 
-data class BoothCreateEntity(
+data class BoothCreate(
     val name: String,
     val category: String,
     val description: String,

@@ -19,6 +19,7 @@ android {
 dependencies {
     implementations(
         projects.core.datastore,
+        projects.core.model,
 
         libs.timber,
     )

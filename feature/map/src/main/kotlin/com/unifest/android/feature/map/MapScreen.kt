@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
@@ -57,8 +58,10 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content2
@@ -99,11 +102,12 @@ internal fun MapRoute(
         setBoothSelectionMode = viewModel::setBoothSelectionMode,
         updateSelectedBoothList = viewModel::updateSelectedBoothList,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
+        setServerErrorDialogVisible = viewModel::setServerErrorDialogVisible,
+        setNetworkErrorDialogVisible = viewModel::setNetworkErrorDialogVisible,
     )
 }
 
 @OptIn(
-    ExperimentalNaverMapApi::class,
     ExperimentalFoundationApi::class,
 )
 @Composable
@@ -121,7 +125,12 @@ internal fun MapScreen(
     setBoothSelectionMode: (Boolean) -> Unit,
     updateSelectedBoothList: (List<BoothDetailModel>) -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    setServerErrorDialogVisible: (Boolean) -> Unit,
+    setNetworkErrorDialogVisible: (Boolean) -> Unit,
 ) {
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
+    }
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
 
     Column(
@@ -131,130 +140,176 @@ internal fun MapScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
-        }
         val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
-        Box {
-            // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
-            // TODO 클러스터링 마커 커스텀
-            // TODO 지도 중앙 위치 조정
-            NaverMap(
-                cameraPositionState = cameraPositionState,
-                uiSettings = MapUiSettings(
-                    isZoomControlEnabled = false,
-                    isScaleBarEnabled = false,
-                    isLogoClickEnabled = false,
-                ),
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                val context = LocalContext.current
-                var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailModel>?>(null) }
-                DisposableMapEffect(uiState.boothList) { map ->
-                    if (clusterManager == null) {
-                        clusterManager = TedNaverClustering.with<BoothDetailModel>(context, map)
-                            .customMarker {
-                                Marker().apply {
-                                    icon = OverlayImage.fromResource(R.drawable.ic_general)
-                                }
+
+        MapContent(
+            uiState = uiState,
+            cameraPositionState = cameraPositionState,
+            pagerState = pagerState,
+            onNavigateToBooth = onNavigateToBooth,
+            setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
+            updateBoothSearchText = updateBoothSearchText,
+            initSearchText = initSearchText,
+            setEnablePopularMode = setEnablePopularMode,
+            setBoothSelectionMode = setBoothSelectionMode,
+            updateSelectedBoothList = updateSelectedBoothList,
+            rotationState = rotationState,
+        )
+
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = {
+                    setServerErrorDialogVisible(false)
+                },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = {
+                    setNetworkErrorDialogVisible(false)
+                },
+            )
+        }
+
+        if (uiState.isFestivalSearchBottomSheetVisible) {
+            FestivalSearchBottomSheet(
+                searchText = uiState.festivalSearchText,
+                updateSearchText = updateFestivalSearchText,
+                searchTextHintRes = R.string.festival_search_text_field_hint,
+                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
+                likedFestivals = uiState.likedFestivals,
+                festivalSearchResults = uiState.festivalSearchResults,
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
+                isSearchMode = uiState.isSearchMode,
+                setEnableEditMode = setEnableEditMode,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
+                isEditMode = uiState.isEditMode,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
+@Composable
+fun MapContent(
+    uiState: MapUiState,
+    cameraPositionState: CameraPositionState,
+    pagerState: PagerState,
+    onNavigateToBooth: (Long) -> Unit,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    updateBoothSearchText: (TextFieldValue) -> Unit,
+    initSearchText: () -> Unit,
+    setEnablePopularMode: () -> Unit,
+    setBoothSelectionMode: (Boolean) -> Unit,
+    updateSelectedBoothList: (List<BoothDetailModel>) -> Unit,
+    rotationState: Float,
+) {
+    Box {
+        // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
+        // TODO 클러스터링 마커 커스텀
+        // TODO 지도 중앙 위치 조정
+        NaverMap(
+            cameraPositionState = cameraPositionState,
+            uiSettings = MapUiSettings(
+                isZoomControlEnabled = false,
+                isScaleBarEnabled = false,
+                isLogoClickEnabled = false,
+            ),
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            val context = LocalContext.current
+            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailModel>?>(null) }
+            DisposableMapEffect(uiState.boothList) { map ->
+                if (clusterManager == null) {
+                    clusterManager = TedNaverClustering.with<BoothDetailModel>(context, map)
+                        .customMarker {
+                            Marker().apply {
+                                icon = OverlayImage.fromResource(R.drawable.ic_general)
                             }
-                            .markerClickListener { booth ->
-                                setBoothSelectionMode(true)
-                                updateSelectedBoothList(listOf(booth))
-                            }
-                            .clusterClickListener { booths ->
-                                setBoothSelectionMode(true)
-                                updateSelectedBoothList(booths.items.toList())
-                            }
-                            // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-                            .clickToCenter(false)
-                            .make()
-                    }
-                    clusterManager?.addItems(uiState.boothList)
-                    onDispose {
-                        clusterManager?.clearItems()
-                    }
+                        }
+                        .markerClickListener { booth ->
+                            setBoothSelectionMode(true)
+                            updateSelectedBoothList(listOf(booth))
+                        }
+                        .clusterClickListener { booths ->
+                            setBoothSelectionMode(true)
+                            updateSelectedBoothList(booths.items.toList())
+                        }
+                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+                        .clickToCenter(false)
+                        .make()
+                }
+                clusterManager?.addItems(uiState.boothList)
+                onDispose {
+                    clusterManager?.clearItems()
                 }
             }
-            MapTopAppBar(
-                title = uiState.selectedSchoolName,
-                searchText = uiState.boothSearchText,
-                updateSearchText = updateBoothSearchText,
-                onTitleClick = setFestivalSearchBottomSheetVisible,
-                initSearchText = initSearchText,
+        }
+
+        MapTopAppBar(
+            title = uiState.selectedSchoolName,
+            searchText = uiState.boothSearchText,
+            updateSearchText = updateBoothSearchText,
+            onTitleClick = setFestivalSearchBottomSheetVisible,
+            initSearchText = initSearchText,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter),
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter),
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .width(116.dp)
+                    .height(36.dp)
+                    .clip(RoundedCornerShape(39.dp))
+                    .background(Color.White)
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFFF5687E),
+                        shape = RoundedCornerShape(39.dp),
+                    )
+                    .clickable {
+                        setEnablePopularMode()
+                    },
             ) {
-                Box(
-                    modifier = Modifier
-                        .width(116.dp)
-                        .height(36.dp)
-                        .clip(RoundedCornerShape(39.dp))
-                        .background(Color.White)
-                        .border(
-                            width = 1.dp,
-                            color = Color(0xFFF5687E),
-                            shape = RoundedCornerShape(39.dp),
-                        )
-                        .clickable {
-                            setEnablePopularMode()
-                        },
+                Row(
+                    modifier = Modifier.align(Alignment.Center),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    Row(
-                        modifier = Modifier.align(Alignment.Center),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            text = "인기 부스",
-                            color = Color(0xFFF5687E),
-                            style = Title4,
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_dropdown),
-                            contentDescription = "Dropdown Icon",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.rotate(rotationState),
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-                AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
-                    BoothCards(
-                        pagerState = pagerState,
-                        boothList = uiState.boothList,
-                        onNavigateToBooth = onNavigateToBooth,
-                        isPopularMode = uiState.isPopularMode,
-                        modifier = Modifier.wrapContentHeight(),
+                    Text(
+                        text = "인기 부스",
+                        color = Color(0xFFF5687E),
+                        style = Title4,
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_dropdown),
+                        contentDescription = "Dropdown Icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.rotate(rotationState),
                     )
                 }
-                Spacer(modifier = Modifier.height(21.dp))
             }
-            if (uiState.isFestivalSearchBottomSheetVisible) {
-                FestivalSearchBottomSheet(
-                    searchText = uiState.festivalSearchText,
-                    updateSearchText = updateFestivalSearchText,
-                    searchTextHintRes = R.string.festival_search_text_field_hint,
-                    setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                    likedFestivals = uiState.likedFestivals,
-                    festivalSearchResults = uiState.festivalSearchResults,
-                    initSearchText = initSearchText,
-                    setEnableSearchMode = setEnableSearchMode,
-                    isSearchMode = uiState.isSearchMode,
-                    setEnableEditMode = setEnableEditMode,
-                    isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
-                    isEditMode = uiState.isEditMode,
+            Spacer(modifier = Modifier.height(10.dp))
+            AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
+                BoothCards(
+                    pagerState = pagerState,
+                    boothList = uiState.boothList,
+                    onNavigateToBooth = onNavigateToBooth,
+                    isPopularMode = uiState.isPopularMode,
+                    modifier = Modifier.wrapContentHeight(),
                 )
             }
+            Spacer(modifier = Modifier.height(21.dp))
         }
     }
 }
@@ -462,6 +517,8 @@ fun MapScreenPreview() {
             setBoothSelectionMode = {},
             updateSelectedBoothList = {},
             setLikedFestivalDeleteDialogVisible = {},
+            setServerErrorDialogVisible = {},
+            setNetworkErrorDialogVisible = {},
         )
     }
 }

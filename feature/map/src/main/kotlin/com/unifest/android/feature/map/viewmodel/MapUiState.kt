@@ -1,14 +1,16 @@
 package com.unifest.android.feature.map.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.Festival
 import com.unifest.android.feature.map.model.BoothDetailModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MapUiState(
     val selectedSchoolName: String = "",
+    val festivalId: Long = 0L,
     val boothList: ImmutableList<BoothDetailModel> = persistentListOf(),
+    val popularBoothList: ImmutableList<BoothDetailModel> = persistentListOf(),
     val selectedBoothList: ImmutableList<BoothDetailModel> = persistentListOf(),
     val boothSearchText: TextFieldValue = TextFieldValue(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
@@ -20,4 +22,6 @@ data class MapUiState(
     val isBoothSelectionMode: Boolean = false,
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
+    val isServerErrorDialogVisible: Boolean = false,
+    val isNetworkErrorDialogVisible: Boolean = false,
 )

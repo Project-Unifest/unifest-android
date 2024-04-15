@@ -30,7 +30,7 @@ include(
     ":core:database",
     ":core:datastore",
     ":core:designsystem",
-    ":core:domain",
+    ":core:model",
     ":core:network",
     ":core:ui",
 
@@ -44,3 +44,4 @@ include(
     ":feature:navigator",
     ":feature:waiting",
 )
+include()

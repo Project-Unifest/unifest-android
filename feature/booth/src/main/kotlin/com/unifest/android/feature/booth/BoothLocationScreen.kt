@@ -40,7 +40,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
+import com.unifest.android.core.model.BoothDetail
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 
@@ -144,7 +144,7 @@ fun BoothLocationScreenPreview() {
     UnifestTheme {
         BoothLocationScreen(
             uiState = BoothUiState(
-                boothDetailInfo = BoothDetailEntity(
+                boothDetailInfo = BoothDetail(
                     id = 0L,
                     name = "컴공 주점",
                     category = "컴퓨터공학부 전용 부스",

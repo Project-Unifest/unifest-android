@@ -1,4 +1,4 @@
-package com.unifest.android.core.domain.entity
+package com.unifest.android.core.model
 
 import androidx.compose.runtime.Stable
 

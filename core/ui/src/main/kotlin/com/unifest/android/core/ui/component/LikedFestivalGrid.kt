@@ -37,7 +37,7 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.Festival
 
 @Composable
 fun LikedFestivalsGrid(

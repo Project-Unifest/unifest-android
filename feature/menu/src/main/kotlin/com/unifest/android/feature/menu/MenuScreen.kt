@@ -56,8 +56,8 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.BoothDetail
+import com.unifest.android.core.model.Festival
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -110,7 +110,7 @@ fun MenuScreen(
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    deleteLikedBooth: (BoothDetailEntity) -> Unit,
+    deleteLikedBooth: (BoothDetail) -> Unit,
     appVersion: String,
 ) {
     Box(
@@ -405,7 +405,7 @@ fun MenuScreenPreview() {
                     ),
                 ),
                 likedBoothList = persistentListOf(
-                    BoothDetailEntity(
+                    BoothDetail(
                         id = 1,
                         name = "부스 이름",
                         category = "부스 카테고리",
@@ -413,7 +413,7 @@ fun MenuScreenPreview() {
                         warning = "주의사항",
                         location = "부스 위치",
                     ),
-                    BoothDetailEntity(
+                    BoothDetail(
                         id = 2,
                         name = "부스 이름",
                         category = "부스 카테고리",

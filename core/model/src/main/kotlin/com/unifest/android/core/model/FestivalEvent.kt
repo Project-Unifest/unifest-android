@@ -1,9 +1,9 @@
-package com.unifest.android.core.domain.entity
+package com.unifest.android.core.model
 
 import androidx.compose.runtime.Stable
 
 @Stable
-data class FestivalEventEntity(
+data class FestivalEvent(
     val id: Int,
     val date: String,
     val name: String,

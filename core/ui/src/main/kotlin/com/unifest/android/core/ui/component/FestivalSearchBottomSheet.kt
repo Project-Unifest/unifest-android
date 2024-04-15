@@ -34,11 +34,10 @@ import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.Festival
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
@@ -174,18 +173,68 @@ fun SchoolSearchBottomSheetPreview() {
             searchText = TextFieldValue(),
             updateSearchText = {},
             likedFestivals = mutableListOf(
-                Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                Festival(
+                    "https://picsum.photos/36",
+                    "서울대학교",
+                    "설대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "연세대학교",
+                    "연대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "고려대학교",
+                    "고대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "건국대학교",
+                    "녹색지대",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "성균관대학교",
+                    "성대축제",
+                    "05.06-05.08",
+                ),
             ),
             festivalSearchResults = persistentListOf(
-                Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                Festival(
+                    "https://picsum.photos/36",
+                    "서울대학교",
+                    "설대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "연세대학교",
+                    "연대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "고려대학교",
+                    "고대축제",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "건국대학교",
+                    "녹색지대",
+                    "05.06-05.08",
+                ),
+                Festival(
+                    "https://picsum.photos/36",
+                    "성균관대학교",
+                    "성대축제",
+                    "05.06-05.08",
+                ),
             ),
             initSearchText = {},
             setEnableSearchMode = {},

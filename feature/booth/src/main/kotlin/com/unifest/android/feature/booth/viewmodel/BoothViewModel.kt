@@ -4,9 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.MenuEntity
-import com.unifest.android.core.domain.mapper.toResponse
+import com.unifest.android.core.model.BoothDetail
+import com.unifest.android.core.model.Menu
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ class BoothViewModel @Inject constructor(
     init {
         _uiState.update {
             it.copy(
-                boothDetailInfo = BoothDetailEntity(
+                boothDetailInfo = BoothDetail(
                     id = 0L,
                     name = "컴공 주점",
                     category = "컴퓨터공학부 전용 부스",
@@ -39,10 +38,10 @@ class BoothViewModel @Inject constructor(
                     latitude = 37.54224856023523f,
                     longitude = 127.07605430700158f,
                     menus = listOf(
-                        MenuEntity(1L, "모둠 사시미", 45000, ""),
-                        MenuEntity(2L, "모둠 사시미", 45000, ""),
-                        MenuEntity(3L, "모둠 사시미", 45000, ""),
-                        MenuEntity(4L, "모둠 사시미", 45000, ""),
+                        Menu(1L, "모둠 사시미", 45000, ""),
+                        Menu(2L, "모둠 사시미", 45000, ""),
+                        Menu(3L, "모둠 사시미", 45000, ""),
+                        Menu(4L, "모둠 사시미", 45000, ""),
                     ),
                 ),
             )
@@ -52,9 +51,9 @@ class BoothViewModel @Inject constructor(
     fun toggleBookmark() {
         viewModelScope.launch {
             if (_uiState.value.isBookmarked) {
-                likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo.toResponse())
+                likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
             } else {
-                likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo.toResponse())
+                likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
             }
             _uiState.update { currentState ->
                 val newBookmarkState = !currentState.isBookmarked

@@ -1,9 +1,9 @@
-package com.unifest.android.core.domain.entity
+package com.unifest.android.core.model
 
 import androidx.compose.runtime.Stable
 
 @Stable
-data class FileEntity(
+data class File(
     val imgUrl: String,
     val imgName: String,
 )

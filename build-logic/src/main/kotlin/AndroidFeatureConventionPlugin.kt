@@ -15,7 +15,7 @@ internal class AndroidFeatureConventionPlugin : BuildLogicConventionPlugin(
         dependencies {
             implementation(project(path = ":core:common"))
             implementation(project(path = ":core:designsystem"))
-            implementation(project(path = ":core:domain"))
+            implementation(project(path = ":core:model"))
             implementation(project(path = ":core:ui"))
             implementation(project(path = ":feature:navigator"))
 
