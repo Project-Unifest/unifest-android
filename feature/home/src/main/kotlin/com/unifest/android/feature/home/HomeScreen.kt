@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,6 +56,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.FestivalEventEntity
 import com.unifest.android.core.domain.entity.IncomingFestivalEventEntity
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -62,7 +64,6 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
-    onNavigateToIntro: () -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -70,8 +71,13 @@ internal fun HomeRoute(
     HomeScreen(
         padding = padding,
         uiState = uiState,
-        onNavigateToIntro = onNavigateToIntro,
         onShowSnackBar = onShowSnackBar,
+        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
+        updateFestivalSearchText = viewModel::updateFestivalSearchText,
+        initSearchText = viewModel::initSearchText,
+        setEnableSearchMode = viewModel::setEnableSearchMode,
+        setEnableEditMode = viewModel::setEnableEditMode,
+        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
     )
 }
 
@@ -80,18 +86,21 @@ internal fun HomeScreen(
     padding: PaddingValues,
     uiState: HomeUiState,
     @Suppress("unused")
-    onNavigateToIntro: () -> Unit,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
+    updateFestivalSearchText: (TextFieldValue) -> Unit,
+    initSearchText: () -> Unit,
+    setEnableSearchMode: (Boolean) -> Unit,
+    setEnableEditMode: () -> Unit,
+    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding),
     ) {
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-        ) {
+        LazyColumn{
             item { Calendar() }
             item {
                 FestivalScheduleText()
@@ -146,7 +155,7 @@ internal fun HomeScreen(
             }
             item {
                 UnifestOutlinedButton(
-                    onClick = { onNavigateToIntro() },
+                    onClick = { setFestivalSearchBottomSheetVisible(true) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -166,6 +175,23 @@ internal fun HomeScreen(
                 IncomingFestivalCard(event)
                 Spacer(modifier = Modifier.height(8.dp))
             }
+        }
+        if (uiState.isFestivalSearchBottomSheetVisible) {
+            FestivalSearchBottomSheet(
+                searchText = uiState.festivalSearchText,
+                updateSearchText = updateFestivalSearchText,
+                searchTextHintRes = R.string.festival_search_text_field_hint,
+                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
+                interestedFestivals = uiState.interestedFestivals,
+                festivalSearchResults = uiState.festivalSearchResults,
+                initSearchText = initSearchText,
+                setEnableSearchMode = setEnableSearchMode,
+                isSearchMode = uiState.isSearchMode,
+                setEnableEditMode = setEnableEditMode,
+                isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
+                setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                isEditMode = uiState.isEditMode,
+            )
         }
     }
 }
@@ -373,8 +399,13 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
-            onNavigateToIntro = {},
             onShowSnackBar = {},
+            setFestivalSearchBottomSheetVisible = {},
+            updateFestivalSearchText = {},
+            initSearchText = {},
+            setEnableSearchMode = {},
+            setEnableEditMode = {},
+            setInterestedFestivalDeleteDialogVisible = {},
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.unifest.android.feature.home.viewmodel
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.domain.entity.FestivalEventEntity
@@ -58,6 +59,42 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     ),
                 ),
             )
+        }
+    }
+
+    fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
+    fun initSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
+    }
+
+    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
+    }
+
+    fun setEnableSearchMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isSearchMode = flag)
+        }
+    }
+
+    fun setEnableEditMode() {
+        _uiState.update {
+            it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
+    }
+
+    fun setInterestedFestivalDeleteDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isInterestedFestivalDeleteDialogVisible = flag)
         }
     }
 }
