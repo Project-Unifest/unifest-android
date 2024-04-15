@@ -4,9 +4,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.mapper.toEntity
-import com.unifest.android.core.domain.mapper.toResponse
+import com.unifest.android.core.model.BoothDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -29,25 +27,23 @@ class MenuViewModel @Inject constructor(
             likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
                 _uiState.update {
                     it.copy(
-                        likedBoothList = likedBoothList.map { likedBooth ->
-                            likedBooth.toEntity()
-                        }.toImmutableList(),
+                        likedBoothList = likedBoothList.toImmutableList(),
                     )
                 }
             }
         }
     }
 
-    fun deleteLikedBooth(booth: BoothDetailEntity) {
+    fun deleteLikedBooth(booth: BoothDetailModel) {
         viewModelScope.launch {
             updateLikedBooth(booth)
             delay(500)
-            likedBoothRepository.deleteLikedBooth(booth.toResponse())
+            likedBoothRepository.deleteLikedBooth(booth)
         }
     }
 
-    private suspend fun updateLikedBooth(booth: BoothDetailEntity) {
-        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false).toResponse())
+    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
+        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
     }
 
 //    init {

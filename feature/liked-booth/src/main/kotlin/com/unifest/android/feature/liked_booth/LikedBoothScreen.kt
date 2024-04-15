@@ -24,8 +24,8 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.MenuEntity
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
@@ -55,7 +55,7 @@ internal fun LikedBoothScreen(
     padding: PaddingValues,
     uiState: LikedBoothUiState,
     onBackClick: () -> Unit,
-    deleteLikedBooth: (BoothDetailEntity) -> Unit,
+    deleteLikedBooth: (BoothDetailModel) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -109,7 +109,7 @@ fun LikedBoothScreenPreview() {
             padding = PaddingValues(),
             uiState = LikedBoothUiState(
                 likedBoothList = persistentListOf(
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 1,
                         name = "부스 이름",
                         category = "음식",
@@ -119,7 +119,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,
@@ -127,7 +127,7 @@ fun LikedBoothScreenPreview() {
                             ),
                         ),
                     ),
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 2,
                         name = "부스 이름",
                         category = "음식",
@@ -137,7 +137,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,
@@ -145,7 +145,7 @@ fun LikedBoothScreenPreview() {
                             ),
                         ),
                     ),
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 3,
                         name = "부스 이름",
                         category = "음식",
@@ -155,7 +155,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,
@@ -163,7 +163,7 @@ fun LikedBoothScreenPreview() {
                             ),
                         ),
                     ),
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 4,
                         name = "부스 이름",
                         category = "음식",
@@ -173,7 +173,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,
@@ -181,7 +181,7 @@ fun LikedBoothScreenPreview() {
                             ),
                         ),
                     ),
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 5,
                         name = "부스 이름",
                         category = "음식",
@@ -191,7 +191,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,
@@ -199,7 +199,7 @@ fun LikedBoothScreenPreview() {
                             ),
                         ),
                     ),
-                    BoothDetailEntity(
+                    BoothDetailModel(
                         id = 6,
                         name = "부스 이름",
                         category = "음식",
@@ -209,7 +209,7 @@ fun LikedBoothScreenPreview() {
                         latitude = 0.0f,
                         longitude = 0.0f,
                         menus = listOf(
-                            MenuEntity(
+                            MenuModel(
                                 id = 1,
                                 name = "메뉴 이름",
                                 price = 1000,

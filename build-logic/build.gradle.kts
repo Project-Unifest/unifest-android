@@ -16,6 +16,7 @@ gradlePlugin {
         "android.feature" to "AndroidFeatureConventionPlugin",
         "android.hilt" to "AndroidHiltConventionPlugin",
         "android.retrofit" to "AndroidRetrofitConventionPlugin",
+        "jvm.kotlin" to "JvmKotlinConventionPlugin",
         "android.room" to "AndroidRoomConventionPlugin",
     )
 

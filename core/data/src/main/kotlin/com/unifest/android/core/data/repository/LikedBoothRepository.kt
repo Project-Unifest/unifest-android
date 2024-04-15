@@ -1,11 +1,11 @@
 package com.unifest.android.core.data.repository
 
-import com.unifest.android.core.data.response.BoothDetailResponse
+import com.unifest.android.core.model.BoothDetailModel
 import kotlinx.coroutines.flow.Flow
 
 interface LikedBoothRepository {
-    fun getLikedBoothList(): Flow<List<BoothDetailResponse>>
-    suspend fun insertLikedBooth(booth: BoothDetailResponse)
-    suspend fun deleteLikedBooth(booth: BoothDetailResponse)
-    suspend fun updateLikedBooth(booth: BoothDetailResponse)
+    fun getLikedBoothList(): Flow<List<BoothDetailModel>>
+    suspend fun insertLikedBooth(booth: BoothDetailModel)
+    suspend fun deleteLikedBooth(booth: BoothDetailModel)
+    suspend fun updateLikedBooth(booth: BoothDetailModel)
 }

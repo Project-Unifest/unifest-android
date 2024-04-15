@@ -13,6 +13,8 @@ android {
 
 dependencies {
     implementations(
+        projects.core.model,
+
         libs.timber,
     )
 }

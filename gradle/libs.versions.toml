@@ -132,6 +132,7 @@ kotlin-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "kotlin-dete
 kotlin-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "kotlin-ktlint-gradle" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-core" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-core" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-core" }
 
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
@@ -153,6 +154,7 @@ unifest-android-feature = { id = "unifest.android.feature", version = "unspecifi
 unifest-android-hilt = { id = "unifest.android.hilt", version = "unspecified" }
 unifest-android-retrofit = { id = "unifest.android.retrofit", version = "unspecified" }
 unifest-android-room = { id = "unifest.android.room", version = "unspecified" }
+unifest-jvm-kotlin = { id = "unifest.jvm.kotlin", version = "unspecified" }
 
 [bundles]
 

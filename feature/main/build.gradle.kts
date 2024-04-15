@@ -20,7 +20,6 @@ dependencies {
         projects.feature.menu,
         projects.feature.waiting,
 
-        libs.androidx.core,
         libs.androidx.activity.compose,
         libs.kotlinx.collections.immutable,
         libs.coil.compose,
