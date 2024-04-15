@@ -60,6 +60,8 @@ import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun HomeRoute(
@@ -78,6 +80,7 @@ internal fun HomeRoute(
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
+        setSelectedDate = viewModel::setSelectedDate,
     )
 }
 
@@ -93,6 +96,7 @@ internal fun HomeScreen(
     setEnableEditMode: () -> Unit,
     setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
+    setSelectedDate: (LocalDate) -> Unit,
 ) {
     var selectedEventId by remember { mutableIntStateOf(-1) }
     Box(
@@ -100,10 +104,15 @@ internal fun HomeScreen(
             .fillMaxSize()
             .padding(padding),
     ) {
-        LazyColumn{
-            item { Calendar() }
+        LazyColumn {
             item {
-                FestivalScheduleText()
+                Calendar(
+                    selectedDate = uiState.selectedDate,
+                    onDateSelected = setSelectedDate
+                )
+            }
+            item {
+                FestivalScheduleText(selectedDate = uiState.selectedDate)
             }
             if (uiState.festivalEvents.isEmpty()) {
                 item {
@@ -193,11 +202,11 @@ internal fun HomeScreen(
         }
     }
 }
-
 @Composable
-fun FestivalScheduleText() {
+fun FestivalScheduleText(selectedDate: LocalDate) {
+    val formattedDate = DateTimeFormatter.ofPattern("M월 d일").format(selectedDate)
     Text(
-        text = stringResource(id = R.string.home_festival_schedule_text),
+        text = formattedDate + stringResource(id = R.string.home_festival_schedule_text) ,
         style = Title3,
         modifier = Modifier.padding(start = 20.dp, top = 20.dp),
     )
@@ -206,7 +215,7 @@ fun FestivalScheduleText() {
 @Composable
 fun FestivalScheduleItem(
     event: FestivalEventEntity,
-    onShowSnackBar: (message: Int) -> Unit
+    onShowSnackBar: (message: Int) -> Unit,
 ) {
     Column {
         Row(
@@ -267,7 +276,7 @@ fun FestivalScheduleItem(
             }
         }
         UnifestOutlinedButton(
-            onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar ) },
+            onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 20.dp, end = 20.dp),
@@ -399,6 +408,7 @@ fun HomeScreenPreview() {
             setEnableSearchMode = {},
             setEnableEditMode = {},
             setInterestedFestivalDeleteDialogVisible = {},
+            setSelectedDate = {},
         )
     }
 }

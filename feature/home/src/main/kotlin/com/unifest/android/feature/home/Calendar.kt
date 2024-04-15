@@ -63,12 +63,15 @@ import java.time.LocalDate
 import java.time.Month
 
 @Composable
-fun Calendar(adjacentMonths: Long = 500) {
+fun Calendar(
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
+    adjacentMonths: Long = 500
+) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
     val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
-    val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     val daysOfWeek = remember { daysOfWeek() }
     var isWeekMode by remember { mutableStateOf(false) }
     Box(
@@ -105,10 +108,10 @@ fun Calendar(adjacentMonths: Long = 500) {
                         val isSelectable = day.position == DayPosition.MonthDate
                         Day(
                             day.date,
-                            isSelected = isSelectable && selectedDate.value == day.date,
+                            isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
-                        ) { clicked ->
-                            selectedDate.value = clicked
+                        ) { newSelectedDate ->
+                            onDateSelected(newSelectedDate)
                         }
                     },
                 )
@@ -120,10 +123,10 @@ fun Calendar(adjacentMonths: Long = 500) {
                         val isSelectable = day.position == WeekDayPosition.RangeDate
                         Day(
                             day.date,
-                            isSelected = isSelectable && selectedDate.value == day.date,
+                            isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
-                        ) { clicked ->
-                            selectedDate.value = clicked
+                        ) { newSelectedDate ->
+                            onDateSelected(newSelectedDate)
                         }
                     },
                 )
@@ -330,6 +333,9 @@ fun Day(
 @Composable
 private fun CalendarPreview() {
     UnifestTheme {
-        Calendar()
+        Calendar(
+            selectedDate = LocalDate.now(),
+            onDateSelected = {},
+        )
     }
 }

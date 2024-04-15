@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -95,6 +96,12 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     fun setInterestedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isInterestedFestivalDeleteDialogVisible = flag)
+        }
+    }
+
+    fun setSelectedDate(date: LocalDate) {
+        _uiState.update {
+            it.copy(selectedDate = date)
         }
     }
 }
