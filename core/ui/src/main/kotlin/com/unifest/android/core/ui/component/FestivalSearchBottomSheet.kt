@@ -31,31 +31,30 @@ import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
-import com.unifest.android.core.designsystem.component.InterestedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     searchText: TextFieldValue,
     updateSearchText: (TextFieldValue) -> Unit,
-    interestedFestivals: MutableList<Festival>,
-    festivalSearchResults: ImmutableList<Festival>,
+    likedFestivals: MutableList<FestivalModel>,
+    festivalSearchResults: ImmutableList<FestivalModel>,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     setEnableEditMode: () -> Unit,
-    isInterestedFestivalDeleteDialogVisible: Boolean,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    isLikedFestivalDeleteDialogVisible: Boolean,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     isEditMode: Boolean = false,
 ) {
-    val selectedFestivals = remember { mutableStateListOf<Festival>() }
+    val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 //    val scope = rememberCoroutineScope()
     val bottomSheetState = rememberFlexibleBottomSheetState(
         containSystemBars = true,
@@ -126,13 +125,13 @@ fun FestivalSearchBottomSheet(
                         .background(Color(0xFFF1F3F7)),
                 )
                 Spacer(modifier = Modifier.height(21.dp))
-                InterestedFestivalsGrid(
-                    selectedFestivals = interestedFestivals,
+                LikedFestivalsGrid(
+                    selectedFestivals = likedFestivals,
                     onFestivalSelected = { school ->
                         selectedFestivals.remove(school)
                     },
                     isEditMode = isEditMode,
-                    setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 ) {
                     TextButton(
                         onClick = setEnableEditMode,
@@ -150,13 +149,13 @@ fun FestivalSearchBottomSheet(
                 )
             }
         }
-        if (isInterestedFestivalDeleteDialogVisible) {
-            InterestedFestivalDeleteDialog(
+        if (isLikedFestivalDeleteDialogVisible) {
+            LikedFestivalDeleteDialog(
                 onCancelClick = {
-                    setInterestedFestivalDeleteDialogVisible(false)
+                    setLikedFestivalDeleteDialogVisible(false)
                 },
                 onConfirmClick = {
-                    setInterestedFestivalDeleteDialogVisible(false)
+                    setLikedFestivalDeleteDialogVisible(false)
                 },
             )
         }
@@ -173,27 +172,77 @@ fun SchoolSearchBottomSheetPreview() {
             setFestivalSearchBottomSheetVisible = {},
             searchText = TextFieldValue(),
             updateSearchText = {},
-            interestedFestivals = mutableListOf(
-                Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+            likedFestivals = mutableListOf(
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "서울대학교",
+                    "설대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "연세대학교",
+                    "연대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "고려대학교",
+                    "고대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "건국대학교",
+                    "녹색지대",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "성균관대학교",
+                    "성대축제",
+                    "05.06-05.08",
+                ),
             ),
             festivalSearchResults = persistentListOf(
-                Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "서울대학교",
+                    "설대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "연세대학교",
+                    "연대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "고려대학교",
+                    "고대축제",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "건국대학교",
+                    "녹색지대",
+                    "05.06-05.08",
+                ),
+                FestivalModel(
+                    "https://picsum.photos/36",
+                    "성균관대학교",
+                    "성대축제",
+                    "05.06-05.08",
+                ),
             ),
             initSearchText = {},
             setEnableSearchMode = {},
             isSearchMode = false,
             setEnableEditMode = {},
-            isInterestedFestivalDeleteDialogVisible = false,
+            isLikedFestivalDeleteDialogVisible = false,
             isEditMode = false,
-            setInterestedFestivalDeleteDialogVisible = {},
+            setLikedFestivalDeleteDialogVisible = {},
         )
     }
 }

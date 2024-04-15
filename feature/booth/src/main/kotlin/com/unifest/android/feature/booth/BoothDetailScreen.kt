@@ -49,8 +49,8 @@ import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
-import com.unifest.android.core.domain.entity.MenuEntity
+import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
@@ -73,7 +73,13 @@ internal fun BoothDetailRoute(
             darkIcons = false,
             isNavigationBarContrastEnforced = false,
         )
-        onDispose {}
+        onDispose {
+            systemUiController.setSystemBarsColor(
+                color = Color.White,
+                darkIcons = true,
+                isNavigationBarContrastEnforced = false,
+            )
+        }
     }
 
     BoothDetailScreen(
@@ -153,9 +159,7 @@ fun BoothDetailContent(
         }
         item { Spacer(modifier = Modifier.height(20.dp)) }
         item { MenuText() }
-        items(uiState.boothDetailInfo.menus) { menu ->
-            MenuItem(menu)
-        }
+        items(uiState.boothDetailInfo.menus) { menu -> MenuItem(menu) }
     }
 }
 
@@ -298,7 +302,7 @@ fun MenuText() {
 }
 
 @Composable
-fun MenuItem(menu: MenuEntity) {
+fun MenuItem(menu: MenuModel) {
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
@@ -332,19 +336,20 @@ fun BoothScreenPreview() {
         BoothDetailScreen(
             padding = PaddingValues(0.dp),
             uiState = BoothUiState(
-                boothDetailInfo = BoothDetailEntity(
+                boothDetailInfo = BoothDetailModel(
                     id = 0L,
                     name = "컴공 주점",
                     category = "컴퓨터공학부 전용 부스",
                     description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
+                    warning = "",
                     location = "청심대 앞",
                     latitude = 37.54224856023523f,
                     longitude = 127.07605430700158f,
                     menus = listOf(
-                        MenuEntity(1L, "모둠 사시미", 45000, ""),
-                        MenuEntity(2L, "모둠 사시미", 45000, ""),
-                        MenuEntity(3L, "모둠 사시미", 45000, ""),
-                        MenuEntity(4L, "모둠 사시미", 45000, ""),
+                        MenuModel(1L, "모둠 사시미", 45000, ""),
+                        MenuModel(2L, "모둠 사시미", 45000, ""),
+                        MenuModel(3L, "모둠 사시미", 45000, ""),
+                        MenuModel(4L, "모둠 사시미", 45000, ""),
                     ),
                 ),
             ),

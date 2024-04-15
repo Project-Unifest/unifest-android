@@ -14,13 +14,12 @@ dependencies {
     implementations(
         projects.feature.booth,
         projects.feature.home,
-        projects.feature.interestedBooth,
+        projects.feature.likedBooth,
         projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,
         projects.feature.waiting,
 
-        libs.androidx.core,
         libs.androidx.activity.compose,
         libs.kotlinx.collections.immutable,
         libs.coil.compose,

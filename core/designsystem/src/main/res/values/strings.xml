@@ -11,7 +11,7 @@
     <string name="intro_info_title">관심있는 학교 축제를 추가해보세요</string>
     <string name="intro_info_description">관심 학교는 언제든지 수정 가능합니다</string>
     <string name="intro_search_text_hint">학교를 검색해보세요</string>
-    <string name="intro_interested_festivals_title">나의 관심 축제</string>
+    <string name="intro_liked_festivals_title">나의 관심 축제</string>
     <string name="intro_clear_item_button_text">모두 선택 해제</string>
     <string-array name="region_tab_titles">
         <item>전체</item>
@@ -48,20 +48,21 @@
 
     <!--    Menu    -->
     <string name="menu_title">메뉴</string>
-    <string name="menu_my_interested_festival">나의 관심 학교</string>
+    <string name="menu_my_liked_festival">나의 관심 학교</string>
     <string name="menu_add">추가하기></string>
-    <string name="menu_interested_booths">관심 부스</string>
+    <string name="menu_liked_booth">관심 부스</string>
     <string name="menu_watch_more">더보기></string>
     <string name="menu_questions">이용 문의</string>
     <string name="menu_admin_mode">운영자 모드 진입</string>
+    <string name="menu_liked_booth_empty">관심 부스 없음</string>
+    <string name="menu_insert_liked_booth">지도에서 관심있는 부스를 추가해주세요</string>
 
-    <!--    Interested Booths   -->
-    <string name="interested_booths_title">관심 부스</string>
-
+    <!--    Liked Booth List   -->
+    <string name="liked_booth_title">관심 부스</string>
 
     <!--    Festival Search BottomSheet-->
     <string name="festival_search_text_field_hint"> 학교 / 축제 이름을 검색해보세요.</string>
-    <string name="interested_festival">나의 관심 축제</string>
+    <string name="my_liked_festival">나의 관심 축제</string>
     <string name="edit">편집</string>
     <string name="finish">완료</string>
     <string name="add">추가</string>
@@ -74,8 +75,8 @@
     <string name="retry">다시 시도</string>
     <string name="network_error_title">네트워크 문제</string>
     <string name="network_error_description">와이파이와 데이터 접속을 확인해주세요</string>
-    <string name="interested_festival_delete_title">관심 축제를 삭제합니다</string>
-    <string name="interested_festival_delete_description">정말 삭제하실 건가요?</string>
+    <string name="liked_festival_delete_title">관심 축제를 삭제합니다</string>
+    <string name="liked_festival_delete_description">정말 삭제하실 건가요?</string>
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 

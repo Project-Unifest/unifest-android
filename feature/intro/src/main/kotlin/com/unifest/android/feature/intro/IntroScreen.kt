@@ -1,7 +1,6 @@
 package com.unifest.android.feature.intro
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -62,9 +61,10 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.core.ui.component.LikedFestivalsGrid
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -93,7 +93,7 @@ fun IntroScreen(
     updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
 ) {
-    val selectedFestivals = remember { mutableStateListOf<Festival>() }
+    val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 
     Box(
         modifier = Modifier
@@ -176,8 +176,8 @@ fun InformationText() {
 
 @Composable
 fun InterestedFestivalsRow(
-    selectedFestivals: MutableList<Festival>,
-    onFestivalSelected: (Festival) -> Unit,
+    selectedFestivals: MutableList<FestivalModel>,
+    onFestivalSelected: (FestivalModel) -> Unit,
 ) {
     Column {
         Row(
@@ -188,7 +188,7 @@ fun InterestedFestivalsRow(
                 .padding(horizontal = 20.dp),
         ) {
             Text(
-                text = stringResource(id = R.string.intro_interested_festivals_title),
+                text = stringResource(id = R.string.intro_liked_festivals_title),
                 style = Title3,
             )
             TextButton(
@@ -225,8 +225,8 @@ fun InterestedFestivalsRow(
 
 @Composable
 fun FestivalRowItem(
-    festival: Festival,
-    onFestivalSelected: (Festival) -> Unit,
+    festival: FestivalModel,
+    onFestivalSelected: (FestivalModel) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -275,8 +275,8 @@ fun FestivalRowItem(
 
 @Composable
 fun AllSchoolsTabView(
-    schools: ImmutableList<Festival>,
-    onSchoolSelected: (Festival) -> Unit,
+    schools: ImmutableList<FestivalModel>,
+    onSchoolSelected: (FestivalModel) -> Unit,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -335,7 +335,6 @@ fun AllSchoolsTabView(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
 fun PreviewIntroScreen() {
@@ -343,11 +342,36 @@ fun PreviewIntroScreen() {
         IntroScreen(
             uiState = IntroUiState(
                 schools = persistentListOf(
-                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "성균관대", "성대축제", "05.06-05.08"),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "고려대학교",
+                        "고대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "건국대학교",
+                        "녹색지대",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "성균관대",
+                        "성대축제",
+                        "05.06-05.08",
+                    ),
                 ),
             ),
             navigateToMain = {},

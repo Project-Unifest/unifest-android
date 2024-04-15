@@ -50,8 +50,8 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.FestivalEventEntity
-import com.unifest.android.core.domain.entity.IncomingFestivalEventEntity
+import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.IncomingFestivalEventModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -76,7 +76,7 @@ internal fun HomeRoute(
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
-        setInterestedFestivalDeleteDialogVisible = viewModel::setInterestedFestivalDeleteDialogVisible,
+        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setSelectedDate = viewModel::setSelectedDate,
     )
 }
@@ -91,7 +91,7 @@ internal fun HomeScreen(
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
-    setInterestedFestivalDeleteDialogVisible: (Boolean) -> Unit,
+    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
     setSelectedDate: (LocalDate) -> Unit,
 ) {
@@ -194,14 +194,14 @@ internal fun HomeScreen(
                 updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
                 setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                interestedFestivals = uiState.interestedFestivals,
+                likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
                 initSearchText = initSearchText,
                 setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
                 setEnableEditMode = setEnableEditMode,
-                isInterestedFestivalDeleteDialogVisible = uiState.isInterestedFestivalDeleteDialogVisible,
-                setInterestedFestivalDeleteDialogVisible = setInterestedFestivalDeleteDialogVisible,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
             )
         }
@@ -220,7 +220,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 
 @Composable
 fun FestivalScheduleItem(
-    event: FestivalEventEntity,
+    event: FestivalEventModel,
     onShowSnackBar: (message: Int) -> Unit,
 ) {
     Column {
@@ -305,7 +305,7 @@ fun IncomingFestivalText() {
 }
 
 @Composable
-fun IncomingFestivalCard(event: IncomingFestivalEventEntity) {
+fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -370,22 +370,37 @@ fun HomeScreenPreview() {
             padding = PaddingValues(0.dp),
             uiState = HomeUiState(
                 festivalEvents = persistentListOf(
-                    FestivalEventEntity(
+                    FestivalEventModel(
                         id = 1,
                         date = "5/21(화)",
                         name = "녹색지대 DAY 1",
                         location = "건국대학교 서울캠퍼스",
                         celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                     ),
+
+                    FestivalEventModel(
+                        id = 2,
+                        date = "5/21(화)",
+                        name = "녹색지대 DAY 1",
+                        location = "건국대학교 서울캠퍼스",
+                        celebrityImages = listOf(0, 1, 2),
+                    ),
+                    FestivalEventModel(
+                        id = 3,
+                        date = "5/21(화)",
+                        name = "녹색지대 DAY 1",
+                        location = "건국대학교 서울캠퍼스",
+                        celebrityImages = listOf(0, 1, 2),
+                    ),
                 ),
                 incomingEvents = persistentListOf(
-                    IncomingFestivalEventEntity(
+                    IncomingFestivalEventModel(
                         imageRes = R.drawable.ic_waiting,
                         name = "녹색지대",
                         dates = "05/21(화) - 05/23(목)",
                         location = "건국대학교 서울캠퍼스",
                     ),
-                    IncomingFestivalEventEntity(
+                    IncomingFestivalEventModel(
                         imageRes = R.drawable.ic_waiting,
                         name = "녹색지대",
                         dates = "05/21(화) - 05/23(목)",
@@ -399,7 +414,7 @@ fun HomeScreenPreview() {
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
-            setInterestedFestivalDeleteDialogVisible = {},
+            setLikedFestivalDeleteDialogVisible = {},
             setSelectedDate = {},
         )
     }

@@ -2,7 +2,7 @@ package com.unifest.android.feature.intro.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
-import com.unifest.android.core.domain.entity.Festival
+import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +20,36 @@ class IntroViewModel @Inject constructor() : ViewModel() {
         _uiState.update {
             it.copy(
                 schools = persistentListOf(
-                    Festival("https://picsum.photos/36", "서울대학교", "설대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "연세대학교", "연대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "고려대학교", "고대축제", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "건국대학교", "녹색지대", "05.06-05.08"),
-                    Festival("https://picsum.photos/36", "성균관대학교", "성대축제", "05.06-05.08"),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "고려대학교",
+                        "고대축제",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "건국대학교",
+                        "녹색지대",
+                        "05.06-05.08",
+                    ),
+                    FestivalModel(
+                        "https://picsum.photos/36",
+                        "성균관대학교",
+                        "성대축제",
+                        "05.06-05.08",
+                    ),
                 ),
             )
         }

@@ -27,16 +27,16 @@ include(
 
     ":core:common",
     ":core:data",
+    ":core:database",
+    ":core:datastore",
     ":core:designsystem",
-    ":core:datastore",
-    ":core:domain",
+    ":core:model",
     ":core:network",
-    ":core:datastore",
     ":core:ui",
 
     ":feature:booth",
     ":feature:home",
-    ":feature:interested-booth",
+    ":feature:liked-booth",
     ":feature:intro",
     ":feature:main",
     ":feature:map",
@@ -44,3 +44,4 @@ include(
     ":feature:navigator",
     ":feature:waiting",
 )
+include()

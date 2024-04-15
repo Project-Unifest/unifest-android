@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +40,9 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.domain.entity.BoothDetailEntity
+import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 
 @Composable
 fun BoothLocationRoute(
@@ -52,16 +50,6 @@ fun BoothLocationRoute(
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val systemUiController = rememberExSystemUiController()
-
-    DisposableEffect(systemUiController) {
-        systemUiController.setSystemBarsColor(
-            color = Color.White,
-            darkIcons = true,
-            isNavigationBarContrastEnforced = false,
-        )
-        onDispose {}
-    }
 
     BoothLocationScreen(
         uiState = uiState,
@@ -156,7 +144,7 @@ fun BoothLocationScreenPreview() {
     UnifestTheme {
         BoothLocationScreen(
             uiState = BoothUiState(
-                boothDetailInfo = BoothDetailEntity(
+                boothDetailInfo = BoothDetailModel(
                     id = 0L,
                     name = "컴공 주점",
                     category = "컴퓨터공학부 전용 부스",

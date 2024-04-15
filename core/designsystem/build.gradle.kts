@@ -13,7 +13,6 @@ dependencies {
     implementations(
         projects.core.common,
 
-        libs.androidx.core,
         libs.coil.compose,
         libs.timber,
         libs.ballon.compose,
