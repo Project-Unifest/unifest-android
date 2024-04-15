@@ -116,7 +116,7 @@ internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
     onNavigateToBooth: (Long) -> Unit,
-    getAllFestivals:() -> Unit,
+    getAllFestivals: () -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     updateBoothSearchText: (TextFieldValue) -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
