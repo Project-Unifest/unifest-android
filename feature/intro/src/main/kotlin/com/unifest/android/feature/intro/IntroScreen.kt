@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -44,12 +46,12 @@ import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
-import com.unifest.android.core.ui.component.InterestedFestivalsGrid
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -104,23 +106,12 @@ fun IntroScreen(
                     .padding(horizontal = 20.dp),
             )
             Spacer(modifier = Modifier.height(18.dp))
-            InterestedFestivalsGrid(
+            InterestedFestivalsRow(
                 selectedFestivals = selectedFestivals,
-                onFestivalSelected = { school ->
-                    selectedFestivals.remove(school)
+                onFestivalSelected = { festival ->
+                    selectedFestivals.remove(festival)
                 },
-            ) {
-                TextButton(
-                    onClick = { selectedFestivals.clear() },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.intro_clear_item_button_text),
-                        color = Color(0xFF848484),
-                        textDecoration = TextDecoration.Underline,
-                        style = Content6,
-                    )
-                }
-            }
+            )
             AllSchoolsTabView(
                 schools = uiState.schools,
                 onSchoolSelected = { school ->
@@ -167,6 +158,55 @@ fun InformationText() {
             fontSize = 12.sp,
             color = Color(0xFF848484),
         )
+    }
+}
+
+@Composable
+fun InterestedFestivalsRow(
+    selectedFestivals: MutableList<Festival>,
+    onFestivalSelected: (Festival) -> Unit,
+) {
+    Column {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        ) {
+            Text(
+                text = stringResource(id = R.string.intro_interested_festivals_title),
+                style = Title3,
+            )
+            TextButton(
+                onClick = { selectedFestivals.clear() },
+            ) {
+                Text(
+                    text = stringResource(id = R.string.intro_clear_item_button_text),
+                    color = Color(0xFF848484),
+                    textDecoration = TextDecoration.Underline,
+                    style = Content6,
+                )
+            }
+        }
+        LazyRow(
+            modifier = Modifier
+                .padding(8.dp)
+                .height(if (selectedFestivals.isEmpty()) 0.dp else 140.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(
+                count = selectedFestivals.size,
+                key = { index -> selectedFestivals[index].schoolName },
+            ) { index ->
+                FestivalItem(
+                    festival = selectedFestivals[index],
+                    onFestivalSelected = {
+                        onFestivalSelected(it)
+                    },
+                )
+            }
+        }
     }
 }
 
@@ -218,15 +258,7 @@ fun AllSchoolsTabView(
             columns = GridCells.Fixed(3),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .height(
-                    when {
-                        schools.isEmpty() -> 0.dp
-                        else -> {
-                            val rows = ((schools.size - 1) / 3 + 1) * 180
-                            rows.dp
-                        }
-                    },
-                ),
+                .height(if (schools.isEmpty()) 0.dp else (((schools.size - 1) / 3 + 1) * 140).dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
