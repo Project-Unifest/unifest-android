@@ -35,12 +35,6 @@ class MainActivity : ComponentActivity() {
 
             UnifestTheme {
                 MainScreen(
-                    onNavigateToIntro = {
-                        introNavigator.navigateFrom(
-                            activity = this,
-                            withFinish = false,
-                        )
-                    },
                     navigator = navigator,
                 )
             }

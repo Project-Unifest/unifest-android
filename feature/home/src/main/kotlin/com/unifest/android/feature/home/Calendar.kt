@@ -66,7 +66,7 @@ import java.time.Month
 fun Calendar(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
-    adjacentMonths: Long = 500
+    adjacentMonths: Long = 500,
 ) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
@@ -75,7 +75,7 @@ fun Calendar(
     val daysOfWeek = remember { daysOfWeek() }
     var isWeekMode by remember { mutableStateOf(false) }
     Box(
-        modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
+        modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
         Column(
             modifier = Modifier
@@ -138,7 +138,6 @@ fun Calendar(
             )
         }
     }
-
 }
 
 @Composable

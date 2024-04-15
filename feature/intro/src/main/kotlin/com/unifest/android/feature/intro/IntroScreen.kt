@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -40,10 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
@@ -226,7 +223,6 @@ fun InterestedFestivalsRow(
     }
 }
 
-
 @Composable
 fun FestivalRowItem(
     festival: Festival,
@@ -239,7 +235,7 @@ fun FestivalRowItem(
         modifier = Modifier.height(130.dp).width(120.dp),
     ) {
         Box(
-            modifier = Modifier.clickable { onFestivalSelected(festival)},
+            modifier = Modifier.clickable { onFestivalSelected(festival) },
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -276,7 +272,6 @@ fun FestivalRowItem(
         }
     }
 }
-
 
 @Composable
 fun AllSchoolsTabView(

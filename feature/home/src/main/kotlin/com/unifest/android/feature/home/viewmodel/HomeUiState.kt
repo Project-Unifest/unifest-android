@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.kizitonwose.calendar.core.CalendarDay
 import com.unifest.android.core.domain.entity.Festival
 import com.unifest.android.core.domain.entity.FestivalEventEntity
 import com.unifest.android.core.domain.entity.IncomingFestivalEventEntity
@@ -19,5 +18,5 @@ data class HomeUiState(
     val isEditMode: Boolean = false,
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isInterestedFestivalDeleteDialogVisible: Boolean = false,
-    val selectedDate: LocalDate = LocalDate.now()
+    val selectedDate: LocalDate = LocalDate.now(),
 )

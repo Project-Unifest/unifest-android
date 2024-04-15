@@ -49,7 +49,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
-    onNavigateToIntro: () -> Unit,
     navigator: MainNavController = rememberMainNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }

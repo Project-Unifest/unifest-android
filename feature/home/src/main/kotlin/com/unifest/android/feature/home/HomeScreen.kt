@@ -1,6 +1,5 @@
 package com.unifest.android.feature.home
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -31,9 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -99,7 +95,6 @@ internal fun HomeScreen(
     onShowSnackBar: (message: Int) -> Unit,
     setSelectedDate: (LocalDate) -> Unit,
 ) {
-    var selectedEventId by remember { mutableIntStateOf(-1) }
     Box(
         modifier = Modifier
             .fillMaxSize()
