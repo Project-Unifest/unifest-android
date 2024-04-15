@@ -57,7 +57,6 @@ dependencies {
         projects.feature.waiting,
 
         libs.androidx.activity.compose,
-        libs.androidx.core,
         libs.androidx.startup,
         libs.timber,
     )

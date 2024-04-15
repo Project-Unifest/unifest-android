@@ -13,7 +13,6 @@ android {
 dependencies {
     implementations(
         libs.kotlinx.collections.immutable,
-        libs.androidx.core,
         libs.timber,
         libs.compose.system.ui.controller,
 

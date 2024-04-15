@@ -12,7 +12,6 @@ android {
 dependencies {
     implementations(
         libs.kotlinx.collections.immutable,
-        libs.androidx.core,
         libs.timber,
         libs.calendar.compose,
         libs.flexible.bottomsheet,
