@@ -28,6 +28,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -108,7 +109,7 @@ internal fun HomeScreen(
             item {
                 Calendar(
                     selectedDate = uiState.selectedDate,
-                    onDateSelected = setSelectedDate
+                    onDateSelected = setSelectedDate,
                 )
             }
             item {
@@ -176,6 +177,15 @@ internal fun HomeScreen(
                 }
             }
             item {
+                VerticalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .background(Color(0xFFF1F3F7)),
+                )
+            }
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item {
                 IncomingFestivalText()
             }
             items(uiState.incomingEvents) { event ->
@@ -202,11 +212,12 @@ internal fun HomeScreen(
         }
     }
 }
+
 @Composable
 fun FestivalScheduleText(selectedDate: LocalDate) {
     val formattedDate = DateTimeFormatter.ofPattern("M월 d일").format(selectedDate)
     Text(
-        text = formattedDate + stringResource(id = R.string.home_festival_schedule_text) ,
+        text = formattedDate + stringResource(id = R.string.home_festival_schedule_text),
         style = Title3,
         modifier = Modifier.padding(start = 20.dp, top = 20.dp),
     )
@@ -370,20 +381,6 @@ fun HomeScreenPreview() {
                         name = "녹색지대 DAY 1",
                         location = "건국대학교 서울캠퍼스",
                         celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
-                    ),
-                    FestivalEventEntity(
-                        id = 2,
-                        date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
-                    ),
-                    FestivalEventEntity(
-                        id = 3,
-                        date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
                     ),
                 ),
                 incomingEvents = persistentListOf(
