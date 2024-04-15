@@ -1,6 +1,10 @@
-package com.unifest.android.core.network
+package com.unifest.android.core.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.unifest.android.core.network.BuildConfig
+import com.unifest.android.core.network.FileApi
+import com.unifest.android.core.network.UnifestApi
+import com.unifest.android.core.network.UnifestClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

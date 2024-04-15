@@ -1,6 +1,6 @@
-package com.unifest.android.core.data.di
+package com.unifest.android.core.network.di
 
-import com.unifest.android.core.data.service.UnifestService
+import com.unifest.android.core.network.service.UnifestService
 import com.unifest.android.core.network.UnifestApi
 import dagger.Module
 import dagger.Provides

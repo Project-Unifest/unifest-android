@@ -1,13 +1,16 @@
-package com.unifest.android.core.data.service
+package com.unifest.android.core.network.service
 
-import com.unifest.android.core.data.response.BoothDetailResponse
-import com.unifest.android.core.data.response.FestivalSearchResponse
-import com.unifest.android.core.data.response.PopularBoothsResponse
+import com.unifest.android.core.network.response.BoothDetailResponse
+import com.unifest.android.core.network.response.FestivalSearchResponse
+import com.unifest.android.core.network.response.PopularBoothsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UnifestService {
+    @GET("festival/all")
+    suspend fun getAllFestivals(): FestivalSearchResponse
+
     @GET("festival")
     suspend fun searchFestival(
         @Query("name") name: String,

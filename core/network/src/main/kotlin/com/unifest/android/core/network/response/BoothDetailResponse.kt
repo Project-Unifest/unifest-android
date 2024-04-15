@@ -1,15 +1,15 @@
-package com.unifest.android.core.data.response
+package com.unifest.android.core.network.response
 
-import com.unifest.android.core.model.FestivalSearch
+import com.unifest.android.core.model.BoothDetail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FestivalSearchResponse(
+data class BoothDetailResponse(
     @SerialName("code")
     val code: String,
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<FestivalSearch>,
+    val data: BoothDetail,
 )
