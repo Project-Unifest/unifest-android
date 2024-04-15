@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalEventModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.IncomingFestivalEventModel
