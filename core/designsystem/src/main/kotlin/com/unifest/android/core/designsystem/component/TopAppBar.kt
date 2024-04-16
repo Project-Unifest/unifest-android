@@ -58,6 +58,8 @@ fun UnifestTopAppBar(
     contentColor: Color = Color.Black,
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
+    isOnboardingCompleted: Boolean = false,
+    completeOnboarding: (Boolean) -> Unit = {},
     elevation: Dp = 0.dp,
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
@@ -88,10 +90,33 @@ fun UnifestTopAppBar(
                 )
             }
             if (navigationType == TopAppBarNavigationType.Search) {
-                SchoolSearchTitleWithToolTip(
-                    title = title,
-                    onTitleClick = onTitleClick,
-                )
+                if (isOnboardingCompleted) {
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 22.dp, top = 10.dp, bottom = 10.dp, end = 9.dp)
+                            .clickable {
+                                onTitleClick(true)
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = title,
+                            style = Title1,
+                        )
+                        Spacer(modifier = Modifier.width(7.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
+                            contentDescription = "Search School",
+                            tint = Color.Unspecified,
+                        )
+                    }
+                } else {
+                    SchoolSearchTitleWithToolTip(
+                        title = title,
+                        onTitleClick = onTitleClick,
+                        completeOnboarding = completeOnboarding,
+                    )
+                }
             } else {
                 Text(
                     text = title,
@@ -115,6 +140,7 @@ fun UnifestTopAppBar(
 fun SchoolSearchTitleWithToolTip(
     title: String,
     onTitleClick: (Boolean) -> Unit,
+    completeOnboarding: (Boolean) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val builder = rememberBalloonBuilder {
@@ -134,7 +160,11 @@ fun SchoolSearchTitleWithToolTip(
         builder = builder,
         balloonContent = {
             Text(
-                modifier = Modifier.wrapContentWidth(),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .clickable {
+                        completeOnboarding(true)
+                    },
                 text = stringResource(id = R.string.map_school_search_tool_tip_description),
                 textAlign = TextAlign.Center,
                 color = Color.White,
@@ -198,6 +228,7 @@ fun SchoolSearchToolTipPreview() {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",
             onTitleClick = {},
+            completeOnboarding = {},
         )
     }
 }

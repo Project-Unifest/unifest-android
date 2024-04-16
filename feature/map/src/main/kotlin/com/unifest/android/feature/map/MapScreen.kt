@@ -102,6 +102,7 @@ internal fun MapRoute(
         setEnablePopularMode = viewModel::setEnablePopularMode,
         setBoothSelectionMode = viewModel::setBoothSelectionMode,
         updateSelectedBoothList = viewModel::updateSelectedBoothList,
+        completeOnboarding = viewModel::completeOnboarding,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setServerErrorDialogVisible = viewModel::setServerErrorDialogVisible,
         setNetworkErrorDialogVisible = viewModel::setNetworkErrorDialogVisible,
@@ -125,6 +126,7 @@ internal fun MapScreen(
     setEnableEditMode: () -> Unit,
     setEnablePopularMode: () -> Unit,
     setBoothSelectionMode: (Boolean) -> Unit,
+    completeOnboarding: (Boolean) -> Unit,
     updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     setServerErrorDialogVisible: (Boolean) -> Unit,
@@ -155,6 +157,7 @@ internal fun MapScreen(
             setEnablePopularMode = setEnablePopularMode,
             setBoothSelectionMode = setBoothSelectionMode,
             updateSelectedBoothList = updateSelectedBoothList,
+            completeOnboarding = completeOnboarding,
             rotationState = rotationState,
         )
 
@@ -209,6 +212,7 @@ fun MapContent(
     setEnablePopularMode: () -> Unit,
     setBoothSelectionMode: (Boolean) -> Unit,
     updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
+    completeOnboarding: (Boolean) -> Unit,
     rotationState: Float,
 ) {
     Box {
@@ -252,13 +256,14 @@ fun MapContent(
                 }
             }
         }
-
         MapTopAppBar(
             title = uiState.selectedSchoolName,
             searchText = uiState.boothSearchText,
             updateSearchText = updateBoothSearchText,
             onTitleClick = setFestivalSearchBottomSheetVisible,
             initSearchText = initSearchText,
+            isOnboardingCompleted = uiState.isOnboardingCompleted,
+            completeOnboarding = completeOnboarding,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
@@ -325,6 +330,8 @@ fun MapTopAppBar(
     updateSearchText: (TextFieldValue) -> Unit,
     onTitleClick: (Boolean) -> Unit,
     initSearchText: () -> Unit,
+    isOnboardingCompleted: Boolean,
+    completeOnboarding: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -341,6 +348,8 @@ fun MapTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
                 onTitleClick = onTitleClick,
+                isOnboardingCompleted = isOnboardingCompleted,
+                completeOnboarding = completeOnboarding,
             )
             SearchTextField(
                 searchText = searchText,
@@ -521,6 +530,7 @@ fun MapScreenPreview() {
             setEnablePopularMode = {},
             setBoothSelectionMode = {},
             updateSelectedBoothList = {},
+            completeOnboarding = {},
             setLikedFestivalDeleteDialogVisible = {},
             setServerErrorDialogVisible = {},
             setNetworkErrorDialogVisible = {},
@@ -538,6 +548,8 @@ fun MapTopAppBarPreview() {
             updateSearchText = {},
             initSearchText = {},
             onTitleClick = {},
+            isOnboardingCompleted = false,
+            completeOnboarding = {},
         )
     }
 }
