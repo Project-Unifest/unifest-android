@@ -7,6 +7,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.mapper.toMapModel
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
+    private val onboardingRepository: OnboardingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -32,6 +34,7 @@ class MapViewModel @Inject constructor(
     init {
         getAllFestivals()
         getPopularBooths()
+        checkOnboardingCompletion()
 
         val boothList = listOf(
             BoothDetailModel(
@@ -177,6 +180,23 @@ class MapViewModel @Inject constructor(
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
                 }
+        }
+    }
+
+    private fun checkOnboardingCompletion() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isOnboardingCompleted = onboardingRepository.checkOnboardingCompletion())
+            }
+        }
+    }
+
+    fun completeOnboarding(flag: Boolean) {
+        viewModelScope.launch {
+            onboardingRepository.completeOnboarding(flag)
+            _uiState.update {
+                it.copy(isOnboardingCompleted = flag)
+            }
         }
     }
 

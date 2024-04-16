@@ -23,6 +23,7 @@ data class MapUiState(
     val isEditMode: Boolean = false,
     val isPopularMode: Boolean = false,
     val isBoothSelectionMode: Boolean = false,
+    val isOnboardingCompleted: Boolean = false,
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
