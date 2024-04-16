@@ -147,7 +147,6 @@ fun SchoolSearchTitle(
     }
 }
 
-
 @Composable
 fun SchoolSearchTitleWithToolTip(
     title: String,
