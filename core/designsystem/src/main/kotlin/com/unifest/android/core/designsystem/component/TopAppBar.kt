@@ -91,25 +91,10 @@ fun UnifestTopAppBar(
             }
             if (navigationType == TopAppBarNavigationType.Search) {
                 if (isOnboardingCompleted) {
-                    Row(
-                        modifier = Modifier
-                            .padding(start = 22.dp, top = 10.dp, bottom = 10.dp, end = 9.dp)
-                            .clickable {
-                                onTitleClick(true)
-                            },
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = title,
-                            style = Title1,
-                        )
-                        Spacer(modifier = Modifier.width(7.dp))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
-                            contentDescription = "Search School",
-                            tint = Color.Unspecified,
-                        )
-                    }
+                    SchoolSearchTitle(
+                        title = title,
+                        onTitleClick = onTitleClick,
+                    )
                 } else {
                     SchoolSearchTitleWithToolTip(
                         title = title,
@@ -135,6 +120,33 @@ fun UnifestTopAppBar(
         }
     }
 }
+
+@Composable
+fun SchoolSearchTitle(
+    title: String,
+    onTitleClick: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(start = 22.dp, top = 10.dp, bottom = 10.dp, end = 9.dp)
+            .clickable {
+                onTitleClick(true)
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            style = Title1,
+        )
+        Spacer(modifier = Modifier.width(7.dp))
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
+            contentDescription = "Search School",
+            tint = Color.Unspecified,
+        )
+    }
+}
+
 
 @Composable
 fun SchoolSearchTitleWithToolTip(
@@ -212,23 +224,34 @@ fun UnifestTopAppBarPreview() {
 
 @ComponentPreview
 @Composable
-fun UnifestTopAppBarWithBackButtonPreview() {
+fun SchoolSearchTitlePreview() {
     UnifestTheme {
-        UnifestTopAppBar(
-            navigationType = TopAppBarNavigationType.Back,
-            navigationIconContentDescription = "Navigation back icon",
+        SchoolSearchTitle(
+            title = "건국대학교",
+            onTitleClick = {},
         )
     }
 }
 
 @ComponentPreview
 @Composable
-fun SchoolSearchToolTipPreview() {
+fun SchoolSearchTitlePreviewWithTitle() {
     UnifestTheme {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",
             onTitleClick = {},
             completeOnboarding = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun UnifestTopAppBarWithBackButtonPreview() {
+    UnifestTheme {
+        UnifestTopAppBar(
+            navigationType = TopAppBarNavigationType.Back,
+            navigationIconContentDescription = "Navigation back icon",
         )
     }
 }
