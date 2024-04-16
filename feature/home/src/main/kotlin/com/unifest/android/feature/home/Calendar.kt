@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -61,74 +63,80 @@ import java.time.LocalDate
 import java.time.Month
 
 @Composable
-fun Calendar(adjacentMonths: Long = 500) {
+fun Calendar(
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
+    adjacentMonths: Long = 500,
+) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
     val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
-    val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     val daysOfWeek = remember { daysOfWeek() }
     var isWeekMode by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .background(Color.White),
+    Box(
+        modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
-        val monthState = rememberCalendarState(
-            startMonth = startMonth,
-            endMonth = endMonth,
-            firstVisibleMonth = currentYearMonth,
-            firstDayOfWeek = daysOfWeek.first(),
-        )
-        val weekState = rememberWeekCalendarState(
-            startDate = startMonth.atStartOfMonth(),
-            endDate = endMonth.atEndOfMonth(),
-            firstVisibleWeekDate = currentDate,
-            firstDayOfWeek = daysOfWeek.first(),
-        )
+        Column(
+            modifier = Modifier
+                .background(Color.White),
+        ) {
+            val monthState = rememberCalendarState(
+                startMonth = startMonth,
+                endMonth = endMonth,
+                firstVisibleMonth = currentYearMonth,
+                firstDayOfWeek = daysOfWeek.first(),
+            )
+            val weekState = rememberWeekCalendarState(
+                startDate = startMonth.atStartOfMonth(),
+                endDate = endMonth.atEndOfMonth(),
+                firstVisibleWeekDate = currentDate,
+                firstDayOfWeek = daysOfWeek.first(),
+            )
 
-        MonthAndWeekCalendarTitle(
-            isWeekMode = isWeekMode,
-            monthState = monthState,
-            weekState = weekState,
-        )
+            MonthAndWeekCalendarTitle(
+                isWeekMode = isWeekMode,
+                monthState = monthState,
+                weekState = weekState,
+            )
 
-        CalendarHeader(daysOfWeek = daysOfWeek)
-        AnimatedVisibility(visible = !isWeekMode) {
-            HorizontalCalendar(
-                state = monthState,
-                dayContent = { day ->
-                    val isSelectable = day.position == DayPosition.MonthDate
-                    Day(
-                        day.date,
-                        isSelected = isSelectable && selectedDate.value == day.date,
-                        isSelectable = isSelectable,
-                    ) { clicked ->
-                        selectedDate.value = clicked
-                    }
-                },
+            CalendarHeader(daysOfWeek = daysOfWeek)
+            AnimatedVisibility(visible = !isWeekMode) {
+                HorizontalCalendar(
+                    state = monthState,
+                    dayContent = { day ->
+                        val isSelectable = day.position == DayPosition.MonthDate
+                        Day(
+                            day.date,
+                            isSelected = isSelectable && selectedDate == day.date,
+                            isSelectable = isSelectable,
+                        ) { newSelectedDate ->
+                            onDateSelected(newSelectedDate)
+                        }
+                    },
+                )
+            }
+            AnimatedVisibility(visible = isWeekMode) {
+                WeekCalendar(
+                    state = weekState,
+                    dayContent = { day ->
+                        val isSelectable = day.position == WeekDayPosition.RangeDate
+                        Day(
+                            day.date,
+                            isSelected = isSelectable && selectedDate == day.date,
+                            isSelectable = isSelectable,
+                        ) { newSelectedDate ->
+                            onDateSelected(newSelectedDate)
+                        }
+                    },
+                )
+            }
+
+            ModeToggleButton(
+                isWeekMode = isWeekMode,
+                onModeChange = { isWeekMode = it },
             )
         }
-        AnimatedVisibility(visible = isWeekMode) {
-            WeekCalendar(
-                state = weekState,
-                dayContent = { day ->
-                    val isSelectable = day.position == WeekDayPosition.RangeDate
-                    Day(
-                        day.date,
-                        isSelected = isSelectable && selectedDate.value == day.date,
-                        isSelectable = isSelectable,
-                    ) { clicked ->
-                        selectedDate.value = clicked
-                    }
-                },
-            )
-        }
-
-        ModeToggleButton(
-            isWeekMode = isWeekMode,
-            onModeChange = { isWeekMode = it },
-        )
     }
 }
 
@@ -324,6 +332,9 @@ fun Day(
 @Composable
 private fun CalendarPreview() {
     UnifestTheme {
-        Calendar()
+        Calendar(
+            selectedDate = LocalDate.now(),
+            onDateSelected = {},
+        )
     }
 }

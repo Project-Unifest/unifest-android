@@ -1,5 +1,6 @@
 package com.unifest.android.feature.home.viewmodel
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalEventModel
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,6 +60,48 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     ),
                 ),
             )
+        }
+    }
+
+    fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
+    fun initSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
+    }
+
+    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
+    }
+
+    fun setEnableSearchMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isSearchMode = flag)
+        }
+    }
+
+    fun setEnableEditMode() {
+        _uiState.update {
+            it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
+    }
+
+    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLikedFestivalDeleteDialogVisible = flag)
+        }
+    }
+
+    fun setSelectedDate(date: LocalDate) {
+        _uiState.update {
+            it.copy(selectedDate = date)
         }
     }
 }

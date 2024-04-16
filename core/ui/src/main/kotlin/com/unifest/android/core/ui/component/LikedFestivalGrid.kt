@@ -66,15 +66,7 @@ fun LikedFestivalsGrid(
             modifier = Modifier
                 .padding(8.dp)
                 // TODO 높이 조정 로직 수정 필요
-                .height(
-                    when {
-                        selectedFestivals.isEmpty() -> 0.dp
-                        else -> {
-                            val rows = ((selectedFestivals.size - 1) / 3 + 1) * 180
-                            rows.dp
-                        }
-                    },
-                ),
+                .height(if (selectedFestivals.isEmpty()) 0.dp else (((selectedFestivals.size - 1) / 3 + 1) * 140).dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {

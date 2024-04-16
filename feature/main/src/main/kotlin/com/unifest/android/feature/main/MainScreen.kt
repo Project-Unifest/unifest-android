@@ -49,7 +49,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun MainScreen(
-    onNavigateToIntro: () -> Unit,
     navigator: MainNavController = rememberMainNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -89,7 +88,7 @@ internal fun MainScreen(
         ) {
             homeNavGraph(
                 padding = innerPadding,
-                onNavigateToIntro = onNavigateToIntro,
+                onShowSnackBar = onShowSnackBar,
             )
             mapNavGraph(
                 padding = innerPadding,
