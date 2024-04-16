@@ -166,6 +166,8 @@ fun SchoolSearchTitleWithToolTip(
         setBackgroundColor(Color(0xFFF5687E))
         setBalloonAnimation(BalloonAnimation.FADE)
         setDismissWhenClicked(true)
+        setDismissWhenTouchOutside(false)
+        setFocusable(false)
     }
 
     Balloon(
@@ -189,6 +191,7 @@ fun SchoolSearchTitleWithToolTip(
                 .padding(start = 22.dp, top = 10.dp, bottom = 10.dp, end = 9.dp)
                 .clickable {
                     onTitleClick(true)
+                    completeOnboarding(true)
                 },
             verticalAlignment = Alignment.CenterVertically,
         ) {
