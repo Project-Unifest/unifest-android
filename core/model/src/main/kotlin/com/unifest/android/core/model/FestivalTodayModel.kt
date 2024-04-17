@@ -8,10 +8,10 @@ data class FestivalTodayModel(
     val date: String,
     val festivalName: String,
     val schoolName: String,
-    val starList: List<Celebrity>,
+    val starList: List<CelebrityModel>,
 )
 @Stable
-data class Celebrity(
+data class CelebrityModel(
     val name: String,
     val img: String,
 )

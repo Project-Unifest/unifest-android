@@ -2,6 +2,7 @@ package com.unifest.android.core.data.repository
 
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.network.service.UnifestService
 import javax.inject.Inject
 
@@ -18,5 +19,9 @@ class FestivalRepositoryImpl @Inject constructor(
 
     override suspend fun getIncomingFestivals() = runSuspendCatching {
         service.getIncomingFestivals().data.map { it.toModel() }
+    }
+
+    override suspend fun getTodayFestivals(date: String) = runSuspendCatching {
+        service.getTodayFestivals(date).data.map { it.toModel() }
     }
 }

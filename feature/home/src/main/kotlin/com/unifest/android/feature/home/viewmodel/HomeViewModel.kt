@@ -92,6 +92,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getTodayFestivals(date:String) {
+        viewModelScope.launch {
+            festivalRepository.getTodayFestivals(date)
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(
+                            todayFestivals = festivals.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
+    }
 
     fun updateFestivalSearchText(text: TextFieldValue) {
         _uiState.update {
