@@ -45,6 +45,9 @@
     <!--    Map    -->
     <string name="map_booth_search_text_field_hint"> 부스 / 주점을 검색해보세요.</string>
     <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
+    <string name="permission_required">권한 필요</string>
+    <string name="go_to_app_setting">앱 설정으로 이동</string>
+    <string name="check">확인</string>
 
     <!--    Menu    -->
     <string name="menu_title">메뉴</string>
