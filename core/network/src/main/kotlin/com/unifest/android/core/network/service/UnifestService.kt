@@ -16,6 +16,9 @@ interface UnifestService {
         @Query("name") name: String,
     ): FestivalSearchResponse
 
+    @GET("festival/after")
+    suspend fun getIncomingFestivals(): FestivalSearchResponse
+
     @GET("api/booths")
     suspend fun getPopularBooths(
         @Query("festival") festivalId: Long,

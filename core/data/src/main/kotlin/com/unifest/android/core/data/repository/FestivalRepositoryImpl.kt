@@ -15,4 +15,8 @@ class FestivalRepositoryImpl @Inject constructor(
     override suspend fun searchFestival(name: String) = runSuspendCatching {
         service.searchFestival(name).data.map { it.toModel() }
     }
+
+    override suspend fun getIncomingFestivals() = runSuspendCatching {
+        service.getIncomingFestivals().data.map { it.toModel() }
+    }
 }

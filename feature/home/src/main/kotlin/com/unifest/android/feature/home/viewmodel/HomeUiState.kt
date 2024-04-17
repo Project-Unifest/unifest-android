@@ -3,13 +3,13 @@ package com.unifest.android.feature.home.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.model.FestivalEventModel
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
+import com.unifest.android.core.model.FestivalSearchModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 
 data class HomeUiState(
-    val incomingEvents: ImmutableList<IncomingFestivalEventModel> = persistentListOf(),
+    val incomingEvents: ImmutableList<FestivalSearchModel> = persistentListOf(),
     val festivalEvents: ImmutableList<FestivalEventModel> = persistentListOf(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: MutableList<FestivalModel> = mutableListOf(),
@@ -19,4 +19,6 @@ data class HomeUiState(
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val selectedDate: LocalDate = LocalDate.now(),
+    val isServerErrorDialogVisible: Boolean = false,
+    val isNetworkErrorDialogVisible: Boolean = false,
 )

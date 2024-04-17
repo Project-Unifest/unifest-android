@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -51,6 +54,7 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.FestivalSearchModel
 import com.unifest.android.core.model.IncomingFestivalEventModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -305,7 +309,7 @@ fun IncomingFestivalText() {
 }
 
 @Composable
-fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
+fun IncomingFestivalCard(event: FestivalSearchModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -320,23 +324,24 @@ fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = event.imageRes),
-                contentDescription = "${event.name} Logo",
-                modifier = Modifier.size(52.dp),
+            NetworkImage(
+                imageUrl = event.thumbnail,
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(CircleShape),
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = event.dates,
+                    text = event.beginDate + " - " + event.endDate,
                     style = Content6,
                     color = Color(0xFF848484),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.name,
+                    text = event.festivalName,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -351,7 +356,7 @@ fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.location,
+                        text = event.schoolName,
                         style = Content6,
                         color = Color(0xFF848484),
                     )
@@ -394,17 +399,23 @@ fun HomeScreenPreview() {
                     ),
                 ),
                 incomingEvents = persistentListOf(
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                    FestivalSearchModel(
+                        thumbnail = "https://picsum.photos/36",
+                        schoolName = "건국대학교",
+                        festivalName = "녹색지대",
+                        beginDate = "05/21(화)",
+                        endDate = "05/23(목)",
+                        latitude = 37.54f,
+                        longitude = 127.07f,
                     ),
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                    FestivalSearchModel(
+                        thumbnail = "https://picsum.photos/36",
+                        schoolName = "건국대학교",
+                        festivalName = "녹색지대",
+                        beginDate = "05/21(화)",
+                        endDate = "05/23(목)",
+                        latitude = 37.54f,
+                        longitude = 127.07f,
                     ),
                 ),
             ),
