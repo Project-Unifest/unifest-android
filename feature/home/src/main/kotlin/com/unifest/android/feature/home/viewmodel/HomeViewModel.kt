@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
     init {
         _uiState.update {
             it.copy(
-                incomingEvents = persistentListOf(
+                incomingFestivals = persistentListOf(
                     FestivalSearchModel(
                         thumbnail = "https://picsum.photos/36",
                         schoolName = "건국대학교",
@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
                         longitude = 127.07f,
                     ),
                 ),
-                festivalEvents = persistentListOf(
+                todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
                         date = "5/21(화)",
@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
                 .onSuccess { festivals ->
                     _uiState.update {
                         it.copy(
-                            incomingEvents = festivals.toImmutableList(),
+                            incomingFestivals = festivals.toImmutableList(),
                         )
                     }
                 }

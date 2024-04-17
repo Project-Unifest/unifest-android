@@ -9,8 +9,8 @@ import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 
 data class HomeUiState(
-    val incomingEvents: ImmutableList<FestivalSearchModel> = persistentListOf(),
-    val festivalEvents: ImmutableList<FestivalTodayModel> = persistentListOf(),
+    val incomingFestivals: ImmutableList<FestivalSearchModel> = persistentListOf(),
+    val todayFestivals: ImmutableList<FestivalTodayModel> = persistentListOf(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: MutableList<FestivalModel> = mutableListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),

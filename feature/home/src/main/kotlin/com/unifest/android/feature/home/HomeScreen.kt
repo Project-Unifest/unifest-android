@@ -113,7 +113,7 @@ internal fun HomeScreen(
             item {
                 FestivalScheduleText(selectedDate = uiState.selectedDate)
             }
-            if (uiState.festivalEvents.isEmpty()) {
+            if (uiState.todayFestivals.isEmpty()) {
                 item {
                     Box(
                         contentAlignment = Alignment.Center,
@@ -144,12 +144,12 @@ internal fun HomeScreen(
                     }
                 }
             } else {
-                itemsIndexed(uiState.festivalEvents) { index, event ->
+                itemsIndexed(uiState.todayFestivals) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(event, onShowSnackBar)
+                        FestivalScheduleItem(festival, onShowSnackBar)
                     }
-                    if (index < uiState.festivalEvents.size - 1) {
+                    if (index < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
@@ -186,8 +186,8 @@ internal fun HomeScreen(
             item {
                 IncomingFestivalText()
             }
-            items(uiState.incomingEvents) { event ->
-                IncomingFestivalCard(event)
+            items(uiState.incomingFestivals) { festival ->
+                IncomingFestivalCard(festival)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -223,7 +223,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 
 @Composable
 fun FestivalScheduleItem(
-    event: FestivalTodayModel,
+    festival: FestivalTodayModel,
     onShowSnackBar: (message: Int) -> Unit,
 ) {
     Column {
@@ -243,13 +243,13 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = event.date,
+                    text = festival.date,
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.festivalName,
+                    text = festival.festivalName,
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -264,7 +264,7 @@ fun FestivalScheduleItem(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.schoolName,
+                        text = festival.schoolName,
                         style = Content5,
                         color = Color(0xFF848484),
                     )
@@ -272,7 +272,7 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(event.starList) { _ ->
+                items(festival.starList) { _ ->
                     Icon(
                         imageVector = Icons.Default.Circle,
                         contentDescription = "Celebrity",
@@ -308,7 +308,7 @@ fun IncomingFestivalText() {
 }
 
 @Composable
-fun IncomingFestivalCard(event: FestivalSearchModel) {
+fun IncomingFestivalCard(festival: FestivalSearchModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -324,7 +324,7 @@ fun IncomingFestivalCard(event: FestivalSearchModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NetworkImage(
-                imageUrl = event.thumbnail,
+                imageUrl = festival.thumbnail,
                 modifier = Modifier
                     .size(52.dp)
                     .clip(CircleShape),
@@ -334,13 +334,13 @@ fun IncomingFestivalCard(event: FestivalSearchModel) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = event.beginDate + " - " + event.endDate,
+                    text = festival.beginDate + " - " + festival.endDate,
                     style = Content6,
                     color = Color(0xFF848484),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.festivalName,
+                    text = festival.festivalName,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -355,7 +355,7 @@ fun IncomingFestivalCard(event: FestivalSearchModel) {
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.schoolName,
+                        text = festival.schoolName,
                         style = Content6,
                         color = Color(0xFF848484),
                     )
@@ -373,7 +373,7 @@ fun HomeScreenPreview() {
         HomeScreen(
             padding = PaddingValues(0.dp),
             uiState = HomeUiState(
-                festivalEvents = persistentListOf(
+                todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
                         date = "5/21(화)",
@@ -397,7 +397,7 @@ fun HomeScreenPreview() {
                         starList = listOf(),
                     ),
                 ),
-                incomingEvents = persistentListOf(
+                incomingFestivals = persistentListOf(
                     FestivalSearchModel(
                         thumbnail = "https://picsum.photos/36",
                         schoolName = "건국대학교",
