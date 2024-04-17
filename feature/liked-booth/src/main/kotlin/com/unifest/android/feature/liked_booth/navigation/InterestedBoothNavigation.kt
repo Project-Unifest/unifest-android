@@ -8,7 +8,7 @@ import com.unifest.android.feature.liked_booth.LikedBoothRoute
 
 const val Liked_BOOTH_ROUTE = "liked_booth_route"
 
-fun NavController.navigateToLikedBoothList() {
+fun NavController.navigateToLikedBooth() {
     navigate(Liked_BOOTH_ROUTE)
 }
 

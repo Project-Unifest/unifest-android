@@ -38,6 +38,7 @@ import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.navigation.boothNavGraph
+import com.unifest.android.feature.contact.navigation.contactNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
@@ -106,9 +107,14 @@ internal fun MainScreen(
             )
             menuNavGraph(
                 padding = innerPadding,
-                onNavigateToLikedBooth = navigator::navigateToLikedBoothList,
+                onNavigateToLikedBooth = navigator::navigateToLikedBooth,
+                onNavigateToContact = navigator::navigateToContact,
             )
             likedBoothNavGraph(
+                padding = innerPadding,
+                onBackClick = navigator::popBackStackIfNotHome,
+            )
+            contactNavGraph(
                 padding = innerPadding,
                 onBackClick = navigator::popBackStackIfNotHome,
             )

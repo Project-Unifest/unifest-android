@@ -2,11 +2,10 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
-    alias(libs.plugins.compose.investigator)
 }
 
 android {
-    namespace = "com.unifest.android.feature.menu"
+    namespace = "com.unifest.android.feature.contact"
 
     buildFeatures {
         buildConfig = true
@@ -15,17 +14,14 @@ android {
     defaultConfig {
         buildConfigField(
             "String",
-            "UNIFEST_WEB_URL",
-            properties["UNIFEST_WEB_URL"] as String,
+            "CONTACT_WEB_VIEW_URL",
+            properties["CONTACT_WEB_VIEW_URL"] as String,
         )
     }
 }
 
 dependencies {
     implementations(
-        projects.core.data,
-
-        libs.kotlinx.collections.immutable,
         libs.timber,
     )
 }

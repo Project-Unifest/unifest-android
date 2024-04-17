@@ -80,4 +80,7 @@
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
 
+    <!--   Contact-->
+    <string name="contact_title">이용문의</string>
+
 </resources>

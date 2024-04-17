@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +72,7 @@ import timber.log.Timber
 internal fun MenuRoute(
     padding: PaddingValues,
     onNavigateToLikedBooth: () -> Unit,
+    onNavigateToContact: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +89,8 @@ internal fun MenuRoute(
         padding = padding,
         uiState = uiState,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToLikedBoothList = onNavigateToLikedBooth,
+        onNavigateToLikedBooth = onNavigateToLikedBooth,
+        onNavigateToContact = onNavigateToContact,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
@@ -104,7 +107,8 @@ fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToLikedBoothList: () -> Unit,
+    onNavigateToLikedBooth: () -> Unit,
+    onNavigateToContact: () -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
@@ -113,6 +117,8 @@ fun MenuScreen(
     deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -206,7 +212,7 @@ fun MenuScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         TextButton(
-                            onClick = { onNavigateToLikedBoothList() },
+                            onClick = onNavigateToLikedBooth,
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -256,7 +262,7 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
-                        onClick = { /* 구현 */ },
+                        onClick = onNavigateToContact,
                     )
                 }
                 item {
@@ -271,7 +277,9 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
                         title = stringResource(id = R.string.menu_admin_mode),
-                        onClick = { /* 구현 */ },
+                        onClick = {
+                            uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
+                        },
                     )
                 }
                 item {
@@ -429,7 +437,8 @@ fun MenuScreenPreview() {
             setEnableSearchMode = {},
             setEnableEditMode = { },
             setLikedFestivalDeleteDialogVisible = {},
-            onNavigateToLikedBoothList = {},
+            onNavigateToLikedBooth = {},
+            onNavigateToContact = {},
             deleteLikedBooth = {},
             appVersion = "1.0.0",
         )
