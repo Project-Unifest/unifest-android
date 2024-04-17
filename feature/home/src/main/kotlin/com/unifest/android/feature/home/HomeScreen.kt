@@ -53,9 +53,8 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalSearchModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -224,7 +223,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 
 @Composable
 fun FestivalScheduleItem(
-    event: FestivalEventModel,
+    event: FestivalTodayModel,
     onShowSnackBar: (message: Int) -> Unit,
 ) {
     Column {
@@ -250,7 +249,7 @@ fun FestivalScheduleItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.name,
+                    text = event.festivalName,
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -265,7 +264,7 @@ fun FestivalScheduleItem(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.location,
+                        text = event.schoolName,
                         style = Content5,
                         color = Color(0xFF848484),
                     )
@@ -273,7 +272,7 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(event.celebrityImages) { _ ->
+                items(event.starList) { _ ->
                     Icon(
                         imageVector = Icons.Default.Circle,
                         contentDescription = "Celebrity",
@@ -375,27 +374,27 @@ fun HomeScreenPreview() {
             padding = PaddingValues(0.dp),
             uiState = HomeUiState(
                 festivalEvents = persistentListOf(
-                    FestivalEventModel(
-                        id = 1,
+                    FestivalTodayModel(
+                        festivalId = 1,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
 
-                    FestivalEventModel(
-                        id = 2,
+                    FestivalTodayModel(
+                        festivalId = 2,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
-                    FestivalEventModel(
-                        id = 3,
+                    FestivalTodayModel(
+                        festivalId = 3,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
                 ),
                 incomingEvents = persistentListOf(

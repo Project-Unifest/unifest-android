@@ -6,10 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalSearchModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -52,26 +50,26 @@ class HomeViewModel @Inject constructor(
                     ),
                 ),
                 festivalEvents = persistentListOf(
-                    FestivalEventModel(
-                        id = 1,
+                    FestivalTodayModel(
+                        festivalId = 1,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
-                    FestivalEventModel(
-                        id = 2,
+                    FestivalTodayModel(
+                        festivalId = 2,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
-                    FestivalEventModel(
-                        id = 3,
+                    FestivalTodayModel(
+                        festivalId = 3,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starList = listOf(),
                     ),
                 ),
             )
