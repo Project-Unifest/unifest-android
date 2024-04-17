@@ -71,6 +71,7 @@ import timber.log.Timber
 internal fun MenuRoute(
     padding: PaddingValues,
     onNavigateToLikedBooth: () -> Unit,
+    onNavigateToContact: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -88,6 +89,7 @@ internal fun MenuRoute(
         uiState = uiState,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         onNavigateToLikedBoothList = onNavigateToLikedBooth,
+        onNavigateToContact = onNavigateToContact,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
@@ -105,6 +107,7 @@ fun MenuScreen(
     uiState: MenuUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     onNavigateToLikedBoothList: () -> Unit,
+    onNavigateToContact: () -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
@@ -256,7 +259,7 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
-                        onClick = { /* 구현 */ },
+                        onClick = onNavigateToContact,
                     )
                 }
                 item {
@@ -430,6 +433,7 @@ fun MenuScreenPreview() {
             setEnableEditMode = { },
             setLikedFestivalDeleteDialogVisible = {},
             onNavigateToLikedBoothList = {},
+            onNavigateToContact = {},
             deleteLikedBooth = {},
             appVersion = "1.0.0",
         )
