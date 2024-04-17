@@ -14,7 +14,7 @@ import com.unifest.android.feature.booth.navigation.navigateToBoothLocation
 import com.unifest.android.feature.contact.navigation.navigateToContact
 import com.unifest.android.feature.home.navigation.HOME_ROUTE
 import com.unifest.android.feature.home.navigation.navigateToHome
-import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBoothList
+import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
 
@@ -57,8 +57,8 @@ internal class MainNavController(
         navController.navigateToBoothLocation()
     }
 
-    fun navigateToLikedBoothList() {
-        navController.navigateToLikedBoothList()
+    fun navigateToLikedBooth() {
+        navController.navigateToLikedBooth()
     }
 
     fun navigateToContact() {

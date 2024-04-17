@@ -107,7 +107,7 @@ internal fun MainScreen(
             )
             menuNavGraph(
                 padding = innerPadding,
-                onNavigateToLikedBooth = navigator::navigateToLikedBoothList,
+                onNavigateToLikedBooth = navigator::navigateToLikedBooth,
                 onNavigateToContact = navigator::navigateToContact,
             )
             likedBoothNavGraph(

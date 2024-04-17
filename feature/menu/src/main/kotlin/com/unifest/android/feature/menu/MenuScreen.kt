@@ -88,7 +88,7 @@ internal fun MenuRoute(
         padding = padding,
         uiState = uiState,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToLikedBoothList = onNavigateToLikedBooth,
+        onNavigateToLikedBooth = onNavigateToLikedBooth,
         onNavigateToContact = onNavigateToContact,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
@@ -106,7 +106,7 @@ fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToLikedBoothList: () -> Unit,
+    onNavigateToLikedBooth: () -> Unit,
     onNavigateToContact: () -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
@@ -209,7 +209,7 @@ fun MenuScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         TextButton(
-                            onClick = { onNavigateToLikedBoothList() },
+                            onClick = onNavigateToLikedBooth,
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -432,7 +432,7 @@ fun MenuScreenPreview() {
             setEnableSearchMode = {},
             setEnableEditMode = { },
             setLikedFestivalDeleteDialogVisible = {},
-            onNavigateToLikedBoothList = {},
+            onNavigateToLikedBooth = {},
             onNavigateToContact = {},
             deleteLikedBooth = {},
             appVersion = "1.0.0",
