@@ -26,6 +26,7 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+
     init {
         _uiState.update {
             it.copy(
@@ -56,6 +57,7 @@ class HomeViewModel @Inject constructor(
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        schoolId = 1,
                     ),
                     FestivalTodayModel(
                         festivalId = 2,
@@ -63,6 +65,7 @@ class HomeViewModel @Inject constructor(
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        schoolId = 2,
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
@@ -70,95 +73,105 @@ class HomeViewModel @Inject constructor(
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        schoolId = 3,
                     ),
                 ),
             )
         }
     }
 
-    fun getIncomingFestivals() {
+
+    fun addInterestFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
-            festivalRepository.getIncomingFestivals()
-                .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(
-                            incomingFestivals = festivals.toImmutableList(),
-                        )
-                    }
+            festivalRepository.insertLikedFestivalAtHome(festival)
+        }
+        //todo: festivalTodayInfo 로직 정리
+
+    }
+
+fun getIncomingFestivals() {
+    viewModelScope.launch {
+        festivalRepository.getIncomingFestivals()
+            .onSuccess { festivals ->
+                _uiState.update {
+                    it.copy(
+                        incomingFestivals = festivals.toImmutableList(),
+                    )
                 }
-                .onFailure { exception ->
-                    handleException(exception, this@HomeViewModel)
+            }
+            .onFailure { exception ->
+                handleException(exception, this@HomeViewModel)
+            }
+    }
+}
+
+fun getTodayFestivals(date: String) {
+    viewModelScope.launch {
+        festivalRepository.getTodayFestivals(date)
+            .onSuccess { festivals ->
+                _uiState.update {
+                    it.copy(
+                        todayFestivals = festivals.toImmutableList(),
+                    )
                 }
-        }
+            }
+            .onFailure { exception ->
+                handleException(exception, this@HomeViewModel)
+            }
     }
+}
 
-    fun getTodayFestivals(date:String) {
-        viewModelScope.launch {
-            festivalRepository.getTodayFestivals(date)
-                .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(
-                            todayFestivals = festivals.toImmutableList(),
-                        )
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@HomeViewModel)
-                }
-        }
+fun updateFestivalSearchText(text: TextFieldValue) {
+    _uiState.update {
+        it.copy(festivalSearchText = text)
     }
+}
 
-    fun updateFestivalSearchText(text: TextFieldValue) {
-        _uiState.update {
-            it.copy(festivalSearchText = text)
-        }
+fun initSearchText() {
+    _uiState.update {
+        it.copy(festivalSearchText = TextFieldValue())
     }
+}
 
-    fun initSearchText() {
-        _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
-        }
+fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+    _uiState.update {
+        it.copy(isFestivalSearchBottomSheetVisible = flag)
     }
+}
 
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isFestivalSearchBottomSheetVisible = flag)
-        }
+fun setEnableSearchMode(flag: Boolean) {
+    _uiState.update {
+        it.copy(isSearchMode = flag)
     }
+}
 
-    fun setEnableSearchMode(flag: Boolean) {
-        _uiState.update {
-            it.copy(isSearchMode = flag)
-        }
+fun setEnableEditMode() {
+    _uiState.update {
+        it.copy(isEditMode = !_uiState.value.isEditMode)
     }
+}
 
-    fun setEnableEditMode() {
-        _uiState.update {
-            it.copy(isEditMode = !_uiState.value.isEditMode)
-        }
+fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+    _uiState.update {
+        it.copy(isLikedFestivalDeleteDialogVisible = flag)
     }
+}
 
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isLikedFestivalDeleteDialogVisible = flag)
-        }
+fun setSelectedDate(date: LocalDate) {
+    _uiState.update {
+        it.copy(selectedDate = date)
     }
+}
 
-    fun setSelectedDate(date: LocalDate) {
-        _uiState.update {
-            it.copy(selectedDate = date)
-        }
+override fun setServerErrorDialogVisible(flag: Boolean) {
+    _uiState.update {
+        it.copy(isServerErrorDialogVisible = flag)
     }
+}
 
-    override fun setServerErrorDialogVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isServerErrorDialogVisible = flag)
-        }
+override fun setNetworkErrorDialogVisible(flag: Boolean) {
+    _uiState.update {
+        it.copy(isNetworkErrorDialogVisible = flag)
     }
-
-    override fun setNetworkErrorDialogVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isNetworkErrorDialogVisible = flag)
-        }
-    }
+}
 }

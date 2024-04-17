@@ -81,6 +81,7 @@ internal fun HomeRoute(
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setSelectedDate = viewModel::setSelectedDate,
+        onAddInterestFestivalClick = { festival -> viewModel.addInterestFestival(festival) },
     )
 }
 
@@ -97,6 +98,7 @@ internal fun HomeScreen(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
     setSelectedDate: (LocalDate) -> Unit,
+    onAddInterestFestivalClick: (FestivalTodayModel) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -147,7 +149,9 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.todayFestivals) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(festival, onShowSnackBar)
+                        FestivalScheduleItem(festival, onShowSnackBar,onAddInterestFestivalClick = {
+                            onAddInterestFestivalClick(festival)
+                        })
                     }
                     if (index < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -225,6 +229,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onShowSnackBar: (message: Int) -> Unit,
+    onAddInterestFestivalClick: (FestivalTodayModel) -> Unit,
 ) {
     Column {
         Row(
@@ -285,7 +290,9 @@ fun FestivalScheduleItem(
             }
         }
         UnifestOutlinedButton(
-            onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
+            onClick = {
+                onAddInterestFestivalClick(festival)
+                onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 20.dp, end = 20.dp),
@@ -426,6 +433,7 @@ fun HomeScreenPreview() {
             setEnableEditMode = {},
             setLikedFestivalDeleteDialogVisible = {},
             setSelectedDate = {},
+            onAddInterestFestivalClick = {},
         )
     }
 }

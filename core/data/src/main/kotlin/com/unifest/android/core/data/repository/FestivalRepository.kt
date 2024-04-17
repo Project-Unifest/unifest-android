@@ -8,4 +8,7 @@ interface FestivalRepository {
     suspend fun searchFestival(name: String): Result<List<FestivalSearchModel>>
     suspend fun getIncomingFestivals(): Result<List<FestivalSearchModel>>
     suspend fun getTodayFestivals(date: String): Result<List<FestivalTodayModel>>
+    suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel)
+    suspend fun deleteLikedFestivalAtHome(festival: FestivalTodayModel)
+
 }

@@ -43,6 +43,8 @@ data class FestivalTodayResponse(
 
 @Serializable
 data class FestivalToday(
+    @SerialName("schoolId")
+    val schoolId: Int,
     @SerialName("festivalId")
     val festivalId: Int,
     @SerialName("date")
@@ -52,10 +54,10 @@ data class FestivalToday(
     @SerialName("schoolName")
     val schoolName: String,
     @SerialName("starList")
-    val starList: List<Celebrity>,
+    val starList: List<StarList>,
 )
 @Serializable
-data class Celebrity(
+data class StarList(
     @SerialName("name")
     val name: String,
     @SerialName("img")
