@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -116,6 +117,8 @@ fun MenuScreen(
     deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -274,7 +277,9 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
                         title = stringResource(id = R.string.menu_admin_mode),
-                        onClick = { /* 구현 */ },
+                        onClick = {
+                            uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
+                        },
                     )
                 }
                 item {

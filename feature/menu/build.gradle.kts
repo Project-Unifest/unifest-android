@@ -7,6 +7,18 @@ plugins {
 
 android {
     namespace = "com.unifest.android.feature.menu"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField(
+            "String",
+            "UNIFEST_WEB_URL",
+            properties["UNIFEST_WEB_URL"] as String,
+        )
+    }
 }
 
 dependencies {
