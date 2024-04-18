@@ -51,7 +51,7 @@ flexible-bottomsheet = "0.1.2"
 
 naver-map-sdk = "3.18.0"
 naver-map-compose = "1.5.5"
-naver-map-location = "21.0.1"
+naver-map-location = "21.0.2"
 tedclustering-naver = "1.0.2"
 
 [libraries]
