@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,17 +27,16 @@ class MenuViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+            combine(
+                festivalRepository.getLikedFestivals(),
+                likedBoothRepository.getLikedBoothList()
+            ) { likedFestivals, likedBooths ->
+                Pair(likedFestivals, likedBooths)
+            }.collect { (likedFestivals, likedBooths) ->
                 _uiState.update {
                     it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
-                    )
-                }
-            }
-            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
-                _uiState.update {
-                    it.copy(
-                        likedBoothList = likedBoothList.toImmutableList(),
+                        likedFestivals = likedFestivals.toMutableList(),
+                        likedBoothList = likedBooths.toImmutableList()
                     )
                 }
             }
