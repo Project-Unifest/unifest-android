@@ -167,16 +167,16 @@ fun MenuScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
-                            .height(if (uiState.festivals.isEmpty()) 0.dp else ((uiState.festivals.size / 4 + 1) * 140).dp),
+                            .height(if (uiState.likedFestivals.isEmpty()) 0.dp else ((uiState.festivals.size / 4 + 1) * 140).dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(
-                            uiState.festivals.size,
-                            key = { index -> uiState.festivals[index].schoolName },
+                            uiState.likedFestivals.size,
+                            key = { index -> uiState.likedFestivals[index].schoolName },
                         ) { index ->
                             FestivalItem(
-                                festival = uiState.festivals[index],
+                                festival = uiState.likedFestivals[index],
                             )
                         }
                     }
