@@ -18,14 +18,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -54,13 +60,13 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 
 @Composable
 internal fun BoothDetailRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
-    onShowSnackBar: (message: Int) -> Unit,
     onNavigateToBoothLocation: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
@@ -90,7 +96,6 @@ internal fun BoothDetailRoute(
         onBookmarkClick = { viewModel.toggleBookmark() },
         isBookmarked = uiState.isBookmarked,
         bookmarkCount = uiState.bookmarkCount,
-        onShowSnackBar = onShowSnackBar,
     )
 }
 
@@ -103,8 +108,11 @@ fun BoothDetailScreen(
     onBookmarkClick: () -> Unit,
     isBookmarked: Boolean,
     bookmarkCount: Int,
-    onShowSnackBar: (message: Int) -> Unit,
 ) {
+    val snackBarState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     Box(modifier = Modifier.fillMaxSize()) {
         BoothDetailContent(
             uiState = uiState,
@@ -125,10 +133,21 @@ fun BoothDetailScreen(
             bookmarkCount = bookmarkCount,
             onBookmarkClick = {
                 onBookmarkClick()
-                onShowSnackBar(if (isBookmarked) R.string.booth_bookmark_removed_message else R.string.booth_bookmarked_message)
+                scope.launch {
+                    snackBarState.showSnackbar(
+                        message = (if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message) else context.getString(R.string.booth_bookmarked_message)),
+                        duration = SnackbarDuration.Short,
+                    )
+                }
             },
             onWaitingClick = { /*showWaitingDialog = true*/ },
             modifier = Modifier.align(Alignment.BottomCenter),
+        )
+        SnackbarHost(
+            hostState = snackBarState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 116.dp),
         )
     }
 }
@@ -358,7 +377,6 @@ fun BoothScreenPreview() {
             onBookmarkClick = {},
             isBookmarked = false,
             bookmarkCount = 0,
-            onShowSnackBar = {},
         )
     }
 }

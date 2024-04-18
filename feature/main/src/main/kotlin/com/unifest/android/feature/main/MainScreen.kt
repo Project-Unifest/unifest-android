@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -75,10 +74,7 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostState,
-                modifier = Modifier.padding(bottom = 64.dp),
-            )
+            SnackbarHost(hostState = snackBarHostState)
         },
         containerColor = White,
     ) { innerPadding ->
@@ -100,7 +96,6 @@ internal fun MainScreen(
                 navController = navigator.navController,
                 onBackClick = navigator::popBackStackIfNotHome,
                 onNavigateToBoothLocation = navigator::navigateToBoothLocation,
-                onShowSnackBar = onShowSnackBar,
             )
             waitingNavGraph(
                 padding = innerPadding,
