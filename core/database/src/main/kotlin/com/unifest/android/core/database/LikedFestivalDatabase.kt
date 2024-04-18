@@ -11,7 +11,7 @@ import com.unifest.android.core.database.entity.LikedFestivalEntity
     version = 1,
     exportSchema = true,
 )
-@TypeConverters(MenuListConverter::class)
+@TypeConverters(StarListConverter::class)
 abstract class LikedFestivalDatabase : RoomDatabase() {
     abstract fun likedFestivalDao(): LikedFestivalDao
 }
