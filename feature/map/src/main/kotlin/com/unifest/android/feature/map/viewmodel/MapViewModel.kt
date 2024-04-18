@@ -7,6 +7,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
@@ -127,6 +128,16 @@ class MapViewModel @Inject constructor(
             ),
         )
 
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+
         _uiState.update {
             it.copy(
                 selectedSchoolName = "건국대학교",
@@ -134,63 +145,6 @@ class MapViewModel @Inject constructor(
                     .map { booth -> booth.toMapModel() }
                     .toImmutableList(),
                 selectedBoothList = persistentListOf(),
-                likedFestivals = mutableListOf(
-                    FestivalModel(
-                        1,
-                        1,
-                        "https://picsum.photos/36",
-                        "서울대학교",
-                        "설대축제",
-                        "05.06",
-                        "05.08",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        2,
-                        2,
-                        "https://picsum.photos/36",
-                        "연세대학교",
-                        "연대축제",
-                        "05.06",
-                        "05.08",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        3,
-                        3,
-                        "https://picsum.photos/36",
-                        "고려대학교",
-                        "고대축제",
-                        "05.06",
-                        "05.08",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        4,
-                        4,
-                        "https://picsum.photos/36",
-                        "성균관대학교",
-                        "성대축제",
-                        "05.06",
-                        "05.08",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        5,
-                        5,
-                        "https://picsum.photos/36",
-                        "건국대학교",
-                        "건대축제",
-                        "05.06",
-                        "05.08",
-                        126.957f,
-                        37.460f,
-                    ),
-                ),
                 festivalSearchResults = persistentListOf(
                     FestivalModel(
                         1,
