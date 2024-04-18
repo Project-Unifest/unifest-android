@@ -3,6 +3,7 @@ package com.unifest.android.feature.menu.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.model.BoothDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,12 +19,20 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(
     private val likedBoothRepository: LikedBoothRepository,
+    private val festivalRepository: FestivalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
             likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
                 _uiState.update {
                     it.copy(

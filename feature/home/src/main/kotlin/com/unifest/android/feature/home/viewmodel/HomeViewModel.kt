@@ -28,6 +28,17 @@ class HomeViewModel @Inject constructor(
 
 
     init {
+
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+
         _uiState.update {
             it.copy(
                 incomingFestivals = persistentListOf(
