@@ -22,25 +22,25 @@ data class LikedFestivalEntity(
     val festivalName: String,
 
     @ColumnInfo(name = "date")
-    val date: String,
+    val date: String?,
 
     @ColumnInfo(name = "thumbnail")
-    val thumbnail: String,
+    val thumbnail: String?,
 
     @ColumnInfo(name = "begin_date")
-    val beginDate: String,
+    val beginDate: String?,
 
     @ColumnInfo(name = "end_date")
-    val endDate: String,
+    val endDate: String?,
 
     @ColumnInfo(name = "star_list")
-    val starList: List<StarListEntity>,
+    val starList: List<StarListEntity>?,
 
     @ColumnInfo(name = "latitude")
-    val latitude: Float,
+    val latitude: Float?,
 
     @ColumnInfo(name = "longitude")
-    val longitude: Float,
+    val longitude: Float?,
 
 
 

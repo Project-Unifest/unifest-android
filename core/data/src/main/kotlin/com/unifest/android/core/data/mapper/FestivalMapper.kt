@@ -1,7 +1,5 @@
 package com.unifest.android.core.data.mapper
 
-import com.unifest.android.core.database.entity.LikedFestivalEntity
-import com.unifest.android.core.database.entity.StarListEntity
 import com.unifest.android.core.model.StarListModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
@@ -37,29 +35,6 @@ internal fun FestivalToday.toModel(): FestivalTodayModel {
 
 internal fun StarList.toModel(): StarListModel {
     return StarListModel(
-        name = name,
-        img = img,
-    )
-}
-
-internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
-    return LikedFestivalEntity(
-        festivalId = festivalId,
-        schoolName = schoolName,
-        festivalName = festivalName,
-        date = date,
-        starList = starList.map { it.toEntity() },
-        schoolId = schoolId,
-        beginDate = "",
-        endDate = "",
-        latitude = 0f,
-        longitude = 0f,
-        thumbnail = "",
-    )
-}
-
-internal fun StarListModel.toEntity(): StarListEntity {
-    return StarListEntity(
         name = name,
         img = img,
     )
