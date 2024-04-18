@@ -167,15 +167,7 @@ fun MenuScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
-                            .height(
-                                when {
-                                    uiState.festivals.isEmpty() -> 0.dp
-                                    else -> {
-                                        val rows = ((uiState.festivals.size - 1) / 4 + 1) * 140
-                                        rows.dp
-                                    }
-                                },
-                            ),
+                            .height(if (uiState.festivals.isEmpty()) 0.dp else ((uiState.festivals.size / 4 + 1) * 140).dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
