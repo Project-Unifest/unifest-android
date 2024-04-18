@@ -15,6 +15,10 @@ data class FestivalSearchResponse(
 
 @Serializable
 data class FestivalSearch(
+    @SerialName("schoolId")
+    val schoolId: Int,
+    @SerialName("festivalId")
+    val festivalId: Int,
     @SerialName("thumbnail")
     val thumbnail: String,
     @SerialName("schoolName")
