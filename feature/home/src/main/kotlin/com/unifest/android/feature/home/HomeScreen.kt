@@ -54,7 +54,7 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.core.model.FestivalSearchModel
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -315,7 +315,7 @@ fun IncomingFestivalText() {
 }
 
 @Composable
-fun IncomingFestivalCard(festival: FestivalSearchModel) {
+fun IncomingFestivalCard(festival: FestivalModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -405,23 +405,27 @@ fun HomeScreenPreview() {
                     ),
                 ),
                 incomingFestivals = persistentListOf(
-                    FestivalSearchModel(
-                        thumbnail = "https://picsum.photos/36",
-                        schoolName = "건국대학교",
-                        festivalName = "녹색지대",
-                        beginDate = "05/21(화)",
-                        endDate = "05/23(목)",
-                        latitude = 37.54f,
-                        longitude = 127.07f,
+                    FestivalModel(
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
-                    FestivalSearchModel(
-                        thumbnail = "https://picsum.photos/36",
-                        schoolName = "건국대학교",
-                        festivalName = "녹색지대",
-                        beginDate = "05/21(화)",
-                        endDate = "05/23(목)",
-                        latitude = 37.54f,
-                        longitude = 127.07f,
+                    FestivalModel(
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
             ),
