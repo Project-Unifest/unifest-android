@@ -62,6 +62,7 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
@@ -82,6 +83,7 @@ internal fun IntroRoute(
         navigateToMain = navigateToMain,
         updateSearchText = viewModel::updateSearchText,
         initSearchText = viewModel::initSearchText,
+        onAddLikeFestivalClick = { festivals -> viewModel.addLikeFestivals(festivals,navigateToMain) },
     )
 }
 
@@ -91,6 +93,7 @@ fun IntroScreen(
     navigateToMain: () -> Unit,
     updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
+    onAddLikeFestivalClick: (List<FestivalModel>) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 
@@ -134,7 +137,9 @@ fun IntroScreen(
             )
         }
         UnifestButton(
-            onClick = navigateToMain,
+            onClick = {
+                onAddLikeFestivalClick(selectedFestivals)
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -231,7 +236,9 @@ fun FestivalRowItem(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier.height(130.dp).width(120.dp),
+        modifier = Modifier
+            .height(130.dp)
+            .width(120.dp),
     ) {
         Box(
             modifier = Modifier.clickable { onFestivalSelected(festival) },
@@ -401,6 +408,7 @@ fun PreviewIntroScreen() {
             navigateToMain = {},
             updateSearchText = {},
             initSearchText = {},
+            onAddLikeFestivalClick = {},
         )
     }
 }

@@ -2,17 +2,23 @@ package com.unifest.android.feature.intro.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class IntroViewModel @Inject constructor() : ViewModel() {
+class IntroViewModel @Inject constructor(
+    private val festivalRepository: FestivalRepository,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
 
@@ -89,6 +95,17 @@ class IntroViewModel @Inject constructor() : ViewModel() {
     fun initSearchText() {
         _uiState.update {
             it.copy(searchText = TextFieldValue())
+        }
+    }
+
+    fun addLikeFestivals(festivals: List<FestivalModel>, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            festivals.forEach { festival ->
+                if (!festivalRepository.isFestivalExists(festival.festivalId)) {
+                    festivalRepository.insertLikedFestivalAtSearch(festival)
+                }
+            }
+            onComplete()
         }
     }
 }
