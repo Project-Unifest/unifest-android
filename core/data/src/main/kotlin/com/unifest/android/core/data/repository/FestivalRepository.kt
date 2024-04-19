@@ -12,6 +12,7 @@ interface FestivalRepository {
     suspend fun getTodayFestivals(date: String): Result<List<FestivalTodayModel>>
     fun getLikedFestivals(): Flow<List<FestivalModel>>
     suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel)
+    suspend fun insertLikedFestivalAtSearch(festival: FestivalModel)
     suspend fun deleteLikedFestivalAtHome(festival: FestivalTodayModel)
 
 }

@@ -11,6 +11,7 @@ import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -388,6 +389,12 @@ class MapViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 }

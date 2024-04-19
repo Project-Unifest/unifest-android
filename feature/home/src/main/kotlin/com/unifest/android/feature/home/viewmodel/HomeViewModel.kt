@@ -100,8 +100,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtHome(festival)
         }
-        //todo: festivalTodayInfo 로직 정리
+    }
 
+    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
+        }
     }
 
 fun getIncomingFestivals() {

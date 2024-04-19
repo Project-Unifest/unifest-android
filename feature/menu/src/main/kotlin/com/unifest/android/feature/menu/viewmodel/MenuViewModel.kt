@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -40,6 +41,12 @@ class MenuViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 

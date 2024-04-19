@@ -42,6 +42,10 @@ class FestivalRepositoryImpl @Inject constructor(
     override suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel) {
         likedFestivalDao.insertLikedFestival(festival.toEntity())
     }
+
+    override suspend fun insertLikedFestivalAtSearch(festival: FestivalModel) {
+        likedFestivalDao.insertLikedFestival(festival.toEntity())
+    }
     override suspend fun deleteLikedFestivalAtHome(festival: FestivalTodayModel) {
         likedFestivalDao.deleteLikedFestival(festival.toEntity())
     }
