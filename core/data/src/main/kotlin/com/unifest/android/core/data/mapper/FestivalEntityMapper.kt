@@ -29,11 +29,6 @@ internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
         date = date,
         starList = starList.map { it.toEntity() },
         schoolId = schoolId,
-        thumbnail = null,
-        beginDate = date,
-        endDate = date,
-        latitude = null,
-        longitude = null,
     )
 }
 
@@ -41,5 +36,19 @@ internal fun StarListModel.toEntity(): StarListEntity {
     return StarListEntity(
         name = name,
         img = img,
+    )
+}
+
+internal fun FestivalModel.toEntity(): LikedFestivalEntity {
+    return LikedFestivalEntity(
+        festivalId = festivalId,
+        schoolName = schoolName,
+        festivalName = festivalName,
+        schoolId = schoolId,
+        thumbnail = thumbnail,
+        beginDate = beginDate,
+        endDate = endDate,
+        latitude = latitude,
+        longitude = longitude,
     )
 }
