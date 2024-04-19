@@ -41,8 +41,7 @@ data class LikedFestivalEntity(
 
     @ColumnInfo(name = "longitude")
     val longitude: Float? = null,
-
-    )
+)
 
 @Serializable
 data class StarInfoEntity(

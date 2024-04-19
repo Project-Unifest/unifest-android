@@ -155,7 +155,8 @@ internal fun HomeScreen(
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
-                            festival, onShowSnackBar,
+                            festival,
+                            onShowSnackBar,
                             onAddLikeFestivalClick = {
                                 onAddLikeFestivalClick(festival)
                             },
