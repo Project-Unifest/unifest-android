@@ -151,7 +151,7 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.todayFestivals) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(festival, onShowSnackBar,onAddLikeFestivalClick = {
+                        FestivalScheduleItem(festival, onShowSnackBar, onAddLikeFestivalClick = {
                             onAddLikeFestivalClick(festival)
                         })
                     }
@@ -391,7 +391,7 @@ fun HomeScreenPreview() {
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
                         thumbnail = "https://picsum.photos/36",
-                        schoolId = 1
+                        schoolId = 1,
                     ),
 
                     FestivalTodayModel(
@@ -401,7 +401,7 @@ fun HomeScreenPreview() {
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
                         thumbnail = "https://picsum.photos/36",
-                        schoolId = 2
+                        schoolId = 2,
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
@@ -410,7 +410,7 @@ fun HomeScreenPreview() {
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
                         thumbnail = "https://picsum.photos/36",
-                        schoolId = 3
+                        schoolId = 3,
                     ),
                 ),
                 incomingFestivals = persistentListOf(

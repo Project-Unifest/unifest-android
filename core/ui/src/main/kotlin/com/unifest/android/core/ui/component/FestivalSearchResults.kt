@@ -130,7 +130,7 @@ fun FestivalSearchResultItem(
         }
         Spacer(modifier = Modifier.weight(1f))
         UnifestOutlinedButton(
-            onClick = {addLikeFestivalAtBottomSheetSearch(festival)},
+            onClick = { addLikeFestivalAtBottomSheetSearch(festival) },
             cornerRadius = 17.dp,
             borderColor = Color(0xFFDDDDDD),
             contentColor = Color(0xFF666666),

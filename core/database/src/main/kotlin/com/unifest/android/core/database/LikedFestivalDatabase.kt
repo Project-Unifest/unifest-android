@@ -3,7 +3,6 @@ package com.unifest.android.core.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.unifest.android.core.database.entity.LikedBoothEntity
 import com.unifest.android.core.database.entity.LikedFestivalEntity
 
 @Database(

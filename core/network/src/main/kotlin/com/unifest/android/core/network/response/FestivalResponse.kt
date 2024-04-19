@@ -62,6 +62,7 @@ data class FestivalToday(
     @SerialName("thumbnail")
     val thumbnail: String,
 )
+
 @Serializable
 data class StarList(
     @SerialName("name")

@@ -397,6 +397,4 @@ class MapViewModel @Inject constructor(
             it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
-
-
 }

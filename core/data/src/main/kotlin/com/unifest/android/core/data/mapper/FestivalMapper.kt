@@ -7,7 +7,6 @@ import com.unifest.android.core.network.response.StarList
 import com.unifest.android.core.network.response.FestivalSearch
 import com.unifest.android.core.network.response.FestivalToday
 
-
 internal fun FestivalSearch.toModel(): FestivalModel {
     return FestivalModel(
         festivalId = festivalId,
@@ -40,5 +39,3 @@ internal fun StarList.toModel(): StarListModel {
         img = img,
     )
 }
-
-

@@ -30,14 +30,14 @@ class MenuViewModel @Inject constructor(
         viewModelScope.launch {
             combine(
                 festivalRepository.getLikedFestivals(),
-                likedBoothRepository.getLikedBoothList()
+                likedBoothRepository.getLikedBoothList(),
             ) { likedFestivals, likedBooths ->
                 Pair(likedFestivals, likedBooths)
             }.collect { (likedFestivals, likedBooths) ->
                 _uiState.update {
                     it.copy(
                         likedFestivals = likedFestivals.toMutableList(),
-                        likedBoothList = likedBooths.toImmutableList()
+                        likedBoothList = likedBooths.toImmutableList(),
                     )
                 }
             }

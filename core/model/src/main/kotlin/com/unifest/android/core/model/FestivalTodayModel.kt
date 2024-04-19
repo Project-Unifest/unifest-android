@@ -12,6 +12,7 @@ data class FestivalTodayModel(
     val schoolName: String,
     val starList: List<StarListModel>,
 )
+
 @Stable
 data class StarListModel(
     val name: String,

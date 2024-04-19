@@ -62,7 +62,6 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
@@ -80,17 +79,15 @@ internal fun IntroRoute(
 
     IntroScreen(
         uiState = uiState,
-        navigateToMain = navigateToMain,
         updateSearchText = viewModel::updateSearchText,
         initSearchText = viewModel::initSearchText,
-        onAddLikeFestivalClick = { festivals -> viewModel.addLikeFestivals(festivals,navigateToMain) },
+        onAddLikeFestivalClick = { festivals -> viewModel.addLikeFestivals(festivals, navigateToMain) },
     )
 }
 
 @Composable
 fun IntroScreen(
     uiState: IntroUiState,
-    navigateToMain: () -> Unit,
     updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     onAddLikeFestivalClick: (List<FestivalModel>) -> Unit,
@@ -405,7 +402,6 @@ fun PreviewIntroScreen() {
                     ),
                 ),
             ),
-            navigateToMain = {},
             updateSearchText = {},
             initSearchText = {},
             onAddLikeFestivalClick = {},

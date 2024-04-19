@@ -53,7 +53,7 @@ fun FestivalSearchBottomSheet(
     isLikedFestivalDeleteDialogVisible: Boolean,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     isEditMode: Boolean = false,
-    addLikeFestivalAtBottomSheetSearch : (FestivalModel) -> Unit,
+    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 //    val scope = rememberCoroutineScope()

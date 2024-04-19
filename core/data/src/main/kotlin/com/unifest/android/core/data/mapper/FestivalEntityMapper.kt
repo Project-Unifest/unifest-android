@@ -20,7 +20,6 @@ internal fun LikedFestivalEntity.toModel(): FestivalModel {
     )
 }
 
-
 internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
     return LikedFestivalEntity(
         festivalId = festivalId,

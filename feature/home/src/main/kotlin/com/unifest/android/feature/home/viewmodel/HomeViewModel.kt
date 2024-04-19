@@ -26,7 +26,6 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-
     init {
 
         viewModelScope.launch {
@@ -98,7 +97,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
             if (!festivalRepository.isFestivalExists(festival.festivalId)) {
@@ -115,89 +113,89 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-fun getIncomingFestivals() {
-    viewModelScope.launch {
-        festivalRepository.getIncomingFestivals()
-            .onSuccess { festivals ->
-                _uiState.update {
-                    it.copy(
-                        incomingFestivals = festivals.toImmutableList(),
-                    )
+    fun getIncomingFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getIncomingFestivals()
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(
+                            incomingFestivals = festivals.toImmutableList(),
+                        )
+                    }
                 }
-            }
-            .onFailure { exception ->
-                handleException(exception, this@HomeViewModel)
-            }
-    }
-}
-
-fun getTodayFestivals(date: String) {
-    viewModelScope.launch {
-        festivalRepository.getTodayFestivals(date)
-            .onSuccess { festivals ->
-                _uiState.update {
-                    it.copy(
-                        todayFestivals = festivals.toImmutableList(),
-                    )
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
                 }
-            }
-            .onFailure { exception ->
-                handleException(exception, this@HomeViewModel)
-            }
+        }
     }
-}
 
-fun updateFestivalSearchText(text: TextFieldValue) {
-    _uiState.update {
-        it.copy(festivalSearchText = text)
+    fun getTodayFestivals(date: String) {
+        viewModelScope.launch {
+            festivalRepository.getTodayFestivals(date)
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(
+                            todayFestivals = festivals.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
     }
-}
 
-fun initSearchText() {
-    _uiState.update {
-        it.copy(festivalSearchText = TextFieldValue())
+    fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
     }
-}
 
-fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
-    _uiState.update {
-        it.copy(isFestivalSearchBottomSheetVisible = flag)
+    fun initSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
     }
-}
 
-fun setEnableSearchMode(flag: Boolean) {
-    _uiState.update {
-        it.copy(isSearchMode = flag)
+    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
     }
-}
 
-fun setEnableEditMode() {
-    _uiState.update {
-        it.copy(isEditMode = !_uiState.value.isEditMode)
+    fun setEnableSearchMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isSearchMode = flag)
+        }
     }
-}
 
-fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
-    _uiState.update {
-        it.copy(isLikedFestivalDeleteDialogVisible = flag)
+    fun setEnableEditMode() {
+        _uiState.update {
+            it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
     }
-}
 
-fun setSelectedDate(date: LocalDate) {
-    _uiState.update {
-        it.copy(selectedDate = date)
+    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLikedFestivalDeleteDialogVisible = flag)
+        }
     }
-}
 
-override fun setServerErrorDialogVisible(flag: Boolean) {
-    _uiState.update {
-        it.copy(isServerErrorDialogVisible = flag)
+    fun setSelectedDate(date: LocalDate) {
+        _uiState.update {
+            it.copy(selectedDate = date)
+        }
     }
-}
 
-override fun setNetworkErrorDialogVisible(flag: Boolean) {
-    _uiState.update {
-        it.copy(isNetworkErrorDialogVisible = flag)
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
     }
-}
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.FestivalTodayModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow

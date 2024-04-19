@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.unifest.android.core.database.entity.LikedBoothEntity
 import com.unifest.android.core.database.entity.LikedFestivalEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface LikedFestivalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLikedFestival(userInfo: LikedFestivalEntity)
+
     @Query("SELECT EXISTS(SELECT 1 FROM liked_festival WHERE festival_id = :festivalId)")
     suspend fun isFestivalExists(festivalId: Int): Boolean
 
@@ -21,6 +21,4 @@ interface LikedFestivalDao {
 
     @Query("SELECT * FROM liked_festival")
     fun getLikedFestivalList(): Flow<List<LikedFestivalEntity>>
-
-
 }

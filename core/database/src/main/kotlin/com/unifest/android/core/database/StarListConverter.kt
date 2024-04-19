@@ -1,7 +1,6 @@
 package com.unifest.android.core.database
 
 import androidx.room.TypeConverter
-import com.unifest.android.core.database.entity.MenuEntity
 import com.unifest.android.core.database.entity.StarListEntity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

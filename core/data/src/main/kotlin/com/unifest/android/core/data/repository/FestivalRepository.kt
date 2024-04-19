@@ -1,6 +1,5 @@
 package com.unifest.android.core.data.repository
 
-import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import kotlinx.coroutines.flow.Flow
@@ -15,5 +14,4 @@ interface FestivalRepository {
     suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel)
     suspend fun insertLikedFestivalAtSearch(festival: FestivalModel)
     suspend fun deleteLikedFestivalAtHome(festival: FestivalTodayModel)
-
 }
