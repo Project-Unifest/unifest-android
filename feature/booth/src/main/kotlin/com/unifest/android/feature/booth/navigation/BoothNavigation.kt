@@ -34,7 +34,6 @@ fun NavGraphBuilder.boothNavGraph(
     navController: NavHostController,
     onBackClick: () -> Unit,
     onNavigateToBoothLocation: () -> Unit,
-    onShowSnackBar: (Int) -> Unit,
 ) {
     navigation(
         startDestination = BOOTH_DETAIL_ROUTE,
@@ -51,7 +50,6 @@ fun NavGraphBuilder.boothNavGraph(
                 padding = padding,
                 onBackClick = onBackClick,
                 onNavigateToBoothLocation = onNavigateToBoothLocation,
-                onShowSnackBar = onShowSnackBar,
                 viewModel = viewModel,
             )
         }
