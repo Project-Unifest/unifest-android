@@ -79,18 +79,18 @@ internal fun IntroRoute(
 
     IntroScreen(
         uiState = uiState,
-        navigateToMain = navigateToMain,
         updateSearchText = viewModel::updateSearchText,
         initSearchText = viewModel::initSearchText,
+        onAddLikeFestivalClick = { festivals -> viewModel.addLikeFestivals(festivals, navigateToMain) },
     )
 }
 
 @Composable
 fun IntroScreen(
     uiState: IntroUiState,
-    navigateToMain: () -> Unit,
     updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
+    onAddLikeFestivalClick: (List<FestivalModel>) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 
@@ -134,7 +134,9 @@ fun IntroScreen(
             )
         }
         UnifestButton(
-            onClick = navigateToMain,
+            onClick = {
+                onAddLikeFestivalClick(selectedFestivals)
+            },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -209,7 +211,7 @@ fun LikedFestivalsRow(
         ) {
             items(
                 count = selectedFestivals.size,
-                key = { index -> selectedFestivals[index].schoolName },
+                key = { index -> selectedFestivals[index].festivalId },
             ) { index ->
                 FestivalRowItem(
                     festival = selectedFestivals[index],
@@ -231,7 +233,9 @@ fun FestivalRowItem(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier.height(130.dp).width(120.dp),
+        modifier = Modifier
+            .height(130.dp)
+            .width(120.dp),
     ) {
         Box(
             modifier = Modifier.clickable { onFestivalSelected(festival) },
@@ -244,7 +248,7 @@ fun FestivalRowItem(
                     .padding(16.dp),
             ) {
                 NetworkImage(
-                    imageUrl = festival.imgUrl,
+                    imageUrl = festival.thumbnail,
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
@@ -263,7 +267,7 @@ fun FestivalRowItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    festival.festivalDate,
+                    festival.beginDate + " - " + festival.endDate,
                     color = Color(0xFF979797),
                     style = Content3,
                 )
@@ -342,40 +346,65 @@ fun PreviewIntroScreen() {
             uiState = IntroUiState(
                 schools = persistentListOf(
                     FestivalModel(
+                        1,
+                        1,
                         "https://picsum.photos/36",
                         "서울대학교",
                         "설대축제",
-                        "05.06-05.08",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                     FestivalModel(
+                        2,
+                        2,
                         "https://picsum.photos/36",
                         "연세대학교",
                         "연대축제",
-                        "05.06-05.08",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                     FestivalModel(
+                        3,
+                        3,
                         "https://picsum.photos/36",
                         "고려대학교",
                         "고대축제",
-                        "05.06-05.08",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                     FestivalModel(
+                        4,
+                        4,
+                        "https://picsum.photos/36",
+                        "성균관대학교",
+                        "성대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
+                    ),
+                    FestivalModel(
+                        5,
+                        5,
                         "https://picsum.photos/36",
                         "건국대학교",
-                        "녹색지대",
-                        "05.06-05.08",
-                    ),
-                    FestivalModel(
-                        "https://picsum.photos/36",
-                        "성균관대",
-                        "성대축제",
-                        "05.06-05.08",
+                        "건대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
             ),
-            navigateToMain = {},
             updateSearchText = {},
             initSearchText = {},
+            onAddLikeFestivalClick = {},
         )
     }
 }

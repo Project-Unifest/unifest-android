@@ -3,8 +3,10 @@ package com.unifest.android.feature.menu.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -18,19 +20,31 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(
     private val likedBoothRepository: LikedBoothRepository,
+    private val festivalRepository: FestivalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
-                    it.copy(
-                        likedBoothList = likedBoothList.toImmutableList(),
-                    )
+                    it.copy(likedFestivals = likedFestivalList.toMutableList())
                 }
             }
+        }
+        viewModelScope.launch {
+            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
+                _uiState.update {
+                    it.copy(likedBoothList = likedBoothList.toImmutableList())
+                }
+            }
+        }
+    }
+
+    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 

@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
+    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -75,11 +76,12 @@ fun FestivalSearchResults(
             }
             items(
                 count = searchResults.size,
-                key = { index -> searchResults[index].schoolName },
+                key = { index -> searchResults[index].festivalId },
             ) {
                 Column {
                     FestivalSearchResultItem(
                         festival = searchResults[it],
+                        addLikeFestivalAtBottomSheetSearch = addLikeFestivalAtBottomSheetSearch,
                     )
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
@@ -94,6 +96,7 @@ fun FestivalSearchResults(
 @Composable
 fun FestivalSearchResultItem(
     festival: FestivalModel,
+    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -120,14 +123,14 @@ fun FestivalSearchResultItem(
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = festival.festivalDate,
+                text = festival.beginDate + " - " + festival.endDate,
                 color = Color(0xFF4D4D4D),
                 style = Content3,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
         UnifestOutlinedButton(
-            onClick = {},
+            onClick = { addLikeFestivalAtBottomSheetSearch(festival) },
             cornerRadius = 17.dp,
             borderColor = Color(0xFFDDDDDD),
             contentColor = Color(0xFF666666),
@@ -151,35 +154,61 @@ fun FestivalSearchResultsPreview() {
     FestivalSearchResults(
         searchResults = persistentListOf(
             FestivalModel(
-                "https://picsum.photos/86",
+                1,
+                1,
+                "https://picsum.photos/36",
                 "서울대학교",
                 "설대축제",
-                "05.06-05.08",
+                "05.06",
+                "05.08",
+                126.957f,
+                37.460f,
             ),
             FestivalModel(
-                "https://picsum.photos/86",
+                2,
+                2,
+                "https://picsum.photos/36",
                 "연세대학교",
                 "연대축제",
-                "05.06-05.08",
+                "05.06",
+                "05.08",
+                126.957f,
+                37.460f,
             ),
             FestivalModel(
-                "https://picsum.photos/86",
+                3,
+                3,
+                "https://picsum.photos/36",
                 "고려대학교",
                 "고대축제",
-                "05.06-05.08",
+                "05.06",
+                "05.08",
+                126.957f,
+                37.460f,
             ),
             FestivalModel(
-                "https://picsum.photos/86",
-                "건국대학교",
-                "녹색지대",
-                "05.06-05.08",
-            ),
-            FestivalModel(
-                "https://picsum.photos/86",
+                4,
+                4,
+                "https://picsum.photos/36",
                 "성균관대학교",
                 "성대축제",
-                "05.06-05.08",
+                "05.06",
+                "05.08",
+                126.957f,
+                37.460f,
+            ),
+            FestivalModel(
+                5,
+                5,
+                "https://picsum.photos/36",
+                "건국대학교",
+                "건대축제",
+                "05.06",
+                "05.08",
+                126.957f,
+                37.460f,
             ),
         ),
+        addLikeFestivalAtBottomSheetSearch = {},
     )
 }

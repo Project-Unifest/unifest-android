@@ -3,7 +3,6 @@ package com.unifest.android.feature.map.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.FestivalSearchModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -11,7 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class MapUiState(
     val selectedSchoolName: String = "",
     val festivalId: Long = 0L,
-    val festivalList: ImmutableList<FestivalSearchModel> = persistentListOf(),
+    val festivalList: ImmutableList<FestivalModel> = persistentListOf(),
     val boothList: ImmutableList<BoothDetailMapModel> = persistentListOf(),
     val popularBoothList: ImmutableList<BoothDetailModel> = persistentListOf(),
     val selectedBoothList: ImmutableList<BoothDetailMapModel> = persistentListOf(),

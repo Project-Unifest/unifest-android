@@ -69,6 +69,7 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -106,6 +107,7 @@ internal fun MapRoute(
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setServerErrorDialogVisible = viewModel::setServerErrorDialogVisible,
         setNetworkErrorDialogVisible = viewModel::setNetworkErrorDialogVisible,
+        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
 
@@ -131,6 +133,7 @@ internal fun MapScreen(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     setServerErrorDialogVisible: (Boolean) -> Unit,
     setNetworkErrorDialogVisible: (Boolean) -> Unit,
+    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
@@ -194,6 +197,7 @@ internal fun MapScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
+                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
             )
         }
     }
@@ -534,6 +538,7 @@ fun MapScreenPreview() {
             setLikedFestivalDeleteDialogVisible = {},
             setServerErrorDialogVisible = {},
             setNetworkErrorDialogVisible = {},
+            onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }
 }

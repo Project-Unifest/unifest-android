@@ -98,6 +98,7 @@ internal fun MenuRoute(
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         deleteLikedBooth = viewModel::deleteLikedBooth,
         appVersion = appVersion,
+        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
 
@@ -116,6 +117,7 @@ fun MenuScreen(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
+    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -167,24 +169,16 @@ fun MenuScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
-                            .height(
-                                when {
-                                    uiState.festivals.isEmpty() -> 0.dp
-                                    else -> {
-                                        val rows = ((uiState.festivals.size - 1) / 4 + 1) * 140
-                                        rows.dp
-                                    }
-                                },
-                            ),
+                            .height(if (uiState.likedFestivals.isEmpty()) 0.dp else ((uiState.festivals.size / 4 + 1) * 140).dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(
-                            uiState.festivals.size,
-                            key = { index -> uiState.festivals[index].schoolName },
+                            uiState.likedFestivals.size,
+                            key = { index -> uiState.likedFestivals[index].festivalId },
                         ) { index ->
                             FestivalItem(
-                                festival = uiState.festivals[index],
+                                festival = uiState.likedFestivals[index],
                             )
                         }
                     }
@@ -321,6 +315,7 @@ fun MenuScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
+                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
             )
         }
     }
@@ -400,16 +395,26 @@ fun MenuScreenPreview() {
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     FestivalModel(
-                        schoolName = "건국대",
-                        festivalName = "녹색지대",
-                        festivalDate = "2021.11.11",
-                        imgUrl = "",
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                     FestivalModel(
-                        schoolName = "서울대",
-                        festivalName = "녹색지대",
-                        festivalDate = "2021.11.11",
-                        imgUrl = "",
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
                 likedBoothList = persistentListOf(
@@ -441,6 +446,7 @@ fun MenuScreenPreview() {
             onNavigateToContact = {},
             deleteLikedBooth = {},
             appVersion = "1.0.0",
+            onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }
 }

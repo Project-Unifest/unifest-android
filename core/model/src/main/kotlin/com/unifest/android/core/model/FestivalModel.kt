@@ -4,8 +4,13 @@ import androidx.compose.runtime.Stable
 
 @Stable
 data class FestivalModel(
-    val imgUrl: String,
+    val festivalId: Long,
+    val schoolId: Long,
+    val thumbnail: String,
     val schoolName: String,
     val festivalName: String,
-    val festivalDate: String,
+    val beginDate: String,
+    val endDate: String,
+    val latitude: Float,
+    val longitude: Float,
 )

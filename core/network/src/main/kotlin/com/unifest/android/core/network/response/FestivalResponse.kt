@@ -15,6 +15,10 @@ data class FestivalSearchResponse(
 
 @Serializable
 data class FestivalSearch(
+    @SerialName("schoolId")
+    val schoolId: Long,
+    @SerialName("festivalId")
+    val festivalId: Long,
     @SerialName("thumbnail")
     val thumbnail: String,
     @SerialName("schoolName")
@@ -29,4 +33,40 @@ data class FestivalSearch(
     val latitude: Float,
     @SerialName("longitude")
     val longitude: Float,
+)
+
+@Serializable
+data class FestivalTodayResponse(
+    @SerialName("code")
+    val code: String,
+    @SerialName("message")
+    val message: String,
+    @SerialName("data")
+    val data: List<FestivalToday>,
+)
+
+@Serializable
+data class FestivalToday(
+    @SerialName("schoolId")
+    val schoolId: Long,
+    @SerialName("festivalId")
+    val festivalId: Long,
+    @SerialName("date")
+    val date: String,
+    @SerialName("festivalName")
+    val festivalName: String,
+    @SerialName("schoolName")
+    val schoolName: String,
+    @SerialName("starInfo")
+    val starInfo: List<StarInfo>,
+    @SerialName("thumbnail")
+    val thumbnail: String,
+)
+
+@Serializable
+data class StarInfo(
+    @SerialName("name")
+    val name: String,
+    @SerialName("img")
+    val img: String,
 )
