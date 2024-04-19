@@ -53,6 +53,7 @@ fun FestivalSearchBottomSheet(
     isLikedFestivalDeleteDialogVisible: Boolean,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     isEditMode: Boolean = false,
+    addLikeFestivalAtBottomSheetSearch : (FestivalModel) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
 //    val scope = rememberCoroutineScope()
@@ -146,6 +147,7 @@ fun FestivalSearchBottomSheet(
             } else {
                 FestivalSearchResults(
                     searchResults = festivalSearchResults,
+                    addLikeFestivalAtBottomSheetSearch = addLikeFestivalAtBottomSheetSearch,
                 )
             }
         }
@@ -293,6 +295,7 @@ fun SchoolSearchBottomSheetPreview() {
             isLikedFestivalDeleteDialogVisible = false,
             isEditMode = false,
             setLikedFestivalDeleteDialogVisible = {},
+            addLikeFestivalAtBottomSheetSearch = {},
         )
     }
 }

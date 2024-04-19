@@ -96,13 +96,13 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun addInterestFestival(festival: FestivalTodayModel) {
+    fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtHome(festival)
         }
     }
 
-    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }

@@ -81,7 +81,8 @@ internal fun HomeRoute(
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setSelectedDate = viewModel::setSelectedDate,
-        onAddInterestFestivalClick = { festival -> viewModel.addInterestFestival(festival) },
+        onAddLikeFestivalClick = { festival -> viewModel.addLikeFestival(festival) },
+        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
 
@@ -98,7 +99,8 @@ internal fun HomeScreen(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     onShowSnackBar: (message: Int) -> Unit,
     setSelectedDate: (LocalDate) -> Unit,
-    onAddInterestFestivalClick: (FestivalTodayModel) -> Unit,
+    onAddLikeFestivalClick: (FestivalTodayModel) -> Unit,
+    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -149,8 +151,8 @@ internal fun HomeScreen(
                 itemsIndexed(uiState.todayFestivals) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(festival, onShowSnackBar,onAddInterestFestivalClick = {
-                            onAddInterestFestivalClick(festival)
+                        FestivalScheduleItem(festival, onShowSnackBar,onAddLikeFestivalClick = {
+                            onAddLikeFestivalClick(festival)
                         })
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -210,6 +212,7 @@ internal fun HomeScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
+                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
             )
         }
     }
@@ -229,7 +232,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onShowSnackBar: (message: Int) -> Unit,
-    onAddInterestFestivalClick: (FestivalTodayModel) -> Unit,
+    onAddLikeFestivalClick: (FestivalTodayModel) -> Unit,
 ) {
     Column {
         Row(
@@ -291,7 +294,7 @@ fun FestivalScheduleItem(
         }
         UnifestOutlinedButton(
             onClick = {
-                onAddInterestFestivalClick(festival)
+                onAddLikeFestivalClick(festival)
                 onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -437,7 +440,8 @@ fun HomeScreenPreview() {
             setEnableEditMode = {},
             setLikedFestivalDeleteDialogVisible = {},
             setSelectedDate = {},
-            onAddInterestFestivalClick = {},
+            onAddLikeFestivalClick = {},
+            onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }
 }

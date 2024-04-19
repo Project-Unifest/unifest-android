@@ -98,6 +98,7 @@ internal fun MenuRoute(
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         deleteLikedBooth = viewModel::deleteLikedBooth,
         appVersion = appVersion,
+        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
 
@@ -116,6 +117,7 @@ fun MenuScreen(
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
     deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
+    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -313,6 +315,7 @@ fun MenuScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
+                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
             )
         }
     }
@@ -443,6 +446,7 @@ fun MenuScreenPreview() {
             onNavigateToContact = {},
             deleteLikedBooth = {},
             appVersion = "1.0.0",
+            onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }
 }

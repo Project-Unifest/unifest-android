@@ -44,7 +44,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }

@@ -7,11 +7,9 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -279,6 +277,12 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
     fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
             it.copy(isSearchMode = flag)
@@ -392,9 +396,5 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun addInterestFestivalAtBottomSheetSearch(festival: FestivalModel) {
-        viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
-        }
-    }
+
 }

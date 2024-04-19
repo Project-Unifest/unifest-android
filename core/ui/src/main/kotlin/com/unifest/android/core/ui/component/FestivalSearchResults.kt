@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
+    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -80,6 +81,7 @@ fun FestivalSearchResults(
                 Column {
                     FestivalSearchResultItem(
                         festival = searchResults[it],
+                        addLikeFestivalAtBottomSheetSearch = addLikeFestivalAtBottomSheetSearch,
                     )
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
@@ -94,6 +96,7 @@ fun FestivalSearchResults(
 @Composable
 fun FestivalSearchResultItem(
     festival: FestivalModel,
+    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -127,7 +130,7 @@ fun FestivalSearchResultItem(
         }
         Spacer(modifier = Modifier.weight(1f))
         UnifestOutlinedButton(
-            onClick = {},
+            onClick = {addLikeFestivalAtBottomSheetSearch(festival)},
             cornerRadius = 17.dp,
             borderColor = Color(0xFFDDDDDD),
             contentColor = Color(0xFF666666),
@@ -206,5 +209,6 @@ fun FestivalSearchResultsPreview() {
                 37.460f,
             ),
         ),
+        addLikeFestivalAtBottomSheetSearch = {},
     )
 }
