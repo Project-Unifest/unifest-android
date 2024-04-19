@@ -124,7 +124,7 @@ fun BoothDetailScreen(
         BoothDetailContent(
             uiState = uiState,
             onNavigateToBoothLocation = onNavigateToBoothLocation,
-            bottomPadding = padding.calculateBottomPadding(),
+            bottomPadding = 116.dp,
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
