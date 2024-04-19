@@ -143,7 +143,8 @@ fun BoothDetailScreen(
                 scope.launch {
                     val job = launch {
                         snackBarState.showSnackbar(
-                            message = (if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message) else context.getString(R.string.booth_bookmarked_message)),
+                            message = if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message)
+                            else context.getString(R.string.booth_bookmarked_message),
                             duration = SnackbarDuration.Short,
                         )
                     }
@@ -219,7 +220,7 @@ fun BottomBar(
         color = Color.White,
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Row(
                 modifier = Modifier
@@ -238,7 +239,7 @@ fun BottomBar(
                         tint = bookMarkColor,
                         modifier = Modifier.clickable {
                             onBookmarkClick()
-                        }
+                        },
                     )
                     Text(
                         text = "$bookmarkCount",
