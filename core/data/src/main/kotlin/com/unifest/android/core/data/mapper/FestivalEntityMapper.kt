@@ -29,6 +29,7 @@ internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
         date = date,
         starList = starList.map { it.toEntity() },
         schoolId = schoolId,
+        thumbnail = thumbnail,
     )
 }
 

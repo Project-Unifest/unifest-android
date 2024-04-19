@@ -4,12 +4,13 @@ import androidx.compose.runtime.Stable
 
 @Stable
 data class FestivalTodayModel(
-    val schoolId: Int = 0,
-    val festivalId: Int = 0,
-    val date: String = "",
-    val festivalName: String = "",
-    val schoolName: String = "",
-    val starList: List<StarListModel> = emptyList(),
+    val thumbnail: String,
+    val schoolId: Int,
+    val festivalId: Int,
+    val date: String,
+    val festivalName: String,
+    val schoolName: String,
+    val starList: List<StarListModel>,
 )
 @Stable
 data class StarListModel(

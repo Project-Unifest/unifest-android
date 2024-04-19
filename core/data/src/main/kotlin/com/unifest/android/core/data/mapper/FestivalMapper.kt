@@ -30,6 +30,7 @@ internal fun FestivalToday.toModel(): FestivalTodayModel {
         date = date,
         starList = starList.map { it.toModel() },
         schoolId = schoolId,
+        thumbnail = thumbnail,
     )
 }
 

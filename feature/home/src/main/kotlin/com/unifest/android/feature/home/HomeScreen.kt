@@ -390,6 +390,8 @@ fun HomeScreenPreview() {
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 1
                     ),
 
                     FestivalTodayModel(
@@ -398,6 +400,8 @@ fun HomeScreenPreview() {
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 2
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
@@ -405,6 +409,8 @@ fun HomeScreenPreview() {
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starList = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 3
                     ),
                 ),
                 incomingFestivals = persistentListOf(
