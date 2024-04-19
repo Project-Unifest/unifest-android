@@ -13,9 +13,6 @@ interface LikedFestivalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLikedFestival(userInfo: LikedFestivalEntity)
 
-    @Query("SELECT EXISTS(SELECT 1 FROM liked_festival WHERE festival_id = :festivalId)")
-    suspend fun isFestivalExists(festivalId: Long): Boolean
-
     @Delete
     suspend fun deleteLikedFestival(userInfo: LikedFestivalEntity)
 

@@ -100,9 +100,7 @@ class IntroViewModel @Inject constructor(
     fun addLikeFestivals(festivals: List<FestivalModel>, onComplete: () -> Unit) {
         viewModelScope.launch {
             festivals.forEach { festival ->
-                if (!festivalRepository.isFestivalExists(festival.festivalId)) {
-                    festivalRepository.insertLikedFestivalAtSearch(festival)
-                }
+                festivalRepository.insertLikedFestivalAtSearch(festival)
             }
             onComplete()
         }

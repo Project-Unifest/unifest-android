@@ -25,6 +25,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
     init {
 
         viewModelScope.launch {
@@ -98,17 +99,13 @@ class HomeViewModel @Inject constructor(
 
     fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
-            if (!festivalRepository.isFestivalExists(festival.festivalId)) {
-                festivalRepository.insertLikedFestivalAtHome(festival)
-            }
+            festivalRepository.insertLikedFestivalAtHome(festival)
         }
     }
 
     fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
-            if (!festivalRepository.isFestivalExists(festival.festivalId)) {
-                festivalRepository.insertLikedFestivalAtSearch(festival)
-            }
+            festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
