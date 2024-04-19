@@ -21,7 +21,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -35,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +51,7 @@ import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.BoothCaution
+import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.MenuPrice
@@ -60,8 +64,11 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+
+private const val SnackBarDuration = 1000L
 
 @Composable
 internal fun BoothDetailRoute(
@@ -117,7 +124,7 @@ fun BoothDetailScreen(
         BoothDetailContent(
             uiState = uiState,
             onNavigateToBoothLocation = onNavigateToBoothLocation,
-            bottomPadding = 116.dp,
+            bottomPadding = padding.calculateBottomPadding(),
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
@@ -134,10 +141,14 @@ fun BoothDetailScreen(
             onBookmarkClick = {
                 onBookmarkClick()
                 scope.launch {
-                    snackBarState.showSnackbar(
-                        message = (if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message) else context.getString(R.string.booth_bookmarked_message)),
-                        duration = SnackbarDuration.Short,
-                    )
+                    val job = launch {
+                        snackBarState.showSnackbar(
+                            message = (if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message) else context.getString(R.string.booth_bookmarked_message)),
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
+                    delay(SnackBarDuration)
+                    job.cancel()
                 }
             },
             onWaitingClick = { /*showWaitingDialog = true*/ },
@@ -147,7 +158,7 @@ fun BoothDetailScreen(
             hostState = snackBarState,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 116.dp),
+                .padding(bottom = 112.dp),
         )
     }
 }
@@ -176,8 +187,18 @@ fun BoothDetailContent(
                 onNavigateToBoothLocation = onNavigateToBoothLocation,
             )
         }
-        item { Spacer(modifier = Modifier.height(20.dp)) }
+        item { Spacer(modifier = Modifier.height(32.dp)) }
+        item {
+            VerticalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .background(Color(0xFFF1F3F7)),
+            )
+        }
+        item { Spacer(modifier = Modifier.height(22.dp)) }
         item { MenuText() }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
         items(uiState.boothDetailInfo.menus) { menu -> MenuItem(menu) }
     }
 }
@@ -191,49 +212,54 @@ fun BottomBar(
     modifier: Modifier = Modifier,
 ) {
     val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
-    Box(
-        modifier = modifier
-            .background(Color.White)
-            .height(116.dp),
+
+    Surface(
+        modifier = modifier.height(116.dp),
+        shadowElevation = 32.dp,
+        color = Color.White,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .clickable(onClick = onBookmarkClick)
-                    .padding(start = 15.dp, top = 15.dp, end = 15.dp)
-                    .background(Color.Transparent),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                    contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                    tint = bookMarkColor,
-                )
-                Spacer(modifier = Modifier.height(1.dp))
-                Text(
-                    text = "$bookmarkCount",
-                    color = bookMarkColor,
-                )
-            }
-            Spacer(modifier = Modifier.width(5.dp))
-            UnifestButton(
-                onClick = onWaitingClick,
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 15.dp),
-                contentPadding = PaddingValues(vertical = 15.dp),
-                enabled = false,
-                containerColor = Color(0xFF777777),
+                    .padding(start = 27.dp, top = 15.dp, end = 15.dp, bottom = 15.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = stringResource(id = R.string.booth_waiting_button_invalid),
-                    style = Title4,
-                    fontSize = 14.sp,
-                )
+                Column(
+                    modifier = Modifier.background(Color.White),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                        contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
+                        tint = bookMarkColor,
+                        modifier = Modifier.clickable {
+                            onBookmarkClick()
+                        }
+                    )
+                    Text(
+                        text = "$bookmarkCount",
+                        color = bookMarkColor,
+                        style = BoothCaution.copy(fontWeight = FontWeight.Bold),
+                    )
+                }
+                Spacer(modifier = Modifier.width(18.dp))
+                UnifestButton(
+                    onClick = onWaitingClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(vertical = 15.dp),
+                    enabled = false,
+                    containerColor = Color(0xFF777777),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.booth_waiting_button_invalid),
+                        style = Title4,
+                        fontSize = 14.sp,
+                    )
+                }
             }
         }
     }
@@ -241,13 +267,6 @@ fun BottomBar(
 
 @Composable
 fun BoothImage() {
-//    Image(
-//        painter = painterResource(id = R.drawable.booth_image_example),
-//        modifier = Modifier
-//            .height(260.dp)
-//            .fillMaxWidth(),
-//        contentDescription = "Booth Image",
-//    )
     NetworkImage(
         imageUrl = "https://picsum.photos/200/300",
         modifier = Modifier
@@ -269,14 +288,15 @@ fun BoothDescription(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = name,
+                modifier = Modifier.alignByBaseline(),
                 style = BoothTitle1,
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
                 text = category,
+                modifier = Modifier.alignByBaseline(),
                 style = BoothCaution,
                 color = Color(0xFFF5687E),
-                modifier = Modifier.align(Alignment.Bottom),
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
@@ -298,7 +318,8 @@ fun BoothDescription(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = location,
-                style = Content2,
+                color = Color(0xFF393939),
+                style = BoothLocation,
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
