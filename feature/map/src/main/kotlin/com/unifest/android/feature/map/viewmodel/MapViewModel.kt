@@ -279,7 +279,9 @@ class MapViewModel @Inject constructor(
 
     fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
+            if (!festivalRepository.isFestivalExists(festival.festivalId)) {
+                festivalRepository.insertLikedFestivalAtSearch(festival)
+            }
         }
     }
 

@@ -11,6 +11,7 @@ interface FestivalRepository {
     suspend fun getIncomingFestivals(): Result<List<FestivalModel>>
     suspend fun getTodayFestivals(date: String): Result<List<FestivalTodayModel>>
     fun getLikedFestivals(): Flow<List<FestivalModel>>
+    suspend fun isFestivalExists(festivalId: Int): Boolean
     suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel)
     suspend fun insertLikedFestivalAtSearch(festival: FestivalModel)
     suspend fun deleteLikedFestivalAtHome(festival: FestivalTodayModel)
