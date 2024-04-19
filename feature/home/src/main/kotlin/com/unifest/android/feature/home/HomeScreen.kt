@@ -21,8 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -287,15 +285,14 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(festival.starInfo) { _ ->
-                    Icon(
-                        imageVector = Icons.Default.Circle,
-                        contentDescription = "Celebrity",
-                        tint = Color(0xFFDFDFDF),
+                items(festival.starInfo) { starInfo ->
+                    NetworkImage(
+                        imageUrl = starInfo.img,
                         modifier = Modifier
-                            .size(60.dp)
-                            .padding(horizontal = 5.dp),
+                            .size(72.dp)
+                            .clip(CircleShape),
                     )
+                    Spacer(modifier = Modifier.width(10.dp))
                 }
             }
         }
