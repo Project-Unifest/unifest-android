@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
+    implementation(projects.core.data)
     implementations(
         libs.kotlinx.collections.immutable,
         libs.androidx.activity.compose,

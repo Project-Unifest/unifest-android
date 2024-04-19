@@ -211,7 +211,7 @@ fun LikedFestivalsRow(
         ) {
             items(
                 count = selectedFestivals.size,
-                key = { index -> selectedFestivals[index].schoolName },
+                key = { index -> selectedFestivals[index].festivalId },
             ) { index ->
                 FestivalRowItem(
                     festival = selectedFestivals[index],

@@ -72,7 +72,7 @@ fun LikedFestivalsGrid(
         ) {
             items(
                 count = selectedFestivals.size,
-                key = { index -> selectedFestivals[index].schoolName },
+                key = { index -> selectedFestivals[index].festivalId },
             ) { index ->
                 FestivalItem(
                     festival = selectedFestivals[index],

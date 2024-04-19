@@ -76,7 +76,7 @@ fun FestivalSearchResults(
             }
             items(
                 count = searchResults.size,
-                key = { index -> searchResults[index].schoolName },
+                key = { index -> searchResults[index].festivalId },
             ) {
                 Column {
                     FestivalSearchResultItem(

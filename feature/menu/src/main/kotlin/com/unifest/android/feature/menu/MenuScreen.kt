@@ -175,7 +175,7 @@ fun MenuScreen(
                     ) {
                         items(
                             uiState.likedFestivals.size,
-                            key = { index -> uiState.likedFestivals[index].schoolName },
+                            key = { index -> uiState.likedFestivals[index].festivalId },
                         ) { index ->
                             FestivalItem(
                                 festival = uiState.likedFestivals[index],
