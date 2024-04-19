@@ -148,12 +148,18 @@ internal fun HomeScreen(
                     }
                 }
             } else {
-                itemsIndexed(uiState.todayFestivals) { index, festival ->
+                itemsIndexed(
+                    items = uiState.todayFestivals,
+                    key = { _, festival -> festival.festivalId },
+                ) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(festival, onShowSnackBar, onAddLikeFestivalClick = {
-                            onAddLikeFestivalClick(festival)
-                        })
+                        FestivalScheduleItem(
+                            festival, onShowSnackBar,
+                            onAddLikeFestivalClick = {
+                                onAddLikeFestivalClick(festival)
+                            },
+                        )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -295,7 +301,8 @@ fun FestivalScheduleItem(
         UnifestOutlinedButton(
             onClick = {
                 onAddLikeFestivalClick(festival)
-                onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
+                onShowSnackBar(R.string.home_add_interest_festival_snack_bar)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 20.dp, end = 20.dp),

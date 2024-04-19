@@ -28,17 +28,16 @@ class MenuViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            combine(
-                festivalRepository.getLikedFestivals(),
-                likedBoothRepository.getLikedBoothList(),
-            ) { likedFestivals, likedBooths ->
-                Pair(likedFestivals, likedBooths)
-            }.collect { (likedFestivals, likedBooths) ->
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivals.toMutableList(),
-                        likedBoothList = likedBooths.toImmutableList(),
-                    )
+                    it.copy(likedFestivals = likedFestivalList.toMutableList())
+                }
+            }
+        }
+        viewModelScope.launch {
+            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
+                _uiState.update {
+                    it.copy(likedBoothList = likedBoothList.toImmutableList())
                 }
             }
         }
@@ -46,9 +45,7 @@ class MenuViewModel @Inject constructor(
 
     fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
-            if (!festivalRepository.isFestivalExists(festival.festivalId)) {
-                festivalRepository.insertLikedFestivalAtSearch(festival)
-            }
+            festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
