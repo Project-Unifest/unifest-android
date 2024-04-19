@@ -1,10 +1,10 @@
 package com.unifest.android.core.data.mapper
 
 import com.unifest.android.core.database.entity.LikedFestivalEntity
-import com.unifest.android.core.database.entity.StarListEntity
+import com.unifest.android.core.database.entity.StarInfoEntity
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.core.model.StarListModel
+import com.unifest.android.core.model.StarInfoModel
 
 internal fun LikedFestivalEntity.toModel(): FestivalModel {
     return FestivalModel(
@@ -26,14 +26,14 @@ internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
         schoolName = schoolName,
         festivalName = festivalName,
         date = date,
-        starList = starList.map { it.toEntity() },
+        starInfo = starInfo.map { it.toEntity() },
         schoolId = schoolId,
         thumbnail = thumbnail,
     )
 }
 
-internal fun StarListModel.toEntity(): StarListEntity {
-    return StarListEntity(
+internal fun StarInfoModel.toEntity(): StarInfoEntity {
+    return StarInfoEntity(
         name = name,
         img = img,
     )

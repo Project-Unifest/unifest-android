@@ -1,9 +1,9 @@
 package com.unifest.android.core.data.mapper
 
-import com.unifest.android.core.model.StarListModel
+import com.unifest.android.core.model.StarInfoModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.core.network.response.StarList
+import com.unifest.android.core.network.response.StarInfo
 import com.unifest.android.core.network.response.FestivalSearch
 import com.unifest.android.core.network.response.FestivalToday
 
@@ -27,14 +27,14 @@ internal fun FestivalToday.toModel(): FestivalTodayModel {
         festivalName = festivalName,
         festivalId = festivalId,
         date = date,
-        starList = starList.map { it.toModel() },
+        starInfo = starInfo.map { it.toModel() },
         schoolId = schoolId,
         thumbnail = thumbnail,
     )
 }
 
-internal fun StarList.toModel(): StarListModel {
-    return StarListModel(
+internal fun StarInfo.toModel(): StarInfoModel {
+    return StarInfoModel(
         name = name,
         img = img,
     )

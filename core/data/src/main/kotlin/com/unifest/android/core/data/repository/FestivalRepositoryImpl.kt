@@ -39,7 +39,7 @@ class FestivalRepositoryImpl @Inject constructor(
         service.getTodayFestivals(date).data.map { it.toModel() }
     }
 
-    override suspend fun isFestivalExists(festivalId: Int): Boolean {
+    override suspend fun isFestivalExists(festivalId: Long): Boolean {
         return likedFestivalDao.isFestivalExists(festivalId)
     }
     override suspend fun insertLikedFestivalAtHome(festival: FestivalTodayModel) {

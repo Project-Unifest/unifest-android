@@ -25,7 +25,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-
     init {
 
         viewModelScope.launch {
@@ -70,7 +69,7 @@ class HomeViewModel @Inject constructor(
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         schoolId = 5,
                         thumbnail = "https://picsum.photos/36",
                     ),
@@ -79,7 +78,7 @@ class HomeViewModel @Inject constructor(
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 2",
                         schoolName = "서울대학교",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         schoolId = 1,
                         thumbnail = "https://picsum.photos/36",
                     ),
@@ -88,7 +87,7 @@ class HomeViewModel @Inject constructor(
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 3",
                         schoolName = "연세대학교",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         schoolId = 2,
                         thumbnail = "https://picsum.photos/36",
                     ),

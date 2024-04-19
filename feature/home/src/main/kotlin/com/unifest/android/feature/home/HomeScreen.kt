@@ -81,7 +81,7 @@ internal fun HomeRoute(
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
         setSelectedDate = viewModel::setSelectedDate,
-        onAddLikeFestivalClick = { festival -> viewModel.addLikeFestival(festival) },
+        onAddLikeFestivalClick = viewModel::addLikeFestival,
         onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
@@ -280,7 +280,7 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(festival.starList) { _ ->
+                items(festival.starInfo) { _ ->
                     Icon(
                         imageVector = Icons.Default.Circle,
                         contentDescription = "Celebrity",
@@ -389,7 +389,7 @@ fun HomeScreenPreview() {
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         thumbnail = "https://picsum.photos/36",
                         schoolId = 1,
                     ),
@@ -399,7 +399,7 @@ fun HomeScreenPreview() {
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         thumbnail = "https://picsum.photos/36",
                         schoolId = 2,
                     ),
@@ -408,7 +408,7 @@ fun HomeScreenPreview() {
                         date = "5/21(화)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
-                        starList = listOf(),
+                        starInfo = listOf(),
                         thumbnail = "https://picsum.photos/36",
                         schoolId = 3,
                     ),

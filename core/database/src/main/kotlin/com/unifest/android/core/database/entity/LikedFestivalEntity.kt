@@ -10,10 +10,10 @@ import kotlinx.serialization.Serializable
 data class LikedFestivalEntity(
     @PrimaryKey
     @ColumnInfo(name = "festival_id")
-    val festivalId: Int,
+    val festivalId: Long,
 
     @ColumnInfo(name = "school_id")
-    val schoolId: Int,
+    val schoolId: Long,
 
     @ColumnInfo(name = "school_name")
     val schoolName: String,
@@ -34,7 +34,7 @@ data class LikedFestivalEntity(
     val endDate: String? = null,
 
     @ColumnInfo(name = "star_list")
-    val starList: List<StarListEntity>? = null,
+    val starInfo: List<StarInfoEntity>? = null,
 
     @ColumnInfo(name = "latitude")
     val latitude: Float? = null,
@@ -42,10 +42,10 @@ data class LikedFestivalEntity(
     @ColumnInfo(name = "longitude")
     val longitude: Float? = null,
 
-)
+    )
 
 @Serializable
-data class StarListEntity(
+data class StarInfoEntity(
     val name: String = "",
     val img: String = "",
 )

@@ -16,9 +16,9 @@ data class FestivalSearchResponse(
 @Serializable
 data class FestivalSearch(
     @SerialName("schoolId")
-    val schoolId: Int,
+    val schoolId: Long,
     @SerialName("festivalId")
-    val festivalId: Int,
+    val festivalId: Long,
     @SerialName("thumbnail")
     val thumbnail: String,
     @SerialName("schoolName")
@@ -48,23 +48,23 @@ data class FestivalTodayResponse(
 @Serializable
 data class FestivalToday(
     @SerialName("schoolId")
-    val schoolId: Int,
+    val schoolId: Long,
     @SerialName("festivalId")
-    val festivalId: Int,
+    val festivalId: Long,
     @SerialName("date")
     val date: String,
     @SerialName("festivalName")
     val festivalName: String,
     @SerialName("schoolName")
     val schoolName: String,
-    @SerialName("starList")
-    val starList: List<StarList>,
+    @SerialName("starInfo")
+    val starInfo: List<StarInfo>,
     @SerialName("thumbnail")
     val thumbnail: String,
 )
 
 @Serializable
-data class StarList(
+data class StarInfo(
     @SerialName("name")
     val name: String,
     @SerialName("img")

@@ -5,16 +5,16 @@ import androidx.compose.runtime.Stable
 @Stable
 data class FestivalTodayModel(
     val thumbnail: String,
-    val schoolId: Int,
-    val festivalId: Int,
+    val schoolId: Long,
+    val festivalId: Long,
     val date: String,
     val festivalName: String,
     val schoolName: String,
-    val starList: List<StarListModel>,
+    val starInfo: List<StarInfoModel>,
 )
 
 @Stable
-data class StarListModel(
+data class StarInfoModel(
     val name: String,
     val img: String,
 )
