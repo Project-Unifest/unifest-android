@@ -3,7 +3,9 @@ package com.unifest.android.feature.home.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
@@ -136,10 +138,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onAction(action: HomeUiAction) {
+    fun onHomeUiAction(action: HomeUiAction) {
         when (action) {
             is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
-            is HomeUiAction.OnAddLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
+            is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
+            is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
+        }
+    }
+
+    fun onFestivalUiAction(action: FestivalUiAction) {
+        when (action) {
+            is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
+            is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
+            is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnAddClick -> addLikeFestivalAtBottomSheet(action.festival)
+            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDialogButtonClick -> {
+                when (action.type) {
+                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+                }
+            }
         }
     }
 
@@ -162,7 +183,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    private fun addLikeFestivalAtBottomSheet(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }
@@ -200,37 +221,37 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun updateFestivalSearchText(text: TextFieldValue) {
+    private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(festivalSearchText = text)
         }
     }
 
-    fun clearSearchText() {
+    private fun clearSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+    private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
         }
     }
 
-    fun setEnableSearchMode(flag: Boolean) {
+    private fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
             it.copy(isSearchMode = flag)
         }
     }
 
-    fun setEnableEditMode() {
+    private fun setEnableEditMode() {
         _uiState.update {
             it.copy(isEditMode = !_uiState.value.isEditMode)
         }
     }
 
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+    private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }

@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.flexible.bottomsheet.material3.FlexibleBottomSheet
 import com.skydoves.flexible.core.FlexibleSheetSize
 import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
+import com.unifest.android.core.common.ButtonType
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
@@ -43,16 +45,10 @@ fun FestivalSearchBottomSheet(
     searchText: TextFieldValue,
     likedFestivals: MutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
-    isLikedFestivalDeleteDialogVisible: Boolean,
-    isEditMode: Boolean = false,
     isSearchMode: Boolean,
-    updateSearchText: (TextFieldValue) -> Unit,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    clearSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    isEditMode: Boolean = false,
+    isLikedFestivalDeleteDialogVisible: Boolean,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
     val bottomSheetState = rememberFlexibleBottomSheetState(
@@ -66,7 +62,7 @@ fun FestivalSearchBottomSheet(
 
     FlexibleBottomSheet(
         onDismissRequest = {
-            setFestivalSearchBottomSheetVisible(false)
+            onFestivalUiAction(FestivalUiAction.OnDismiss)
         },
         sheetState = bottomSheetState,
         containerColor = Color.White,
@@ -96,11 +92,11 @@ fun FestivalSearchBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
                 searchText = searchText,
-                updateSearchText = updateSearchText,
+                updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = searchTextHintRes,
                 onSearch = {},
-                clearSearchText = clearSearchText,
-                setEnableSearchMode = setEnableSearchMode,
+                clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },
+                setEnableSearchMode = { flag -> onFestivalUiAction(FestivalUiAction.OnEnableSearchMode(flag)) },
                 isSearchMode = isSearchMode,
                 modifier = Modifier
                     .height(46.dp)
@@ -118,14 +114,18 @@ fun FestivalSearchBottomSheet(
                 Spacer(modifier = Modifier.height(21.dp))
                 LikedFestivalsGrid(
                     selectedFestivals = likedFestivals,
-                    onFestivalSelected = { school ->
-                        selectedFestivals.remove(school)
+                    onFestivalSelected = { festival ->
+                        selectedFestivals.remove(festival)
                     },
                     isEditMode = isEditMode,
-                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
+                    onDeleteLikedFestivalClick = {
+                        onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
+                    },
                 ) {
                     TextButton(
-                        onClick = setEnableEditMode,
+                        onClick = {
+                            onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
+                        },
                     ) {
                         Text(
                             text = stringResource(id = R.string.edit),
@@ -137,17 +137,17 @@ fun FestivalSearchBottomSheet(
             } else {
                 FestivalSearchResults(
                     searchResults = festivalSearchResults,
-                    addLikeFestivalAtBottomSheetSearch = addLikeFestivalAtBottomSheetSearch,
+                    onFestivalUiAction = onFestivalUiAction,
                 )
             }
         }
         if (isLikedFestivalDeleteDialogVisible) {
             LikedFestivalDeleteDialog(
                 onCancelClick = {
-                    setLikedFestivalDeleteDialogVisible(false)
+                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CANCEL))
                 },
                 onConfirmClick = {
-                    setLikedFestivalDeleteDialogVisible(false)
+                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM))
                 },
             )
         }
@@ -160,9 +160,7 @@ fun SchoolSearchBottomSheetPreview() {
     UnifestTheme {
         FestivalSearchBottomSheet(
             searchTextHintRes = R.string.festival_search_text_field_hint,
-            setFestivalSearchBottomSheetVisible = {},
             searchText = TextFieldValue(),
-            updateSearchText = {},
             likedFestivals = mutableListOf(
                 FestivalModel(
                     1,
@@ -277,14 +275,10 @@ fun SchoolSearchBottomSheetPreview() {
                     37.460f,
                 ),
             ),
-            clearSearchText = {},
-            setEnableSearchMode = {},
             isSearchMode = false,
-            setEnableEditMode = {},
-            isLikedFestivalDeleteDialogVisible = false,
             isEditMode = false,
-            setLikedFestivalDeleteDialogVisible = {},
-            addLikeFestivalAtBottomSheetSearch = {},
+            isLikedFestivalDeleteDialogVisible = false,
+            onFestivalUiAction = {},
         )
     }
 }

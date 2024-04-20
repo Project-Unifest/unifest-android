@@ -3,7 +3,9 @@ package com.unifest.android.feature.map.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
@@ -202,16 +204,34 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun onAction(action: MapUiAction) {
+    fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
-            is MapUiAction.OnBoothSearchTextUpdated -> updateBoothSearchText(action.text)
-            is MapUiAction.OnBoothSearchTextCleared -> clearBoothSearchText()
+            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.text)
+            is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnTooltipClick -> completeOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
+        }
+    }
+
+    fun onFestivalUiAction(action: FestivalUiAction) {
+        when (action) {
+            is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
+            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.text)
+            is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
+            is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
+            is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
+            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDialogButtonClick -> {
+                when (action.type) {
+                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+                }
+            }
         }
     }
 
@@ -281,12 +301,12 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun refresh(error: Error) {
+    private fun refresh(error: ErrorType) {
         getAllFestivals()
         getPopularBooths()
         when (error) {
-            Error.NETWORK -> setNetworkErrorDialogVisible(false)
-            Error.SERVER -> setServerErrorDialogVisible(false)
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 
@@ -302,37 +322,37 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun updateFestivalSearchText(text: TextFieldValue) {
+    private fun updateFestivalSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(festivalSearchText = text)
         }
     }
 
-    fun clearFestivalSearchText() {
+    private fun clearFestivalSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+    private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
         }
     }
 
-    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
-    fun setEnableSearchMode(flag: Boolean) {
+    private fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
             it.copy(isSearchMode = flag)
         }
     }
 
-    fun setEnableEditMode() {
+    private fun setEnableEditMode() {
         _uiState.update {
             it.copy(isEditMode = !_uiState.value.isEditMode)
         }
@@ -416,7 +436,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+    private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }

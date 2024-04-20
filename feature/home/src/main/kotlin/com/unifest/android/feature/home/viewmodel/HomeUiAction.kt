@@ -5,5 +5,6 @@ import java.time.LocalDate
 
 sealed interface HomeUiAction {
     data class OnDateSelected(val date: LocalDate) : HomeUiAction
-    data class OnAddLikedFestivalClick(val festivalTodayModel: FestivalTodayModel) : HomeUiAction
+    data class OnAddAsLikedFestivalClick(val festivalTodayModel: FestivalTodayModel) : HomeUiAction
+    data object OnAddLikedFestivalClick : HomeUiAction
 }

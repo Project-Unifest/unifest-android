@@ -42,11 +42,11 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
@@ -105,14 +105,8 @@ internal fun MenuRoute(
         padding = padding,
         uiState = uiState,
         appVersion = appVersion,
-        onAction = viewModel::onAction,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        clearSearchText = viewModel::initSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
+        onMenuUiAction = viewModel::onMenuUiAction,
+        onFestivalUiAction = viewModel::onFestivalUiAction,
     )
 }
 
@@ -122,14 +116,8 @@ fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
     appVersion: String,
-    onAction: (MenuUiAction) -> Unit,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    clearSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    onMenuUiAction: (MenuUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -165,7 +153,7 @@ fun MenuScreen(
                             style = Title3,
                         )
                         TextButton(
-                            onClick = { onAction(MenuUiAction.OnAddClick) },
+                            onClick = { onMenuUiAction(MenuUiAction.OnAddClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -218,7 +206,7 @@ fun MenuScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         TextButton(
-                            onClick = { onAction(MenuUiAction.OnShowMoreClick) },
+                            onClick = { onMenuUiAction(MenuUiAction.OnShowMoreClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -246,10 +234,10 @@ fun MenuScreen(
                             booth = booth,
                             index = index,
                             totalCount = uiState.likedBoothList.size,
-                            deleteLikedBooth = { onAction(MenuUiAction.OnToggleBookmark(booth)) },
+                            deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
                             modifier = Modifier
                                 .clickable {
-                                    onAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
+                                    onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
                                 }
                                 .animateItemPlacement(
                                     animationSpec = tween(
@@ -272,7 +260,7 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
-                        onClick = { onAction(MenuUiAction.OnContactClick) },
+                        onClick = { onMenuUiAction(MenuUiAction.OnContactClick) },
                     )
                 }
                 item {
@@ -325,13 +313,7 @@ fun MenuScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 isSearchMode = uiState.isSearchMode,
                 isEditMode = uiState.isEditMode,
-                updateSearchText = updateFestivalSearchText,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-                clearSearchText = clearSearchText,
-                setEnableSearchMode = setEnableSearchMode,
-                setEnableEditMode = setEnableEditMode,
-                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
-                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
+                onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
@@ -453,14 +435,8 @@ fun MenuScreenPreview() {
                 ),
             ),
             appVersion = "1.0.0",
-            onAction = {},
-            setFestivalSearchBottomSheetVisible = {},
-            updateFestivalSearchText = {},
-            clearSearchText = {},
-            setEnableSearchMode = {},
-            setEnableEditMode = { },
-            setLikedFestivalDeleteDialogVisible = {},
-            onAddLikeFestivalAtBottomSheetSearch = {},
+            onMenuUiAction = {},
+            onFestivalUiAction = {}
         )
     }
 }

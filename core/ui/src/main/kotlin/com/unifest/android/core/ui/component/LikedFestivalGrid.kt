@@ -44,7 +44,7 @@ fun LikedFestivalsGrid(
     selectedFestivals: MutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
+    onDeleteLikedFestivalClick: (Boolean) -> Unit = {},
     optionTextButton: @Composable () -> Unit,
 ) {
     Column {
@@ -80,7 +80,7 @@ fun LikedFestivalsGrid(
                         onFestivalSelected(it)
                     },
                     isEditMode = isEditMode,
-                    setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
+                    setLikedFestivalDeleteDialogVisible = onDeleteLikedFestivalClick,
                 )
             }
         }

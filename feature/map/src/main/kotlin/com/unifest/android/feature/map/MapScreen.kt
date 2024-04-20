@@ -56,6 +56,7 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
@@ -70,12 +71,11 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.map.model.BoothDetailMapModel
-import com.unifest.android.feature.map.viewmodel.Error
+import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
@@ -100,31 +100,18 @@ internal fun MapRoute(
     MapScreen(
         padding = padding,
         uiState = uiState,
-        onAction = viewModel::onAction,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        clearFestivalSearchText = viewModel::clearFestivalSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
+        onMapUiAction = viewModel::onMapUiAction,
+        onFestivalUiAction = viewModel::onFestivalUiAction,
     )
 }
 
-// TODO onAction 으로 묶기
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
-    onAction: (MapUiAction) -> Unit,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    clearFestivalSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
@@ -144,37 +131,31 @@ internal fun MapScreen(
             cameraPositionState = cameraPositionState,
             rotationState = rotationState,
             pagerState = pagerState,
-            onAction = onAction,
+            onAction = onMapUiAction,
         )
 
         if (uiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
-                onRetryClick = { onAction(MapUiAction.OnRetryClick(Error.SERVER)) },
+                onRetryClick = { onMapUiAction(MapUiAction.OnRetryClick(ErrorType.SERVER)) },
             )
         }
 
         if (uiState.isNetworkErrorDialogVisible) {
             NetworkErrorDialog(
-                onRetryClick = { onAction(MapUiAction.OnRetryClick(Error.NETWORK)) },
+                onRetryClick = { onMapUiAction(MapUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
 
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
-                updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
-                clearSearchText = clearFestivalSearchText,
-                setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
-                setEnableEditMode = setEnableEditMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
-                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
@@ -327,10 +308,10 @@ fun MapTopAppBar(
             )
             SearchTextField(
                 searchText = boothSearchText,
-                updateSearchText = { text -> onAction(MapUiAction.OnBoothSearchTextUpdated(text)) },
+                updateSearchText = { text -> onAction(MapUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = {},
-                clearSearchText = { onAction(MapUiAction.OnBoothSearchTextCleared) },
+                clearSearchText = { onAction(MapUiAction.OnSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -467,14 +448,8 @@ fun MapScreenPreview() {
                     ),
                 ),
             ),
-            onAction = {},
-            setFestivalSearchBottomSheetVisible = {},
-            updateFestivalSearchText = {},
-            clearFestivalSearchText = {},
-            setEnableSearchMode = {},
-            setEnableEditMode = {},
-            setLikedFestivalDeleteDialogVisible = {},
-            onAddLikeFestivalAtBottomSheetSearch = {},
+            onMapUiAction = {},
+            onFestivalUiAction = {},
         )
     }
 }

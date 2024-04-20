@@ -3,6 +3,8 @@ package com.unifest.android.feature.menu.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ButtonType
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
@@ -38,13 +40,31 @@ class MenuViewModel @Inject constructor(
         observeLikedBooth()
     }
 
-    fun onAction(action: MenuUiAction) {
+    fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
             is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
             is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
+        }
+    }
+
+    fun onFestivalUiAction(action: FestivalUiAction) {
+        when (action) {
+            is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
+            is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
+            is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
+            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDialogButtonClick -> {
+                when (action.type) {
+                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+                }
+            }
         }
     }
 
@@ -84,7 +104,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }
@@ -109,7 +129,43 @@ class MenuViewModel @Inject constructor(
         likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
     }
 
-//    init {
+    private fun updateSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
+    private fun clearSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
+    }
+
+    private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
+    }
+
+    private fun setEnableSearchMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isSearchMode = flag)
+        }
+    }
+
+    private fun setEnableEditMode() {
+        _uiState.update {
+            it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
+    }
+
+    private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLikedFestivalDeleteDialogVisible = flag)
+        }
+    }
+
+    //    init {
 //        _uiState.update { currentState ->
 //            currentState.copy(
 //                likedFestivals = mutableListOf(
@@ -172,40 +228,4 @@ class MenuViewModel @Inject constructor(
 //            )
 //        }
 //    }
-
-    fun updateFestivalSearchText(text: TextFieldValue) {
-        _uiState.update {
-            it.copy(festivalSearchText = text)
-        }
-    }
-
-    fun initSearchText() {
-        _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
-        }
-    }
-
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isFestivalSearchBottomSheetVisible = flag)
-        }
-    }
-
-    fun setEnableSearchMode(flag: Boolean) {
-        _uiState.update {
-            it.copy(isSearchMode = flag)
-        }
-    }
-
-    fun setEnableEditMode() {
-        _uiState.update {
-            it.copy(isEditMode = !_uiState.value.isEditMode)
-        }
-    }
-
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isLikedFestivalDeleteDialogVisible = flag)
-        }
-    }
 }

@@ -35,11 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
@@ -81,14 +81,8 @@ internal fun HomeRoute(
     HomeScreen(
         padding = padding,
         uiState = uiState,
-        onAction = viewModel::onAction,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        clearSearchText = viewModel::clearSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
+        onHomeUiAction = viewModel::onHomeUiAction,
+        onFestivalUiAction = viewModel::onFestivalUiAction,
     )
 }
 
@@ -96,14 +90,8 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     padding: PaddingValues,
     uiState: HomeUiState,
-    onAction: (HomeUiAction) -> Unit,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    clearSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    onHomeUiAction: (HomeUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -114,7 +102,7 @@ internal fun HomeScreen(
             item {
                 Calendar(
                     selectedDate = uiState.selectedDate,
-                    onDateSelected = { date -> onAction(HomeUiAction.OnDateSelected(date)) },
+                    onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
                 )
             }
             item {
@@ -159,7 +147,7 @@ internal fun HomeScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
                             festival = festival,
-                            onAction = onAction,
+                            onAction = onHomeUiAction,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -174,7 +162,7 @@ internal fun HomeScreen(
             }
             item {
                 UnifestOutlinedButton(
-                    onClick = { setFestivalSearchBottomSheetVisible(true) },
+                    onClick = { onHomeUiAction(HomeUiAction.OnAddLikedFestivalClick) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -207,19 +195,13 @@ internal fun HomeScreen(
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
-                updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
-                clearSearchText = clearSearchText,
-                setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
-                setEnableEditMode = setEnableEditMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
-                addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
@@ -299,7 +281,7 @@ fun FestivalScheduleItem(
         }
         UnifestOutlinedButton(
             onClick = {
-                onAction(HomeUiAction.OnAddLikedFestivalClick(festival))
+                onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -442,14 +424,8 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
-            onAction = {},
-            setFestivalSearchBottomSheetVisible = {},
-            updateFestivalSearchText = {},
-            clearSearchText = {},
-            setEnableSearchMode = {},
-            setEnableEditMode = {},
-            setLikedFestivalDeleteDialogVisible = {},
-            onAddLikeFestivalAtBottomSheetSearch = {},
+            onHomeUiAction = {},
+            onFestivalUiAction = {},
         )
     }
 }
