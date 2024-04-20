@@ -38,11 +38,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -62,6 +62,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import kotlinx.coroutines.delay
@@ -95,14 +97,17 @@ internal fun BoothDetailRoute(
         }
     }
 
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is BoothUiEvent.NavigateBack -> onBackClick()
+            is BoothUiEvent.NavigateToBoothLocation -> onNavigateToBoothLocation()
+        }
+    }
+
     BoothDetailScreen(
         padding = padding,
         uiState = uiState,
-        onBackClick = onBackClick,
-        onNavigateToBoothLocation = onNavigateToBoothLocation,
-        onBookmarkClick = { viewModel.toggleBookmark() },
-        isBookmarked = uiState.isBookmarked,
-        bookmarkCount = uiState.bookmarkCount,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -110,49 +115,30 @@ internal fun BoothDetailRoute(
 fun BoothDetailScreen(
     padding: PaddingValues,
     uiState: BoothUiState,
-    onBackClick: () -> Unit,
-    onNavigateToBoothLocation: () -> Unit,
-    onBookmarkClick: () -> Unit,
-    isBookmarked: Boolean,
-    bookmarkCount: Int,
+    onAction: (BoothUiAction) -> Unit,
 ) {
     val snackBarState = remember { SnackbarHostState() }
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         BoothDetailContent(
             uiState = uiState,
-            onNavigateToBoothLocation = onNavigateToBoothLocation,
-            bottomPadding = 116.dp,
+            onAction = onAction,
+            modifier = Modifier.padding(bottom = 116.dp),
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
             navigationIconRes = R.drawable.ic_arrow_back_gray,
             containerColor = Color.Transparent,
-            onNavigationClick = onBackClick,
+            onNavigationClick = { onAction(BoothUiAction.OnBackClick) },
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(padding),
         )
         BottomBar(
-            isBookmarked = isBookmarked,
-            bookmarkCount = bookmarkCount,
-            onBookmarkClick = {
-                onBookmarkClick()
-                scope.launch {
-                    val job = launch {
-                        snackBarState.showSnackbar(
-                            message = if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message)
-                            else context.getString(R.string.booth_bookmarked_message),
-                            duration = SnackbarDuration.Short,
-                        )
-                    }
-                    delay(SnackBarDuration)
-                    job.cancel()
-                }
-            },
-            onWaitingClick = { /*showWaitingDialog = true*/ },
+            isBookmarked = uiState.isBookmarked,
+            bookmarkCount = uiState.bookmarkCount,
+            snackBarState = snackBarState,
+            onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
         SnackbarHost(
@@ -167,13 +153,11 @@ fun BoothDetailScreen(
 @Composable
 fun BoothDetailContent(
     uiState: BoothUiState,
-    onNavigateToBoothLocation: () -> Unit,
-    bottomPadding: Dp,
+    onAction: (BoothUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = bottomPadding),
+        modifier = modifier.fillMaxSize(),
     ) {
         item {
             BoothImage()
@@ -185,7 +169,7 @@ fun BoothDetailContent(
                 category = uiState.boothDetailInfo.category,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
-                onNavigateToBoothLocation = onNavigateToBoothLocation,
+                onAction = onAction,
             )
         }
         item { Spacer(modifier = Modifier.height(32.dp)) }
@@ -208,10 +192,12 @@ fun BoothDetailContent(
 fun BottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
-    onBookmarkClick: () -> Unit,
-    onWaitingClick: () -> Unit,
+    snackBarState: SnackbarHostState,
+    onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
 
     Surface(
@@ -238,7 +224,18 @@ fun BottomBar(
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
                         tint = bookMarkColor,
                         modifier = Modifier.clickable {
-                            onBookmarkClick()
+                            onAction(BoothUiAction.OnToggleBookmark)
+                            scope.launch {
+                                val job = launch {
+                                    snackBarState.showSnackbar(
+                                        message = if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message)
+                                        else context.getString(R.string.booth_bookmarked_message),
+                                        duration = SnackbarDuration.Short,
+                                    )
+                                }
+                                delay(SnackBarDuration)
+                                job.cancel()
+                            }
                         },
                     )
                     Text(
@@ -249,7 +246,7 @@ fun BottomBar(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
-                    onClick = onWaitingClick,
+                    onClick = { /* showWaitingDialog = true */ },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
                     enabled = false,
@@ -283,7 +280,7 @@ fun BoothDescription(
     category: String,
     description: String,
     location: String,
-    onNavigateToBoothLocation: () -> Unit,
+    onAction: (BoothUiAction) -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -325,7 +322,7 @@ fun BoothDescription(
         }
         Spacer(modifier = Modifier.height(16.dp))
         UnifestOutlinedButton(
-            onClick = onNavigateToBoothLocation,
+            onClick = { onAction(BoothUiAction.OnCheckLocationClick) },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(id = R.string.booth_check_locaiton))
@@ -394,11 +391,7 @@ fun BoothScreenPreview() {
                     ),
                 ),
             ),
-            onBackClick = {},
-            onNavigateToBoothLocation = {},
-            onBookmarkClick = {},
-            isBookmarked = false,
-            bookmarkCount = 0,
+            onAction = {},
         )
     }
 }

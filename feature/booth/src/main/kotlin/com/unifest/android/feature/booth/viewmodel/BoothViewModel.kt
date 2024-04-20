@@ -8,9 +8,11 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +26,10 @@ class BoothViewModel @Inject constructor(
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 
     private val _uiState = MutableStateFlow(BoothUiState())
-    val uiState: StateFlow<BoothUiState> = this._uiState.asStateFlow()
+    val uiState: StateFlow<BoothUiState> = _uiState.asStateFlow()
+
+    private val _uiEvent = Channel<BoothUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
         _uiState.update {
@@ -48,7 +53,27 @@ class BoothViewModel @Inject constructor(
         }
     }
 
-    fun toggleBookmark() {
+    fun onAction(action: BoothUiAction) {
+        when (action) {
+            is BoothUiAction.OnBackClick -> navigateBack()
+            is BoothUiAction.OnCheckLocationClick -> navigateToBoothLocation()
+            is BoothUiAction.OnToggleBookmark -> toggleBookmark()
+        }
+    }
+
+    private fun navigateBack() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateBack)
+        }
+    }
+
+    private fun navigateToBoothLocation() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToBoothLocation)
+        }
+    }
+
+    private fun toggleBookmark() {
         viewModelScope.launch {
             if (_uiState.value.isBookmarked) {
                 likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
