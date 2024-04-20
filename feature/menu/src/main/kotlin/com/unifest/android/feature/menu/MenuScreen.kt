@@ -90,7 +90,7 @@ internal fun MenuRoute(
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
-        when(event) {
+        when (event) {
             is MenuUiEvent.NavigateToLikedBooth -> onNavigateToLikedBooth()
             is MenuUiEvent.NavigateToContact -> onNavigateToContact()
         }

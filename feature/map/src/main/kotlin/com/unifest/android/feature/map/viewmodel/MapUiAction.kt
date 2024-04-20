@@ -7,10 +7,10 @@ sealed interface MapUiAction {
     data class OnBoothMarkerClick(val booths: List<BoothDetailMapModel>) : MapUiAction
     data object OnTogglePopularBooth : MapUiAction
     data class OnBoothItemClick(val boothId: Long) : MapUiAction
-    data class OnRetryClick(val error: Error): MapUiAction
+    data class OnRetryClick(val error: Error) : MapUiAction
 }
 
 enum class Error {
     NETWORK,
-    SERVER
+    SERVER,
 }

@@ -239,7 +239,7 @@ fun MapContent(
             onTitleClick = setFestivalSearchBottomSheetVisible,
             initSearchText = initSearchText,
             isOnboardingCompleted = uiState.isOnboardingCompleted,
-            completeOnboarding = { onAction(MapUiAction.OnTooltipClick)},
+            completeOnboarding = { onAction(MapUiAction.OnTooltipClick) },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
