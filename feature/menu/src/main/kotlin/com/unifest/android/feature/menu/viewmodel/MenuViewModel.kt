@@ -32,7 +32,7 @@ class MenuViewModel @Inject constructor(
     val uiEvent: Flow<MenuUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        observeLikedFestival()
+        observeLikedFestivals()
         observeLikedBooth()
     }
 
@@ -45,7 +45,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun observeLikedFestival() {
+    private fun observeLikedFestivals() {
         viewModelScope.launch {
             festivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {

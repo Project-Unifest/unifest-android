@@ -4,17 +4,22 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.StarInfoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -27,16 +32,11 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<HomeUiEvent>()
+    val uiEvent: Flow<HomeUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
-        viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
-                _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
-                    )
-                }
-            }
-        }
+        observeLikedFestivals()
 
         _uiState.update {
             it.copy(
@@ -136,9 +136,29 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun addLikeFestival(festival: FestivalTodayModel) {
+    fun onAction(action: HomeUiAction) {
+        when (action) {
+            is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
+            is HomeUiAction.OnAddLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
+        }
+    }
+
+    private fun observeLikedFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtHome(festival)
+            _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
         }
     }
 
@@ -216,7 +236,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedDate(date: LocalDate) {
+    private fun setSelectedDate(date: LocalDate) {
         _uiState.update {
             it.copy(selectedDate = date)
         }

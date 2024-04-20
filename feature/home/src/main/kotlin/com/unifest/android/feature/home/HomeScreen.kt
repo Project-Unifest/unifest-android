@@ -40,6 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -54,6 +56,8 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.feature.home.viewmodel.HomeUiAction
+import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -63,22 +67,27 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
-    onShowSnackBar: (message: Int) -> Unit,
+    onShowSnackBar: (message: UiText) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+        }
+    }
+
     HomeScreen(
         padding = padding,
         uiState = uiState,
-        onShowSnackBar = onShowSnackBar,
+        onAction = viewModel::onAction,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        setSelectedDate = viewModel::setSelectedDate,
-        onAddLikeFestivalClick = viewModel::addLikeFestival,
         onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
@@ -87,16 +96,13 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     padding: PaddingValues,
     uiState: HomeUiState,
-    @Suppress("unused")
+    onAction: (HomeUiAction) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    onShowSnackBar: (message: Int) -> Unit,
-    setSelectedDate: (LocalDate) -> Unit,
-    onAddLikeFestivalClick: (FestivalTodayModel) -> Unit,
     onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     Box(
@@ -108,7 +114,7 @@ internal fun HomeScreen(
             item {
                 Calendar(
                     selectedDate = uiState.selectedDate,
-                    onDateSelected = setSelectedDate,
+                    onDateSelected = { date -> onAction(HomeUiAction.OnDateSelected(date)) },
                 )
             }
             item {
@@ -152,11 +158,8 @@ internal fun HomeScreen(
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
-                            festival,
-                            onShowSnackBar,
-                            onAddLikeFestivalClick = {
-                                onAddLikeFestivalClick(festival)
-                            },
+                            festival = festival,
+                            onAction = onAction,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -235,8 +238,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 @Composable
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
-    onShowSnackBar: (message: Int) -> Unit,
-    onAddLikeFestivalClick: (FestivalTodayModel) -> Unit,
+    onAction: (HomeUiAction) -> Unit,
 ) {
     Column {
         Row(
@@ -297,8 +299,7 @@ fun FestivalScheduleItem(
         }
         UnifestOutlinedButton(
             onClick = {
-                onAddLikeFestivalClick(festival)
-                onShowSnackBar(R.string.home_add_interest_festival_snack_bar)
+                onAction(HomeUiAction.OnAddLikedFestivalClick(festival))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -441,15 +442,13 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
-            onShowSnackBar = {},
+            onAction = {},
             setFestivalSearchBottomSheetVisible = {},
             updateFestivalSearchText = {},
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
             setLikedFestivalDeleteDialogVisible = {},
-            setSelectedDate = {},
-            onAddLikeFestivalClick = {},
             onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }

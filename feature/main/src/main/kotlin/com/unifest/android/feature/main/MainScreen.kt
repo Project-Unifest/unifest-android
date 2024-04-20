@@ -32,6 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
@@ -53,12 +54,12 @@ internal fun MainScreen(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val resource = LocalContext.current.resources
+    val context = LocalContext.current
 
-    val onShowSnackBar: (message: Int) -> Unit = { message ->
+    val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
             snackBarHostState.showSnackbar(
-                message = resource.getString(message),
+                message = message.asString(context),
                 duration = SnackbarDuration.Short,
             )
         }
