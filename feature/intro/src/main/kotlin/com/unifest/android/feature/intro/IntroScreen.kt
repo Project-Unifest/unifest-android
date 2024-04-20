@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -88,8 +87,6 @@ internal fun IntroRoute(
     IntroScreen(
         uiState = uiState,
         onAction = viewModel::onAction,
-        updateSearchText = viewModel::updateSearchText,
-        initSearchText = viewModel::initSearchText,
     )
 }
 
@@ -97,8 +94,6 @@ internal fun IntroRoute(
 fun IntroScreen(
     uiState: IntroUiState,
     onAction: (IntroUiAction) -> Unit,
-    updateSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
 ) {
     UnifestScaffold(
         containerColor = Color.White,
@@ -116,10 +111,10 @@ fun IntroScreen(
                 InformationText()
                 SearchTextField(
                     searchText = uiState.searchText,
-                    updateSearchText = updateSearchText,
+                    updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
                     searchTextHintRes = R.string.intro_search_text_hint,
                     onSearch = { query -> Timber.d("검색: $query") },
-                    initSearchText = initSearchText,
+                    clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                     modifier = Modifier
                         .height(46.dp)
                         .fillMaxWidth()
@@ -131,10 +126,8 @@ fun IntroScreen(
                     onAction = onAction,
                 )
                 AllFestivalsTabView(
-                    schools = uiState.festivals,
-                    onFestivalSelected = { festival ->
-                        onAction(IntroUiAction.OnFestivalSelected(festival))
-                    },
+                    festivals = uiState.festivals,
+                    onAction = onAction,
                 )
             }
             UnifestButton(
@@ -218,9 +211,7 @@ fun LikedFestivalsRow(
             ) { index ->
                 FestivalRowItem(
                     festival = selectedFestivals[index],
-                    onFestivalSelected = { festival ->
-                        onAction(IntroUiAction.OnFestivalDeselected(festival))
-                    },
+                    onAction = onAction,
                 )
             }
         }
@@ -230,7 +221,7 @@ fun LikedFestivalsRow(
 @Composable
 fun FestivalRowItem(
     festival: FestivalModel,
-    onFestivalSelected: (FestivalModel) -> Unit,
+    onAction: (IntroUiAction) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -241,7 +232,9 @@ fun FestivalRowItem(
             .width(120.dp),
     ) {
         Box(
-            modifier = Modifier.clickable { onFestivalSelected(festival) },
+            modifier = Modifier.clickable {
+                onAction(IntroUiAction.OnFestivalDeselected(festival))
+            },
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -281,8 +274,8 @@ fun FestivalRowItem(
 
 @Composable
 fun AllFestivalsTabView(
-    schools: ImmutableList<FestivalModel>,
-    onFestivalSelected: (FestivalModel) -> Unit,
+    festivals: ImmutableList<FestivalModel>,
+    onAction: (IntroUiAction) -> Unit,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -315,7 +308,7 @@ fun AllFestivalsTabView(
 
     Column(modifier = Modifier.padding(top = 8.dp)) {
         Text(
-            text = "총 ${schools.size}개",
+            text = "총 ${festivals.size}개",
             modifier = Modifier
                 .padding(start = 20.dp, bottom = 16.dp)
                 .align(Alignment.Start),
@@ -327,14 +320,16 @@ fun AllFestivalsTabView(
             columns = GridCells.Fixed(3),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .height(if (schools.isEmpty()) 0.dp else (((schools.size - 1) / 3 + 1) * 140).dp),
+                .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(schools.size) { index ->
+            items(festivals.size) { index ->
                 FestivalItem(
-                    festival = schools[index],
-                    onFestivalSelected = onFestivalSelected,
+                    festival = festivals[index],
+                    onFestivalSelected = { festival ->
+                        onAction(IntroUiAction.OnFestivalSelected(festival))
+                    },
                 )
             }
         }
@@ -406,8 +401,6 @@ fun PreviewIntroScreen() {
                 ),
             ),
             onAction = {},
-            updateSearchText = {},
-            initSearchText = {},
         )
     }
 }

@@ -204,6 +204,9 @@ class MapViewModel @Inject constructor(
 
     fun onAction(action: MapUiAction) {
         when (action) {
+            is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
+            is MapUiAction.OnBoothSearchTextUpdated -> updateBoothSearchText(action.text)
+            is MapUiAction.OnBoothSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnTooltipClick -> completeOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
@@ -224,7 +227,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getAllFestivals() {
+    private fun getAllFestivals() {
         viewModelScope.launch {
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
@@ -240,7 +243,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getPopularBooths() {
+    private fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(_uiState.value.festivalId)
                 .onSuccess { booths ->
@@ -287,9 +290,15 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun updateBoothSearchText(text: TextFieldValue) {
+    private fun updateBoothSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(boothSearchText = text)
+        }
+    }
+
+    private fun clearBoothSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
@@ -299,7 +308,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun initSearchText() {
+    fun clearFestivalSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }

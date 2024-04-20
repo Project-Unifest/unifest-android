@@ -206,7 +206,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun initSearchText() {
+    fun clearSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }

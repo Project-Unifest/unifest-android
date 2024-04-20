@@ -103,9 +103,8 @@ internal fun MapRoute(
         uiState = uiState,
         onAction = viewModel::onAction,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        updateBoothSearchText = viewModel::updateBoothSearchText,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        initSearchText = viewModel::initSearchText,
+        clearFestivalSearchText = viewModel::clearFestivalSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
@@ -119,9 +118,8 @@ internal fun MapScreen(
     uiState: MapUiState,
     onAction: (MapUiAction) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateBoothSearchText: (TextFieldValue) -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
+    clearFestivalSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
@@ -142,11 +140,8 @@ internal fun MapScreen(
         MapContent(
             uiState = uiState,
             cameraPositionState = cameraPositionState,
-            onAction = onAction,
-            setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
-            updateBoothSearchText = updateBoothSearchText,
-            initSearchText = initSearchText,
             rotationState = rotationState,
+            onAction = onAction,
         )
 
         if (uiState.isServerErrorDialogVisible) {
@@ -169,7 +164,7 @@ internal fun MapScreen(
                 setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
-                initSearchText = initSearchText,
+                clearSearchText = clearFestivalSearchText,
                 setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
                 setEnableEditMode = setEnableEditMode,
@@ -187,11 +182,8 @@ internal fun MapScreen(
 fun MapContent(
     uiState: MapUiState,
     cameraPositionState: CameraPositionState,
-    onAction: (MapUiAction) -> Unit,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateBoothSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
     rotationState: Float,
+    onAction: (MapUiAction) -> Unit,
 ) {
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
@@ -234,12 +226,9 @@ fun MapContent(
         }
         MapTopAppBar(
             title = uiState.selectedSchoolName,
-            searchText = uiState.boothSearchText,
-            updateSearchText = updateBoothSearchText,
-            onTitleClick = setFestivalSearchBottomSheetVisible,
-            initSearchText = initSearchText,
+            boothSearchText = uiState.boothSearchText,
+            onAction = onAction,
             isOnboardingCompleted = uiState.isOnboardingCompleted,
-            completeOnboarding = { onAction(MapUiAction.OnTooltipClick) },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
@@ -301,12 +290,9 @@ fun MapContent(
 @Composable
 fun MapTopAppBar(
     title: String,
-    searchText: TextFieldValue,
-    updateSearchText: (TextFieldValue) -> Unit,
-    onTitleClick: (Boolean) -> Unit,
-    initSearchText: () -> Unit,
+    boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
-    completeOnboarding: (Boolean) -> Unit,
+    onAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -322,16 +308,16 @@ fun MapTopAppBar(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
-                onTitleClick = onTitleClick,
+                onTitleClick = { onAction(MapUiAction.OnTitleClick) },
                 isOnboardingCompleted = isOnboardingCompleted,
-                completeOnboarding = completeOnboarding,
+                onTooltipClick = { onAction(MapUiAction.OnTooltipClick) },
             )
             SearchTextField(
-                searchText = searchText,
-                updateSearchText = updateSearchText,
+                searchText = boothSearchText,
+                updateSearchText = { text -> onAction(MapUiAction.OnBoothSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = {},
-                initSearchText = initSearchText,
+                clearSearchText = { onAction(MapUiAction.OnBoothSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -497,9 +483,8 @@ fun MapScreenPreview() {
             ),
             onAction = {},
             setFestivalSearchBottomSheetVisible = {},
-            updateBoothSearchText = {},
             updateFestivalSearchText = {},
-            initSearchText = {},
+            clearFestivalSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
             setLikedFestivalDeleteDialogVisible = {},
@@ -514,12 +499,9 @@ fun MapTopAppBarPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",
-            searchText = TextFieldValue(),
-            updateSearchText = {},
-            initSearchText = {},
-            onTitleClick = {},
+            boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
-            completeOnboarding = {},
+            onAction = {},
         )
     }
 }

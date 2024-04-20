@@ -93,6 +93,8 @@ class IntroViewModel @Inject constructor(
 
     fun onAction(action: IntroUiAction) {
         when (action) {
+            is IntroUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is IntroUiAction.OnSearchTextCleared -> clearSearchText()
             is IntroUiAction.OnClearSelectionClick -> clearSelectedFestivals()
             is IntroUiAction.OnFestivalSelected -> addSelectedFestival(action.festival)
             is IntroUiAction.OnFestivalDeselected -> removeSelectedFestivals(action.festival)
@@ -100,13 +102,13 @@ class IntroViewModel @Inject constructor(
         }
     }
 
-    fun updateSearchText(text: TextFieldValue) {
+    private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(searchText = text)
         }
     }
 
-    fun initSearchText() {
+    private fun clearSearchText() {
         _uiState.update {
             it.copy(searchText = TextFieldValue())
         }
