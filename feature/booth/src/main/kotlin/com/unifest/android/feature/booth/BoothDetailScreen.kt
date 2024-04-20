@@ -104,7 +104,7 @@ internal fun BoothDetailRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> onNavigateToBoothLocation()
-            is BoothUiEvent.OnShowSnackBar -> {
+            is BoothUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {
                         snackBarState.showSnackbar(

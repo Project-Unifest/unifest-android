@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
@@ -40,6 +41,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun LikedBoothRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
     viewModel: LikedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,6 +49,7 @@ internal fun LikedBoothRoute(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is LikedBoothUiEvent.NavigateBack -> onBackClick()
+            is LikedBoothUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
 

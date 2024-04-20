@@ -92,7 +92,7 @@ class BoothViewModel @Inject constructor(
                 )
             }
             _uiEvent.send(
-                BoothUiEvent.OnShowSnackBar(
+                BoothUiEvent.ShowSnackBar(
                     if (newBookmarkFlag) UiText.StringResource(R.string.booth_bookmarked_message)
                     else UiText.StringResource(R.string.booth_bookmark_removed_message),
                 ),

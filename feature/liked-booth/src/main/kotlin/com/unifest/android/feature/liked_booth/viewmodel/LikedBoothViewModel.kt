@@ -2,7 +2,9 @@ package com.unifest.android.feature.liked_booth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -61,6 +63,7 @@ class LikedBoothViewModel @Inject constructor(
             updateLikedBooth(booth)
             delay(500)
             likedBoothRepository.deleteLikedBooth(booth)
+            _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmark_removed_message)))
         }
     }
 

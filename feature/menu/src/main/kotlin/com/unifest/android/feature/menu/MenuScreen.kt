@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -76,6 +77,7 @@ internal fun MenuRoute(
     padding: PaddingValues,
     onNavigateToLikedBooth: () -> Unit,
     onNavigateToContact: () -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,6 +95,7 @@ internal fun MenuRoute(
         when (event) {
             is MenuUiEvent.NavigateToLikedBooth -> onNavigateToLikedBooth()
             is MenuUiEvent.NavigateToContact -> onNavigateToContact()
+            is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
 

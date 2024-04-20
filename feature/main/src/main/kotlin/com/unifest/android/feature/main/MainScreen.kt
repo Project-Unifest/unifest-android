@@ -46,22 +46,31 @@ import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+private const val SnackBarDuration = 1000L
 
 @Composable
 internal fun MainScreen(
     navigator: MainNavController = rememberMainNavController(),
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarstate = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
-            snackBarHostState.showSnackbar(
-                message = message.asString(context),
-                duration = SnackbarDuration.Short,
-            )
+            scope.launch {
+                val job = launch {
+                    snackBarstate.showSnackbar(
+                        message = message.asString(context),
+                        duration = SnackbarDuration.Short,
+                    )
+                }
+                delay(SnackBarDuration)
+                job.cancel()
+            }
         }
     }
 
@@ -75,7 +84,7 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
+            SnackbarHost(hostState = snackBarstate)
         },
         containerColor = White,
     ) { innerPadding ->
@@ -105,10 +114,12 @@ internal fun MainScreen(
                 padding = innerPadding,
                 onNavigateToLikedBooth = navigator::navigateToLikedBooth,
                 onNavigateToContact = navigator::navigateToContact,
+                onShowSnackBar = onShowSnackBar,
             )
             likedBoothNavGraph(
                 padding = innerPadding,
                 onBackClick = navigator::popBackStackIfNotHome,
+                onShowSnackBar = onShowSnackBar,
             )
             contactNavGraph(
                 padding = innerPadding,

@@ -3,8 +3,10 @@ package com.unifest.android.feature.menu.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -92,6 +94,7 @@ class MenuViewModel @Inject constructor(
             updateLikedBooth(booth)
             delay(500)
             likedBoothRepository.deleteLikedBooth(booth)
+            _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmark_removed_message)))
         }
     }
 
