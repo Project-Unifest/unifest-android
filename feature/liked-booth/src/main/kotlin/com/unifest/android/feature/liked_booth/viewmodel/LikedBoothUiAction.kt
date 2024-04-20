@@ -4,5 +4,6 @@ import com.unifest.android.core.model.BoothDetailModel
 
 interface LikedBoothUiAction {
     data object OnBackClick : LikedBoothUiAction
+    data class OnLikedBoothItemClick(val boothId: Long) : LikedBoothUiAction
     data class OnToggleBookmark(val booth: BoothDetailModel) : LikedBoothUiAction
 }

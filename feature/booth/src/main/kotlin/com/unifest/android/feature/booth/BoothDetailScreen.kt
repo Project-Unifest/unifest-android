@@ -76,7 +76,7 @@ private const val SnackBarDuration = 1000L
 internal fun BoothDetailRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
-    onNavigateToBoothLocation: () -> Unit,
+    navigateToBoothLocation: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -103,7 +103,7 @@ internal fun BoothDetailRoute(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
-            is BoothUiEvent.NavigateToBoothLocation -> onNavigateToBoothLocation()
+            is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
             is BoothUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {

@@ -16,15 +16,17 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
 
 fun NavGraphBuilder.menuNavGraph(
     padding: PaddingValues,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
+    navigateToLikedBooth: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    navigateToContact: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = MENU_ROUTE) {
         MenuRoute(
             padding = padding,
-            onNavigateToLikedBooth = onNavigateToLikedBooth,
-            onNavigateToContact = onNavigateToContact,
+            navigateToLikedBooth = navigateToLikedBooth,
+            navigateToBoothDetail = navigateToBoothDetail,
+            navigateToContact = navigateToContact,
             onShowSnackBar = onShowSnackBar,
         )
     }

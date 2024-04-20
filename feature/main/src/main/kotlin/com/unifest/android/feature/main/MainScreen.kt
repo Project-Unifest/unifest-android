@@ -99,31 +99,33 @@ internal fun MainScreen(
             )
             mapNavGraph(
                 padding = innerPadding,
-                onNavigateToBooth = navigator::navigateToBoothDetail,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
             boothNavGraph(
                 padding = innerPadding,
                 navController = navigator.navController,
-                onBackClick = navigator::popBackStackIfNotHome,
-                onNavigateToBoothLocation = navigator::navigateToBoothLocation,
+                popBackStack = navigator::popBackStackIfNotHome,
+                navigateToBoothLocation = navigator::navigateToBoothLocation,
             )
             waitingNavGraph(
                 padding = innerPadding,
             )
             menuNavGraph(
                 padding = innerPadding,
-                onNavigateToLikedBooth = navigator::navigateToLikedBooth,
-                onNavigateToContact = navigator::navigateToContact,
+                navigateToLikedBooth = navigator::navigateToLikedBooth,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
+                navigateToContact = navigator::navigateToContact,
                 onShowSnackBar = onShowSnackBar,
             )
             likedBoothNavGraph(
                 padding = innerPadding,
-                onBackClick = navigator::popBackStackIfNotHome,
+                popBackStack = navigator::popBackStackIfNotHome,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
             )
             contactNavGraph(
                 padding = innerPadding,
-                onBackClick = navigator::popBackStackIfNotHome,
+                popBackStack = navigator::popBackStackIfNotHome,
             )
         }
     }

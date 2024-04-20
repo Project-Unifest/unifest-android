@@ -87,14 +87,14 @@ import ted.gun0912.clustering.naver.TedNaverClustering
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
-    onNavigateToBooth: (Long) -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is MapUiEvent.NavigateToBooth -> onNavigateToBooth(event.boothId)
+            is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }
 
@@ -112,6 +112,7 @@ internal fun MapRoute(
     )
 }
 
+// TODO onAction 으로 묶기
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,

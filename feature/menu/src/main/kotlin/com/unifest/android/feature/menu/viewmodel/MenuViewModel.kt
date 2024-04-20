@@ -43,6 +43,7 @@ class MenuViewModel @Inject constructor(
             is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
+            is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
         }
     }
@@ -86,6 +87,12 @@ class MenuViewModel @Inject constructor(
     fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    private fun navigateToBoothDetail(boothId: Long) {
+        viewModelScope.launch {
+            _uiEvent.send(MenuUiEvent.NavigateToBoothDetail(boothId))
         }
     }
 

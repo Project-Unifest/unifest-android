@@ -210,7 +210,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTooltipClick -> completeOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
-            is MapUiAction.OnBoothItemClick -> navigateToBooth(action.boothId)
+            is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
         }
     }
@@ -275,9 +275,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToBooth(boothId: Long) {
+    private fun navigateToBoothDetail(boothId: Long) {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.NavigateToBooth(boothId))
+            _uiEvent.send(MapUiEvent.NavigateToBoothDetail(boothId))
         }
     }
 

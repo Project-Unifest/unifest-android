@@ -15,13 +15,15 @@ fun NavController.navigateToLikedBooth() {
 
 fun NavGraphBuilder.likedBoothNavGraph(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = Liked_BOOTH_ROUTE) {
         LikedBoothRoute(
             padding = padding,
-            onBackClick = onBackClick,
+            popBackStack = popBackStack,
+            navigateToBoothDetail = navigateToBoothDetail,
             onShowSnackBar = onShowSnackBar,
         )
     }

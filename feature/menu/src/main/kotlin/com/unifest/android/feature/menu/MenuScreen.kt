@@ -75,8 +75,9 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
+    navigateToLikedBooth: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    navigateToContact: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
@@ -93,8 +94,9 @@ internal fun MenuRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is MenuUiEvent.NavigateToLikedBooth -> onNavigateToLikedBooth()
-            is MenuUiEvent.NavigateToContact -> onNavigateToContact()
+            is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
+            is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+            is MenuUiEvent.NavigateToContact -> navigateToContact()
             is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
@@ -245,12 +247,16 @@ fun MenuScreen(
                             index = index,
                             totalCount = uiState.likedBoothList.size,
                             deleteLikedBooth = { onAction(MenuUiAction.OnToggleBookmark(booth)) },
-                            modifier = Modifier.animateItemPlacement(
-                                animationSpec = tween(
-                                    durationMillis = 500,
-                                    easing = LinearOutSlowInEasing,
+                            modifier = Modifier
+                                .clickable {
+                                    onAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
+                                }
+                                .animateItemPlacement(
+                                    animationSpec = tween(
+                                        durationMillis = 500,
+                                        easing = LinearOutSlowInEasing,
+                                    ),
                                 ),
-                            ),
                         )
                     }
                 }

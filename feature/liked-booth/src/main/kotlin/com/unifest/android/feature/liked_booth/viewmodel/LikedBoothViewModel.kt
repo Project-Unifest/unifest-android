@@ -36,6 +36,7 @@ class LikedBoothViewModel @Inject constructor(
     fun onAction(action: LikedBoothUiAction) {
         when (action) {
             is LikedBoothUiAction.OnBackClick -> navigateBack()
+            is LikedBoothUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is LikedBoothUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
         }
     }
@@ -55,6 +56,12 @@ class LikedBoothViewModel @Inject constructor(
     private fun navigateBack() {
         viewModelScope.launch {
             _uiEvent.send(LikedBoothUiEvent.NavigateBack)
+        }
+    }
+
+    private fun navigateToBoothDetail(boothId: Long) {
+        viewModelScope.launch {
+            _uiEvent.send(LikedBoothUiEvent.NavigateToBoothDetail(boothId))
         }
     }
 

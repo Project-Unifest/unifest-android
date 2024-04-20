@@ -4,6 +4,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,7 +41,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun LikedBoothRoute(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
     viewModel: LikedBoothViewModel = hiltViewModel(),
 ) {
@@ -48,7 +50,8 @@ internal fun LikedBoothRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is LikedBoothUiEvent.NavigateBack -> onBackClick()
+            is LikedBoothUiEvent.NavigateBack -> popBackStack()
+            is LikedBoothUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is LikedBoothUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
@@ -93,17 +96,22 @@ internal fun LikedBoothScreen(
                     uiState.likedBoothList,
                     key = { _, booth -> booth.id },
                 ) { index, booth ->
+                    // TODO onAction 으로 묶기
                     LikedBoothItem(
                         booth = booth,
                         index = index,
                         totalCount = uiState.likedBoothList.size,
                         deleteLikedBooth = { onAction(LikedBoothUiAction.OnToggleBookmark(booth)) },
-                        modifier = Modifier.animateItemPlacement(
-                            animationSpec = tween(
-                                durationMillis = 500,
-                                easing = LinearOutSlowInEasing,
+                        modifier = Modifier
+                            .clickable {
+                                onAction(LikedBoothUiAction.OnLikedBoothItemClick(booth.id))
+                            }
+                            .animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 500,
+                                    easing = LinearOutSlowInEasing,
+                                ),
                             ),
-                        ),
                     )
                 }
             }

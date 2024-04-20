@@ -14,14 +14,14 @@ fun NavController.navigateToContact() {
 
 fun NavGraphBuilder.contactNavGraph(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
 ) {
     composable(
         route = CONTACT_ROUTE,
     ) {
         ContactRoute(
             padding = padding,
-            onCloseClick = onBackClick,
+            onCloseClick = popBackStack,
         )
     }
 }

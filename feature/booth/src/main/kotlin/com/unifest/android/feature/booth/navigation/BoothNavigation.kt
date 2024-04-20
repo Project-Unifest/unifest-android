@@ -32,8 +32,8 @@ fun NavController.navigateToBoothLocation() {
 fun NavGraphBuilder.boothNavGraph(
     padding: PaddingValues,
     navController: NavHostController,
-    onBackClick: () -> Unit,
-    onNavigateToBoothLocation: () -> Unit,
+    popBackStack: () -> Unit,
+    navigateToBoothLocation: () -> Unit,
 ) {
     navigation(
         startDestination = BOOTH_DETAIL_ROUTE,
@@ -48,15 +48,15 @@ fun NavGraphBuilder.boothNavGraph(
             val viewModel = entry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(
                 padding = padding,
-                onBackClick = onBackClick,
-                onNavigateToBoothLocation = onNavigateToBoothLocation,
+                onBackClick = popBackStack,
+                navigateToBoothLocation = navigateToBoothLocation,
                 viewModel = viewModel,
             )
         }
         composable(route = BOOTH_LOCATION_ROUTE) { entry ->
             val viewModel = entry.sharedViewModel<BoothViewModel>(navController)
             BoothLocationRoute(
-                onBackClick = onBackClick,
+                onBackClick = popBackStack,
                 viewModel = viewModel,
             )
         }
