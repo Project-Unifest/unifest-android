@@ -1,7 +1,6 @@
 package com.unifest.android.feature.intro
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,7 +30,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,10 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.UnifestButton
+import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
@@ -64,6 +64,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.feature.intro.viewmodel.IntroUiAction
+import com.unifest.android.feature.intro.viewmodel.IntroUiEvent
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -77,77 +79,78 @@ internal fun IntroRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is IntroUiEvent.NavigateToMain -> navigateToMain()
+        }
+    }
+
     IntroScreen(
         uiState = uiState,
+        onAction = viewModel::onAction,
         updateSearchText = viewModel::updateSearchText,
         initSearchText = viewModel::initSearchText,
-        onAddLikeFestivalClick = { festivals -> viewModel.addLikeFestivals(festivals, navigateToMain) },
     )
 }
 
 @Composable
 fun IntroScreen(
     uiState: IntroUiState,
+    onAction: (IntroUiAction) -> Unit,
     updateSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
-    onAddLikeFestivalClick: (List<FestivalModel>) -> Unit,
 ) {
-    val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-    ) {
-        Column(
+    UnifestScaffold(
+        containerColor = Color.White,
+    ) { innerPadding ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 80.dp), // 추가 완료 버튼에게 공간 주기
+                .padding(innerPadding),
         ) {
-            InformationText()
-            SearchTextField(
-                searchText = uiState.searchText,
-                updateSearchText = updateSearchText,
-                searchTextHintRes = R.string.intro_search_text_hint,
-                onSearch = { query -> Timber.d("검색: $query") },
-                initSearchText = initSearchText,
+            Column(
                 modifier = Modifier
-                    .height(46.dp)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                InformationText()
+                SearchTextField(
+                    searchText = uiState.searchText,
+                    updateSearchText = updateSearchText,
+                    searchTextHintRes = R.string.intro_search_text_hint,
+                    onSearch = { query -> Timber.d("검색: $query") },
+                    initSearchText = initSearchText,
+                    modifier = Modifier
+                        .height(46.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                )
+                Spacer(modifier = Modifier.height(18.dp))
+                LikedFestivalsRow(
+                    selectedFestivals = uiState.selectedFestivals,
+                    onAction = onAction,
+                )
+                AllFestivalsTabView(
+                    schools = uiState.festivals,
+                    onFestivalSelected = { festival ->
+                        onAction(IntroUiAction.OnFestivalSelected(festival))
+                    },
+                )
+            }
+            UnifestButton(
+                onClick = { onAction(IntroUiAction.OnAddCompleteClick) },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-            )
-            Spacer(modifier = Modifier.height(18.dp))
-            LikedFestivalsRow(
-                selectedFestivals = selectedFestivals,
-                onFestivalSelected = { festival ->
-                    selectedFestivals.remove(festival)
-                },
-            )
-            AllSchoolsTabView(
-                schools = uiState.schools,
-                onSchoolSelected = { school ->
-                    if (!selectedFestivals.any { it.schoolName == school.schoolName }) {
-                        selectedFestivals.add(school)
-                    }
-                },
-            )
-        }
-        UnifestButton(
-            onClick = {
-                onAddLikeFestivalClick(selectedFestivals)
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            contentPadding = PaddingValues(vertical = 17.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.intro_add_complete),
-                style = Title4,
-                fontSize = 14.sp,
-            )
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                contentPadding = PaddingValues(vertical = 17.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.intro_add_complete),
+                    style = Title4,
+                    fontSize = 14.sp,
+                )
+            }
         }
     }
 }
@@ -177,8 +180,8 @@ fun InformationText() {
 
 @Composable
 fun LikedFestivalsRow(
-    selectedFestivals: MutableList<FestivalModel>,
-    onFestivalSelected: (FestivalModel) -> Unit,
+    selectedFestivals: List<FestivalModel>,
+    onAction: (IntroUiAction) -> Unit,
 ) {
     Column {
         Row(
@@ -193,7 +196,7 @@ fun LikedFestivalsRow(
                 style = Title3,
             )
             TextButton(
-                onClick = { selectedFestivals.clear() },
+                onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
             ) {
                 Text(
                     text = stringResource(id = R.string.intro_clear_item_button_text),
@@ -215,8 +218,8 @@ fun LikedFestivalsRow(
             ) { index ->
                 FestivalRowItem(
                     festival = selectedFestivals[index],
-                    onFestivalSelected = {
-                        onFestivalSelected(it)
+                    onFestivalSelected = { festival ->
+                        onAction(IntroUiAction.OnFestivalDeselected(festival))
                     },
                 )
             }
@@ -277,9 +280,9 @@ fun FestivalRowItem(
 }
 
 @Composable
-fun AllSchoolsTabView(
+fun AllFestivalsTabView(
     schools: ImmutableList<FestivalModel>,
-    onSchoolSelected: (FestivalModel) -> Unit,
+    onFestivalSelected: (FestivalModel) -> Unit,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -331,7 +334,7 @@ fun AllSchoolsTabView(
             items(schools.size) { index ->
                 FestivalItem(
                     festival = schools[index],
-                    onFestivalSelected = onSchoolSelected,
+                    onFestivalSelected = onFestivalSelected,
                 )
             }
         }
@@ -344,7 +347,7 @@ fun PreviewIntroScreen() {
     UnifestTheme {
         IntroScreen(
             uiState = IntroUiState(
-                schools = persistentListOf(
+                festivals = persistentListOf(
                     FestivalModel(
                         1,
                         1,
@@ -402,9 +405,9 @@ fun PreviewIntroScreen() {
                     ),
                 ),
             ),
+            onAction = {},
             updateSearchText = {},
             initSearchText = {},
-            onAddLikeFestivalClick = {},
         )
     }
 }
