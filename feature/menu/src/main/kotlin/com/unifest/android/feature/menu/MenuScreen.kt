@@ -436,7 +436,7 @@ fun MenuScreenPreview() {
             ),
             appVersion = "1.0.0",
             onMenuUiAction = {},
-            onFestivalUiAction = {}
+            onFestivalUiAction = {},
         )
     }
 }
