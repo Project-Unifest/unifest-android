@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
@@ -29,6 +30,8 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiAction
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiEvent
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -41,11 +44,16 @@ internal fun LikedBoothRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is LikedBoothUiEvent.NavigateBack -> onBackClick()
+        }
+    }
+
     LikedBoothScreen(
         padding = padding,
         uiState = uiState,
-        onBackClick = onBackClick,
-        deleteLikedBooth = viewModel::deleteLikedBooth,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -54,8 +62,7 @@ internal fun LikedBoothRoute(
 internal fun LikedBoothScreen(
     padding: PaddingValues,
     uiState: LikedBoothUiState,
-    onBackClick: () -> Unit,
-    deleteLikedBooth: (BoothDetailModel) -> Unit,
+    onAction: (LikedBoothUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -65,7 +72,7 @@ internal fun LikedBoothScreen(
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Back,
-                onNavigationClick = onBackClick,
+                onNavigationClick = { onAction(LikedBoothUiAction.OnBackClick) },
                 title = stringResource(id = R.string.liked_booth_title),
                 elevation = 8.dp,
                 modifier = Modifier
@@ -87,7 +94,7 @@ internal fun LikedBoothScreen(
                         booth = booth,
                         index = index,
                         totalCount = uiState.likedBoothList.size,
-                        deleteLikedBooth = { deleteLikedBooth(booth) },
+                        deleteLikedBooth = { onAction(LikedBoothUiAction.OnToggleBookmark(booth)) },
                         modifier = Modifier.animateItemPlacement(
                             animationSpec = tween(
                                 durationMillis = 500,
@@ -219,8 +226,7 @@ fun LikedBoothScreenPreview() {
                     ),
                 ),
             ),
-            onBackClick = {},
-            deleteLikedBooth = {},
+            onAction = {},
         )
     }
 }

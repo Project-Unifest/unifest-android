@@ -9,6 +9,7 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +30,7 @@ class BoothViewModel @Inject constructor(
     val uiState: StateFlow<BoothUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<BoothUiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    val uiEvent: Flow<BoothUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
         _uiState.update {

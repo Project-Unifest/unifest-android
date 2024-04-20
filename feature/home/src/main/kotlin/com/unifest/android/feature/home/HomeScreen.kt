@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -51,8 +50,8 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -380,13 +379,12 @@ fun IncomingFestivalCard(festival: FestivalModel) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
 fun HomeScreenPreview() {
     UnifestTheme {
         HomeScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = HomeUiState(
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(

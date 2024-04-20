@@ -1,7 +1,6 @@
 package com.unifest.android.core.ui.component
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,11 +40,11 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     searchText: TextFieldValue,
-    updateSearchText: (TextFieldValue) -> Unit,
     likedFestivals: MutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
+    updateSearchText: (TextFieldValue) -> Unit,
+    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
@@ -56,7 +55,6 @@ fun FestivalSearchBottomSheet(
     addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
-//    val scope = rememberCoroutineScope()
     val bottomSheetState = rememberFlexibleBottomSheetState(
         containSystemBars = true,
         flexibleSheetSize = FlexibleSheetSize(
@@ -65,14 +63,6 @@ fun FestivalSearchBottomSheet(
         isModal = true,
         skipSlightlyExpanded = true,
     )
-//    val bottomSheetState = rememberModalBottomSheetState(
-//        skipPartiallyExpanded = true,
-//    )
-//    LaunchedEffect(key1 = Unit) {
-//        scope.launch {
-//            bottomSheetState.expand()
-//        }
-//    }
 
     FlexibleBottomSheet(
         onDismissRequest = {
@@ -164,7 +154,6 @@ fun FestivalSearchBottomSheet(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
 fun SchoolSearchBottomSheetPreview() {

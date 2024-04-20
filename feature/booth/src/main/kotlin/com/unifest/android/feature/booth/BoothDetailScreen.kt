@@ -372,7 +372,7 @@ fun MenuItem(menu: MenuModel) {
 fun BoothScreenPreview() {
     UnifestTheme {
         BoothDetailScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = BoothUiState(
                 boothDetailInfo = BoothDetailModel(
                     id = 0L,
