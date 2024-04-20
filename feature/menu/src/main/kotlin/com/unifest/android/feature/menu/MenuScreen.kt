@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -63,6 +64,8 @@ import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.menu.viewmodel.MenuUiAction
+import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -85,19 +88,25 @@ internal fun MenuRoute(
             "Unknown"
         }
     }
+
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when(event) {
+            is MenuUiEvent.NavigateToLikedBooth -> onNavigateToLikedBooth()
+            is MenuUiEvent.NavigateToContact -> onNavigateToContact()
+        }
+    }
+
     MenuScreen(
         padding = padding,
         uiState = uiState,
+        appVersion = appVersion,
+        onAction = viewModel::onAction,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToLikedBooth = onNavigateToLikedBooth,
-        onNavigateToContact = onNavigateToContact,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        deleteLikedBooth = viewModel::deleteLikedBooth,
-        appVersion = appVersion,
         onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
@@ -107,16 +116,14 @@ internal fun MenuRoute(
 fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
+    appVersion: String,
+    onAction: (MenuUiAction) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    deleteLikedBooth: (BoothDetailModel) -> Unit,
-    appVersion: String,
     onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -153,7 +160,7 @@ fun MenuScreen(
                             style = Title3,
                         )
                         TextButton(
-                            onClick = { setFestivalSearchBottomSheetVisible(true) },
+                            onClick = { onAction(MenuUiAction.OnAddClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -206,7 +213,7 @@ fun MenuScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         TextButton(
-                            onClick = onNavigateToLikedBooth,
+                            onClick = { onAction(MenuUiAction.OnShowMoreClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -234,7 +241,7 @@ fun MenuScreen(
                             booth = booth,
                             index = index,
                             totalCount = uiState.likedBoothList.size,
-                            deleteLikedBooth = { deleteLikedBooth(booth) },
+                            deleteLikedBooth = { onAction(MenuUiAction.OnToggleBookmark(booth)) },
                             modifier = Modifier.animateItemPlacement(
                                 animationSpec = tween(
                                     durationMillis = 500,
@@ -256,7 +263,7 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
-                        onClick = onNavigateToContact,
+                        onClick = { onAction(MenuUiAction.OnContactClick) },
                     )
                 }
                 item {
@@ -303,18 +310,18 @@ fun MenuScreen(
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
-                updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                isSearchMode = uiState.isSearchMode,
+                isEditMode = uiState.isEditMode,
+                updateSearchText = updateFestivalSearchText,
+                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 initSearchText = initSearchText,
                 setEnableSearchMode = setEnableSearchMode,
-                isSearchMode = uiState.isSearchMode,
                 setEnableEditMode = setEnableEditMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
-                isEditMode = uiState.isEditMode,
                 addLikeFestivalAtBottomSheetSearch = onAddLikeFestivalAtBottomSheetSearch,
             )
         }
@@ -391,7 +398,7 @@ fun MenuItem(
 fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     FestivalModel(
@@ -436,16 +443,14 @@ fun MenuScreenPreview() {
                     ),
                 ),
             ),
+            appVersion = "1.0.0",
+            onAction = {},
             setFestivalSearchBottomSheetVisible = {},
             updateFestivalSearchText = {},
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = { },
             setLikedFestivalDeleteDialogVisible = {},
-            onNavigateToLikedBooth = {},
-            onNavigateToContact = {},
-            deleteLikedBooth = {},
-            appVersion = "1.0.0",
             onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }

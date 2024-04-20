@@ -9,10 +9,13 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,20 +28,56 @@ class MenuViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<MenuUiEvent>()
+    val uiEvent: Flow<MenuUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
+        observeLikedFestival()
+        observeLikedBooth()
+    }
+
+    fun onAction(action: MenuUiAction) {
+        when (action) {
+            is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
+            is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
+            is MenuUiAction.OnContactClick -> navigateToContact()
+            is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
+        }
+    }
+
+    private fun observeLikedFestival() {
         viewModelScope.launch {
             festivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
-                    it.copy(likedFestivals = likedFestivalList.toMutableList())
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
                 }
             }
         }
+    }
+
+    private fun observeLikedBooth() {
         viewModelScope.launch {
             likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
                 _uiState.update {
-                    it.copy(likedBoothList = likedBoothList.toImmutableList())
+                    it.copy(
+                        likedBoothList = likedBoothList.toImmutableList(),
+                    )
                 }
             }
+        }
+    }
+
+    private fun navigateToLikedBooth() {
+        viewModelScope.launch {
+            _uiEvent.send(MenuUiEvent.NavigateToLikedBooth)
+        }
+    }
+
+    private fun navigateToContact() {
+        viewModelScope.launch {
+            _uiEvent.send(MenuUiEvent.NavigateToContact)
         }
     }
 
@@ -48,7 +87,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    fun deleteLikedBooth(booth: BoothDetailModel) {
+    private fun deleteLikedBooth(booth: BoothDetailModel) {
         viewModelScope.launch {
             updateLikedBooth(booth)
             delay(500)

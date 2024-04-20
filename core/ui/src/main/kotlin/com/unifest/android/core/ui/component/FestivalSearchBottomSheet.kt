@@ -43,15 +43,15 @@ fun FestivalSearchBottomSheet(
     searchText: TextFieldValue,
     likedFestivals: MutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
+    isLikedFestivalDeleteDialogVisible: Boolean,
+    isEditMode: Boolean = false,
+    isSearchMode: Boolean,
     updateSearchText: (TextFieldValue) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
-    isSearchMode: Boolean,
     setEnableEditMode: () -> Unit,
-    isLikedFestivalDeleteDialogVisible: Boolean,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    isEditMode: Boolean = false,
     addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }

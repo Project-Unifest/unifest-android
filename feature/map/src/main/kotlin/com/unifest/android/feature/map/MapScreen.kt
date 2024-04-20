@@ -508,7 +508,7 @@ fun MapScreenPreview() {
 
     UnifestTheme {
         MapScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = MapUiState(
                 selectedSchoolName = "건국대학교",
                 boothList = persistentListOf(
