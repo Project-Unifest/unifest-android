@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -79,9 +80,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import ted.gun0912.clustering.naver.TedNaverClustering
 
 @Composable
@@ -113,6 +112,7 @@ internal fun MapRoute(
 }
 
 // TODO onAction 으로 묶기
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
@@ -130,6 +130,7 @@ internal fun MapScreen(
         position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
     }
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
+    val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
 
     Column(
         modifier = Modifier
@@ -142,6 +143,7 @@ internal fun MapScreen(
             uiState = uiState,
             cameraPositionState = cameraPositionState,
             rotationState = rotationState,
+            pagerState = pagerState,
             onAction = onAction,
         )
 
@@ -178,12 +180,13 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MapContent(
     uiState: MapUiState,
     cameraPositionState: CameraPositionState,
     rotationState: Float,
+    pagerState: PagerState,
     onAction: (MapUiAction) -> Unit,
 ) {
     Box {
@@ -276,12 +279,21 @@ fun MapContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
-                BoothList(
-                    selectedBoothList = uiState.selectedBoothList,
-                    isPopularMode = uiState.isPopularMode,
-                    onAction = onAction,
+                HorizontalPager(
+                    state = pagerState,
                     modifier = Modifier.wrapContentHeight(),
-                )
+                    contentPadding = PaddingValues(horizontal = 30.dp),
+                ) { page ->
+                    BoothItem(
+                        boothInfo = uiState.selectedBoothList[page],
+                        isPopularMode = uiState.isPopularMode,
+                        ranking = page + 1,
+                        onAction = onAction,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(21.dp))
         }
@@ -335,33 +347,6 @@ fun MapTopAppBar(
             )
             Spacer(modifier = Modifier.height(10.dp))
         }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun BoothList(
-    selectedBoothList: ImmutableList<BoothDetailMapModel>,
-    isPopularMode: Boolean,
-    onAction: (MapUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val pagerState = rememberPagerState(pageCount = { selectedBoothList.size })
-
-    HorizontalPager(
-        state = pagerState,
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 30.dp),
-    ) { page ->
-        BoothItem(
-            boothInfo = selectedBoothList[page],
-            isPopularMode = isPopularMode,
-            ranking = page + 1,
-            onAction = onAction,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-        )
     }
 }
 
@@ -503,35 +488,6 @@ fun MapTopAppBarPreview() {
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
             onAction = {},
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun BoothListPreview() {
-    val selectedBoothList = mutableListOf<BoothDetailMapModel>()
-    repeat(5) {
-        selectedBoothList.add(
-            BoothDetailMapModel(
-                id = 1L,
-                name = "컴공 주점",
-                category = "",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                warning = "",
-                location = "청심대 앞",
-                latitude = 0.toDouble(),
-                longitude = 0.toDouble(),
-            ),
-        )
-    }
-
-    UnifestTheme {
-        BoothList(
-            selectedBoothList = selectedBoothList.toImmutableList(),
-            isPopularMode = false,
-            onAction = {},
-            modifier = Modifier.height(116.dp),
         )
     }
 }
