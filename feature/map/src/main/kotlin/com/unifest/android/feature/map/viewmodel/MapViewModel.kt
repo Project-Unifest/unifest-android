@@ -15,9 +15,12 @@ import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,10 +34,14 @@ class MapViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<MapUiEvent>()
+    val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
         getAllFestivals()
         getPopularBooths()
         checkOnboardingCompletion()
+        observeLikedFestivals()
 
         val boothList = listOf(
             BoothDetailModel(
@@ -127,16 +134,6 @@ class MapViewModel @Inject constructor(
             ),
         )
 
-        viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
-                _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
-                    )
-                }
-            }
-        }
-
         _uiState.update {
             it.copy(
                 selectedSchoolName = "건국대학교",
@@ -205,6 +202,28 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun onAction(action: MapUiAction) {
+        when (action) {
+            is MapUiAction.OnTooltipClick -> completeOnboarding()
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
+            is MapUiAction.OnBoothItemClick -> navigateToBooth(action.boothId)
+            is MapUiAction.OnRetryClick -> refresh(action.error)
+        }
+    }
+
+    private fun observeLikedFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+    }
+
     fun getAllFestivals() {
         viewModelScope.launch {
             festivalRepository.getAllFestivals()
@@ -244,12 +263,27 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun completeOnboarding(flag: Boolean) {
+    private fun completeOnboarding() {
         viewModelScope.launch {
-            onboardingRepository.completeOnboarding(flag)
+            onboardingRepository.completeOnboarding(true)
             _uiState.update {
-                it.copy(isOnboardingCompleted = flag)
+                it.copy(isOnboardingCompleted = true)
             }
+        }
+    }
+
+    private fun navigateToBooth(boothId: Long) {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.NavigateToBooth(boothId))
+        }
+    }
+
+    private fun refresh(error: Error) {
+        getAllFestivals()
+        getPopularBooths()
+        when (error) {
+            Error.NETWORK -> setNetworkErrorDialogVisible(false)
+            Error.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 
@@ -295,7 +329,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setEnablePopularMode() {
+    private fun setEnablePopularMode() {
         val popularBoothList = listOf(
             BoothDetailModel(
                 id = 1L,
@@ -363,18 +397,13 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setBoothSelectionMode(flag: Boolean) {
+    private fun updateSelectedBoothList(booths: List<BoothDetailMapModel>) {
         _uiState.update {
             it.copy(
                 isPopularMode = false,
-                isBoothSelectionMode = flag,
+                isBoothSelectionMode = true,
+                selectedBoothList = booths.toImmutableList(),
             )
-        }
-    }
-
-    fun updateSelectedBoothList(boothList: List<BoothDetailMapModel>) {
-        _uiState.update {
-            it.copy(selectedBoothList = boothList.toImmutableList())
         }
     }
 

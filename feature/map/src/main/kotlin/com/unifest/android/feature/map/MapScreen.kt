@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,6 +55,7 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
+import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -74,6 +74,9 @@ import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.feature.map.model.BoothDetailMapModel
+import com.unifest.android.feature.map.viewmodel.Error
+import com.unifest.android.feature.map.viewmodel.MapUiAction
+import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -89,50 +92,39 @@ internal fun MapRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is MapUiEvent.NavigateToBooth -> onNavigateToBooth(event.boothId)
+        }
+    }
+
     MapScreen(
         padding = padding,
         uiState = uiState,
-        onNavigateToBooth = onNavigateToBooth,
-        getAllFestivals = viewModel::getAllFestivals,
+        onAction = viewModel::onAction,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         updateBoothSearchText = viewModel::updateBoothSearchText,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
         initSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
-        setEnablePopularMode = viewModel::setEnablePopularMode,
-        setBoothSelectionMode = viewModel::setBoothSelectionMode,
-        updateSelectedBoothList = viewModel::updateSelectedBoothList,
-        completeOnboarding = viewModel::completeOnboarding,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        setServerErrorDialogVisible = viewModel::setServerErrorDialogVisible,
-        setNetworkErrorDialogVisible = viewModel::setNetworkErrorDialogVisible,
         onAddLikeFestivalAtBottomSheetSearch = viewModel::addLikeFestivalAtBottomSheetSearch,
     )
 }
 
-@OptIn(
-    ExperimentalFoundationApi::class,
-)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
     uiState: MapUiState,
-    onNavigateToBooth: (Long) -> Unit,
-    getAllFestivals: () -> Unit,
+    onAction: (MapUiAction) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     updateBoothSearchText: (TextFieldValue) -> Unit,
     updateFestivalSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     setEnableEditMode: () -> Unit,
-    setEnablePopularMode: () -> Unit,
-    setBoothSelectionMode: (Boolean) -> Unit,
-    completeOnboarding: (Boolean) -> Unit,
-    updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
     setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    setServerErrorDialogVisible: (Boolean) -> Unit,
-    setNetworkErrorDialogVisible: (Boolean) -> Unit,
     onAddLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
@@ -147,38 +139,25 @@ internal fun MapScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
-
         MapContent(
             uiState = uiState,
             cameraPositionState = cameraPositionState,
-            pagerState = pagerState,
-            onNavigateToBooth = onNavigateToBooth,
+            onAction = onAction,
             setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
             updateBoothSearchText = updateBoothSearchText,
             initSearchText = initSearchText,
-            setEnablePopularMode = setEnablePopularMode,
-            setBoothSelectionMode = setBoothSelectionMode,
-            updateSelectedBoothList = updateSelectedBoothList,
-            completeOnboarding = completeOnboarding,
             rotationState = rotationState,
         )
 
         if (uiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
-                onRetryClick = {
-                    setServerErrorDialogVisible(false)
-                    getAllFestivals()
-                },
+                onRetryClick = { onAction(MapUiAction.OnRetryClick(Error.SERVER)) },
             )
         }
 
         if (uiState.isNetworkErrorDialogVisible) {
             NetworkErrorDialog(
-                onRetryClick = {
-                    setNetworkErrorDialogVisible(false)
-                    getAllFestivals()
-                },
+                onRetryClick = { onAction(MapUiAction.OnRetryClick(Error.NETWORK)) },
             )
         }
 
@@ -203,20 +182,15 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapContent(
     uiState: MapUiState,
     cameraPositionState: CameraPositionState,
-    pagerState: PagerState,
-    onNavigateToBooth: (Long) -> Unit,
+    onAction: (MapUiAction) -> Unit,
     setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
     updateBoothSearchText: (TextFieldValue) -> Unit,
     initSearchText: () -> Unit,
-    setEnablePopularMode: () -> Unit,
-    setBoothSelectionMode: (Boolean) -> Unit,
-    updateSelectedBoothList: (List<BoothDetailMapModel>) -> Unit,
-    completeOnboarding: (Boolean) -> Unit,
     rotationState: Float,
 ) {
     Box {
@@ -243,12 +217,10 @@ fun MapContent(
                             }
                         }
                         .markerClickListener { booth ->
-                            setBoothSelectionMode(true)
-                            updateSelectedBoothList(listOf(booth))
+                            onAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
                         }
                         .clusterClickListener { booths ->
-                            setBoothSelectionMode(true)
-                            updateSelectedBoothList(booths.items.toList())
+                            onAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
                         }
                         // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
                         .clickToCenter(false)
@@ -267,7 +239,7 @@ fun MapContent(
             onTitleClick = setFestivalSearchBottomSheetVisible,
             initSearchText = initSearchText,
             isOnboardingCompleted = uiState.isOnboardingCompleted,
-            completeOnboarding = completeOnboarding,
+            completeOnboarding = { onAction(MapUiAction.OnTooltipClick)},
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
@@ -290,7 +262,7 @@ fun MapContent(
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
-                        setEnablePopularMode()
+                        onAction(MapUiAction.OnTogglePopularBooth)
                     },
             ) {
                 Row(
@@ -314,11 +286,10 @@ fun MapContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
-                BoothCards(
-                    pagerState = pagerState,
-                    boothList = uiState.boothList,
-                    onNavigateToBooth = onNavigateToBooth,
+                BoothList(
+                    selectedBoothList = uiState.selectedBoothList,
                     isPopularMode = uiState.isPopularMode,
+                    onAction = onAction,
                     modifier = Modifier.wrapContentHeight(),
                 )
             }
@@ -382,23 +353,24 @@ fun MapTopAppBar(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BoothCards(
-    pagerState: PagerState,
-    boothList: ImmutableList<BoothDetailMapModel>,
-    onNavigateToBooth: (Long) -> Unit,
+fun BoothList(
+    selectedBoothList: ImmutableList<BoothDetailMapModel>,
     isPopularMode: Boolean,
+    onAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val pagerState = rememberPagerState(pageCount = { selectedBoothList.size })
+
     HorizontalPager(
         state = pagerState,
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 30.dp),
     ) { page ->
-        BoothCard(
-            boothInfo = boothList[page],
-            onNavigateToBooth = onNavigateToBooth,
+        BoothItem(
+            boothInfo = selectedBoothList[page],
             isPopularMode = isPopularMode,
             ranking = page + 1,
+            onAction = onAction,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
@@ -407,16 +379,16 @@ fun BoothCards(
 }
 
 @Composable
-fun BoothCard(
+fun BoothItem(
     boothInfo: BoothDetailMapModel,
-    onNavigateToBooth: (Long) -> Unit,
     isPopularMode: Boolean,
     ranking: Int,
+    onAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.clickable {
-            onNavigateToBooth(boothInfo.id)
+            onAction(MapUiAction.OnBoothItemClick(boothInfo.id))
         },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(12.dp),
@@ -523,21 +495,14 @@ fun MapScreenPreview() {
                     ),
                 ),
             ),
-            onNavigateToBooth = {},
-            getAllFestivals = {},
+            onAction = {},
             setFestivalSearchBottomSheetVisible = {},
             updateBoothSearchText = {},
             updateFestivalSearchText = {},
             initSearchText = {},
             setEnableSearchMode = {},
             setEnableEditMode = {},
-            setEnablePopularMode = {},
-            setBoothSelectionMode = {},
-            updateSelectedBoothList = {},
-            completeOnboarding = {},
             setLikedFestivalDeleteDialogVisible = {},
-            setServerErrorDialogVisible = {},
-            setNetworkErrorDialogVisible = {},
             onAddLikeFestivalAtBottomSheetSearch = {},
         )
     }
@@ -559,13 +524,12 @@ fun MapTopAppBarPreview() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @ComponentPreview
 @Composable
-fun BoothCardsPreview() {
-    val boothList = mutableListOf<BoothDetailMapModel>()
+fun BoothListPreview() {
+    val selectedBoothList = mutableListOf<BoothDetailMapModel>()
     repeat(5) {
-        boothList.add(
+        selectedBoothList.add(
             BoothDetailMapModel(
                 id = 1L,
                 name = "컴공 주점",
@@ -580,11 +544,10 @@ fun BoothCardsPreview() {
     }
 
     UnifestTheme {
-        BoothCards(
-            pagerState = rememberPagerState(pageCount = { boothList.size }),
-            boothList = boothList.toImmutableList(),
-            onNavigateToBooth = {},
+        BoothList(
+            selectedBoothList = selectedBoothList.toImmutableList(),
             isPopularMode = false,
+            onAction = {},
             modifier = Modifier.height(116.dp),
         )
     }
@@ -592,9 +555,9 @@ fun BoothCardsPreview() {
 
 @ComponentPreview
 @Composable
-fun BoothCardPreview() {
+fun BoothItemPreview() {
     UnifestTheme {
-        BoothCard(
+        BoothItem(
             boothInfo = BoothDetailMapModel(
                 id = 1L,
                 name = "컴공 주점",
@@ -603,9 +566,9 @@ fun BoothCardPreview() {
                 warning = "",
                 location = "청심대 앞",
             ),
-            onNavigateToBooth = {},
             isPopularMode = true,
             ranking = 1,
+            onAction = {},
         )
     }
 }
