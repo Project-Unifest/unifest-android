@@ -3,7 +3,9 @@ package com.unifest.android.feature.booth.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
@@ -75,19 +77,26 @@ class BoothViewModel @Inject constructor(
     }
 
     private fun toggleBookmark() {
+        val currentBookmarkFlag = _uiState.value.isBookmarked
+        val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
-            if (_uiState.value.isBookmarked) {
+            if (currentBookmarkFlag) {
                 likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
             } else {
                 likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
             }
-            _uiState.update { currentState ->
-                val newBookmarkState = !currentState.isBookmarked
-                currentState.copy(
-                    isBookmarked = newBookmarkState,
-                    bookmarkCount = currentState.bookmarkCount + if (newBookmarkState) 1 else -1,
+            _uiState.update {
+                it.copy(
+                    isBookmarked = newBookmarkFlag,
+                    bookmarkCount = it.bookmarkCount + if (newBookmarkFlag) 1 else -1,
                 )
             }
+            _uiEvent.send(
+                BoothUiEvent.OnShowSnackBar(
+                    if (newBookmarkFlag) UiText.StringResource(R.string.booth_bookmarked_message)
+                    else UiText.StringResource(R.string.booth_bookmark_removed_message),
+                ),
+            )
         }
     }
 }

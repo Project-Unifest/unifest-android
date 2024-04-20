@@ -169,7 +169,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    fun clearSearchText() {
+    fun initSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }

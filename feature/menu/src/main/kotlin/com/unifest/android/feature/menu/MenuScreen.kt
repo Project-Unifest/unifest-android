@@ -103,7 +103,7 @@ internal fun MenuRoute(
         onAction = viewModel::onAction,
         setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
         updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        clearSearchText = viewModel::clearSearchText,
+        clearSearchText = viewModel::initSearchText,
         setEnableSearchMode = viewModel::setEnableSearchMode,
         setEnableEditMode = viewModel::setEnableEditMode,
         setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,

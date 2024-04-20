@@ -81,6 +81,9 @@ internal fun BoothDetailRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val systemUiController = rememberExSystemUiController()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackBarState = remember { SnackbarHostState() }
 
     DisposableEffect(systemUiController) {
         systemUiController.setSystemBarsColor(
@@ -101,12 +104,25 @@ internal fun BoothDetailRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> onNavigateToBoothLocation()
+            is BoothUiEvent.OnShowSnackBar -> {
+                scope.launch {
+                    val job = launch {
+                        snackBarState.showSnackbar(
+                            message = event.message.asString(context),
+                            duration = SnackbarDuration.Short,
+                        )
+                    }
+                    delay(SnackBarDuration)
+                    job.cancel()
+                }
+            }
         }
     }
 
     BoothDetailScreen(
         padding = padding,
         uiState = uiState,
+        snackBarState = snackBarState,
         onAction = viewModel::onAction,
     )
 }
@@ -115,10 +131,9 @@ internal fun BoothDetailRoute(
 fun BoothDetailScreen(
     padding: PaddingValues,
     uiState: BoothUiState,
+    snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
 ) {
-    val snackBarState = remember { SnackbarHostState() }
-
     Box(modifier = Modifier.fillMaxSize()) {
         BoothDetailContent(
             uiState = uiState,
@@ -137,7 +152,6 @@ fun BoothDetailScreen(
         BottomBar(
             isBookmarked = uiState.isBookmarked,
             bookmarkCount = uiState.bookmarkCount,
-            snackBarState = snackBarState,
             onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
@@ -192,14 +206,10 @@ fun BoothDetailContent(
 fun BottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
-    snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
-
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -225,17 +235,6 @@ fun BottomBar(
                         tint = bookMarkColor,
                         modifier = Modifier.clickable {
                             onAction(BoothUiAction.OnToggleBookmark)
-                            scope.launch {
-                                val job = launch {
-                                    snackBarState.showSnackbar(
-                                        message = if (isBookmarked) context.getString(R.string.booth_bookmark_removed_message)
-                                        else context.getString(R.string.booth_bookmarked_message),
-                                        duration = SnackbarDuration.Short,
-                                    )
-                                }
-                                delay(SnackBarDuration)
-                                job.cancel()
-                            }
                         },
                     )
                     Text(
@@ -391,6 +390,7 @@ fun BoothScreenPreview() {
                     ),
                 ),
             ),
+            snackBarState = SnackbarHostState(),
             onAction = {},
         )
     }
