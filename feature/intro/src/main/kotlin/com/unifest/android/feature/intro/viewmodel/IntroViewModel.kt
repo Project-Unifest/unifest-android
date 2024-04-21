@@ -7,9 +7,12 @@ import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,10 +24,13 @@ class IntroViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<IntroUiEvent>()
+    val uiEvent: Flow<IntroUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
         _uiState.update {
             it.copy(
-                schools = persistentListOf(
+                festivals = persistentListOf(
                     FestivalModel(
                         1,
                         1,
@@ -85,24 +91,57 @@ class IntroViewModel @Inject constructor(
         }
     }
 
-    fun updateSearchText(text: TextFieldValue) {
+    fun onAction(action: IntroUiAction) {
+        when (action) {
+            is IntroUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is IntroUiAction.OnSearchTextCleared -> clearSearchText()
+            is IntroUiAction.OnClearSelectionClick -> clearSelectedFestivals()
+            is IntroUiAction.OnFestivalSelected -> addSelectedFestival(action.festival)
+            is IntroUiAction.OnFestivalDeselected -> removeSelectedFestivals(action.festival)
+            is IntroUiAction.OnAddCompleteClick -> addLikedFestivals()
+        }
+    }
+
+    private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(searchText = text)
         }
     }
 
-    fun initSearchText() {
+    private fun clearSearchText() {
         _uiState.update {
             it.copy(searchText = TextFieldValue())
         }
     }
 
-    fun addLikeFestivals(festivals: List<FestivalModel>, onComplete: () -> Unit) {
+    private fun clearSelectedFestivals() {
+        _uiState.update {
+            it.copy(selectedFestivals = emptyList())
+        }
+    }
+
+    private fun addSelectedFestival(festival: FestivalModel) {
+        _uiState.update {
+            it.copy(
+                selectedFestivals = it.selectedFestivals.toMutableList().apply { add(festival) },
+            )
+        }
+    }
+
+    private fun removeSelectedFestivals(festival: FestivalModel) {
+        _uiState.update {
+            it.copy(
+                selectedFestivals = it.selectedFestivals.toMutableList().apply { remove(festival) },
+            )
+        }
+    }
+
+    private fun addLikedFestivals() {
         viewModelScope.launch {
-            festivals.forEach { festival ->
+            _uiState.value.selectedFestivals.forEach { festival ->
                 festivalRepository.insertLikedFestivalAtSearch(festival)
             }
-            onComplete()
+            _uiEvent.send(IntroUiEvent.NavigateToMain)
         }
     }
 }

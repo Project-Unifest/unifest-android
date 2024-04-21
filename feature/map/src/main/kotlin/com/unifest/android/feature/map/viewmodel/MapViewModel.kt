@@ -3,7 +3,9 @@ package com.unifest.android.feature.map.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
@@ -15,9 +17,12 @@ import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,10 +36,14 @@ class MapViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<MapUiEvent>()
+    val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
         getAllFestivals()
         getPopularBooths()
         checkOnboardingCompletion()
+        observeLikedFestivals()
 
         val boothList = listOf(
             BoothDetailModel(
@@ -127,16 +136,6 @@ class MapViewModel @Inject constructor(
             ),
         )
 
-        viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
-                _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
-                    )
-                }
-            }
-        }
-
         _uiState.update {
             it.copy(
                 selectedSchoolName = "건국대학교",
@@ -205,7 +204,50 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getAllFestivals() {
+    fun onMapUiAction(action: MapUiAction) {
+        when (action) {
+            is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
+            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.text)
+            is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
+            is MapUiAction.OnTooltipClick -> completeOnboarding()
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
+            is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
+            is MapUiAction.OnRetryClick -> refresh(action.error)
+        }
+    }
+
+    fun onFestivalUiAction(action: FestivalUiAction) {
+        when (action) {
+            is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
+            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.text)
+            is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
+            is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
+            is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
+            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDialogButtonClick -> {
+                when (action.type) {
+                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+                }
+            }
+        }
+    }
+
+    private fun observeLikedFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getAllFestivals() {
         viewModelScope.launch {
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
@@ -221,7 +263,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getPopularBooths() {
+    private fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(_uiState.value.festivalId)
                 .onSuccess { booths ->
@@ -244,58 +286,79 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun completeOnboarding(flag: Boolean) {
+    private fun completeOnboarding() {
         viewModelScope.launch {
-            onboardingRepository.completeOnboarding(flag)
+            onboardingRepository.completeOnboarding(true)
             _uiState.update {
-                it.copy(isOnboardingCompleted = flag)
+                it.copy(isOnboardingCompleted = true)
             }
         }
     }
 
-    fun updateBoothSearchText(text: TextFieldValue) {
+    private fun navigateToBoothDetail(boothId: Long) {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.NavigateToBoothDetail(boothId))
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getAllFestivals()
+        getPopularBooths()
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
+        }
+    }
+
+    private fun updateBoothSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(boothSearchText = text)
         }
     }
 
-    fun updateFestivalSearchText(text: TextFieldValue) {
-        _uiState.update {
-            it.copy(festivalSearchText = text)
-        }
-    }
-
-    fun initSearchText() {
+    private fun clearBoothSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+    private fun updateFestivalSearchText(text: TextFieldValue) {
+        _uiState.update {
+            it.copy(festivalSearchText = text)
+        }
+    }
+
+    private fun clearFestivalSearchText() {
+        _uiState.update {
+            it.copy(festivalSearchText = TextFieldValue())
+        }
+    }
+
+    private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
         }
     }
 
-    fun addLikeFestivalAtBottomSheetSearch(festival: FestivalModel) {
+    private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
-    fun setEnableSearchMode(flag: Boolean) {
+    private fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
             it.copy(isSearchMode = flag)
         }
     }
 
-    fun setEnableEditMode() {
+    private fun setEnableEditMode() {
         _uiState.update {
             it.copy(isEditMode = !_uiState.value.isEditMode)
         }
     }
 
-    fun setEnablePopularMode() {
+    private fun setEnablePopularMode() {
         val popularBoothList = listOf(
             BoothDetailModel(
                 id = 1L,
@@ -363,22 +426,17 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setBoothSelectionMode(flag: Boolean) {
+    private fun updateSelectedBoothList(booths: List<BoothDetailMapModel>) {
         _uiState.update {
             it.copy(
                 isPopularMode = false,
-                isBoothSelectionMode = flag,
+                isBoothSelectionMode = true,
+                selectedBoothList = booths.toImmutableList(),
             )
         }
     }
 
-    fun updateSelectedBoothList(boothList: List<BoothDetailMapModel>) {
-        _uiState.update {
-            it.copy(selectedBoothList = boothList.toImmutableList())
-        }
-    }
-
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+    private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }

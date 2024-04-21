@@ -40,9 +40,7 @@ fun LikedBoothItem(
 ) {
     val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
     Column(
-        modifier = modifier
-            .clickable { /* 클릭 이벤트 처리 */ }
-            .padding(horizontal = 20.dp),
+        modifier = modifier.padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Row(

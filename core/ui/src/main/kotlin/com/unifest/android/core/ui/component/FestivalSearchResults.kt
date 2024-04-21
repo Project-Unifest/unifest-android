@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -38,7 +39,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
-    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -81,7 +82,7 @@ fun FestivalSearchResults(
                 Column {
                     FestivalSearchResultItem(
                         festival = searchResults[it],
-                        addLikeFestivalAtBottomSheetSearch = addLikeFestivalAtBottomSheetSearch,
+                        onFestivalUiAction = onFestivalUiAction,
                     )
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
@@ -96,7 +97,7 @@ fun FestivalSearchResults(
 @Composable
 fun FestivalSearchResultItem(
     festival: FestivalModel,
-    addLikeFestivalAtBottomSheetSearch: (FestivalModel) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -130,7 +131,7 @@ fun FestivalSearchResultItem(
         }
         Spacer(modifier = Modifier.weight(1f))
         UnifestOutlinedButton(
-            onClick = { addLikeFestivalAtBottomSheetSearch(festival) },
+            onClick = { onFestivalUiAction(FestivalUiAction.OnAddClick(festival)) },
             cornerRadius = 17.dp,
             borderColor = Color(0xFFDDDDDD),
             contentColor = Color(0xFF666666),
@@ -209,6 +210,6 @@ fun FestivalSearchResultsPreview() {
                 37.460f,
             ),
         ),
-        addLikeFestivalAtBottomSheetSearch = {},
+        onFestivalUiAction = {},
     )
 }

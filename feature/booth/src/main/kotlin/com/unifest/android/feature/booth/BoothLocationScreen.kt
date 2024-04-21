@@ -158,3 +158,15 @@ fun BoothLocationScreenPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+fun BoothLocationAppBarPreview() {
+    UnifestTheme {
+        BoothLocationAppBar(
+            onBackClick = {},
+            boothName = "컴공 주점",
+            boothLocation = "청심대 앞",
+        )
+    }
+}

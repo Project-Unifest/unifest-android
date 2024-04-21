@@ -48,7 +48,7 @@ fun SearchTextField(
     updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
-    initSearchText: () -> Unit,
+    clearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.White,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
@@ -98,7 +98,7 @@ fun SearchTextField(
                             tint = Color.Unspecified,
                             modifier = Modifier
                                 .clickable {
-                                    initSearchText()
+                                    clearSearchText()
                                 },
                         )
                     }
@@ -115,7 +115,7 @@ fun FestivalSearchTextField(
     updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
     onSearch: (String) -> Unit,
-    initSearchText: () -> Unit,
+    clearSearchText: () -> Unit,
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     modifier: Modifier = Modifier,
@@ -151,7 +151,7 @@ fun FestivalSearchTextField(
                             contentDescription = "Search Icon",
                             tint = Color(0xFF767676),
                             modifier = Modifier.clickable {
-                                initSearchText()
+                                clearSearchText()
                             },
                         )
                     }
@@ -181,7 +181,7 @@ fun FestivalSearchTextField(
                             contentDescription = "Delete Icon",
                             tint = Color.Unspecified,
                             modifier = Modifier.clickable {
-                                initSearchText()
+                                clearSearchText()
                             },
                         )
                     }
@@ -201,7 +201,7 @@ fun SearchTextFieldPreview() {
             updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
-            initSearchText = {},
+            clearSearchText = {},
             modifier = Modifier
                 .height(46.dp)
                 .fillMaxWidth()
@@ -219,7 +219,7 @@ fun FestivalSearchTextFieldPreview() {
             updateSearchText = {},
             searchTextHintRes = R.string.intro_search_text_hint,
             onSearch = {},
-            initSearchText = {},
+            clearSearchText = {},
             setEnableSearchMode = {},
             isSearchMode = true,
             modifier = Modifier
