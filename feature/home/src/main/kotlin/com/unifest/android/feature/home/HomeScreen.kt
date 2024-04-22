@@ -239,7 +239,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = festival.date,
+                    text = festival.beginDate + " - " + festival.endDate,
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
@@ -372,7 +372,8 @@ fun HomeScreenPreview() {
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -382,7 +383,8 @@ fun HomeScreenPreview() {
 
                     FestivalTodayModel(
                         festivalId = 2,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -391,7 +393,8 @@ fun HomeScreenPreview() {
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
