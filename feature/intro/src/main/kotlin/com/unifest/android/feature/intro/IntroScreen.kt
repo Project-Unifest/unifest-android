@@ -290,76 +290,77 @@ fun AllFestivalsTabRow(
     val scope = rememberCoroutineScope()
     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
-    ScrollableTabRow(
-        selectedTabIndex = selectedTabIndex,
-        containerColor = Color.White,
-        contentColor = Color(0xFFE5E5E5),
-        edgePadding = 0.dp,
-        indicator = {},
-        divider = {
-            HorizontalDivider(
-                color = Color(0xFFE5E5E5),
-                thickness = 1.75.dp,
-            )
-        },
-    ) {
-        tabTitles.forEachIndexed { index, title ->
-            val isSelected = selectedTabIndex == index
-            val tabTitleColor by animateColorAsState(
-                targetValue = if (isSelected) Color(0xFFF5687E) else Color.Black
-            )
-            val tabTitleFontWeight by animateFloatAsState(
-                targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat()
-            )
-            Tab(
-                selected = isSelected,
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                },
-                text = {
-                    Text(
-                        text = title,
-                        color = tabTitleColor,
-                        style = Content1,
-                        fontWeight = FontWeight(weight = tabTitleFontWeight.toInt()),
-                    )
-                },
-            )
+    Column {
+        ScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = Color.White,
+            contentColor = Color(0xFFE5E5E5),
+            edgePadding = 0.dp,
+            indicator = {},
+            divider = {
+                HorizontalDivider(
+                    color = Color(0xFFE5E5E5),
+                    thickness = 1.75.dp,
+                )
+            },
+        ) {
+            tabTitles.forEachIndexed { index, title ->
+                val isSelected = selectedTabIndex == index
+                val tabTitleColor by animateColorAsState(
+                    targetValue = if (isSelected) Color(0xFFF5687E) else Color.Black,
+                )
+                val tabTitleFontWeight by animateFloatAsState(
+                    targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),
+                )
+                Tab(
+                    selected = isSelected,
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(
+                            text = title,
+                            color = tabTitleColor,
+                            style = Content1,
+                            fontWeight = FontWeight(weight = tabTitleFontWeight.toInt()),
+                        )
+                    },
+                )
+            }
         }
-    }
-
-    HorizontalPager(
-        state = pagerState,
-    ) {
-        Column(modifier = Modifier.padding(top = 8.dp)) {
-            Text(
-                text = "총 ${festivals.size}개",
-                modifier = Modifier
-                    .padding(start = 20.dp, bottom = 16.dp)
-                    .align(Alignment.Start),
-                color = Color(0xFF4C4C4C),
-                style = Content6,
-            )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                items(
-                    count = festivals.size,
-                    key = { index -> festivals[index].festivalId },
-                ) { index ->
-                    FestivalItem(
-                        festival = festivals[index],
-                        onFestivalSelected = { festival ->
-                            onAction(IntroUiAction.OnFestivalSelected(festival))
-                        },
-                    )
+        Text(
+            text = stringResource(id = R.string.total_festivals_count, festivals.size),
+            modifier = Modifier
+                .padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
+                .align(Alignment.Start),
+            color = Color(0xFF4C4C4C),
+            style = Content6,
+        )
+        HorizontalPager(
+            state = pagerState,
+        ) {
+            Column(modifier = Modifier.padding(top = 8.dp)) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(
+                        count = festivals.size,
+                        key = { index -> festivals[index].festivalId },
+                    ) { index ->
+                        FestivalItem(
+                            festival = festivals[index],
+                            onFestivalSelected = { festival ->
+                                onAction(IntroUiAction.OnFestivalSelected(festival))
+                            },
+                        )
+                    }
                 }
             }
         }

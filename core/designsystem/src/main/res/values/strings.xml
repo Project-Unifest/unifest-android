@@ -23,6 +23,7 @@
         <item>부산/대구</item>
         <item>경상도</item>
     </string-array>
+    <string name="total_festivals_count">총 %d개</string>
 
     <!--    Home    -->
     <string name="home_festival_schedule_text">의 축제 일정</string>
