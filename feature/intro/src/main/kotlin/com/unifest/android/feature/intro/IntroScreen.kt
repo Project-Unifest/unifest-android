@@ -1,6 +1,7 @@
 package com.unifest.android.feature.intro
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,21 +18,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,6 +73,7 @@ import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -125,7 +130,7 @@ fun IntroScreen(
                     selectedFestivals = uiState.selectedFestivals,
                     onAction = onAction,
                 )
-                AllFestivalsTabView(
+                AllFestivalsTabRow(
                     festivals = uiState.festivals,
                     onAction = onAction,
                 )
@@ -272,32 +277,43 @@ fun FestivalRowItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AllFestivalsTabView(
+fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val selectedColor = Color(0xFFF5687E)
-    val unselectedColor = Color.Black
+    val pagerState = rememberPagerState(pageCount = { tabTitles.size })
+    val scope = rememberCoroutineScope()
+    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
-    // TODO tab 간의 간격을 더 좁게 해야 함
     ScrollableTabRow(
-        // 지역 탭
         selectedTabIndex = selectedTabIndex,
+        contentColor = Color(0xFFE5E5E5),
         containerColor = Color.White,
         edgePadding = 0.dp,
         indicator = {},
+        divider = {
+            HorizontalDivider(
+                color = Color(0xFFE5E5E5),
+                thickness = 1.dp,
+            )
+        }
     ) {
         tabTitles.forEachIndexed { index, title ->
             Tab(
                 selected = selectedTabIndex == index,
-                onClick = { selectedTabIndex = index },
+                selectedContentColor = Color(0xFFF5687E),
+                unselectedContentColor = Color.Black,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
                 text = {
                     Text(
                         text = title,
-                        color = if (selectedTabIndex == index) selectedColor else unselectedColor,
                         style = Content1,
                         fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
                     )
@@ -306,31 +322,34 @@ fun AllFestivalsTabView(
         }
     }
 
-    Column(modifier = Modifier.padding(top = 8.dp)) {
-        Text(
-            text = "총 ${festivals.size}개",
-            modifier = Modifier
-                .padding(start = 20.dp, bottom = 16.dp)
-                .align(Alignment.Start),
-            color = Color(0xFF4C4C4C),
-            style = BoothLocation,
-            fontSize = 12.sp,
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(festivals.size) { index ->
-                FestivalItem(
-                    festival = festivals[index],
-                    onFestivalSelected = { festival ->
-                        onAction(IntroUiAction.OnFestivalSelected(festival))
-                    },
-                )
+    HorizontalPager(
+        state = pagerState,
+    ) {
+        Column(modifier = Modifier.padding(top = 8.dp)) {
+            Text(
+                text = "총 ${festivals.size}개",
+                modifier = Modifier
+                    .padding(start = 20.dp, bottom = 16.dp)
+                    .align(Alignment.Start),
+                color = Color(0xFF4C4C4C),
+                style = Content6,
+            )
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(festivals.size) { index ->
+                    FestivalItem(
+                        festival = festivals[index],
+                        onFestivalSelected = { festival ->
+                            onAction(IntroUiAction.OnFestivalSelected(festival))
+                        },
+                    )
+                }
             }
         }
     }
