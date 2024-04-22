@@ -132,6 +132,13 @@ fun IntroScreen(
                     selectedFestivals = uiState.selectedFestivals,
                     onAction = onAction,
                 )
+                if (uiState.selectedFestivals.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(21.dp))
+                    HorizontalDivider(
+                        thickness = 7.dp,
+                        color = Color(0xFFEBECF0),
+                    )
+                }
                 AllFestivalsTabRow(
                     festivals = uiState.festivals,
                     onAction = onAction,
@@ -191,19 +198,21 @@ fun LikedFestivalsRow(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
         ) {
-            Text(
-                text = stringResource(id = R.string.intro_liked_festivals_title),
-                style = Title3,
-            )
-            TextButton(
-                onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
-            ) {
+            if (selectedFestivals.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.intro_clear_item_button_text),
-                    color = Color(0xFF848484),
-                    textDecoration = TextDecoration.Underline,
-                    style = Content6,
+                    text = stringResource(id = R.string.intro_liked_festivals_title),
+                    style = Title3,
                 )
+                TextButton(
+                    onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.intro_clear_item_button_text),
+                        color = Color(0xFF848484),
+                        textDecoration = TextDecoration.Underline,
+                        style = Content6,
+                    )
+                }
             }
         }
         LazyRow(
@@ -233,7 +242,7 @@ fun FestivalRowItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
+        border = BorderStroke(1.dp, Color(0xFFF5687E)),
         modifier = Modifier
             .height(130.dp)
             .width(120.dp),
@@ -435,4 +444,3 @@ fun PreviewIntroScreen() {
         )
     }
 }
-
