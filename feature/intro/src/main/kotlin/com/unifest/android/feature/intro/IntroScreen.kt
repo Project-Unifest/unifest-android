@@ -290,16 +290,16 @@ fun AllFestivalsTabRow(
 
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
-        contentColor = Color(0xFFE5E5E5),
         containerColor = Color.White,
+        contentColor = Color(0xFFE5E5E5),
         edgePadding = 0.dp,
         indicator = {},
         divider = {
             HorizontalDivider(
                 color = Color(0xFFE5E5E5),
-                thickness = 1.dp,
+                thickness = 1.75.dp,
             )
-        }
+        },
     ) {
         tabTitles.forEachIndexed { index, title ->
             Tab(
@@ -342,7 +342,10 @@ fun AllFestivalsTabRow(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(festivals.size) { index ->
+                items(
+                    count = festivals.size,
+                    key = { index -> festivals[index].festivalId },
+                ) { index ->
                     FestivalItem(
                         festival = festivals[index],
                         onFestivalSelected = { festival ->
@@ -423,3 +426,4 @@ fun PreviewIntroScreen() {
         )
     }
 }
+
