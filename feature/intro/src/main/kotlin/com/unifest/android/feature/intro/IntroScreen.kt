@@ -1,5 +1,7 @@
 package com.unifest.android.feature.intro
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -302,10 +304,15 @@ fun AllFestivalsTabRow(
         },
     ) {
         tabTitles.forEachIndexed { index, title ->
+            val isSelected = selectedTabIndex == index
+            val tabTitleColor by animateColorAsState(
+                targetValue = if (isSelected) Color(0xFFF5687E) else Color.Black
+            )
+            val tabTitleFontWeight by animateFloatAsState(
+                targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat()
+            )
             Tab(
-                selected = selectedTabIndex == index,
-                selectedContentColor = Color(0xFFF5687E),
-                unselectedContentColor = Color.Black,
+                selected = isSelected,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(index)
@@ -314,8 +321,9 @@ fun AllFestivalsTabRow(
                 text = {
                     Text(
                         text = title,
+                        color = tabTitleColor,
                         style = Content1,
-                        fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
+                        fontWeight = FontWeight(weight = tabTitleFontWeight.toInt()),
                     )
                 },
             )
