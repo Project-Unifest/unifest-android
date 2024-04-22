@@ -5,13 +5,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import com.unifest.android.core.datastore.di.OnboardingDataStore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 import javax.inject.Inject
 
 class OnboardingDataSourceImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
+    @OnboardingDataStore private val dataStore: DataStore<Preferences>,
 ) : OnboardingDataSource {
     private companion object {
         private val KEY_ONBOARDING_COMPLETE = booleanPreferencesKey("onboarding_complete")
