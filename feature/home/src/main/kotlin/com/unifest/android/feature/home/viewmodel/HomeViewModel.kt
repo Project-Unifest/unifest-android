@@ -277,4 +277,9 @@ class HomeViewModel @Inject constructor(
             it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
+    private fun deleteLikedFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.deleteLikedFestival(festival)
+        }
+    }
 }

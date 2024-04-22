@@ -226,6 +226,7 @@ class MapViewModel @Inject constructor(
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDeleteDialogClick -> deleteLikedFestival(action.festival)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
                     ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
@@ -451,6 +452,12 @@ class MapViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun deleteLikedFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.deleteLikedFestival(festival)
         }
     }
 }
