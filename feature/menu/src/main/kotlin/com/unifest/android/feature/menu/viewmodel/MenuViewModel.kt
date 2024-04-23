@@ -59,10 +59,12 @@ class MenuViewModel @Inject constructor(
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
-            is FestivalUiAction.OnDeleteDialogClick -> deleteLikedFestival(action.festival)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
-                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CONFIRM -> {
+                        setLikedFestivalDeleteDialogVisible(false)
+                        action.festival?.let { deleteLikedFestival(it) }
+                    }
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }

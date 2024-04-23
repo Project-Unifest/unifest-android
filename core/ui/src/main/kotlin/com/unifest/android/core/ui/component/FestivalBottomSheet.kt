@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,7 +54,7 @@ fun FestivalSearchBottomSheet(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
-    val deleteSelectedFestival = remember { mutableStateOf<FestivalModel?>(null) }
+    var deleteSelectedFestival by remember { mutableStateOf<FestivalModel?>(null) }
     val bottomSheetState = rememberFlexibleBottomSheetState(
         containSystemBars = true,
         flexibleSheetSize = FlexibleSheetSize(
@@ -121,7 +123,7 @@ fun FestivalSearchBottomSheet(
                     },
                     isEditMode = isEditMode,
                     onDeleteLikedFestivalClick = { festival ->
-                        deleteSelectedFestival.value = festival
+                        deleteSelectedFestival = festival
                         onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
                     },
                 ) {
@@ -151,7 +153,6 @@ fun FestivalSearchBottomSheet(
                 },
                 onConfirmClick = {
                     onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM))
-                    onFestivalUiAction(FestivalUiAction.OnDeleteDialogClick(deleteSelectedFestival.value!!))
                 },
             )
         }
