@@ -1,6 +1,9 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,12 +42,13 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedFestivalsGrid(
     selectedFestivals: MutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    onDeleteLikedFestivalClick: (Boolean) -> Unit = {},
+    onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
     optionTextButton: @Composable () -> Unit,
 ) {
     Column {
@@ -65,8 +69,7 @@ fun LikedFestivalsGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier
                 .padding(8.dp)
-                // TODO 높이 조정 로직 수정 필요
-                .height(if (selectedFestivals.isEmpty()) 0.dp else (((selectedFestivals.size - 1) / 3 + 1) * 140).dp),
+                .height(if (selectedFestivals.isEmpty()) 0.dp else ((selectedFestivals.size / 4 + 1) * 140).dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -81,6 +84,12 @@ fun LikedFestivalsGrid(
                     },
                     isEditMode = isEditMode,
                     setLikedFestivalDeleteDialogVisible = onDeleteLikedFestivalClick,
+                    modifier = Modifier.animateItemPlacement(
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing,
+                        ),
+                    ),
                 )
             }
         }
@@ -91,20 +100,21 @@ fun LikedFestivalsGrid(
 fun FestivalItem(
     festival: FestivalModel,
     onFestivalSelected: (FestivalModel) -> Unit,
+    modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
+    setLikedFestivalDeleteDialogVisible: (FestivalModel) -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
                 .clickable {
                     if (isEditMode) {
-                        setLikedFestivalDeleteDialogVisible(true)
+                        setLikedFestivalDeleteDialogVisible(festival)
                     } else {
                         onFestivalSelected(festival)
                     }

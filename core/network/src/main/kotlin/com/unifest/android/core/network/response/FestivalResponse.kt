@@ -51,8 +51,10 @@ data class FestivalToday(
     val schoolId: Long,
     @SerialName("festivalId")
     val festivalId: Long,
-    @SerialName("date")
-    val date: String,
+    @SerialName("beginDate")
+    val beginDate: String,
+    @SerialName("endDate")
+    val endDate: String,
     @SerialName("festivalName")
     val festivalName: String,
     @SerialName("schoolName")

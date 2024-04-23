@@ -148,6 +148,7 @@ internal fun HomeScreen(
                         FestivalScheduleItem(
                             festival = festival,
                             onAction = onHomeUiAction,
+                            likedFestivals = uiState.likedFestivals,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -221,6 +222,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
+    likedFestivals: List<FestivalModel>,
 ) {
     Column {
         Row(
@@ -239,7 +241,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = festival.date,
+                    text = festival.beginDate + " - " + festival.endDate,
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
@@ -279,18 +281,20 @@ fun FestivalScheduleItem(
                 }
             }
         }
-        UnifestOutlinedButton(
-            onClick = {
-                onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                style = BoothLocation,
-            )
+        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
+            UnifestOutlinedButton(
+                onClick = {
+                    onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
+                    style = BoothLocation,
+                )
+            }
         }
     }
 }
@@ -372,7 +376,8 @@ fun HomeScreenPreview() {
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -382,7 +387,8 @@ fun HomeScreenPreview() {
 
                     FestivalTodayModel(
                         festivalId = 2,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -391,7 +397,8 @@ fun HomeScreenPreview() {
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
