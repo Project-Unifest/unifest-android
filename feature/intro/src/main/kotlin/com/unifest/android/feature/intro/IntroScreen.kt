@@ -1,6 +1,9 @@
 package com.unifest.android.feature.intro
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,21 +20,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,6 +75,7 @@ import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -125,7 +132,14 @@ fun IntroScreen(
                     selectedFestivals = uiState.selectedFestivals,
                     onAction = onAction,
                 )
-                AllFestivalsTabView(
+                if (uiState.selectedFestivals.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(21.dp))
+                    HorizontalDivider(
+                        thickness = 7.dp,
+                        color = Color(0xFFEBECF0),
+                    )
+                }
+                AllFestivalsTabRow(
                     festivals = uiState.festivals,
                     onAction = onAction,
                 )
@@ -184,19 +198,21 @@ fun LikedFestivalsRow(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
         ) {
-            Text(
-                text = stringResource(id = R.string.intro_liked_festivals_title),
-                style = Title3,
-            )
-            TextButton(
-                onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
-            ) {
+            if (selectedFestivals.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.intro_clear_item_button_text),
-                    color = Color(0xFF848484),
-                    textDecoration = TextDecoration.Underline,
-                    style = Content6,
+                    text = stringResource(id = R.string.intro_liked_festivals_title),
+                    style = Title3,
                 )
+                TextButton(
+                    onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.intro_clear_item_button_text),
+                        color = Color(0xFF848484),
+                        textDecoration = TextDecoration.Underline,
+                        style = Content6,
+                    )
+                }
             }
         }
         LazyRow(
@@ -226,7 +242,7 @@ fun FestivalRowItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
+        border = BorderStroke(1.dp, Color(0xFFF5687E)),
         modifier = Modifier
             .height(130.dp)
             .width(120.dp),
@@ -272,65 +288,89 @@ fun FestivalRowItem(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AllFestivalsTabView(
+fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val selectedColor = Color(0xFFF5687E)
-    val unselectedColor = Color.Black
+    val pagerState = rememberPagerState(pageCount = { tabTitles.size })
+    val scope = rememberCoroutineScope()
+    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
-    // TODO tab 간의 간격을 더 좁게 해야 함
-    ScrollableTabRow(
-        // 지역 탭
-        selectedTabIndex = selectedTabIndex,
-        containerColor = Color.White,
-        edgePadding = 0.dp,
-        indicator = {},
-    ) {
-        tabTitles.forEachIndexed { index, title ->
-            Tab(
-                selected = selectedTabIndex == index,
-                onClick = { selectedTabIndex = index },
-                text = {
-                    Text(
-                        text = title,
-                        color = if (selectedTabIndex == index) selectedColor else unselectedColor,
-                        style = Content1,
-                        fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                    )
-                },
-            )
-        }
-    }
-
-    Column(modifier = Modifier.padding(top = 8.dp)) {
-        Text(
-            text = "총 ${festivals.size}개",
-            modifier = Modifier
-                .padding(start = 20.dp, bottom = 16.dp)
-                .align(Alignment.Start),
-            color = Color(0xFF4C4C4C),
-            style = BoothLocation,
-            fontSize = 12.sp,
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+    Column {
+        ScrollableTabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = Color.White,
+            contentColor = Color(0xFFE5E5E5),
+            edgePadding = 0.dp,
+            indicator = {},
+            divider = {
+                HorizontalDivider(
+                    color = Color(0xFFE5E5E5),
+                    thickness = 1.75.dp,
+                )
+            },
         ) {
-            items(festivals.size) { index ->
-                FestivalItem(
-                    festival = festivals[index],
-                    onFestivalSelected = { festival ->
-                        onAction(IntroUiAction.OnFestivalSelected(festival))
+            tabTitles.forEachIndexed { index, title ->
+                val isSelected = selectedTabIndex == index
+                val tabTitleColor by animateColorAsState(
+                    targetValue = if (isSelected) Color(0xFFF5687E) else Color.Black,
+                )
+                val tabTitleFontWeight by animateFloatAsState(
+                    targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),
+                )
+                Tab(
+                    selected = isSelected,
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(
+                            text = title,
+                            color = tabTitleColor,
+                            style = Content1,
+                            fontWeight = FontWeight(weight = tabTitleFontWeight.toInt()),
+                        )
                     },
                 )
+            }
+        }
+        Text(
+            text = stringResource(id = R.string.total_festivals_count, festivals.size),
+            modifier = Modifier
+                .padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
+                .align(Alignment.Start),
+            color = Color(0xFF4C4C4C),
+            style = Content6,
+        )
+        HorizontalPager(
+            state = pagerState,
+        ) {
+            Column(modifier = Modifier.padding(top = 8.dp)) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    items(
+                        count = festivals.size,
+                        key = { index -> festivals[index].festivalId },
+                    ) { index ->
+                        FestivalItem(
+                            festival = festivals[index],
+                            onFestivalSelected = { festival ->
+                                onAction(IntroUiAction.OnFestivalSelected(festival))
+                            },
+                        )
+                    }
+                }
             }
         }
     }

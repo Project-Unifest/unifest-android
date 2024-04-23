@@ -87,6 +87,7 @@ fun SearchTextField(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                             contentDescription = "Search Icon",
+                            tint = Color.Unspecified,
                             modifier = Modifier.clickable {
                                 onSearch(searchText.text)
                             },
