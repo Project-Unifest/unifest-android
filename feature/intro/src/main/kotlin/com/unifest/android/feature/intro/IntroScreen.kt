@@ -153,6 +153,7 @@ fun IntroScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 contentPadding = PaddingValues(vertical = 17.dp),
+                enabled = uiState.selectedFestivals.isNotEmpty(),
             ) {
                 Text(
                     text = stringResource(id = R.string.intro_add_complete),
@@ -164,7 +165,7 @@ fun IntroScreen(
                 LoadingWheel(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White)
+                        .background(Color.White),
                 )
             }
         }

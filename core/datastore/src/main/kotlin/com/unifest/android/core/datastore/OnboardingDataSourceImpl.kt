@@ -20,10 +20,10 @@ class OnboardingDataSourceImpl @Inject constructor(
     }
 
     override suspend fun checkIntroCompletion(): Boolean = dataStore.data
-    .catch { exception ->
-        if (exception is IOException) emit(emptyPreferences())
-        else throw exception
-    }.first()[KEY_INTRO_COMPLETE] ?: false
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences())
+            else throw exception
+        }.first()[KEY_INTRO_COMPLETE] ?: false
 
     override suspend fun completeIntro(flag: Boolean) {
         dataStore.edit { preferences -> preferences[KEY_INTRO_COMPLETE] = flag }

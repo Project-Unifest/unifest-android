@@ -34,7 +34,7 @@ class IntroViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            if(onboardingRepository.checkIntroCompletion()) {
+            if (onboardingRepository.checkIntroCompletion()) {
                 _uiEvent.send(IntroUiEvent.NavigateToMain)
             } else {
                 _uiState.update {
