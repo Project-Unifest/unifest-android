@@ -152,7 +152,7 @@ fun FestivalSearchBottomSheet(
                     onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CANCEL))
                 },
                 onConfirmClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM))
+                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM, deleteSelectedFestival))
                 },
             )
         }

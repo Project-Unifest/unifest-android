@@ -1,6 +1,9 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +42,7 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedFestivalsGrid(
     selectedFestivals: MutableList<FestivalModel>,
@@ -80,6 +84,12 @@ fun LikedFestivalsGrid(
                     },
                     isEditMode = isEditMode,
                     setLikedFestivalDeleteDialogVisible = onDeleteLikedFestivalClick,
+                    modifier = Modifier.animateItemPlacement(
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing,
+                        ),
+                    ),
                 )
             }
         }
@@ -90,6 +100,7 @@ fun LikedFestivalsGrid(
 fun FestivalItem(
     festival: FestivalModel,
     onFestivalSelected: (FestivalModel) -> Unit,
+    modifier: Modifier = Modifier,
     isEditMode: Boolean = false,
     setLikedFestivalDeleteDialogVisible: (FestivalModel) -> Unit = {},
 ) {
@@ -97,7 +108,7 @@ fun FestivalItem(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
         border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
