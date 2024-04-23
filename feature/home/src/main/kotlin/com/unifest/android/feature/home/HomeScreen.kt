@@ -148,6 +148,7 @@ internal fun HomeScreen(
                         FestivalScheduleItem(
                             festival = festival,
                             onAction = onHomeUiAction,
+                            likedFestivals = uiState.likedFestivals,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -221,6 +222,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
+    likedFestivals: List<FestivalModel>,
 ) {
     Column {
         Row(
@@ -279,18 +281,20 @@ fun FestivalScheduleItem(
                 }
             }
         }
-        UnifestOutlinedButton(
-            onClick = {
-                onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                style = BoothLocation,
-            )
+        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
+            UnifestOutlinedButton(
+                onClick = {
+                    onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
+                    style = BoothLocation,
+                )
+            }
         }
     }
 }
