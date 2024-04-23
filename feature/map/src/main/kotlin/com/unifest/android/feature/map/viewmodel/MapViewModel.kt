@@ -233,6 +233,7 @@ class MapViewModel @Inject constructor(
                         setLikedFestivalDeleteDialogVisible(false)
                         action.festival?.let { deleteLikedFestival(it) }
                     }
+
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
@@ -439,7 +440,7 @@ class MapViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     selectedBoothList = popularBoothList.map { it.toMapModel() }.toImmutableList(),
-                    isPopularMode = !_uiState.value.isPopularMode
+                    isPopularMode = !_uiState.value.isPopularMode,
                 )
             }
         }
