@@ -12,6 +12,7 @@ sealed interface FestivalUiAction {
     data class OnAddClick(val festival: FestivalModel) : FestivalUiAction
     data object OnDeleteIconClick : FestivalUiAction
     data class OnDialogButtonClick(val type: ButtonType) : FestivalUiAction
+    data class OnDeleteDialogClick(val festival: FestivalModel) : FestivalUiAction
 }
 
 enum class ButtonType {

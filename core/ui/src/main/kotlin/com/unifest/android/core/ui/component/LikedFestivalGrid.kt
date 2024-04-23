@@ -44,7 +44,7 @@ fun LikedFestivalsGrid(
     selectedFestivals: MutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    onDeleteLikedFestivalClick: (Boolean) -> Unit = {},
+    onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
     optionTextButton: @Composable () -> Unit,
 ) {
     Column {
@@ -65,8 +65,7 @@ fun LikedFestivalsGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier
                 .padding(8.dp)
-                // TODO 높이 조정 로직 수정 필요
-                .height(if (selectedFestivals.isEmpty()) 0.dp else (((selectedFestivals.size - 1) / 3 + 1) * 140).dp),
+                .height(if (selectedFestivals.isEmpty()) 0.dp else (((selectedFestivals.size - 1) / 4 + 1) * 140).dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -92,7 +91,7 @@ fun FestivalItem(
     festival: FestivalModel,
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit = {},
+    setLikedFestivalDeleteDialogVisible: (FestivalModel) -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -104,7 +103,7 @@ fun FestivalItem(
             modifier = Modifier
                 .clickable {
                     if (isEditMode) {
-                        setLikedFestivalDeleteDialogVisible(true)
+                        setLikedFestivalDeleteDialogVisible(festival)
                     } else {
                         onFestivalSelected(festival)
                     }

@@ -158,6 +158,7 @@ class HomeViewModel @Inject constructor(
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnAddClick -> addLikeFestivalAtBottomSheet(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDeleteDialogClick -> deleteLikedFestival(action.festival)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
                     ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
