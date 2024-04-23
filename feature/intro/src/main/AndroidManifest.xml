@@ -7,7 +7,7 @@
             android:name=".IntroActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Unifest">
+            android:theme="@style/Theme.Unifest.Splash">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
