@@ -2,7 +2,6 @@ package com.unifest.android.feature.map
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -264,13 +263,7 @@ fun MapContent(
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
                 LaunchedEffect(uiState.isPopularMode, uiState.isBoothSelectionMode) {
-                    pagerState.animateScrollToPage(
-                        page = 0,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            delayMillis = 100,
-                        ),
-                    )
+                    pagerState.animateScrollToPage(page = 0)
                 }
                 HorizontalPager(
                     state = pagerState,
