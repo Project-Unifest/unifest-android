@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
@@ -46,22 +46,31 @@ import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+private const val SnackBarDuration = 1000L
 
 @Composable
 internal fun MainScreen(
     navigator: MainNavController = rememberMainNavController(),
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarstate = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val resource = LocalContext.current.resources
+    val context = LocalContext.current
 
-    val onShowSnackBar: (message: Int) -> Unit = { message ->
+    val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
-            snackBarHostState.showSnackbar(
-                message = resource.getString(message),
-                duration = SnackbarDuration.Short,
-            )
+            scope.launch {
+                val job = launch {
+                    snackBarstate.showSnackbar(
+                        message = message.asString(context),
+                        duration = SnackbarDuration.Short,
+                    )
+                }
+                delay(SnackBarDuration)
+                job.cancel()
+            }
         }
     }
 
@@ -75,10 +84,7 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(
-                hostState = snackBarHostState,
-                modifier = Modifier.padding(bottom = 64.dp),
-            )
+            SnackbarHost(hostState = snackBarstate)
         },
         containerColor = White,
     ) { innerPadding ->
@@ -93,30 +99,33 @@ internal fun MainScreen(
             )
             mapNavGraph(
                 padding = innerPadding,
-                onNavigateToBooth = navigator::navigateToBoothDetail,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
             boothNavGraph(
                 padding = innerPadding,
                 navController = navigator.navController,
-                onBackClick = navigator::popBackStackIfNotHome,
-                onNavigateToBoothLocation = navigator::navigateToBoothLocation,
-                onShowSnackBar = onShowSnackBar,
+                popBackStack = navigator::popBackStackIfNotHome,
+                navigateToBoothLocation = navigator::navigateToBoothLocation,
             )
             waitingNavGraph(
                 padding = innerPadding,
             )
             menuNavGraph(
                 padding = innerPadding,
-                onNavigateToLikedBooth = navigator::navigateToLikedBooth,
-                onNavigateToContact = navigator::navigateToContact,
+                navigateToLikedBooth = navigator::navigateToLikedBooth,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
+                navigateToContact = navigator::navigateToContact,
+                onShowSnackBar = onShowSnackBar,
             )
             likedBoothNavGraph(
                 padding = innerPadding,
-                onBackClick = navigator::popBackStackIfNotHome,
+                popBackStack = navigator::popBackStackIfNotHome,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
+                onShowSnackBar = onShowSnackBar,
             )
             contactNavGraph(
                 padding = innerPadding,
-                onBackClick = navigator::popBackStackIfNotHome,
+                popBackStack = navigator::popBackStackIfNotHome,
             )
         }
     }

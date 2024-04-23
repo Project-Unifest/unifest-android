@@ -59,7 +59,7 @@ fun UnifestTopAppBar(
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
     isOnboardingCompleted: Boolean = false,
-    completeOnboarding: (Boolean) -> Unit = {},
+    onTooltipClick: (Boolean) -> Unit = {},
     elevation: Dp = 0.dp,
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
@@ -99,7 +99,7 @@ fun UnifestTopAppBar(
                     SchoolSearchTitleWithToolTip(
                         title = title,
                         onTitleClick = onTitleClick,
-                        completeOnboarding = completeOnboarding,
+                        completeOnboarding = onTooltipClick,
                     )
                 }
             } else {

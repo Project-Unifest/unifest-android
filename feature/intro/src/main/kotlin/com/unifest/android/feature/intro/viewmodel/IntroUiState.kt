@@ -7,5 +7,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class IntroUiState(
     val searchText: TextFieldValue = TextFieldValue(),
-    val schools: ImmutableList<FestivalModel> = persistentListOf(),
+    val festivals: ImmutableList<FestivalModel> = persistentListOf(),
+    val selectedFestivals: List<FestivalModel> = emptyList(),
 )

@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,9 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -32,16 +30,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -50,10 +52,12 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalEventModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
+import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.feature.home.viewmodel.HomeUiAction
+import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -63,21 +67,22 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
-    onShowSnackBar: (message: Int) -> Unit,
+    onShowSnackBar: (message: UiText) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+        }
+    }
+
     HomeScreen(
         padding = padding,
         uiState = uiState,
-        onShowSnackBar = onShowSnackBar,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        initSearchText = viewModel::initSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        setSelectedDate = viewModel::setSelectedDate,
+        onHomeUiAction = viewModel::onHomeUiAction,
+        onFestivalUiAction = viewModel::onFestivalUiAction,
     )
 }
 
@@ -85,15 +90,8 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     padding: PaddingValues,
     uiState: HomeUiState,
-    @Suppress("unused")
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    onShowSnackBar: (message: Int) -> Unit,
-    setSelectedDate: (LocalDate) -> Unit,
+    onHomeUiAction: (HomeUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -104,13 +102,13 @@ internal fun HomeScreen(
             item {
                 Calendar(
                     selectedDate = uiState.selectedDate,
-                    onDateSelected = setSelectedDate,
+                    onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
                 )
             }
             item {
                 FestivalScheduleText(selectedDate = uiState.selectedDate)
             }
-            if (uiState.festivalEvents.isEmpty()) {
+            if (uiState.todayFestivals.isEmpty()) {
                 item {
                     Box(
                         contentAlignment = Alignment.Center,
@@ -141,12 +139,18 @@ internal fun HomeScreen(
                     }
                 }
             } else {
-                itemsIndexed(uiState.festivalEvents) { index, event ->
+                itemsIndexed(
+                    items = uiState.todayFestivals,
+                    key = { _, festival -> festival.festivalId },
+                ) { index, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(event, onShowSnackBar)
+                        FestivalScheduleItem(
+                            festival = festival,
+                            onAction = onHomeUiAction,
+                        )
                     }
-                    if (index < uiState.festivalEvents.size - 1) {
+                    if (index < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
@@ -158,7 +162,7 @@ internal fun HomeScreen(
             }
             item {
                 UnifestOutlinedButton(
-                    onClick = { setFestivalSearchBottomSheetVisible(true) },
+                    onClick = { onHomeUiAction(HomeUiAction.OnAddLikedFestivalClick) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -183,26 +187,21 @@ internal fun HomeScreen(
             item {
                 IncomingFestivalText()
             }
-            items(uiState.incomingEvents) { event ->
-                IncomingFestivalCard(event)
+            items(uiState.incomingFestivals) { festival ->
+                IncomingFestivalCard(festival)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
-                updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
-                initSearchText = initSearchText,
-                setEnableSearchMode = setEnableSearchMode,
                 isSearchMode = uiState.isSearchMode,
-                setEnableEditMode = setEnableEditMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
                 isEditMode = uiState.isEditMode,
+                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
@@ -220,8 +219,8 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 
 @Composable
 fun FestivalScheduleItem(
-    event: FestivalEventModel,
-    onShowSnackBar: (message: Int) -> Unit,
+    festival: FestivalTodayModel,
+    onAction: (HomeUiAction) -> Unit,
 ) {
     Column {
         Row(
@@ -240,13 +239,13 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = event.date,
+                    text = festival.date,
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.name,
+                    text = festival.festivalName,
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -261,7 +260,7 @@ fun FestivalScheduleItem(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.location,
+                        text = festival.schoolName,
                         style = Content5,
                         color = Color(0xFF848484),
                     )
@@ -269,20 +268,21 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(event.celebrityImages) { _ ->
-                    Icon(
-                        imageVector = Icons.Default.Circle,
-                        contentDescription = "Celebrity",
-                        tint = Color(0xFFDFDFDF),
+                items(festival.starInfo) { starInfo ->
+                    NetworkImage(
+                        imageUrl = starInfo.img,
                         modifier = Modifier
-                            .size(60.dp)
-                            .padding(horizontal = 5.dp),
+                            .size(72.dp)
+                            .clip(CircleShape),
                     )
+                    Spacer(modifier = Modifier.width(10.dp))
                 }
             }
         }
         UnifestOutlinedButton(
-            onClick = { onShowSnackBar(R.string.home_add_interest_festival_snack_bar) },
+            onClick = {
+                onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 20.dp, end = 20.dp),
@@ -305,7 +305,7 @@ fun IncomingFestivalText() {
 }
 
 @Composable
-fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
+fun IncomingFestivalCard(festival: FestivalModel) {
     Card(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -320,23 +320,24 @@ fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = event.imageRes),
-                contentDescription = "${event.name} Logo",
-                modifier = Modifier.size(52.dp),
+            NetworkImage(
+                imageUrl = festival.thumbnail,
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(CircleShape),
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = event.dates,
+                    text = festival.beginDate + " - " + festival.endDate,
                     style = Content6,
                     color = Color(0xFF848484),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = event.name,
+                    text = festival.festivalName,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -351,7 +352,7 @@ fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = event.location,
+                        text = festival.schoolName,
                         style = Content6,
                         color = Color(0xFF848484),
                     )
@@ -361,61 +362,70 @@ fun IncomingFestivalCard(event: IncomingFestivalEventModel) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
 fun HomeScreenPreview() {
     UnifestTheme {
         HomeScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = HomeUiState(
-                festivalEvents = persistentListOf(
-                    FestivalEventModel(
-                        id = 1,
+                todayFestivals = persistentListOf(
+                    FestivalTodayModel(
+                        festivalId = 1,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 1,
                     ),
 
-                    FestivalEventModel(
-                        id = 2,
+                    FestivalTodayModel(
+                        festivalId = 2,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 2,
                     ),
-                    FestivalEventModel(
-                        id = 3,
+                    FestivalTodayModel(
+                        festivalId = 3,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 3,
                     ),
                 ),
-                incomingEvents = persistentListOf(
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                incomingFestivals = persistentListOf(
+                    FestivalModel(
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                    FestivalModel(
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
             ),
-            onShowSnackBar = {},
-            setFestivalSearchBottomSheetVisible = {},
-            updateFestivalSearchText = {},
-            initSearchText = {},
-            setEnableSearchMode = {},
-            setEnableEditMode = {},
-            setLikedFestivalDeleteDialogVisible = {},
-            setSelectedDate = {},
+            onHomeUiAction = {},
+            onFestivalUiAction = {},
         )
     }
 }

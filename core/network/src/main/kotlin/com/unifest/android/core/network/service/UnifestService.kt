@@ -2,6 +2,7 @@ package com.unifest.android.core.network.service
 
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
+import com.unifest.android.core.network.response.FestivalTodayResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,6 +16,14 @@ interface UnifestService {
     suspend fun searchFestival(
         @Query("name") name: String,
     ): FestivalSearchResponse
+
+    @GET("festival/after")
+    suspend fun getIncomingFestivals(): FestivalSearchResponse
+
+    @GET("festival/today")
+    suspend fun getTodayFestivals(
+        @Query("date") date: String,
+    ): FestivalTodayResponse
 
     @GET("api/booths")
     suspend fun getPopularBooths(

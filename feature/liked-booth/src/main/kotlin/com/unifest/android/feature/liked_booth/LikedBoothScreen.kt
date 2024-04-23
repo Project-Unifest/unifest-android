@@ -4,6 +4,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
@@ -29,6 +32,8 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiAction
+import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiEvent
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -36,16 +41,25 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun LikedBoothRoute(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
     viewModel: LikedBoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is LikedBoothUiEvent.NavigateBack -> popBackStack()
+            is LikedBoothUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+            is LikedBoothUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+        }
+    }
+
     LikedBoothScreen(
         padding = padding,
         uiState = uiState,
-        onBackClick = onBackClick,
-        deleteLikedBooth = viewModel::deleteLikedBooth,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -54,8 +68,7 @@ internal fun LikedBoothRoute(
 internal fun LikedBoothScreen(
     padding: PaddingValues,
     uiState: LikedBoothUiState,
-    onBackClick: () -> Unit,
-    deleteLikedBooth: (BoothDetailModel) -> Unit,
+    onAction: (LikedBoothUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -65,7 +78,7 @@ internal fun LikedBoothScreen(
         Column {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Back,
-                onNavigationClick = onBackClick,
+                onNavigationClick = { onAction(LikedBoothUiAction.OnBackClick) },
                 title = stringResource(id = R.string.liked_booth_title),
                 elevation = 8.dp,
                 modifier = Modifier
@@ -83,17 +96,22 @@ internal fun LikedBoothScreen(
                     uiState.likedBoothList,
                     key = { _, booth -> booth.id },
                 ) { index, booth ->
+                    // TODO onAction 으로 묶기
                     LikedBoothItem(
                         booth = booth,
                         index = index,
                         totalCount = uiState.likedBoothList.size,
-                        deleteLikedBooth = { deleteLikedBooth(booth) },
-                        modifier = Modifier.animateItemPlacement(
-                            animationSpec = tween(
-                                durationMillis = 500,
-                                easing = LinearOutSlowInEasing,
+                        deleteLikedBooth = { onAction(LikedBoothUiAction.OnToggleBookmark(booth)) },
+                        modifier = Modifier
+                            .clickable {
+                                onAction(LikedBoothUiAction.OnLikedBoothItemClick(booth.id))
+                            }
+                            .animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 500,
+                                    easing = LinearOutSlowInEasing,
+                                ),
                             ),
-                        ),
                     )
                 }
             }
@@ -219,8 +237,7 @@ fun LikedBoothScreenPreview() {
                     ),
                 ),
             ),
-            onBackClick = {},
-            deleteLikedBooth = {},
+            onAction = {},
         )
     }
 }

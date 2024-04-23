@@ -2,106 +2,276 @@ package com.unifest.android.feature.home.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ButtonType
+import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.handleException
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.FestivalEventModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
+import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.StarInfoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val festivalRepository: FestivalRepository,
+) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent = Channel<HomeUiEvent>()
+    val uiEvent: Flow<HomeUiEvent> = _uiEvent.receiveAsFlow()
+
     init {
+        observeLikedFestivals()
+
         _uiState.update {
             it.copy(
-                incomingEvents = persistentListOf(
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                incomingFestivals = persistentListOf(
+                    FestivalModel(
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
-                    IncomingFestivalEventModel(
-                        imageRes = R.drawable.ic_waiting,
-                        name = "녹색지대",
-                        dates = "05/21(화) - 05/23(목)",
-                        location = "건국대학교 서울캠퍼스",
+                    FestivalModel(
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
-                festivalEvents = persistentListOf(
-                    FestivalEventModel(
-                        id = 1,
+                todayFestivals = persistentListOf(
+                    FestivalTodayModel(
+                        festivalId = 5,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교",
+                        starInfo = listOf(
+                            StarInfoModel(
+                                name = "비",
+                                img = "https://picsum.photos/36",
+                            ),
+                            StarInfoModel(
+                                name = "싸이",
+                                img = "https://picsum.photos/37",
+                            ),
+                            StarInfoModel(
+                                name = "아이유",
+                                img = "https://picsum.photos/38",
+                            ),
+                        ),
+                        schoolId = 5,
+                        thumbnail = "https://picsum.photos/36",
                     ),
-                    FestivalEventModel(
-                        id = 2,
+                    FestivalTodayModel(
+                        festivalId = 1,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 2",
+                        schoolName = "서울대학교",
+                        starInfo = listOf(
+                            StarInfoModel(
+                                name = "비",
+                                img = "https://picsum.photos/36",
+                            ),
+                            StarInfoModel(
+                                name = "싸이",
+                                img = "https://picsum.photos/37",
+                            ),
+                            StarInfoModel(
+                                name = "아이유",
+                                img = "https://picsum.photos/38",
+                            ),
+                        ),
+                        schoolId = 1,
+                        thumbnail = "https://picsum.photos/36",
                     ),
-                    FestivalEventModel(
-                        id = 3,
+                    FestivalTodayModel(
+                        festivalId = 2,
                         date = "5/21(화)",
-                        name = "녹색지대 DAY 1",
-                        location = "건국대학교 서울캠퍼스",
-                        celebrityImages = listOf(0, 1, 2),
+                        festivalName = "녹색지대 DAY 3",
+                        schoolName = "연세대학교",
+                        starInfo = listOf(
+                            StarInfoModel(
+                                name = "비",
+                                img = "https://picsum.photos/36",
+                            ),
+                            StarInfoModel(
+                                name = "싸이",
+                                img = "https://picsum.photos/37",
+                            ),
+                            StarInfoModel(
+                                name = "아이유",
+                                img = "https://picsum.photos/38",
+                            ),
+                        ),
+                        schoolId = 2,
+                        thumbnail = "https://picsum.photos/36",
                     ),
                 ),
             )
         }
     }
 
-    fun updateFestivalSearchText(text: TextFieldValue) {
+    fun onHomeUiAction(action: HomeUiAction) {
+        when (action) {
+            is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
+            is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
+            is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
+        }
+    }
+
+    fun onFestivalUiAction(action: FestivalUiAction) {
+        when (action) {
+            is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
+            is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
+            is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnAddClick -> addLikeFestivalAtBottomSheet(action.festival)
+            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDialogButtonClick -> {
+                when (action.type) {
+                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+                }
+            }
+        }
+    }
+
+    private fun observeLikedFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+                _uiState.update {
+                    it.copy(
+                        likedFestivals = likedFestivalList.toMutableList(),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun addLikeFestival(festival: FestivalTodayModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtHome(festival)
+            _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
+        }
+    }
+
+    private fun addLikeFestivalAtBottomSheet(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    fun getIncomingFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getIncomingFestivals()
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(
+                            incomingFestivals = festivals.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
+    }
+
+    fun getTodayFestivals(date: String) {
+        viewModelScope.launch {
+            festivalRepository.getTodayFestivals(date)
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(
+                            todayFestivals = festivals.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
+    }
+
+    private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(festivalSearchText = text)
         }
     }
 
-    fun initSearchText() {
+    private fun clearSearchText() {
         _uiState.update {
             it.copy(festivalSearchText = TextFieldValue())
         }
     }
 
-    fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
+    private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
         }
     }
 
-    fun setEnableSearchMode(flag: Boolean) {
+    private fun setEnableSearchMode(flag: Boolean) {
         _uiState.update {
             it.copy(isSearchMode = flag)
         }
     }
 
-    fun setEnableEditMode() {
+    private fun setEnableEditMode() {
         _uiState.update {
             it.copy(isEditMode = !_uiState.value.isEditMode)
         }
     }
 
-    fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
+    private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isLikedFestivalDeleteDialogVisible = flag)
         }
     }
 
-    fun setSelectedDate(date: LocalDate) {
+    private fun setSelectedDate(date: LocalDate) {
         _uiState.update {
             it.copy(selectedDate = date)
+        }
+    }
+
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
 }

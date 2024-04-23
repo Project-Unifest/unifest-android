@@ -16,6 +16,7 @@ internal fun LikedBoothEntity.toModel(): BoothDetailModel {
         latitude = latitude,
         longitude = longitude,
         menus = menus.map { it.toModel() },
+        isLiked = isLiked,
     )
 }
 
@@ -39,7 +40,7 @@ internal fun BoothDetailModel.toEntity(): LikedBoothEntity {
         latitude = latitude,
         longitude = longitude,
         menus = menus.map { it.toEntity() },
-        isLiked = false,
+        isLiked = true,
     )
 }
 

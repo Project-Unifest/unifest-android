@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.unifest.android.core.common.UiText
 import com.unifest.android.feature.liked_booth.LikedBoothRoute
 
 const val Liked_BOOTH_ROUTE = "liked_booth_route"
@@ -14,12 +15,16 @@ fun NavController.navigateToLikedBooth() {
 
 fun NavGraphBuilder.likedBoothNavGraph(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = Liked_BOOTH_ROUTE) {
         LikedBoothRoute(
             padding = padding,
-            onBackClick = onBackClick,
+            popBackStack = popBackStack,
+            navigateToBoothDetail = navigateToBoothDetail,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }

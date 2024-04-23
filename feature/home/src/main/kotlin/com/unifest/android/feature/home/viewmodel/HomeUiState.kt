@@ -1,16 +1,15 @@
 package com.unifest.android.feature.home.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.unifest.android.core.model.FestivalEventModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.IncomingFestivalEventModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 
 data class HomeUiState(
-    val incomingEvents: ImmutableList<IncomingFestivalEventModel> = persistentListOf(),
-    val festivalEvents: ImmutableList<FestivalEventModel> = persistentListOf(),
+    val incomingFestivals: ImmutableList<FestivalModel> = persistentListOf(),
+    val todayFestivals: ImmutableList<FestivalTodayModel> = persistentListOf(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: MutableList<FestivalModel> = mutableListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
@@ -19,4 +18,6 @@ data class HomeUiState(
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val selectedDate: LocalDate = LocalDate.now(),
+    val isServerErrorDialogVisible: Boolean = false,
+    val isNetworkErrorDialogVisible: Boolean = false,
 )

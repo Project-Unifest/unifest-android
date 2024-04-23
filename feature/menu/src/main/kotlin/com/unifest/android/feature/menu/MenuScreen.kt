@@ -42,11 +42,13 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -63,6 +65,8 @@ import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.menu.viewmodel.MenuUiAction
+import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -71,8 +75,10 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
+    navigateToLikedBooth: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    navigateToContact: () -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -85,19 +91,22 @@ internal fun MenuRoute(
             "Unknown"
         }
     }
+
+    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+        when (event) {
+            is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
+            is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+            is MenuUiEvent.NavigateToContact -> navigateToContact()
+            is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+        }
+    }
+
     MenuScreen(
         padding = padding,
         uiState = uiState,
-        setFestivalSearchBottomSheetVisible = viewModel::setFestivalSearchBottomSheetVisible,
-        onNavigateToLikedBooth = onNavigateToLikedBooth,
-        onNavigateToContact = onNavigateToContact,
-        updateFestivalSearchText = viewModel::updateFestivalSearchText,
-        initSearchText = viewModel::initSearchText,
-        setEnableSearchMode = viewModel::setEnableSearchMode,
-        setEnableEditMode = viewModel::setEnableEditMode,
-        setLikedFestivalDeleteDialogVisible = viewModel::setLikedFestivalDeleteDialogVisible,
-        deleteLikedBooth = viewModel::deleteLikedBooth,
         appVersion = appVersion,
+        onMenuUiAction = viewModel::onMenuUiAction,
+        onFestivalUiAction = viewModel::onFestivalUiAction,
     )
 }
 
@@ -106,16 +115,9 @@ internal fun MenuRoute(
 fun MenuScreen(
     padding: PaddingValues,
     uiState: MenuUiState,
-    setFestivalSearchBottomSheetVisible: (Boolean) -> Unit,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
-    updateFestivalSearchText: (TextFieldValue) -> Unit,
-    initSearchText: () -> Unit,
-    setEnableSearchMode: (Boolean) -> Unit,
-    setEnableEditMode: () -> Unit,
-    setLikedFestivalDeleteDialogVisible: (Boolean) -> Unit,
-    deleteLikedBooth: (BoothDetailModel) -> Unit,
     appVersion: String,
+    onMenuUiAction: (MenuUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -151,7 +153,7 @@ fun MenuScreen(
                             style = Title3,
                         )
                         TextButton(
-                            onClick = { setFestivalSearchBottomSheetVisible(true) },
+                            onClick = { onMenuUiAction(MenuUiAction.OnAddClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -167,24 +169,16 @@ fun MenuScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
-                            .height(
-                                when {
-                                    uiState.festivals.isEmpty() -> 0.dp
-                                    else -> {
-                                        val rows = ((uiState.festivals.size - 1) / 4 + 1) * 140
-                                        rows.dp
-                                    }
-                                },
-                            ),
+                            .height(if (uiState.likedFestivals.isEmpty()) 0.dp else ((uiState.festivals.size / 4 + 1) * 140).dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(
-                            uiState.festivals.size,
-                            key = { index -> uiState.festivals[index].schoolName },
+                            uiState.likedFestivals.size,
+                            key = { index -> uiState.likedFestivals[index].festivalId },
                         ) { index ->
                             FestivalItem(
-                                festival = uiState.festivals[index],
+                                festival = uiState.likedFestivals[index],
                             )
                         }
                     }
@@ -212,7 +206,7 @@ fun MenuScreen(
                             fontWeight = FontWeight.Bold,
                         )
                         TextButton(
-                            onClick = onNavigateToLikedBooth,
+                            onClick = { onMenuUiAction(MenuUiAction.OnShowMoreClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -240,13 +234,17 @@ fun MenuScreen(
                             booth = booth,
                             index = index,
                             totalCount = uiState.likedBoothList.size,
-                            deleteLikedBooth = { deleteLikedBooth(booth) },
-                            modifier = Modifier.animateItemPlacement(
-                                animationSpec = tween(
-                                    durationMillis = 500,
-                                    easing = LinearOutSlowInEasing,
+                            deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
+                            modifier = Modifier
+                                .clickable {
+                                    onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
+                                }
+                                .animateItemPlacement(
+                                    animationSpec = tween(
+                                        durationMillis = 500,
+                                        easing = LinearOutSlowInEasing,
+                                    ),
                                 ),
-                            ),
                         )
                     }
                 }
@@ -262,7 +260,7 @@ fun MenuScreen(
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
-                        onClick = onNavigateToContact,
+                        onClick = { onMenuUiAction(MenuUiAction.OnContactClick) },
                     )
                 }
                 item {
@@ -309,18 +307,13 @@ fun MenuScreen(
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
-                updateSearchText = updateFestivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                setFestivalSearchBottomSheetVisible = setFestivalSearchBottomSheetVisible,
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
-                initSearchText = initSearchText,
-                setEnableSearchMode = setEnableSearchMode,
-                isSearchMode = uiState.isSearchMode,
-                setEnableEditMode = setEnableEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                setLikedFestivalDeleteDialogVisible = setLikedFestivalDeleteDialogVisible,
+                isSearchMode = uiState.isSearchMode,
                 isEditMode = uiState.isEditMode,
+                onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
@@ -396,20 +389,30 @@ fun MenuItem(
 fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
-            padding = PaddingValues(0.dp),
+            padding = PaddingValues(),
             uiState = MenuUiState(
                 festivals = persistentListOf(
                     FestivalModel(
-                        schoolName = "건국대",
-                        festivalName = "녹색지대",
-                        festivalDate = "2021.11.11",
-                        imgUrl = "",
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "설대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                     FestivalModel(
-                        schoolName = "서울대",
-                        festivalName = "녹색지대",
-                        festivalDate = "2021.11.11",
-                        imgUrl = "",
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "연대축제",
+                        "05.06",
+                        "05.08",
+                        126.957f,
+                        37.460f,
                     ),
                 ),
                 likedBoothList = persistentListOf(
@@ -431,16 +434,9 @@ fun MenuScreenPreview() {
                     ),
                 ),
             ),
-            setFestivalSearchBottomSheetVisible = {},
-            updateFestivalSearchText = {},
-            initSearchText = {},
-            setEnableSearchMode = {},
-            setEnableEditMode = { },
-            setLikedFestivalDeleteDialogVisible = {},
-            onNavigateToLikedBooth = {},
-            onNavigateToContact = {},
-            deleteLikedBooth = {},
             appVersion = "1.0.0",
+            onMenuUiAction = {},
+            onFestivalUiAction = {},
         )
     }
 }

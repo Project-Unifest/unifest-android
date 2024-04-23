@@ -15,6 +15,7 @@ import com.unifest.android.feature.contact.navigation.navigateToContact
 import com.unifest.android.feature.home.navigation.HOME_ROUTE
 import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
+import com.unifest.android.feature.map.navigation.MAP_ROUTE
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
 
@@ -25,7 +26,7 @@ internal class MainNavController(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = HOME_ROUTE
+    val startDestination = MAP_ROUTE
 
     val currentTab: MainTab?
         @Composable get() = currentDestination

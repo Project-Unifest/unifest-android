@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.unifest.android.core.common.UiText
 import com.unifest.android.feature.menu.MenuRoute
 
 const val MENU_ROUTE = "menu_route"
@@ -15,14 +16,18 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
 
 fun NavGraphBuilder.menuNavGraph(
     padding: PaddingValues,
-    onNavigateToLikedBooth: () -> Unit,
-    onNavigateToContact: () -> Unit,
+    navigateToLikedBooth: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
+    navigateToContact: () -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = MENU_ROUTE) {
         MenuRoute(
             padding = padding,
-            onNavigateToLikedBooth = onNavigateToLikedBooth,
-            onNavigateToContact = onNavigateToContact,
+            navigateToLikedBooth = navigateToLikedBooth,
+            navigateToBoothDetail = navigateToBoothDetail,
+            navigateToContact = navigateToContact,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 }
