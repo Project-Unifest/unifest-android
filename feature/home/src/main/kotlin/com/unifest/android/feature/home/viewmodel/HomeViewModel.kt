@@ -9,6 +9,7 @@ import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalModel
@@ -30,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -164,6 +166,7 @@ class HomeViewModel @Inject constructor(
                         setLikedFestivalDeleteDialogVisible(false)
                         action.festival?.let { deleteLikedFestival(it) }
                     }
+
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
@@ -172,7 +175,7 @@ class HomeViewModel @Inject constructor(
 
     private fun observeLikedFestivals() {
         viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+            likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
                         likedFestivals = likedFestivalList.toMutableList(),
@@ -184,14 +187,14 @@ class HomeViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtHome(festival)
+            likedFestivalRepository.insertLikedFestivalAtHome(festival)
             _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
         }
     }
 
     private fun addLikeFestivalAtBottomSheet(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
@@ -280,9 +283,10 @@ class HomeViewModel @Inject constructor(
             it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
+
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.deleteLikedFestival(festival)
         }
     }
 }

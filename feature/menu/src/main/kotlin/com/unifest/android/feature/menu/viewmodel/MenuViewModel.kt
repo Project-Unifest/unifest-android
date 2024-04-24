@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
@@ -29,7 +28,6 @@ import javax.inject.Inject
 class MenuViewModel @Inject constructor(
     private val likedFestivalRepository: LikedFestivalRepository,
     private val likedBoothRepository: LikedBoothRepository,
-    private val festivalRepository: FestivalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
@@ -82,7 +80,7 @@ class MenuViewModel @Inject constructor(
 
     private fun observeLikedFestivals() {
         viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+            likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
                         likedFestivals = likedFestivalList.toMutableList(),
@@ -118,7 +116,7 @@ class MenuViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
@@ -179,7 +177,7 @@ class MenuViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.deleteLikedFestival(festival)
         }
     }
 

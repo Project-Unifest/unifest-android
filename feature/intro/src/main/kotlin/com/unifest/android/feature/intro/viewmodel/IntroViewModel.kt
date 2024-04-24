@@ -3,7 +3,7 @@ package com.unifest.android.feature.intro.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class IntroViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
-    private val festivalRepository: FestivalRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
@@ -153,7 +153,7 @@ class IntroViewModel @Inject constructor(
     private fun addLikedFestivals() {
         viewModelScope.launch {
             _uiState.value.selectedFestivals.forEach { festival ->
-                festivalRepository.insertLikedFestivalAtSearch(festival)
+                likedFestivalRepository.insertLikedFestivalAtSearch(festival)
             }
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)
