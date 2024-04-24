@@ -2,7 +2,6 @@ package com.unifest.android.feature.map.viewmodel
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.os.Looper
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.naver.maps.map.compose.LocationTrackingMode
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
@@ -54,8 +54,6 @@ class MapViewModel @Inject constructor(
     private val _uiEvent = Channel<MapUiEvent>()
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
-    private var lastLocation: Location? = null
-
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
@@ -67,7 +65,9 @@ class MapViewModel @Inject constructor(
     private val locationCallback by lazy {
         object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                lastLocation = locationResult.lastLocation
+                _uiState.update {
+                    it.copy(lastLocation = locationResult.lastLocation)
+                }
             }
         }
     }
@@ -288,16 +288,26 @@ class MapViewModel @Inject constructor(
                             _uiEvent.send(MapUiEvent.RequestLocationPermission)
                         }
                     }
+
                     PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
                         viewModelScope.launch {
                             _uiEvent.send(MapUiEvent.GoToAppSettings)
                         }
                     }
+
                     PermissionDialogButtonType.DISMISS -> {
                         _uiState.update {
                             it.copy(isPermissionDialogVisible = false)
                         }
                     }
+                }
+            }
+
+            is MapUiAction.OnLocationButtonClick -> {
+                _uiState.update {
+                    it.copy(
+                        locationTrackingMode = LocationTrackingMode.Follow,
+                    )
                 }
             }
         }

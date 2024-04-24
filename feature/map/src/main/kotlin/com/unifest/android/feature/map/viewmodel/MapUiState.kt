@@ -1,6 +1,8 @@
 package com.unifest.android.feature.map.viewmodel
 
+import android.location.Location
 import androidx.compose.ui.text.input.TextFieldValue
+import com.naver.maps.map.compose.LocationTrackingMode
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
@@ -27,5 +29,7 @@ data class MapUiState(
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
+    val lastLocation: Location? = null,
+    val locationTrackingMode: LocationTrackingMode = LocationTrackingMode.None,
     val isPermissionDialogVisible: Boolean = false,
 )

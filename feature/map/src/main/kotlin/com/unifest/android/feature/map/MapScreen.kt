@@ -2,6 +2,7 @@ package com.unifest.android.feature.map
 
 import android.Manifest
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -32,6 +33,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -39,11 +41,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -56,10 +60,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
@@ -93,6 +97,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import ted.gun0912.clustering.naver.TedNaverClustering
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -118,9 +123,11 @@ internal fun MapRoute(
             is MapUiEvent.RequestLocationPermission -> {
                 locationPermissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
+
             is MapUiEvent.PermissionGranted -> {
                 viewModel.addLocationListener()
             }
+
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
@@ -168,7 +175,7 @@ internal fun MapScreen(
             cameraPositionState = cameraPositionState,
             rotationState = rotationState,
             pagerState = pagerState,
-            onAction = onMapUiAction,
+            onMapUiAction = onMapUiAction,
         )
 
         if (uiState.isServerErrorDialogVisible) {
@@ -212,9 +219,10 @@ fun MapContent(
     cameraPositionState: CameraPositionState,
     rotationState: Float,
     pagerState: PagerState,
-    onAction: (MapUiAction) -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
@@ -224,7 +232,7 @@ fun MapContent(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.None,
+                locationTrackingMode = uiState.locationTrackingMode,
             ),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
@@ -242,10 +250,10 @@ fun MapContent(
                             }
                         }
                         .markerClickListener { booth ->
-                            onAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
                         }
                         .clusterClickListener { booths ->
-                            onAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
                         }
                         // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
                         .clickToCenter(false)
@@ -257,10 +265,24 @@ fun MapContent(
                 }
             }
         }
+        LocationTrackButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClick = {
+                onMapUiAction(MapUiAction.OnLocationButtonClick)
+                scope.launch {
+                    if (uiState.lastLocation == null) {
+                        Toast.makeText(context, "위치를 조회할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+                    val lastLatLng = LatLng(uiState.lastLocation.latitude, uiState.lastLocation.longitude)
+                    cameraPositionState.animate(update = CameraUpdate.scrollAndZoomTo(lastLatLng, 14.0))
+                }
+            },
+        )
         MapTopAppBar(
             title = uiState.selectedSchoolName,
             boothSearchText = uiState.boothSearchText,
-            onAction = onAction,
+            onAction = onMapUiAction,
             isOnboardingCompleted = uiState.isOnboardingCompleted,
             modifier = Modifier
                 .fillMaxWidth()
@@ -284,7 +306,7 @@ fun MapContent(
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
-                        onAction(MapUiAction.OnTogglePopularBooth)
+                        onMapUiAction(MapUiAction.OnTogglePopularBooth)
                     },
             ) {
                 Row(
@@ -320,7 +342,7 @@ fun MapContent(
                         boothInfo = uiState.selectedBoothList[page],
                         isPopularMode = uiState.isPopularMode,
                         ranking = page + 1,
-                        onAction = onAction,
+                        onAction = onMapUiAction,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp),
@@ -461,6 +483,28 @@ fun RankingBadge(ranking: Int) {
             color = Color.White,
             style = Title5,
             modifier = Modifier.align(Alignment.Center),
+        )
+    }
+}
+
+@Composable
+fun LocationTrackButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    buttonIconTint: Color = Color.Unspecified,
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .padding(30.dp)
+            .size(50.dp)
+            .shadow(elevation = 1.dp, shape = CircleShape)
+            .background(color = Color.White, shape = CircleShape),
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_location_track),
+            contentDescription = "Location Track Icon",
+            tint = buttonIconTint,
         )
     }
 }
