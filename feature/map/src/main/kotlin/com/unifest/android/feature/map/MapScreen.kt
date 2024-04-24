@@ -121,6 +121,7 @@ internal fun MapRoute(
             is MapUiEvent.RequestLocationPermission -> {
                 locationPermissionResultLauncher.launch(locationPermissions)
             }
+
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
@@ -219,7 +220,7 @@ fun MapContent(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
-                isLocationButtonEnabled = true
+                isLocationButtonEnabled = true,
             ),
         ) {
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }

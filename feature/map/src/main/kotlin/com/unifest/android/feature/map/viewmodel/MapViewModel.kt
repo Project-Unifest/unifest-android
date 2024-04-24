@@ -529,8 +529,4 @@ class MapViewModel @Inject constructor(
             likedFestivalRepository.deleteLikedFestival(festival)
         }
     }
-
-    private companion object {
-        private const val LOCATION_INTERVAL_MILLIS = 3000L
-    }
 }
