@@ -60,7 +60,7 @@ class MapViewModel @Inject constructor(
         LocationServices.getFusedLocationProviderClient(context)
 
     private val locationRequest: LocationRequest =
-        LocationRequest.Builder(LOCATION_INTERVAL_MILLIS) // 초기 1회만 가져오고 Long.MAX_VALUE 만큼 기다림
+        LocationRequest.Builder(LOCATION_INTERVAL_MILLIS)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
             .build()
 
@@ -299,7 +299,6 @@ class MapViewModel @Inject constructor(
                         }
                     }
                 }
-
             }
         }
     }
