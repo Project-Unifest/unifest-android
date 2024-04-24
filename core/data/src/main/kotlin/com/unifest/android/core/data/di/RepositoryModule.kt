@@ -6,6 +6,8 @@ import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.FestivalRepositoryImpl
 import com.unifest.android.core.data.repository.LikedBoothRepositoryImpl
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepositoryImpl
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.OnboardingRepositoryImpl
 import dagger.Binds
@@ -24,6 +26,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBoothRepository(boothRepositoryImpl: BoothRepositoryImpl): BoothRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLikedFestivalRepository(likedFestivalRepositoryImpl: LikedFestivalRepositoryImpl): LikedFestivalRepository
 
     @Binds
     @Singleton

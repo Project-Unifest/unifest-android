@@ -8,6 +8,7 @@ import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
@@ -26,6 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
+    private val likedFestivalRepository: LikedFestivalRepository,
     private val likedBoothRepository: LikedBoothRepository,
     private val festivalRepository: FestivalRepository,
 ) : ViewModel() {
@@ -42,6 +44,12 @@ class MenuViewModel @Inject constructor(
 
     fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
+            is MenuUiAction.OnLikedFestivalItemClick -> {
+                viewModelScope.launch {
+                    likedFestivalRepository.setRecentLikedFestival(action.schoolName)
+                    _uiEvent.send(MenuUiEvent.NavigateToMap)
+                }
+            }
             is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
@@ -65,6 +73,7 @@ class MenuViewModel @Inject constructor(
                         setLikedFestivalDeleteDialogVisible(false)
                         action.festival?.let { deleteLikedFestival(it) }
                     }
+
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
