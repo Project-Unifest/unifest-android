@@ -110,6 +110,9 @@ internal fun MapRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
+    val permissionGranted by remember {
+        mutableStateOf(false)
+    }
 
     val locationPermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -134,7 +137,9 @@ internal fun MapRoute(
     }
 
     DisposableEffect(Unit) {
-        viewModel.requestLocationPermission()
+        if (!permissionGranted) {
+            viewModel.requestLocationPermission()
+        }
         onDispose {
             viewModel.removeLocationListener()
         }
