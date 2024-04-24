@@ -103,6 +103,7 @@ internal fun HomeScreen(
                 Calendar(
                     selectedDate = uiState.selectedDate,
                     onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
+                    allFestivals = uiState.allFestivals,
                 )
             }
             item {

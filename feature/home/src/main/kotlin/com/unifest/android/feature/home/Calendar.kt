@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -54,9 +55,11 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -67,6 +70,7 @@ fun Calendar(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     adjacentMonths: Long = 500,
+    allFestivals: List<FestivalModel>,
 ) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
@@ -110,9 +114,11 @@ fun Calendar(
                             day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
-                        ) { newSelectedDate ->
-                            onDateSelected(newSelectedDate)
-                        }
+                            onClick = { newSelectedDate ->
+                                onDateSelected(newSelectedDate)
+                            },
+                            allFestivals = allFestivals,
+                        )
                     },
                 )
             }
@@ -125,9 +131,11 @@ fun Calendar(
                             day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
-                        ) { newSelectedDate ->
-                            onDateSelected(newSelectedDate)
-                        }
+                            onClick = { newSelectedDate ->
+                                onDateSelected(newSelectedDate)
+                            },
+                            allFestivals = allFestivals,
+                        )
                     },
                 )
             }
@@ -289,26 +297,33 @@ fun Day(
     isSelected: Boolean,
     isSelectable: Boolean,
     onClick: (LocalDate) -> Unit,
+    allFestivals: List<FestivalModel>,
 ) {
     val currentDate = LocalDate.now()
     val isToday = day == currentDate
+    val showFestivalDot = allFestivals.any { festival ->
+        val beginDate = festival.beginDate.toLocalDate()
+        val endDate = festival.endDate.toLocalDate()
+        !(day.isBefore(beginDate) || day.isAfter(endDate))
+    }
 
-    Column {
+    Column(
+        modifier = Modifier.clickable(
+            enabled = isSelectable,
+            showRipple = !isSelected,
+            onClick = { onClick(day) },
+        ),
+    ) {
         Box(
             modifier = Modifier
                 .aspectRatio(1f) // This is important for square-sizing!
-                .padding(12.dp)
+                .padding(10.dp)
                 .clip(CircleShape)
                 .background(color = if (isSelected) Color(0xFFF5687E) else Color.Transparent)
                 .then(
                     if (day == currentDate) {
                         Modifier.border(2.dp, Color(0xFFF5687E), CircleShape)
                     } else Modifier,
-                )
-                .clickable(
-                    enabled = isSelectable,
-                    showRipple = !isSelected,
-                    onClick = { onClick(day) },
                 ),
             contentAlignment = Alignment.Center,
         ) {
@@ -325,6 +340,15 @@ fun Day(
                 fontWeight = FontWeight.Bold,
             )
         }
+        if (showFestivalDot) {
+            Box(
+                modifier = Modifier
+                    .size(7.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF1FC0BA))
+                    .align(Alignment.CenterHorizontally),
+            )
+        }
     }
 }
 
@@ -335,6 +359,7 @@ private fun CalendarPreview() {
         Calendar(
             selectedDate = LocalDate.now(),
             onDateSelected = {},
+            allFestivals = emptyList(),
         )
     }
 }

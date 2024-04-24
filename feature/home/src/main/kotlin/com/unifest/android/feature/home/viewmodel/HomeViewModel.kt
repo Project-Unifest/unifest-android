@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-
+//        getAllFestivals()
         _uiState.update {
             it.copy(
                 incomingFestivals = persistentListOf(
@@ -226,6 +226,22 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
+
+//    fun getAllFestivals() {
+//        viewModelScope.launch {
+//            festivalRepository.getAllFestivals()
+//                .onSuccess { festivals ->
+//                    _uiState.update {
+//                        it.copy(
+//                            allFestivals = festivals.toImmutableList(),
+//                        )
+//                    }
+//                }
+//                .onFailure { exception ->
+//                    handleException(exception, this@HomeViewModel)
+//                }
+//        }
+//    }
 
     private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
