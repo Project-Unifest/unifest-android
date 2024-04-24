@@ -29,6 +29,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
@@ -245,7 +247,7 @@ fun MapContent(
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = "인기 부스",
+                        text = stringResource(id = R.string.map_popular_booth),
                         color = Color(0xFFF5687E),
                         style = Title4,
                     )
@@ -260,6 +262,9 @@ fun MapContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
+                LaunchedEffect(uiState.isPopularMode, uiState.isBoothSelectionMode) {
+                    pagerState.animateScrollToPage(page = 0)
+                }
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier.wrapContentHeight(),
@@ -406,7 +411,7 @@ fun RankingBadge(ranking: Int) {
         contentAlignment = Alignment.TopStart,
     ) {
         Text(
-            text = "${ranking}위",
+            text = stringResource(id = R.string.map_ranking, ranking),
             color = Color.White,
             style = Title5,
             modifier = Modifier.align(Alignment.Center),

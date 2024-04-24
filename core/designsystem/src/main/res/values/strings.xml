@@ -44,8 +44,10 @@
     <string name="booth_bookmark_removed_message">관심 주점에서 삭제했습니다.</string>
 
     <!--    Map    -->
-    <string name="map_booth_search_text_field_hint"> 부스 / 주점을 검색해보세요.</string>
+    <string name="map_booth_search_text_field_hint">부스 / 주점을 검색해보세요.</string>
     <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
+    <string name="map_popular_booth">인기 부스</string>
+    <string name="map_ranking">%d위</string>
 
     <!--    Menu    -->
     <string name="menu_title">메뉴</string>
