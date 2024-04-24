@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.UnifestButton
@@ -151,11 +153,19 @@ fun IntroScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 contentPadding = PaddingValues(vertical = 17.dp),
+                enabled = uiState.selectedFestivals.isNotEmpty(),
             ) {
                 Text(
                     text = stringResource(id = R.string.intro_add_complete),
                     style = Title4,
                     fontSize = 14.sp,
+                )
+            }
+            if (uiState.isLoading) {
+                LoadingWheel(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
                 )
             }
         }
