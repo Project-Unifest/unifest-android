@@ -18,7 +18,7 @@ fun LoadingWheel(
         modifier = modifier.noRippleClickable { },
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(color = Color.Black)
+        CircularProgressIndicator(color = Color(0xFFF5687E))
     }
 }
 

@@ -69,7 +69,8 @@ class HomeViewModel @Inject constructor(
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 5,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교",
                         starInfo = listOf(
@@ -91,7 +92,8 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 1,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 2",
                         schoolName = "서울대학교",
                         starInfo = listOf(
@@ -113,7 +115,8 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 2,
-                        date = "5/21(화)",
+                        beginDate = "5/20(화)",
+                        endDate = "5/22(목)",
                         festivalName = "녹색지대 DAY 3",
                         schoolName = "연세대학교",
                         starInfo = listOf(
@@ -157,7 +160,10 @@ class HomeViewModel @Inject constructor(
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
-                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CONFIRM -> {
+                        setLikedFestivalDeleteDialogVisible(false)
+                        action.festival?.let { deleteLikedFestival(it) }
+                    }
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
@@ -272,6 +278,11 @@ class HomeViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+    private fun deleteLikedFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.deleteLikedFestival(festival)
         }
     }
 }

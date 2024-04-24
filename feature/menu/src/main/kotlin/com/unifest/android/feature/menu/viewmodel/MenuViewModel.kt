@@ -61,7 +61,10 @@ class MenuViewModel @Inject constructor(
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
-                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CONFIRM -> {
+                        setLikedFestivalDeleteDialogVisible(false)
+                        action.festival?.let { deleteLikedFestival(it) }
+                    }
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
@@ -162,6 +165,12 @@ class MenuViewModel @Inject constructor(
     private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isLikedFestivalDeleteDialogVisible = flag)
+        }
+    }
+
+    private fun deleteLikedFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.deleteLikedFestival(festival)
         }
     }
 

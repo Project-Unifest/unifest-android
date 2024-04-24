@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +41,7 @@ class MapViewModel @Inject constructor(
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        getAllFestivals()
+        // getAllFestivals()
         getPopularBooths()
         checkOnboardingCompletion()
         observeLikedFestivals()
@@ -228,7 +229,11 @@ class MapViewModel @Inject constructor(
             is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
-                    ButtonType.CONFIRM -> setLikedFestivalDeleteDialogVisible(false)
+                    ButtonType.CONFIRM -> {
+                        setLikedFestivalDeleteDialogVisible(false)
+                        action.festival?.let { deleteLikedFestival(it) }
+                    }
+
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
@@ -416,23 +421,54 @@ class MapViewModel @Inject constructor(
                 menus = emptyList(),
             ),
         )
-
-        _uiState.update {
-            it.copy(
-                selectedBoothList = popularBoothList.map { it.toMapModel() }.toImmutableList(),
-                isPopularMode = !_uiState.value.isPopularMode,
-                isBoothSelectionMode = false,
-            )
+        if (_uiState.value.isBoothSelectionMode) {
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        isBoothSelectionMode = false,
+                    )
+                }
+                delay(500)
+                _uiState.update {
+                    it.copy(
+                        selectedBoothList = popularBoothList.map { it.toMapModel() }.toImmutableList(),
+                        isPopularMode = true,
+                    )
+                }
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    selectedBoothList = popularBoothList.map { it.toMapModel() }.toImmutableList(),
+                    isPopularMode = !_uiState.value.isPopularMode,
+                )
+            }
         }
     }
 
     private fun updateSelectedBoothList(booths: List<BoothDetailMapModel>) {
-        _uiState.update {
-            it.copy(
-                isPopularMode = false,
-                isBoothSelectionMode = true,
-                selectedBoothList = booths.toImmutableList(),
-            )
+        if (_uiState.value.isPopularMode) {
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(
+                        isPopularMode = false,
+                    )
+                }
+                delay(500)
+                _uiState.update {
+                    it.copy(
+                        isBoothSelectionMode = true,
+                        selectedBoothList = booths.toImmutableList(),
+                    )
+                }
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isBoothSelectionMode = true,
+                    selectedBoothList = booths.toImmutableList(),
+                )
+            }
         }
     }
 
@@ -451,6 +487,12 @@ class MapViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun deleteLikedFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            festivalRepository.deleteLikedFestival(festival)
         }
     }
 }
