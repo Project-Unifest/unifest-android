@@ -1,20 +1,32 @@
 package com.unifest.android.feature.map.viewmodel
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
+import android.os.Looper
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -30,15 +42,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val onboardingRepository: OnboardingRepository,
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
-    private val onboardingRepository: OnboardingRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<MapUiEvent>()
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
+
+    private var lastLocation: Location? = null
+
+    private val fusedLocationClient: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
+
+    private val locationRequest: LocationRequest =
+        LocationRequest.Builder(LOCATION_INTERVAL_MILLIS) // 초기 1회만 가져오고 Long.MAX_VALUE 만큼 기다림
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .build()
+
+    private val locationCallback by lazy {
+        object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                lastLocation = locationResult.lastLocation
+            }
+        }
+    }
 
     init {
         // getAllFestivals()
@@ -205,6 +237,37 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    @SuppressLint("MissingPermission")
+    fun addLocationListener() {
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper(),
+        )
+    }
+
+    fun removeLocationListener() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun onPermissionResult(isGranted: Boolean) {
+        if (isGranted) {
+            viewModelScope.launch {
+                _uiEvent.send(MapUiEvent.PermissionGranted)
+            }
+        } else {
+            _uiState.update {
+                it.copy(isPermissionDialogVisible = true)
+            }
+        }
+    }
+
+    fun requestLocationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.RequestLocationPermission)
+        }
+    }
+
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
@@ -215,6 +278,29 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
+            is MapUiAction.OnPermissionDialogButtonClick -> {
+                when (action.buttonType) {
+                    PermissionDialogButtonType.CONFIRM -> {
+                        viewModelScope.launch {
+                            _uiState.update {
+                                it.copy(isPermissionDialogVisible = false)
+                            }
+                            _uiEvent.send(MapUiEvent.RequestLocationPermission)
+                        }
+                    }
+                    PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
+                        viewModelScope.launch {
+                            _uiEvent.send(MapUiEvent.GoToAppSettings)
+                        }
+                    }
+                    PermissionDialogButtonType.DISMISS -> {
+                        _uiState.update {
+                            it.copy(isPermissionDialogVisible = false)
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -242,7 +328,7 @@ class MapViewModel @Inject constructor(
 
     private fun observeLikedFestivals() {
         viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+            likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
                         likedFestivals = likedFestivalList.toMutableList(),
@@ -347,7 +433,7 @@ class MapViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
@@ -492,7 +578,11 @@ class MapViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.deleteLikedFestival(festival)
         }
+    }
+
+    private companion object {
+        private const val LOCATION_INTERVAL_MILLIS = 3000L
     }
 }

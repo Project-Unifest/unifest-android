@@ -2,7 +2,9 @@ package com.unifest.android.core.common.extension
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 
 inline fun <reified T : Activity> Activity.startActivityWithAnimation(
     withFinish: Boolean,
@@ -20,4 +22,11 @@ inline fun <reified T : Activity> Activity.startActivityWithAnimation(
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
     if (withFinish) finish()
+}
+
+fun Activity.goToAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null),
+    ).also(::startActivity)
 }

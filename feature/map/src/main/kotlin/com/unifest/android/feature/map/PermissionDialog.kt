@@ -23,19 +23,19 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.map.viewmodel.PermissionDialogButtonType
+import com.unifest.android.feature.map.viewmodel.MapUiAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PermissionDialog(
     permissionTextProvider: PermissionTextProvider,
     isPermanentlyDeclined: Boolean,
-    onDismissClick: () -> Unit,
-    onConfirmClick: () -> Unit,
-    onGoToAppSettingsClick: () -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BasicAlertDialog(
-        onDismissRequest = onDismissClick,
+        onDismissRequest = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
         content = {
             Column(
                 modifier = Modifier
@@ -69,9 +69,9 @@ internal fun PermissionDialog(
                         .padding(top = 16.dp)
                         .noRippleClickable {
                             if (isPermanentlyDeclined) {
-                                onGoToAppSettingsClick()
+                                onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.GO_TO_APP_SETTINGS))
                             } else {
-                                onConfirmClick()
+                                onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM))
                             }
                         },
                     textAlign = TextAlign.Center,
@@ -107,9 +107,7 @@ fun PermissionDialogPreview() {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = false,
-            onDismissClick = {},
-            onConfirmClick = {},
-            onGoToAppSettingsClick = {},
+            onMapUiAction = {},
         )
     }
 }

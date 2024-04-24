@@ -1,5 +1,10 @@
 package com.unifest.android.feature.map
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -29,6 +34,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +59,8 @@ import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
@@ -60,6 +68,8 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.common.extension.goToAppSettings
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -85,6 +95,7 @@ import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
 import ted.gun0912.clustering.naver.TedNaverClustering
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
@@ -92,10 +103,33 @@ internal fun MapRoute(
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val activity = context.findActivity()
+
+    val locationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onPermissionResult(isGranted = isGranted)
+        },
+    )
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is MapUiEvent.RequestLocationPermission -> {
+                locationPermissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            is MapUiEvent.PermissionGranted -> {
+                viewModel.addLocationListener()
+            }
+            is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        viewModel.requestLocationPermission()
+        onDispose {
+            viewModel.removeLocationListener()
         }
     }
 
@@ -115,6 +149,7 @@ internal fun MapScreen(
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
+    val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
     }
@@ -160,6 +195,13 @@ internal fun MapScreen(
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
+        if (uiState.isPermissionDialogVisible) {
+            PermissionDialog(
+                permissionTextProvider = LocationPermissionTextProvider(),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
+                onMapUiAction = onMapUiAction,
+            )
+        }
     }
 }
 
@@ -172,20 +214,24 @@ fun MapContent(
     pagerState: PagerState,
     onAction: (MapUiAction) -> Unit,
 ) {
+    val context = LocalContext.current
+
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
         // TODO 지도 중앙 위치 조정
         NaverMap(
+            modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
+            properties = MapProperties(
+                locationTrackingMode = LocationTrackingMode.None,
+            ),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
             ),
-            modifier = Modifier.fillMaxSize(),
         ) {
-            val context = LocalContext.current
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
             DisposableMapEffect(uiState.boothList) { map ->
                 if (clusterManager == null) {
