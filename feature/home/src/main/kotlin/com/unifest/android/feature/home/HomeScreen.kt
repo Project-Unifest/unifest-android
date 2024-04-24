@@ -42,6 +42,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -63,6 +64,7 @@ import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Composable
 internal fun HomeRoute(
@@ -150,6 +152,7 @@ internal fun HomeScreen(
                             festival = festival,
                             onAction = onHomeUiAction,
                             likedFestivals = uiState.likedFestivals,
+                            uiState = uiState,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -224,6 +227,7 @@ fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
     likedFestivals: List<FestivalModel>,
+    uiState: HomeUiState,
 ) {
     Column {
         Row(
@@ -248,7 +252,7 @@ fun FestivalScheduleItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = festival.festivalName,
+                    text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), uiState.selectedDate),
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))

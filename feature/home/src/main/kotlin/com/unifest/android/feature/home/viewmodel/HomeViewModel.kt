@@ -69,9 +69,9 @@ class HomeViewModel @Inject constructor(
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 5,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 1",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
+                        festivalName = "녹색지대",
                         schoolName = "건국대학교",
                         starInfo = listOf(
                             StarInfoModel(
@@ -92,9 +92,9 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 1,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 2",
+                        beginDate = "2024-04-15",
+                        endDate = "2024-04-17",
+                        festivalName = "녹색지대",
                         schoolName = "서울대학교",
                         starInfo = listOf(
                             StarInfoModel(
@@ -115,9 +115,9 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 2,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 3",
+                        beginDate = "2024-04-22",
+                        endDate = "2024-04-24",
+                        festivalName = "녹색지대",
                         schoolName = "연세대학교",
                         starInfo = listOf(
                             StarInfoModel(
