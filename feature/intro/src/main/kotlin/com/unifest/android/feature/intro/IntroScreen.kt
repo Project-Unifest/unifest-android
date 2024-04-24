@@ -117,7 +117,8 @@ fun IntroScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 80.dp),
             ) {
                 InformationText()
                 SearchTextField(
@@ -146,6 +147,7 @@ fun IntroScreen(
                 AllFestivalsTabRow(
                     festivals = uiState.festivals,
                     onAction = onAction,
+                    selectedFestivals = uiState.selectedFestivals,
                 )
             }
             UnifestButton(
@@ -305,6 +307,7 @@ fun FestivalRowItem(
 fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
+    selectedFestivals: List<FestivalModel>,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     val pagerState = rememberPagerState(pageCount = { tabTitles.size })
@@ -378,7 +381,9 @@ fun AllFestivalsTabRow(
                         FestivalItem(
                             festival = festivals[index],
                             onFestivalSelected = { festival ->
-                                onAction(IntroUiAction.OnFestivalSelected(festival))
+                                if (!selectedFestivals.any { it.festivalId == festival.festivalId }) {
+                                    onAction(IntroUiAction.OnFestivalSelected(festival))
+                                }
                             },
                         )
                     }
