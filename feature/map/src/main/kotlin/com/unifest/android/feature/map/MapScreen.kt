@@ -2,7 +2,6 @@ package com.unifest.android.feature.map
 
 import android.Manifest
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -33,21 +32,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -60,14 +55,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.FestivalUiAction
@@ -97,7 +91,6 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 import ted.gun0912.clustering.naver.TedNaverClustering
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -110,38 +103,26 @@ internal fun MapRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
-    val permissionGranted by remember {
-        mutableStateOf(false)
-    }
+
+    val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    )
 
     val locationPermissionResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            viewModel.onPermissionResult(isGranted = isGranted)
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            viewModel.onPermissionResult(isGranted = permissions.none { it.value })
         },
     )
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is MapUiEvent.RequestLocationPermission -> {
-                locationPermissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                locationPermissionResultLauncher.launch(locationPermissions)
             }
-
-            is MapUiEvent.PermissionGranted -> {
-                viewModel.addLocationListener()
-            }
-
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
-        }
-    }
-
-    DisposableEffect(Unit) {
-        if (!permissionGranted) {
-            viewModel.requestLocationPermission()
-        }
-        onDispose {
-            viewModel.removeLocationListener()
         }
     }
 
@@ -227,22 +208,18 @@ fun MapContent(
     onMapUiAction: (MapUiAction) -> Unit,
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
         // TODO 지도 중앙 위치 조정
         NaverMap(
-            modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
-            properties = MapProperties(
-                locationTrackingMode = uiState.locationTrackingMode,
-            ),
+            locationSource = rememberFusedLocationSource(),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
+                isLocationButtonEnabled = true
             ),
         ) {
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
@@ -270,20 +247,6 @@ fun MapContent(
                 }
             }
         }
-        LocationTrackButton(
-            modifier = Modifier.align(Alignment.BottomEnd),
-            onClick = {
-                onMapUiAction(MapUiAction.OnLocationButtonClick)
-                scope.launch {
-                    if (uiState.lastLocation == null) {
-                        Toast.makeText(context, "위치를 조회할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                        return@launch
-                    }
-                    val lastLatLng = LatLng(uiState.lastLocation.latitude, uiState.lastLocation.longitude)
-                    cameraPositionState.animate(update = CameraUpdate.scrollAndZoomTo(lastLatLng, 14.0))
-                }
-            },
-        )
         MapTopAppBar(
             title = uiState.selectedSchoolName,
             boothSearchText = uiState.boothSearchText,
@@ -488,28 +451,6 @@ fun RankingBadge(ranking: Int) {
             color = Color.White,
             style = Title5,
             modifier = Modifier.align(Alignment.Center),
-        )
-    }
-}
-
-@Composable
-fun LocationTrackButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    buttonIconTint: Color = Color.Unspecified,
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier
-            .padding(30.dp)
-            .size(50.dp)
-            .shadow(elevation = 1.dp, shape = CircleShape)
-            .background(color = Color.White, shape = CircleShape),
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_location_track),
-            contentDescription = "Location Track Icon",
-            tint = buttonIconTint,
         )
     }
 }
