@@ -16,6 +16,7 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
 
 fun NavGraphBuilder.menuNavGraph(
     padding: PaddingValues,
+    navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
     navigateToContact: () -> Unit,
@@ -24,6 +25,7 @@ fun NavGraphBuilder.menuNavGraph(
     composable(route = MENU_ROUTE) {
         MenuRoute(
             padding = padding,
+            navigateToMap = navigateToMap,
             navigateToLikedBooth = navigateToLikedBooth,
             navigateToBoothDetail = navigateToBoothDetail,
             navigateToContact = navigateToContact,

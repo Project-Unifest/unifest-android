@@ -27,4 +27,5 @@ data class MapUiState(
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
+    val isPermissionDialogVisible: Boolean = false,
 )

@@ -75,6 +75,7 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
+    navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
     navigateToContact: () -> Unit,
@@ -94,6 +95,7 @@ internal fun MenuRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is MenuUiEvent.NavigateToMap -> navigateToMap()
             is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MenuUiEvent.NavigateToContact -> navigateToContact()
@@ -179,6 +181,7 @@ fun MenuScreen(
                         ) { index ->
                             FestivalItem(
                                 festival = uiState.likedFestivals[index],
+                                onMenuUiAction = onMenuUiAction,
                             )
                         }
                     }
@@ -322,11 +325,16 @@ fun MenuScreen(
 @Composable
 fun FestivalItem(
     festival: FestivalModel,
+    onMenuUiAction: (MenuUiAction) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(vertical = 10.dp),
+        modifier = Modifier
+            .padding(vertical = 10.dp)
+            .clickable {
+                onMenuUiAction(MenuUiAction.OnLikedFestivalItemClick(festival.schoolName))
+            },
     ) {
         Box(
             modifier = Modifier

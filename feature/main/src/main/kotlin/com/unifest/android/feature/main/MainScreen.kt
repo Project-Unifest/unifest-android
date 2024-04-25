@@ -112,6 +112,7 @@ internal fun MainScreen(
             )
             menuNavGraph(
                 padding = innerPadding,
+                navigateToMap = navigator::popBackStackIfNotHome,
                 navigateToLikedBooth = navigator::navigateToLikedBooth,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 navigateToContact = navigator::navigateToContact,

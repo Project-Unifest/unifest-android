@@ -8,4 +8,4 @@ annotation class OnboardingDataStore
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class RecentFestivalDataStore
+annotation class RecentLikedFestivalDataStore

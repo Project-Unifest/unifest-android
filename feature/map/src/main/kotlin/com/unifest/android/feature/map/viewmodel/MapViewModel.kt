@@ -9,6 +9,7 @@ import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
@@ -30,9 +31,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
+    private val onboardingRepository: OnboardingRepository,
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
-    private val onboardingRepository: OnboardingRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -205,6 +207,14 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    fun onPermissionResult(isGranted: Boolean) {
+        if (!isGranted) {
+            _uiState.update {
+                it.copy(isPermissionDialogVisible = true)
+            }
+        }
+    }
+
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
@@ -215,6 +225,30 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
+            is MapUiAction.OnPermissionDialogButtonClick -> {
+                when (action.buttonType) {
+                    PermissionDialogButtonType.CONFIRM -> {
+                        viewModelScope.launch {
+                            _uiState.update {
+                                it.copy(isPermissionDialogVisible = false)
+                            }
+                            _uiEvent.send(MapUiEvent.RequestLocationPermission)
+                        }
+                    }
+
+                    PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
+                        viewModelScope.launch {
+                            _uiEvent.send(MapUiEvent.GoToAppSettings)
+                        }
+                    }
+
+                    PermissionDialogButtonType.DISMISS -> {
+                        _uiState.update {
+                            it.copy(isPermissionDialogVisible = false)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -242,7 +276,7 @@ class MapViewModel @Inject constructor(
 
     private fun observeLikedFestivals() {
         viewModelScope.launch {
-            festivalRepository.getLikedFestivals().collect { likedFestivalList ->
+            likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
                         likedFestivals = likedFestivalList.toMutableList(),
@@ -347,7 +381,7 @@ class MapViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
         }
     }
 
@@ -492,7 +526,7 @@ class MapViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            festivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.deleteLikedFestival(festival)
         }
     }
 }

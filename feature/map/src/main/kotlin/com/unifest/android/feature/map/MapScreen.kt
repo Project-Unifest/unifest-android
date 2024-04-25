@@ -1,5 +1,10 @@
 package com.unifest.android.feature.map
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -56,10 +61,13 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.common.extension.goToAppSettings
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -85,6 +93,7 @@ import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
 import ted.gun0912.clustering.naver.TedNaverClustering
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
@@ -92,9 +101,28 @@ internal fun MapRoute(
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val activity = context.findActivity()
+
+    val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    )
+
+    val locationPermissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            viewModel.onPermissionResult(isGranted = permissions.none { it.value })
+        },
+    )
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is MapUiEvent.RequestLocationPermission -> {
+                locationPermissionResultLauncher.launch(locationPermissions)
+            }
+
+            is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }
@@ -115,6 +143,7 @@ internal fun MapScreen(
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
+    val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
     }
@@ -133,7 +162,7 @@ internal fun MapScreen(
             cameraPositionState = cameraPositionState,
             rotationState = rotationState,
             pagerState = pagerState,
-            onAction = onMapUiAction,
+            onMapUiAction = onMapUiAction,
         )
 
         if (uiState.isServerErrorDialogVisible) {
@@ -160,6 +189,13 @@ internal fun MapScreen(
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
+        if (uiState.isPermissionDialogVisible) {
+            PermissionDialog(
+                permissionTextProvider = LocationPermissionTextProvider(),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
+                onMapUiAction = onMapUiAction,
+            )
+        }
     }
 }
 
@@ -170,22 +206,23 @@ fun MapContent(
     cameraPositionState: CameraPositionState,
     rotationState: Float,
     pagerState: PagerState,
-    onAction: (MapUiAction) -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
 ) {
+    val context = LocalContext.current
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
         // TODO 지도 중앙 위치 조정
         NaverMap(
             cameraPositionState = cameraPositionState,
+            locationSource = rememberFusedLocationSource(),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
+                isLocationButtonEnabled = true,
             ),
-            modifier = Modifier.fillMaxSize(),
         ) {
-            val context = LocalContext.current
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
             DisposableMapEffect(uiState.boothList) { map ->
                 if (clusterManager == null) {
@@ -196,10 +233,10 @@ fun MapContent(
                             }
                         }
                         .markerClickListener { booth ->
-                            onAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
                         }
                         .clusterClickListener { booths ->
-                            onAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
                         }
                         // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
                         .clickToCenter(false)
@@ -214,7 +251,7 @@ fun MapContent(
         MapTopAppBar(
             title = uiState.selectedSchoolName,
             boothSearchText = uiState.boothSearchText,
-            onAction = onAction,
+            onAction = onMapUiAction,
             isOnboardingCompleted = uiState.isOnboardingCompleted,
             modifier = Modifier
                 .fillMaxWidth()
@@ -238,7 +275,7 @@ fun MapContent(
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
-                        onAction(MapUiAction.OnTogglePopularBooth)
+                        onMapUiAction(MapUiAction.OnTogglePopularBooth)
                     },
             ) {
                 Row(
@@ -274,7 +311,7 @@ fun MapContent(
                         boothInfo = uiState.selectedBoothList[page],
                         isPopularMode = uiState.isPopularMode,
                         ranking = page + 1,
-                        onAction = onAction,
+                        onAction = onMapUiAction,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp),
