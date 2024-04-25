@@ -28,5 +28,5 @@ data class HomeUiState(
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
     val showAddToFavoritesButton: Boolean = false,
-    val starImageClickStates: Map<Int, Boolean> = emptyMap()
+    val starImageClickStates: Map<Int, Boolean> = emptyMap(),
 )

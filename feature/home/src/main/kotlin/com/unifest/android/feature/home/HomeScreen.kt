@@ -45,6 +45,7 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -278,7 +279,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
                 itemsIndexed(festival.starInfo) { index, starInfo ->
-                    NetworkImage(
+                    StarImage(
                         imageUrl = starInfo.imgUrl,
                         modifier = Modifier
                             .size(72.dp)
@@ -292,7 +293,6 @@ fun FestivalScheduleItem(
                         },
                         isClicked = uiState.starImageClickStates[index] ?: false,
                         label = starInfo.name,
-                        isClickable = true,
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                 }
