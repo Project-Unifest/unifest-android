@@ -50,7 +50,6 @@ balloon = "1.6.4"
 calendar-compose = "2.5.0"
 flexible-bottomsheet = "0.1.2"
 
-naver-map-sdk = "3.18.0"
 naver-map-compose = "1.5.5"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
@@ -118,7 +117,6 @@ ballon-compose = { group = "com.github.skydoves", name = "balloon-compose", vers
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose" }
 flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottomsheet-material3", version.ref = "flexible-bottomsheet" }
 
-naver-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "naver-map-sdk" }
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
@@ -173,7 +171,6 @@ landscapist = [
 ]
 
 naver-map-compose = [
-    "naver-map-sdk",
     "naver-map-compose",
     "naver-map-location",
     "tedclustering-naver",
