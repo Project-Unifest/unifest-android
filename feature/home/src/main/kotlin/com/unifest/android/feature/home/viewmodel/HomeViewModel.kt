@@ -146,6 +146,8 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
+            is HomeUiAction.OnStarImageClick -> toggleStarImageClicked(action.index, true)
+            is HomeUiAction.OnStarImageDismiss -> toggleStarImageClicked(action.index, false)
         }
     }
 
@@ -299,6 +301,14 @@ class HomeViewModel @Inject constructor(
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
             festivalRepository.deleteLikedFestival(festival)
+        }
+    }
+
+    private fun toggleStarImageClicked(index: Int, isClicked: Boolean) {
+        _uiState.update { currentState ->
+            val newStates = currentState.starImageClickStates.toMutableMap()
+            newStates[index] = isClicked
+            currentState.copy(starImageClickStates = newStates)
         }
     }
 }

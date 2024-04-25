@@ -28,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -153,6 +155,7 @@ internal fun HomeScreen(
                             onAction = onHomeUiAction,
                             likedFestivals = uiState.likedFestivals,
                             uiState = uiState,
+                            onHomeUiAction = onHomeUiAction,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -227,6 +230,7 @@ fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
     likedFestivals: List<FestivalModel>,
+    onHomeUiAction: (HomeUiAction) -> Unit,
     uiState: HomeUiState,
 ) {
     Column {
@@ -275,12 +279,22 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(festival.starInfo) { starInfo ->
+                itemsIndexed(festival.starInfo) { index, starInfo ->
                     NetworkImage(
                         imageUrl = starInfo.img,
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape),
+                        onClick = {
+                            if (uiState.starImageClickStates[index] == true) {
+                                onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
+                            } else {
+                                onHomeUiAction(HomeUiAction.OnStarImageClick(index))
+                            }
+                        },
+                        isClicked = uiState.starImageClickStates[index] ?: false,
+                        label = starInfo.name,
+                        isClickable = true,
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                 }
