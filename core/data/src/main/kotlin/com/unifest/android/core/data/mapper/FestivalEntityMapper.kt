@@ -36,7 +36,7 @@ internal fun FestivalTodayModel.toEntity(): LikedFestivalEntity {
 internal fun StarInfoModel.toEntity(): StarInfoEntity {
     return StarInfoEntity(
         name = name,
-        img = img,
+        imgUrl = imgUrl,
     )
 }
 

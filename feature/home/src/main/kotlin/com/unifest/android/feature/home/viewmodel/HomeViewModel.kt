@@ -76,15 +76,15 @@ class HomeViewModel @Inject constructor(
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 5,
@@ -99,15 +99,15 @@ class HomeViewModel @Inject constructor(
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 1,
@@ -122,15 +122,15 @@ class HomeViewModel @Inject constructor(
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 2,
