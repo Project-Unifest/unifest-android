@@ -69,6 +69,6 @@ data class FestivalToday(
 data class StarInfo(
     @SerialName("name")
     val name: String,
-    @SerialName("img")
-    val img: String,
+    @SerialName("imgUrl")
+    val imgUrl: String,
 )

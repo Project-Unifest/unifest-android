@@ -42,8 +42,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -63,6 +65,7 @@ import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 @Composable
 internal fun HomeRoute(
@@ -103,6 +106,7 @@ internal fun HomeScreen(
                 Calendar(
                     selectedDate = uiState.selectedDate,
                     onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
+                    allFestivals = uiState.allFestivals,
                 )
             }
             item {
@@ -149,6 +153,9 @@ internal fun HomeScreen(
                             festival = festival,
                             onAction = onHomeUiAction,
                             likedFestivals = uiState.likedFestivals,
+                            selectedDate = uiState.selectedDate,
+                            starImageClickStates = uiState.starImageClickStates,
+                            onHomeUiAction = onHomeUiAction,
                         )
                     }
                     if (index < uiState.todayFestivals.size - 1) {
@@ -223,6 +230,9 @@ fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
     likedFestivals: List<FestivalModel>,
+    onHomeUiAction: (HomeUiAction) -> Unit,
+    selectedDate: LocalDate,
+    starImageClickStates: Map<Int, Boolean>,
 ) {
     Column {
         Row(
@@ -247,7 +257,7 @@ fun FestivalScheduleItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = festival.festivalName,
+                    text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate),
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -270,9 +280,18 @@ fun FestivalScheduleItem(
             }
             Spacer(modifier = Modifier.width(39.dp))
             LazyRow {
-                items(festival.starInfo) { starInfo ->
-                    NetworkImage(
-                        imageUrl = starInfo.img,
+                itemsIndexed(festival.starInfo) { index, starInfo ->
+                    StarImage(
+                        imageUrl = starInfo.imgUrl,
+                        onClick = {
+                            if (starImageClickStates[index] == true) {
+                                onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
+                            } else {
+                                onHomeUiAction(HomeUiAction.OnStarImageClick(index))
+                            }
+                        },
+                        isClicked = starImageClickStates[index] ?: false,
+                        label = starInfo.name,
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape),

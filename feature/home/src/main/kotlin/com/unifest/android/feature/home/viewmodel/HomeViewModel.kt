@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-
+//        getAllFestivals()
         _uiState.update {
             it.copy(
                 incomingFestivals = persistentListOf(
@@ -71,22 +71,22 @@ class HomeViewModel @Inject constructor(
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 5,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 1",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
+                        festivalName = "녹색지대",
                         schoolName = "건국대학교",
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 5,
@@ -94,22 +94,22 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 1,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 2",
+                        beginDate = "2024-04-15",
+                        endDate = "2024-04-17",
+                        festivalName = "녹색지대",
                         schoolName = "서울대학교",
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 1,
@@ -117,22 +117,22 @@ class HomeViewModel @Inject constructor(
                     ),
                     FestivalTodayModel(
                         festivalId = 2,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
-                        festivalName = "녹색지대 DAY 3",
+                        beginDate = "2024-04-22",
+                        endDate = "2024-04-24",
+                        festivalName = "녹색지대",
                         schoolName = "연세대학교",
                         starInfo = listOf(
                             StarInfoModel(
                                 name = "비",
-                                img = "https://picsum.photos/36",
+                                imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
                                 name = "싸이",
-                                img = "https://picsum.photos/37",
+                                imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
                                 name = "아이유",
-                                img = "https://picsum.photos/38",
+                                imgUrl = "https://picsum.photos/38",
                             ),
                         ),
                         schoolId = 2,
@@ -148,6 +148,8 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
+            is HomeUiAction.OnStarImageClick -> toggleStarImageClicked(action.index, true)
+            is HomeUiAction.OnStarImageDismiss -> toggleStarImageClicked(action.index, false)
         }
     }
 
@@ -230,6 +232,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+//    fun getAllFestivals() {
+//        viewModelScope.launch {
+//            festivalRepository.getAllFestivals()
+//                .onSuccess { festivals ->
+//                    _uiState.update {
+//                        it.copy(
+//                            allFestivals = festivals.toImmutableList(),
+//                        )
+//                    }
+//                }
+//                .onFailure { exception ->
+//                    handleException(exception, this@HomeViewModel)
+//                }
+//        }
+//    }
+
     private fun updateSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(festivalSearchText = text)
@@ -287,6 +305,14 @@ class HomeViewModel @Inject constructor(
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.deleteLikedFestival(festival)
+        }
+    }
+
+    private fun toggleStarImageClicked(index: Int, isClicked: Boolean) {
+        _uiState.update { currentState ->
+            val newStates = currentState.starImageClickStates.toMutableMap()
+            newStates[index] = isClicked
+            currentState.copy(starImageClickStates = newStates)
         }
     }
 }

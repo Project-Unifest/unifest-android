@@ -151,3 +151,9 @@ val WaitingTeam = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 28.sp,
 )
+
+val Content9 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+)

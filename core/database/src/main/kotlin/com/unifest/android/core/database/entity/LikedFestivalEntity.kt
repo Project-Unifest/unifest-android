@@ -46,5 +46,5 @@ data class LikedFestivalEntity(
 @Serializable
 data class StarInfoEntity(
     val name: String = "",
-    val img: String = "",
+    val imgUrl: String = "",
 )

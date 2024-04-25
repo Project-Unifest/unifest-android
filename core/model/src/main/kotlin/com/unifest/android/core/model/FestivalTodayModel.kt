@@ -17,5 +17,5 @@ data class FestivalTodayModel(
 @Stable
 data class StarInfoModel(
     val name: String,
-    val img: String,
+    val imgUrl: String,
 )
