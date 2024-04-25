@@ -153,7 +153,8 @@ internal fun HomeScreen(
                             festival = festival,
                             onAction = onHomeUiAction,
                             likedFestivals = uiState.likedFestivals,
-                            uiState = uiState,
+                            selectedDate = uiState.selectedDate,
+                            starImageClickStates = uiState.starImageClickStates,
                             onHomeUiAction = onHomeUiAction,
                         )
                     }
@@ -230,7 +231,8 @@ fun FestivalScheduleItem(
     onAction: (HomeUiAction) -> Unit,
     likedFestivals: List<FestivalModel>,
     onHomeUiAction: (HomeUiAction) -> Unit,
-    uiState: HomeUiState,
+    selectedDate: LocalDate,
+    starImageClickStates: Map<Int, Boolean>,
 ) {
     Column {
         Row(
@@ -255,7 +257,7 @@ fun FestivalScheduleItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), uiState.selectedDate),
+                    text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate),
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -285,13 +287,13 @@ fun FestivalScheduleItem(
                             .size(72.dp)
                             .clip(CircleShape),
                         onClick = {
-                            if (uiState.starImageClickStates[index] == true) {
+                            if (starImageClickStates[index] == true) {
                                 onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
                             } else {
                                 onHomeUiAction(HomeUiAction.OnStarImageClick(index))
                             }
                         },
-                        isClicked = uiState.starImageClickStates[index] ?: false,
+                        isClicked = starImageClickStates[index] ?: false,
                         label = starInfo.name,
                     )
                     Spacer(modifier = Modifier.width(10.dp))

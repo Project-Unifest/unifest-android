@@ -16,10 +16,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil.CoilImage
-import com.skydoves.landscapist.components.rememberImageComponent
-import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -49,17 +45,12 @@ fun StarImage(
                     .align(Alignment.Center),
             )
         } else {
-            CoilImage(
-                imageModel = { imageUrl },
-                component = rememberImageComponent {
-                    +PlaceholderPlugin.Loading(placeholder)
-                    +PlaceholderPlugin.Failure(placeholder)
-                },
-                imageOptions = ImageOptions(
-                    contentScale = contentScale,
-                    alignment = Alignment.Center,
-                    contentDescription = contentDescription,
-                ),
+            NetworkImage(
+                imageUrl = imageUrl,
+                modifier = Modifier.matchParentSize(),
+                placeholder = placeholder,
+                contentScale = contentScale,
+                contentDescription = contentDescription,
             )
             if (isClicked) {
                 Box(
@@ -82,6 +73,6 @@ fun StarImage(
 @Composable
 fun StarImagePreview() {
     UnifestTheme {
-        NetworkImage(imageUrl = "")
+        StarImage(imageUrl = "")
     }
 }
