@@ -283,9 +283,6 @@ fun FestivalScheduleItem(
                 itemsIndexed(festival.starInfo) { index, starInfo ->
                     StarImage(
                         imageUrl = starInfo.imgUrl,
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(CircleShape),
                         onClick = {
                             if (starImageClickStates[index] == true) {
                                 onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
@@ -295,6 +292,9 @@ fun FestivalScheduleItem(
                         },
                         isClicked = starImageClickStates[index] ?: false,
                         label = starInfo.name,
+                        modifier = Modifier
+                            .size(72.dp)
+                            .clip(CircleShape),
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                 }

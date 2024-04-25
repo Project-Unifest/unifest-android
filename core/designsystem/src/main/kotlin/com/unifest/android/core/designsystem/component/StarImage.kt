@@ -3,10 +3,6 @@ package com.unifest.android.core.designsystem.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -23,48 +17,38 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 @Composable
 fun StarImage(
     imageUrl: String?,
+    onClick: () -> Unit,
+    isClicked: Boolean,
+    label: String,
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     contentScale: ContentScale = ContentScale.Crop,
     contentDescription: String? = null,
-    onClick: () -> Unit = {},
-    isClicked: Boolean = false,
-    label: String = "",
 ) {
     Box(
         modifier = modifier
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        if (LocalInspectionMode.current) {
-            Icon(
-                imageVector = Icons.Outlined.Person,
-                contentDescription = "Placeholder Image",
+        NetworkImage(
+            imageUrl = imageUrl,
+            modifier = Modifier.matchParentSize(),
+            placeholder = placeholder,
+            contentScale = contentScale,
+            contentDescription = contentDescription,
+        )
+        if (isClicked) {
+            Box(
                 modifier = Modifier
-                    .size(72.dp)
-                    .align(Alignment.Center),
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.6f)),
             )
-        } else {
-            NetworkImage(
-                imageUrl = imageUrl,
-                modifier = Modifier.matchParentSize(),
-                placeholder = placeholder,
-                contentScale = contentScale,
-                contentDescription = contentDescription,
+            Text(
+                text = label,
+                color = Color.White,
+                style = Content9,
+                modifier = Modifier.align(Alignment.Center),
             )
-            if (isClicked) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.6f)),
-                )
-                Text(
-                    text = label,
-                    color = Color.White,
-                    style = Content9,
-                    modifier = Modifier.align(Alignment.Center),
-                )
-            }
         }
     }
 }
@@ -73,6 +57,11 @@ fun StarImage(
 @Composable
 fun StarImagePreview() {
     UnifestTheme {
-        StarImage(imageUrl = "")
+        StarImage(
+            imageUrl = "",
+            onClick = {},
+            isClicked = false,
+            label = "",
+        )
     }
 }
