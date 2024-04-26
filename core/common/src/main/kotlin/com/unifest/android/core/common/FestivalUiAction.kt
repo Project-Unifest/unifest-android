@@ -7,7 +7,7 @@ sealed interface FestivalUiAction {
     data object OnDismiss : FestivalUiAction
     data class OnSearchTextUpdated(val text: TextFieldValue) : FestivalUiAction
     data object OnSearchTextCleared : FestivalUiAction
-    data object OnTooltipClick: FestivalUiAction
+    data object OnTooltipClick : FestivalUiAction
     data class OnEnableSearchMode(val flag: Boolean) : FestivalUiAction
     data object OnEnableEditMode : FestivalUiAction
     data class OnAddClick(val festival: FestivalModel) : FestivalUiAction

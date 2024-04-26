@@ -46,7 +46,6 @@ class OnboardingDataSourceImpl @Inject constructor(
             else throw exception
         }.first()[KEY_FESTIVAL_ONBOARDING_COMPLETE] ?: false
 
-
     override suspend fun completeFestivalOnboarding(flag: Boolean) {
         dataStore.edit { preferences -> preferences[KEY_FESTIVAL_ONBOARDING_COMPLETE] = flag }
     }

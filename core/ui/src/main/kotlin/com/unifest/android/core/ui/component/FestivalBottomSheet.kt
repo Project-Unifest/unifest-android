@@ -110,7 +110,7 @@ fun FestivalSearchBottomSheet(
         windowInsets = WindowInsets(0, 0, 0, 0),
         modifier = Modifier
             .fillMaxHeight()
-            .padding(top = 18.dp)
+            .padding(top = 18.dp),
     ) {
         val scope = rememberCoroutineScope()
         val builder = rememberBalloonBuilder {
