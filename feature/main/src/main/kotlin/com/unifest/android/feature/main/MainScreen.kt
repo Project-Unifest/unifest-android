@@ -61,16 +61,14 @@ internal fun MainScreen(
 
     val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
-            scope.launch {
-                val job = launch {
-                    snackBarstate.showSnackbar(
-                        message = message.asString(context),
-                        duration = SnackbarDuration.Short,
-                    )
-                }
-                delay(SnackBarDuration)
-                job.cancel()
+            val job = launch {
+                snackBarstate.showSnackbar(
+                    message = message.asString(context),
+                    duration = SnackbarDuration.Short,
+                )
             }
+            delay(SnackBarDuration)
+            job.cancel()
         }
     }
 
