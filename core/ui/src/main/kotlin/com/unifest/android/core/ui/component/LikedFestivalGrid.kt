@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -49,11 +50,11 @@ fun LikedFestivalsGrid(
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
     onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
+    tooltip: @Composable () -> Unit,
     optionTextButton: @Composable () -> Unit,
 ) {
     Column {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,6 +64,9 @@ fun LikedFestivalsGrid(
                 text = stringResource(id = R.string.intro_liked_festivals_title),
                 style = Title3,
             )
+            Spacer(modifier = Modifier.width(24.dp))
+            tooltip()
+            Spacer(modifier = Modifier.weight(1f))
             optionTextButton()
         }
         LazyVerticalGrid(
@@ -245,12 +249,8 @@ fun LikedFestivalsGridPreview() {
                 ),
             ),
             onFestivalSelected = {},
-            optionTextButton = {
-                Text(
-                    text = "편집",
-                    style = Content3,
-                )
-            },
+            tooltip = {},
+            optionTextButton = {},
         )
     }
 }
@@ -334,13 +334,9 @@ fun LikedFestivalsGridEditModePreview() {
                 ),
             ),
             onFestivalSelected = {},
-            optionTextButton = {
-                Text(
-                    text = "편집",
-                    style = Content3,
-                )
-            },
             isEditMode = true,
+            tooltip = {},
+            optionTextButton = {},
         )
     }
 }

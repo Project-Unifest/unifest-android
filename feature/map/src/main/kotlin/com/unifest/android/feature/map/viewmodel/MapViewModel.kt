@@ -45,7 +45,8 @@ class MapViewModel @Inject constructor(
     init {
         // getAllFestivals()
         getPopularBooths()
-        checkOnboardingCompletion()
+        checkMapOnboardingCompletion()
+        checkFestivalOnboardingCompletion()
         observeLikedFestivals()
 
         val boothList = listOf(
@@ -220,7 +221,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
             is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.text)
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
-            is MapUiAction.OnTooltipClick -> completeOnboarding()
+            is MapUiAction.OnTooltipClick -> completeMapOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
@@ -271,6 +272,7 @@ class MapViewModel @Inject constructor(
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
+            is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
     }
 
@@ -317,17 +319,17 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun checkOnboardingCompletion() {
+    private fun checkMapOnboardingCompletion() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isOnboardingCompleted = onboardingRepository.checkOnboardingCompletion())
+                it.copy(isOnboardingCompleted = onboardingRepository.checkMapOnboardingCompletion())
             }
         }
     }
 
-    private fun completeOnboarding() {
+    private fun completeMapOnboarding() {
         viewModelScope.launch {
-            onboardingRepository.completeOnboarding(true)
+            onboardingRepository.completeMapOnboarding(true)
             _uiState.update {
                 it.copy(isOnboardingCompleted = true)
             }
@@ -527,6 +529,20 @@ class MapViewModel @Inject constructor(
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.deleteLikedFestival(festival)
+        }
+    }
+
+    private fun checkFestivalOnboardingCompletion() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isOnboardingCompleted = onboardingRepository.checkFestivalOnboardingCompletion())
+            }
+        }
+    }
+
+    private fun completeFestivalOnboarding() {
+        viewModelScope.launch {
+            onboardingRepository.completeFestivalOnboarding(true)
         }
     }
 }

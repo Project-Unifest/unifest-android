@@ -172,6 +172,8 @@ class HomeViewModel @Inject constructor(
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
+
+            else -> {}
         }
     }
 

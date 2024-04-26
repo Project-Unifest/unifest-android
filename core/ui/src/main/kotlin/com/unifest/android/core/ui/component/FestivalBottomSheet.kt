@@ -2,6 +2,7 @@ package com.unifest.android.core.ui.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -10,15 +11,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +30,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.BalloonSizeSpec
+import com.skydoves.balloon.compose.Balloon
+import com.skydoves.balloon.compose.rememberBalloonBuilder
+import com.skydoves.balloon.compose.setBackgroundColor
 import com.skydoves.flexible.bottomsheet.material3.FlexibleBottomSheet
 import com.skydoves.flexible.core.FlexibleSheetSize
 import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
@@ -37,10 +48,12 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
+import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @Composable
 fun FestivalSearchBottomSheet(
@@ -88,6 +101,21 @@ fun FestivalSearchBottomSheet(
         },
         windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
+        val scope = rememberCoroutineScope()
+        val builder = rememberBalloonBuilder {
+            setArrowSize(10)
+            setArrowPosition(0.5f)
+            setArrowOrientation(ArrowOrientation.BOTTOM)
+            setWidth(BalloonSizeSpec.WRAP)
+            setHeight(BalloonSizeSpec.WRAP)
+            setPadding(9)
+            setCornerRadius(8f)
+            setBackgroundColor(Color(0xFFF5687E))
+            setBalloonAnimation(BalloonAnimation.FADE)
+            setDismissWhenClicked(true)
+            setDismissWhenTouchOutside(false)
+            setFocusable(false)
+        }
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -126,19 +154,44 @@ fun FestivalSearchBottomSheet(
                         deleteSelectedFestival = festival
                         onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
                     },
-                ) {
-                    TextButton(
-                        onClick = {
-                            onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
-                        },
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.edit),
-                            color = Color.Black,
-                            style = Content3,
-                        )
-                    }
-                }
+                    tooltip = {
+                        Balloon(
+                            builder = builder,
+                            balloonContent = {
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentWidth()
+                                        .clickable {
+                                            onFestivalUiAction(FestivalUiAction.OnTooltipClick)
+                                        },
+                                    text = stringResource(id = R.string.map_school_search_tool_tip_description),
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White,
+                                    style = Content5,
+                                )
+                            },
+                        ) { balloonWindow ->
+                            LaunchedEffect(key1 = Unit) {
+                                scope.launch {
+                                    balloonWindow.awaitAlignEnd()
+                                }
+                            }
+                        }
+                    },
+                    optionTextButton = {
+                        TextButton(
+                            onClick = {
+                                onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
+                            },
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.edit),
+                                color = Color.Black,
+                                style = Content3,
+                            )
+                        }
+                    },
+                )
             } else {
                 FestivalSearchResults(
                     searchResults = festivalSearchResults,
