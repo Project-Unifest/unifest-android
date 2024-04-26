@@ -50,7 +50,7 @@ balloon = "1.6.4"
 calendar-compose = "2.5.0"
 flexible-bottomsheet = "0.1.2"
 
-naver-map-compose = "1.5.5"
+naver-map-compose = "1.5.7"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
 
