@@ -49,9 +49,9 @@ fun LikedFestivalsGrid(
     selectedFestivals: MutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
-    tooltip: @Composable () -> Unit,
     optionTextButton: @Composable () -> Unit,
+    onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
+    tooltip: @Composable () -> Unit = {},
 ) {
     Column {
         Row(
@@ -64,7 +64,7 @@ fun LikedFestivalsGrid(
                 text = stringResource(id = R.string.intro_liked_festivals_title),
                 style = Title3,
             )
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             tooltip()
             Spacer(modifier = Modifier.weight(1f))
             optionTextButton()

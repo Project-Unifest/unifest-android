@@ -322,7 +322,7 @@ class MapViewModel @Inject constructor(
     private fun checkMapOnboardingCompletion() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isOnboardingCompleted = onboardingRepository.checkMapOnboardingCompletion())
+                it.copy(isMapOnboardingCompleted = onboardingRepository.checkMapOnboardingCompletion())
             }
         }
     }
@@ -331,7 +331,7 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch {
             onboardingRepository.completeMapOnboarding(true)
             _uiState.update {
-                it.copy(isOnboardingCompleted = true)
+                it.copy(isMapOnboardingCompleted = true)
             }
         }
     }
@@ -535,7 +535,7 @@ class MapViewModel @Inject constructor(
     private fun checkFestivalOnboardingCompletion() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isOnboardingCompleted = onboardingRepository.checkFestivalOnboardingCompletion())
+                it.copy(isFestivalOnboardingCompleted = onboardingRepository.checkFestivalOnboardingCompletion())
             }
         }
     }
@@ -543,6 +543,9 @@ class MapViewModel @Inject constructor(
     private fun completeFestivalOnboarding() {
         viewModelScope.launch {
             onboardingRepository.completeFestivalOnboarding(true)
+            _uiState.update {
+                it.copy(isFestivalOnboardingCompleted = true)
+            }
         }
     }
 }

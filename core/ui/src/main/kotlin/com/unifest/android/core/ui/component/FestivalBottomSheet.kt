@@ -2,10 +2,10 @@ package com.unifest.android.core.ui.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,11 +41,9 @@ import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.skydoves.balloon.compose.setBackgroundColor
-import com.skydoves.flexible.bottomsheet.material3.FlexibleBottomSheet
-import com.skydoves.flexible.core.FlexibleSheetSize
-import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
@@ -53,8 +54,10 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
@@ -62,26 +65,31 @@ fun FestivalSearchBottomSheet(
     likedFestivals: MutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
     isSearchMode: Boolean,
-    isEditMode: Boolean = false,
     isLikedFestivalDeleteDialogVisible: Boolean,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isOnboardingCompleted: Boolean = true,
+    isEditMode: Boolean = false,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
     var deleteSelectedFestival by remember { mutableStateOf<FestivalModel?>(null) }
-    val bottomSheetState = rememberFlexibleBottomSheetState(
-        containSystemBars = true,
-        flexibleSheetSize = FlexibleSheetSize(
-            intermediatelyExpanded = 1.0f,
-        ),
-        isModal = true,
-        skipSlightlyExpanded = true,
+//    val bottomSheetState = rememberFlexibleBottomSheetState(
+//        containSystemBars = true,
+//        flexibleSheetSize = FlexibleSheetSize(
+//            intermediatelyExpanded = 1.0f,
+//        ),
+//        isModal = true,
+//        skipSlightlyExpanded = true,
+//    )
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
     )
 
-    FlexibleBottomSheet(
+    ModalBottomSheet(
         onDismissRequest = {
             onFestivalUiAction(FestivalUiAction.OnDismiss)
         },
         sheetState = bottomSheetState,
+        shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
         containerColor = Color.White,
         dragHandle = {
             Column(
@@ -100,11 +108,14 @@ fun FestivalSearchBottomSheet(
             }
         },
         windowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 18.dp)
     ) {
         val scope = rememberCoroutineScope()
         val builder = rememberBalloonBuilder {
             setArrowSize(10)
-            setArrowPosition(0.5f)
+            setArrowPosition(0.1f)
             setArrowOrientation(ArrowOrientation.BOTTOM)
             setWidth(BalloonSizeSpec.WRAP)
             setHeight(BalloonSizeSpec.WRAP)
@@ -155,25 +166,28 @@ fun FestivalSearchBottomSheet(
                         onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
                     },
                     tooltip = {
-                        Balloon(
-                            builder = builder,
-                            balloonContent = {
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentWidth()
-                                        .clickable {
-                                            onFestivalUiAction(FestivalUiAction.OnTooltipClick)
-                                        },
-                                    text = stringResource(id = R.string.map_school_search_tool_tip_description),
-                                    textAlign = TextAlign.Center,
-                                    color = Color.White,
-                                    style = Content5,
-                                )
-                            },
-                        ) { balloonWindow ->
-                            LaunchedEffect(key1 = Unit) {
-                                scope.launch {
-                                    balloonWindow.awaitAlignEnd()
+                        if (!isOnboardingCompleted) {
+                            Balloon(
+                                builder = builder,
+                                balloonContent = {
+                                    Text(
+                                        modifier = Modifier
+                                            .wrapContentWidth()
+                                            .noRippleClickable {
+                                                onFestivalUiAction(FestivalUiAction.OnTooltipClick)
+                                            },
+                                        text = stringResource(id = R.string.festival_search_onboarding_title),
+                                        textAlign = TextAlign.Center,
+                                        color = Color.White,
+                                        style = Content5,
+                                    )
+                                },
+                            ) { balloonWindow ->
+                                LaunchedEffect(key1 = Unit) {
+                                    scope.launch {
+                                        delay(500L)
+                                        balloonWindow.awaitAlignEnd()
+                                    }
                                 }
                             }
                         }
@@ -336,6 +350,7 @@ fun SchoolSearchBottomSheetPreview() {
             isSearchMode = false,
             isEditMode = false,
             isLikedFestivalDeleteDialogVisible = false,
+            isOnboardingCompleted = true,
             onFestivalUiAction = {},
         )
     }
