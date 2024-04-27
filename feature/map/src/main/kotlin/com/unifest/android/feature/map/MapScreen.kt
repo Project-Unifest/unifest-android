@@ -55,6 +55,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.clustering.Clusterer
+import com.naver.maps.map.clustering.DefaultLeafMarkerUpdater
+import com.naver.maps.map.clustering.LeafMarkerInfo
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -63,6 +66,7 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
@@ -91,7 +95,6 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
-import ted.gun0912.clustering.naver.TedNaverClustering
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -208,7 +211,6 @@ fun MapContent(
     pagerState: PagerState,
     onMapUiAction: (MapUiAction) -> Unit,
 ) {
-    val context = LocalContext.current
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
@@ -223,30 +225,58 @@ fun MapContent(
                 isLocationButtonEnabled = true,
             ),
         ) {
-            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
-            DisposableMapEffect(uiState.boothList) { map ->
+            var clusterManager by remember { mutableStateOf<Clusterer<BoothDetailMapModel>?>(null) }
+            DisposableMapEffect(Unit) { map ->
                 if (clusterManager == null) {
-                    clusterManager = TedNaverClustering.with<BoothDetailMapModel>(context, map)
-                        .customMarker {
-                            Marker().apply {
-                                icon = OverlayImage.fromResource(R.drawable.ic_general)
+                    clusterManager = Clusterer.Builder<BoothDetailMapModel>()
+                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
+                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
+                                super.updateLeafMarker(info, marker)
+                                marker.icon = OverlayImage.fromResource(R.drawable.ic_general)
+                                marker.onClickListener = Overlay.OnClickListener {
+                                    clusterManager?.remove(info.key as BoothDetailMapModel)
+                                    true
+                                }
                             }
-                        }
-                        .markerClickListener { booth ->
-                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
-                        }
-                        .clusterClickListener { booths ->
-                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
-                        }
-                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-                        .clickToCenter(false)
-                        .make()
+                        })
+                        .build()
+                        .apply { this.map = map }
                 }
-                clusterManager?.addItems(uiState.boothList)
+                val boothListMap = buildMap(uiState.boothList.size) {
+                    uiState.boothList.forEachIndexed { index, booth ->
+                        put(booth, index)
+                    }
+                }
+                clusterManager?.addAll(boothListMap)
                 onDispose {
-                    clusterManager?.clearItems()
+                    clusterManager?.clear()
                 }
             }
+
+//            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
+//            DisposableMapEffect(uiState.boothList) { map ->
+//                if (clusterManager == null) {
+//                    clusterManager = TedNaverClustering.with<BoothDetailMapModel>(context, map)
+//                        .customMarker {
+//                            Marker().apply {
+//                                icon = OverlayImage.fromResource(R.drawable.ic_general)
+//                            }
+//                        }
+//                        .markerClickListener { booth ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+//                        }
+//                        .clusterClickListener { booths ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+//                        }
+//                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+//                        .clickToCenter(false)
+//                        .make()
+//                }
+//                clusterManager?.addItems(uiState.boothList)
+//                onDispose {
+//                    clusterManager?.clearItems()
+//                }
+//            }
         }
         MapTopAppBar(
             title = uiState.selectedSchoolName,
