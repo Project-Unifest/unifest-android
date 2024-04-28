@@ -45,7 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    likedFestivals : List<FestivalModel> = emptyList(),
+    likedFestivals: List<FestivalModel> = emptyList(),
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -133,7 +133,7 @@ fun FestivalSearchResultItem(
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text =  "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
+                text = "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                 color = Color(0xFF4D4D4D),
                 style = Content3,
             )
@@ -155,12 +155,12 @@ fun FestivalSearchResultItem(
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
                     contentDescription = "Checked",
-                    tint = Color(0xFF666666)
+                    tint = Color(0xFF666666),
                 )
             }
         } else {
             UnifestOutlinedButton(
-                onClick =  {onFestivalUiAction(FestivalUiAction.OnAddClick(festival))},
+                onClick = { onFestivalUiAction(FestivalUiAction.OnAddClick(festival)) },
                 cornerRadius = 17.dp,
                 borderColor = Color(0xFFDDDDDD),
                 contentColor = Color(0xFF666666),

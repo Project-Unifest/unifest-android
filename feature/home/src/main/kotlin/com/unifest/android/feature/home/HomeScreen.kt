@@ -42,7 +42,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
@@ -253,7 +252,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text =  "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
+                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
@@ -358,7 +357,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text =  "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
+                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content6,
                     color = Color(0xFF848484),
                 )
