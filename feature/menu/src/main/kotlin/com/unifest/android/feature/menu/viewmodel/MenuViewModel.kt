@@ -110,7 +110,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun navigateToMap(schoolName: String,) {
+    private fun navigateToMap(schoolName: String) {
         viewModelScope.launch {
             likedFestivalRepository.setRecentLikedFestival(schoolName)
             _uiEvent.send(MenuUiEvent.NavigateToMap)
