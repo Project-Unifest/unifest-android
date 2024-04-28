@@ -54,7 +54,6 @@ class MenuViewModel @Inject constructor(
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
             is MenuUiAction.OnAdministratorModeClick -> navigateToAdministratorMode()
-
         }
     }
 
