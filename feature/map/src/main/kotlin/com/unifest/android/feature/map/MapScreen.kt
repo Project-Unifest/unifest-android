@@ -1,10 +1,8 @@
 package com.unifest.android.feature.map
 
 import android.Manifest
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -99,7 +97,6 @@ import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,

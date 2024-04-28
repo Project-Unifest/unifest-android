@@ -16,11 +16,13 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
+    popBackStack: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
         HomeRoute(
             padding = padding,
+            popBackStack = popBackStack,
             onShowSnackBar = onShowSnackBar,
         )
     }

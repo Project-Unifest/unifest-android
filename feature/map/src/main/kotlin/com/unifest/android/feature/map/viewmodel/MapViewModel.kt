@@ -261,6 +261,7 @@ class MapViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -385,6 +386,13 @@ class MapViewModel @Inject constructor(
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
         }
+    }
+
+    private fun setRecentLikedFestival(schoolName: String) {
+        viewModelScope.launch {
+            likedFestivalRepository.setRecentLikedFestival(schoolName)
+        }
+        setFestivalSearchBottomSheetVisible(false)
     }
 
     private fun addLikeFestival(festival: FestivalModel) {

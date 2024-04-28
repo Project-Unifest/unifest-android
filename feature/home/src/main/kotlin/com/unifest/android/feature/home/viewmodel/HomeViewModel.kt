@@ -162,6 +162,7 @@ class HomeViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
             is FestivalUiAction.OnAddClick -> addLikeFestivalAtBottomSheet(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -272,6 +273,14 @@ class HomeViewModel @Inject constructor(
     private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isFestivalSearchBottomSheetVisible = flag)
+        }
+    }
+
+    private fun setRecentLikedFestival(schoolName: String) {
+        viewModelScope.launch {
+            likedFestivalRepository.setRecentLikedFestival(schoolName)
+            _uiEvent.send(HomeUiEvent.NavigateBack)
+            setLikedFestivalDeleteDialogVisible(false)
         }
     }
 
