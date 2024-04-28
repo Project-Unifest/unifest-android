@@ -55,14 +55,14 @@ private const val SnackBarDuration = 1000L
 internal fun MainScreen(
     navigator: MainNavController = rememberMainNavController(),
 ) {
-    val snackBarstate = remember { SnackbarHostState() }
+    val snackBarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
             val job = launch {
-                snackBarstate.showSnackbar(
+                snackBarState.showSnackbar(
                     message = message.asString(context),
                     duration = SnackbarDuration.Short,
                 )
@@ -82,7 +82,7 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackBarstate)
+            SnackbarHost(hostState = snackBarState)
         },
         containerColor = White,
     ) { innerPadding ->
