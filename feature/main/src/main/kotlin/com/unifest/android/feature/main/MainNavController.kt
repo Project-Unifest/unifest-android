@@ -11,8 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.unifest.android.feature.booth.navigation.navigateToBoothDetail
 import com.unifest.android.feature.booth.navigation.navigateToBoothLocation
-import com.unifest.android.feature.contact.navigation.navigateToContact
-import com.unifest.android.feature.home.navigation.HOME_ROUTE
 import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.MAP_ROUTE
@@ -62,17 +60,13 @@ internal class MainNavController(
         navController.navigateToLikedBooth()
     }
 
-    fun navigateToContact() {
-        navController.navigateToContact()
-    }
-
     private fun popBackStack() {
         navController.popBackStack()
     }
 
     // https://github.com/droidknights/DroidKnights2023_App/pull/243/commits/4bfb6d13908eaaab38ab3a59747d628efa3893cb
     fun popBackStackIfNotHome() {
-        if (!isSameCurrentDestination(HOME_ROUTE)) {
+        if (!isSameCurrentDestination(MAP_ROUTE)) {
             popBackStack()
         }
     }

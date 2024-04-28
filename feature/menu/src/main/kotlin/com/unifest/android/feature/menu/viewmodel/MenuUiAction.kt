@@ -9,4 +9,5 @@ sealed interface MenuUiAction {
     data class OnLikedBoothItemClick(val boothId: Long) : MenuUiAction
     data class OnToggleBookmark(val booth: BoothDetailModel) : MenuUiAction
     data object OnContactClick : MenuUiAction
+    data object OnAdministratorModeClick: MenuUiAction
 }

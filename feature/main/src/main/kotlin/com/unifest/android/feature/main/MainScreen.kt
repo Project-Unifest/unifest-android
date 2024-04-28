@@ -38,7 +38,6 @@ import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.navigation.boothNavGraph
-import com.unifest.android.feature.contact.navigation.contactNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
@@ -113,7 +112,6 @@ internal fun MainScreen(
                 navigateToMap = navigator::popBackStackIfNotHome,
                 navigateToLikedBooth = navigator::navigateToLikedBooth,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
-                navigateToContact = navigator::navigateToContact,
                 onShowSnackBar = onShowSnackBar,
             )
             likedBoothNavGraph(
@@ -121,10 +119,6 @@ internal fun MainScreen(
                 popBackStack = navigator::popBackStackIfNotHome,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
-            )
-            contactNavGraph(
-                padding = innerPadding,
-                popBackStack = navigator::popBackStackIfNotHome,
             )
         }
     }

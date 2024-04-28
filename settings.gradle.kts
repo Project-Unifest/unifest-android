@@ -35,10 +35,9 @@ include(
     ":core:ui",
 
     ":feature:booth",
-    ":feature:contact",
     ":feature:home",
-    ":feature:liked-booth",
     ":feature:intro",
+    ":feature:liked-booth",
     ":feature:main",
     ":feature:map",
     ":feature:menu",

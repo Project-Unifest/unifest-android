@@ -19,7 +19,6 @@ fun NavGraphBuilder.menuNavGraph(
     navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
-    navigateToContact: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
 ) {
     composable(route = MENU_ROUTE) {
@@ -28,7 +27,6 @@ fun NavGraphBuilder.menuNavGraph(
             navigateToMap = navigateToMap,
             navigateToLikedBooth = navigateToLikedBooth,
             navigateToBoothDetail = navigateToBoothDetail,
-            navigateToContact = navigateToContact,
             onShowSnackBar = onShowSnackBar,
         )
     }
