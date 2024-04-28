@@ -47,7 +47,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
-import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
@@ -184,13 +184,9 @@ internal fun HomeScreen(
                     )
                 }
             }
-            item {
-                UnifestVerticalDivider()
-            }
+            item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
-            item {
-                IncomingFestivalText()
-            }
+            item { IncomingFestivalText() }
             items(uiState.incomingFestivals) { festival ->
                 IncomingFestivalCard(festival)
                 Spacer(modifier = Modifier.height(8.dp))

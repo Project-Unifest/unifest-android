@@ -49,7 +49,7 @@ import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
@@ -187,7 +187,7 @@ fun BoothDetailContent(
             )
         }
         item { Spacer(modifier = Modifier.height(32.dp)) }
-        item { UnifestVerticalDivider() }
+        item { UnifestHorizontalDivider() }
         item { Spacer(modifier = Modifier.height(22.dp)) }
         item { MenuText() }
         item { Spacer(modifier = Modifier.height(16.dp)) }

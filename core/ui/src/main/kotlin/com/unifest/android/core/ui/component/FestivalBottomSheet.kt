@@ -15,10 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +49,7 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
-import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title3
@@ -101,12 +101,12 @@ fun FestivalSearchBottomSheet(
                     .padding(top = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                VerticalDivider(
+                HorizontalDivider(
+                    thickness = 5.dp,
+                    color = Color(0xFFA0A0A0),
                     modifier = Modifier
                         .width(80.dp)
-                        .height(5.dp)
-                        .clip(RoundedCornerShape(43.dp))
-                        .background(Color(0xFFA0A0A0)),
+                        .clip(RoundedCornerShape(43.dp)),
                 )
             }
         },
@@ -151,7 +151,7 @@ fun FestivalSearchBottomSheet(
             )
             if (!isSearchMode) {
                 Spacer(modifier = Modifier.height(39.dp))
-                UnifestVerticalDivider()
+                UnifestHorizontalDivider()
                 Spacer(modifier = Modifier.height(21.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

@@ -59,6 +59,7 @@ import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.UnifestButton
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
@@ -139,10 +140,7 @@ fun IntroScreen(
                 )
                 if (uiState.selectedFestivals.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(21.dp))
-                    HorizontalDivider(
-                        thickness = 7.dp,
-                        color = Color(0xFFEBECF0),
-                    )
+                    UnifestHorizontalDivider()
                 }
                 AllFestivalsTabRow(
                     festivals = uiState.festivals,

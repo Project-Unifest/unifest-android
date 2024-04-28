@@ -24,10 +24,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,8 +52,8 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.Content8
@@ -186,9 +186,7 @@ fun MenuScreen(
                         }
                     }
                 }
-                item {
-                    UnifestVerticalDivider()
-                }
+                item { UnifestHorizontalDivider() }
                 item {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -246,9 +244,7 @@ fun MenuScreen(
                         )
                     }
                 }
-                item {
-                    UnifestVerticalDivider()
-                }
+                item { UnifestHorizontalDivider() }
                 item {
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
@@ -257,11 +253,9 @@ fun MenuScreen(
                     )
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color(0xFFDFDFDF)),
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFDFDFDF),
                     )
                 }
                 item {
@@ -274,11 +268,9 @@ fun MenuScreen(
                     )
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color(0xFFDFDFDF)),
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFDFDFDF),
                     )
                 }
                 item {
