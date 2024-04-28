@@ -37,6 +37,7 @@ import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.skydoves.balloon.compose.setBackgroundColor
+import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
@@ -175,7 +176,7 @@ fun SchoolSearchTitleWithToolTip(
             Text(
                 modifier = Modifier
                     .wrapContentWidth()
-                    .clickable {
+                    .noRippleClickable {
                         completeOnboarding(true)
                     },
                 text = stringResource(id = R.string.map_school_search_tool_tip_description),

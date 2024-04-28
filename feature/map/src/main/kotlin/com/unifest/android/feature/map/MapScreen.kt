@@ -190,9 +190,10 @@ internal fun MapScreen(
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
                 isSearchMode = uiState.isSearchMode,
-                isEditMode = uiState.isEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
+                isEditMode = uiState.isEditMode,
+                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
         if (uiState.isPermissionDialogVisible) {
@@ -293,7 +294,7 @@ fun MapContent(
             title = uiState.selectedSchoolName,
             boothSearchText = uiState.boothSearchText,
             onAction = onMapUiAction,
-            isOnboardingCompleted = uiState.isOnboardingCompleted,
+            isOnboardingCompleted = uiState.isMapOnboardingCompleted,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),

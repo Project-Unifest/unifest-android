@@ -75,6 +75,8 @@ class MenuViewModel @Inject constructor(
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
                 }
             }
+
+            else -> {}
         }
     }
 

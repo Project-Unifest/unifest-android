@@ -16,7 +16,8 @@ class OnboardingDataSourceImpl @Inject constructor(
 ) : OnboardingDataSource {
     private companion object {
         private val KEY_INTRO_COMPLETE = booleanPreferencesKey("intro_complete")
-        private val KEY_ONBOARDING_COMPLETE = booleanPreferencesKey("onboarding_complete")
+        private val KEY_MAP_ONBOARDING_COMPLETE = booleanPreferencesKey("map_onboarding_complete")
+        private val KEY_FESTIVAL_ONBOARDING_COMPLETE = booleanPreferencesKey("festival_onboarding_complete")
     }
 
     override suspend fun checkIntroCompletion(): Boolean = dataStore.data
@@ -29,13 +30,23 @@ class OnboardingDataSourceImpl @Inject constructor(
         dataStore.edit { preferences -> preferences[KEY_INTRO_COMPLETE] = flag }
     }
 
-    override suspend fun checkOnboardingCompletion(): Boolean = dataStore.data
+    override suspend fun checkMapOnboardingCompletion(): Boolean = dataStore.data
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences())
             else throw exception
-        }.first()[KEY_ONBOARDING_COMPLETE] ?: false
+        }.first()[KEY_MAP_ONBOARDING_COMPLETE] ?: false
 
-    override suspend fun completeOnboarding(flag: Boolean) {
-        dataStore.edit { preferences -> preferences[KEY_ONBOARDING_COMPLETE] = flag }
+    override suspend fun completeMapOnboarding(flag: Boolean) {
+        dataStore.edit { preferences -> preferences[KEY_MAP_ONBOARDING_COMPLETE] = flag }
+    }
+
+    override suspend fun checkFestivalOnboardingCompletion(): Boolean = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences())
+            else throw exception
+        }.first()[KEY_FESTIVAL_ONBOARDING_COMPLETE] ?: false
+
+    override suspend fun completeFestivalOnboarding(flag: Boolean) {
+        dataStore.edit { preferences -> preferences[KEY_FESTIVAL_ONBOARDING_COMPLETE] = flag }
     }
 }
