@@ -25,7 +25,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,6 +47,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
@@ -185,12 +185,7 @@ internal fun HomeScreen(
                 }
             }
             item {
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .background(Color(0xFFF1F3F7)),
-                )
+                UnifestVerticalDivider()
             }
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item {

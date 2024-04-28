@@ -49,6 +49,7 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title3
@@ -150,12 +151,7 @@ fun FestivalSearchBottomSheet(
             )
             if (!isSearchMode) {
                 Spacer(modifier = Modifier.height(39.dp))
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .background(Color(0xFFF1F3F7)),
-                )
+                UnifestVerticalDivider()
                 Spacer(modifier = Modifier.height(21.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

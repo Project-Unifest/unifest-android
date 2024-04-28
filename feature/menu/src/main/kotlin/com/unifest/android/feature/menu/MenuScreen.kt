@@ -53,6 +53,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
+import com.unifest.android.core.designsystem.component.UnifestVerticalDivider
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.Content8
@@ -186,12 +187,7 @@ fun MenuScreen(
                     }
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(Color(0xFFF1F3F7)),
-                    )
+                    UnifestVerticalDivider()
                 }
                 item {
                     Row(
@@ -251,12 +247,7 @@ fun MenuScreen(
                     }
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(Color(0xFFF1F3F7)),
-                    )
+                    UnifestVerticalDivider()
                 }
                 item {
                     MenuItem(
@@ -270,7 +261,7 @@ fun MenuScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(Color(0xFFE0E0E0)),
+                            .background(Color(0xFFDFDFDF)),
                     )
                 }
                 item {
@@ -287,7 +278,7 @@ fun MenuScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(1.dp)
-                            .background(Color(0xFFE0E0E0)),
+                            .background(Color(0xFFDFDFDF)),
                     )
                 }
                 item {
