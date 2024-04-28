@@ -359,12 +359,14 @@ fun FestivalItem(
             text = festival.schoolName,
             color = Color(0xFF545454),
             style = Content6,
+            textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = festival.festivalName,
             color = Color.Black,
             style = MenuTitle,
+            textAlign = TextAlign.Center,
         )
     }
 }
