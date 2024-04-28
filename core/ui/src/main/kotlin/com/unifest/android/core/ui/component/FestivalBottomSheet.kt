@@ -143,6 +143,7 @@ fun FestivalSearchBottomSheet(
                 FestivalSearchResults(
                     searchResults = festivalSearchResults,
                     onFestivalUiAction = onFestivalUiAction,
+                    likedFestivals = likedFestivals,
                 )
             }
         }

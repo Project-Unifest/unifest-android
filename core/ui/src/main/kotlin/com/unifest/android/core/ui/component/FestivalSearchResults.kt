@@ -15,13 +15,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.utils.formatToString
@@ -42,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    likedFestivals : List<FestivalModel> = emptyList(),
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -85,6 +89,7 @@ fun FestivalSearchResults(
                     FestivalSearchResultItem(
                         festival = searchResults[it],
                         onFestivalUiAction = onFestivalUiAction,
+                        likedFestivals = likedFestivals,
                     )
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
@@ -100,7 +105,9 @@ fun FestivalSearchResults(
 fun FestivalSearchResultItem(
     festival: FestivalModel,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    likedFestivals: List<FestivalModel>,
 ) {
+    val isFavorite = likedFestivals.any { it.festivalId == festival.festivalId }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,21 +139,42 @@ fun FestivalSearchResultItem(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        UnifestOutlinedButton(
-            onClick = { onFestivalUiAction(FestivalUiAction.OnAddClick(festival)) },
-            cornerRadius = 17.dp,
-            borderColor = Color(0xFFDDDDDD),
-            contentColor = Color(0xFF666666),
-            contentPadding = PaddingValues(horizontal = 17.dp),
-            modifier = Modifier.defaultMinSize(
-                minWidth = ButtonDefaults.MinWidth,
-                minHeight = 29.dp,
-            ),
-        ) {
-            Text(
-                text = stringResource(id = R.string.add),
-                style = Content3,
-            )
+        if (isFavorite) {
+            UnifestOutlinedButton(
+                onClick = { /* 클릭 하면 관심 축제에서 삭제? */ },
+                cornerRadius = 17.dp,
+                borderColor = Color(0xFFDDDDDD),
+                contentColor = Color(0xFF666666),
+                contentPadding = PaddingValues(horizontal = 17.dp),
+                enabled = false,
+                modifier = Modifier.defaultMinSize(
+                    minWidth = ButtonDefaults.MinWidth,
+                    minHeight = 29.dp,
+                ),
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check),
+                    contentDescription = "Checked",
+                    tint = Color(0xFF666666)
+                )
+            }
+        } else {
+            UnifestOutlinedButton(
+                onClick =  {onFestivalUiAction(FestivalUiAction.OnAddClick(festival))},
+                cornerRadius = 17.dp,
+                borderColor = Color(0xFFDDDDDD),
+                contentColor = Color(0xFF666666),
+                contentPadding = PaddingValues(horizontal = 17.dp),
+                modifier = Modifier.defaultMinSize(
+                    minWidth = ButtonDefaults.MinWidth,
+                    minHeight = 29.dp,
+                ),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.add),
+                    style = Content3,
+                )
+            }
         }
     }
 }
