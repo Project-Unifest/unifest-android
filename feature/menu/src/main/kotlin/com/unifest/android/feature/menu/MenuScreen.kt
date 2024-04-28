@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -160,8 +161,9 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_add),
-                                style = Content7,
                                 color = Color(0xFF545454),
+                                style = Content7,
+                                textDecoration = TextDecoration.Underline,
                             )
                         }
                     }
@@ -207,8 +209,9 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_watch_more),
-                                style = Content7,
                                 color = Color(0xFF545454),
+                                style = Content7,
+                                textDecoration = TextDecoration.Underline,
                             )
                         }
                     }
