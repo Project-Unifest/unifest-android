@@ -3,6 +3,7 @@ package com.unifest.android.core.ui.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -50,6 +51,7 @@ import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content5
+import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -155,6 +157,55 @@ fun FestivalSearchBottomSheet(
                         .background(Color(0xFFF1F3F7)),
                 )
                 Spacer(modifier = Modifier.height(21.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.intro_liked_festivals_title),
+                        style = Title3,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    if (!isOnboardingCompleted) {
+                        Balloon(
+                            builder = builder,
+                            balloonContent = {
+                                Text(
+                                    modifier = Modifier
+                                        .wrapContentWidth()
+                                        .noRippleClickable {
+                                            onFestivalUiAction(FestivalUiAction.OnTooltipClick)
+                                        },
+                                    text = stringResource(id = R.string.festival_search_onboarding_title),
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White,
+                                    style = Content5,
+                                )
+                            },
+                        ) { balloonWindow ->
+                            LaunchedEffect(key1 = Unit) {
+                                scope.launch {
+                                    delay(500L)
+                                    balloonWindow.awaitAlignEnd()
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    TextButton(
+                        onClick = {
+                            onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.edit),
+                            color = Color.Black,
+                            style = Content3,
+                        )
+                    }
+                }
                 LikedFestivalsGrid(
                     selectedFestivals = likedFestivals,
                     onFestivalSelected = { festival ->
@@ -164,46 +215,6 @@ fun FestivalSearchBottomSheet(
                     onDeleteLikedFestivalClick = { festival ->
                         deleteSelectedFestival = festival
                         onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
-                    },
-                    tooltip = {
-                        if (!isOnboardingCompleted) {
-                            Balloon(
-                                builder = builder,
-                                balloonContent = {
-                                    Text(
-                                        modifier = Modifier
-                                            .wrapContentWidth()
-                                            .noRippleClickable {
-                                                onFestivalUiAction(FestivalUiAction.OnTooltipClick)
-                                            },
-                                        text = stringResource(id = R.string.festival_search_onboarding_title),
-                                        textAlign = TextAlign.Center,
-                                        color = Color.White,
-                                        style = Content5,
-                                    )
-                                },
-                            ) { balloonWindow ->
-                                LaunchedEffect(key1 = Unit) {
-                                    scope.launch {
-                                        delay(500L)
-                                        balloonWindow.awaitAlignEnd()
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    optionTextButton = {
-                        TextButton(
-                            onClick = {
-                                onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
-                            },
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.edit),
-                                color = Color.Black,
-                                style = Content3,
-                            )
-                        }
                     },
                 )
             } else {
