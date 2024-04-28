@@ -42,6 +42,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.formatToString
+import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -251,7 +253,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = festival.beginDate + " - " + festival.endDate,
+                    text =  "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
@@ -354,7 +356,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = festival.beginDate + " - " + festival.endDate,
+                    text =  "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content6,
                     color = Color(0xFF848484),
                 )
@@ -395,8 +397,8 @@ fun HomeScreenPreview() {
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -406,8 +408,8 @@ fun HomeScreenPreview() {
 
                     FestivalTodayModel(
                         festivalId = 2,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -416,8 +418,8 @@ fun HomeScreenPreview() {
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -432,8 +434,8 @@ fun HomeScreenPreview() {
                         "https://picsum.photos/36",
                         "서울대학교",
                         "설대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -443,8 +445,8 @@ fun HomeScreenPreview() {
                         "https://picsum.photos/36",
                         "연세대학교",
                         "연대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),

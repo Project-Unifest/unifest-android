@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.utils.formatToString
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -124,7 +126,7 @@ fun FestivalSearchResultItem(
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = festival.beginDate + " - " + festival.endDate,
+                text =  "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                 color = Color(0xFF4D4D4D),
                 style = Content3,
             )
@@ -160,8 +162,8 @@ fun FestivalSearchResultsPreview() {
                 "https://picsum.photos/36",
                 "서울대학교",
                 "설대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
@@ -171,8 +173,8 @@ fun FestivalSearchResultsPreview() {
                 "https://picsum.photos/36",
                 "연세대학교",
                 "연대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
@@ -182,8 +184,8 @@ fun FestivalSearchResultsPreview() {
                 "https://picsum.photos/36",
                 "고려대학교",
                 "고대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
@@ -193,8 +195,8 @@ fun FestivalSearchResultsPreview() {
                 "https://picsum.photos/36",
                 "성균관대학교",
                 "성대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
@@ -204,8 +206,8 @@ fun FestivalSearchResultsPreview() {
                 "https://picsum.photos/36",
                 "건국대학교",
                 "건대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
