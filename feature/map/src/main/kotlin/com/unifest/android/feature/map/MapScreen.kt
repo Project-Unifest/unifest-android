@@ -51,11 +51,14 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getColor
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.clustering.ClusterMarkerInfo
 import com.naver.maps.map.clustering.Clusterer
+import com.naver.maps.map.clustering.DefaultClusterMarkerUpdater
 import com.naver.maps.map.clustering.DefaultLeafMarkerUpdater
 import com.naver.maps.map.clustering.LeafMarkerInfo
 import com.naver.maps.map.compose.CameraPositionState
@@ -187,9 +190,10 @@ internal fun MapScreen(
                 likedFestivals = uiState.likedFestivals,
                 festivalSearchResults = uiState.festivalSearchResults,
                 isSearchMode = uiState.isSearchMode,
-                isEditMode = uiState.isEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
+                isEditMode = uiState.isEditMode,
+                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
         if (uiState.isPermissionDialogVisible) {
@@ -211,6 +215,7 @@ fun MapContent(
     pagerState: PagerState,
     onMapUiAction: (MapUiAction) -> Unit,
 ) {
+    val context = LocalContext.current
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
@@ -226,15 +231,22 @@ fun MapContent(
             ),
         ) {
             var clusterManager by remember { mutableStateOf<Clusterer<BoothDetailMapModel>?>(null) }
-            DisposableMapEffect(Unit) { map ->
+            DisposableMapEffect(uiState.boothList) { map ->
                 if (clusterManager == null) {
                     clusterManager = Clusterer.Builder<BoothDetailMapModel>()
+                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
+                            override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
+                                super.updateClusterMarker(info, marker)
+                                marker.icon = OverlayImage.fromResource(R.drawable.ic_general)
+                                marker.captionColor = getColor(context, R.color.black)
+                            }
+                        })
                         .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
                             override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
                                 super.updateLeafMarker(info, marker)
                                 marker.icon = OverlayImage.fromResource(R.drawable.ic_general)
                                 marker.onClickListener = Overlay.OnClickListener {
-                                    clusterManager?.remove(info.key as BoothDetailMapModel)
+                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothDetailMapModel)))
                                     true
                                 }
                             }
@@ -282,7 +294,7 @@ fun MapContent(
             title = uiState.selectedSchoolName,
             boothSearchText = uiState.boothSearchText,
             onAction = onMapUiAction,
-            isOnboardingCompleted = uiState.isOnboardingCompleted,
+            isOnboardingCompleted = uiState.isMapOnboardingCompleted,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),

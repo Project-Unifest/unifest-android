@@ -78,12 +78,12 @@ internal fun MenuRoute(
     navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
-    navigateToContact: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val appVersion = remember {
         try {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName
@@ -98,7 +98,8 @@ internal fun MenuRoute(
             is MenuUiEvent.NavigateToMap -> navigateToMap()
             is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
-            is MenuUiEvent.NavigateToContact -> navigateToContact()
+            is MenuUiEvent.NavigateToContact -> uriHandler.openUri(BuildConfig.UNIFEST_CONTACT_URL)
+            is MenuUiEvent.NavigateToAdministratorMode -> uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
             is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
@@ -121,8 +122,6 @@ fun MenuScreen(
     onMenuUiAction: (MenuUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
-    val uriHandler = LocalUriHandler.current
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -279,7 +278,7 @@ fun MenuScreen(
                         icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
                         title = stringResource(id = R.string.menu_admin_mode),
                         onClick = {
-                            uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
+                            onMenuUiAction(MenuUiAction.OnContactClick)
                         },
                     )
                 }

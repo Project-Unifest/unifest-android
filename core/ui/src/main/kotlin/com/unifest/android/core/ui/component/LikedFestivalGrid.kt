@@ -8,10 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
@@ -40,7 +37,6 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
-import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 
@@ -51,22 +47,8 @@ fun LikedFestivalsGrid(
     onFestivalSelected: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
     onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
-    optionTextButton: @Composable () -> Unit,
 ) {
     Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-        ) {
-            Text(
-                text = stringResource(id = R.string.intro_liked_festivals_title),
-                style = Title3,
-            )
-            optionTextButton()
-        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier
@@ -247,12 +229,6 @@ fun LikedFestivalsGridPreview() {
                 ),
             ),
             onFestivalSelected = {},
-            optionTextButton = {
-                Text(
-                    text = "편집",
-                    style = Content3,
-                )
-            },
         )
     }
 }
@@ -336,12 +312,6 @@ fun LikedFestivalsGridEditModePreview() {
                 ),
             ),
             onFestivalSelected = {},
-            optionTextButton = {
-                Text(
-                    text = "편집",
-                    style = Content3,
-                )
-            },
             isEditMode = true,
         )
     }

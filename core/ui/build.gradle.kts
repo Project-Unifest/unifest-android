@@ -19,5 +19,6 @@ dependencies {
         libs.coil.compose,
         libs.flexible.bottomsheet,
         libs.timber,
+        libs.ballon.compose,
     )
 }

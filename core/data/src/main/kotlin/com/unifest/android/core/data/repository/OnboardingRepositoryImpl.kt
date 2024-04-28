@@ -14,11 +14,19 @@ class OnboardingRepositoryImpl @Inject constructor(
         onboardingDataSource.completeIntro(flag)
     }
 
-    override suspend fun checkOnboardingCompletion(): Boolean {
-        return onboardingDataSource.checkOnboardingCompletion()
+    override suspend fun checkMapOnboardingCompletion(): Boolean {
+        return onboardingDataSource.checkMapOnboardingCompletion()
     }
 
-    override suspend fun completeOnboarding(flag: Boolean) {
-        onboardingDataSource.completeOnboarding(flag)
+    override suspend fun completeMapOnboarding(flag: Boolean) {
+        onboardingDataSource.completeMapOnboarding(flag)
+    }
+
+    override suspend fun checkFestivalOnboardingCompletion(): Boolean {
+        return onboardingDataSource.checkFestivalOnboardingCompletion()
+    }
+
+    override suspend fun completeFestivalOnboarding(flag: Boolean) {
+        onboardingDataSource.completeFestivalOnboarding(flag)
     }
 }

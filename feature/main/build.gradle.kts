@@ -13,7 +13,6 @@ android {
 dependencies {
     implementations(
         projects.feature.booth,
-        projects.feature.contact,
         projects.feature.home,
         projects.feature.likedBooth,
         projects.feature.intro,

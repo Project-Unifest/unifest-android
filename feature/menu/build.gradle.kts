@@ -15,6 +15,11 @@ android {
     defaultConfig {
         buildConfigField(
             "String",
+            "UNIFEST_CONTACT_URL",
+            properties["UNIFEST_CONTACT_URL"] as String,
+        )
+        buildConfigField(
+            "String",
             "UNIFEST_WEB_URL",
             properties["UNIFEST_WEB_URL"] as String,
         )
