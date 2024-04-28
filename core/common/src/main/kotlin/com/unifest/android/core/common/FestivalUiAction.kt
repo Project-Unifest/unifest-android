@@ -11,8 +11,8 @@ sealed interface FestivalUiAction {
     data class OnEnableSearchMode(val flag: Boolean) : FestivalUiAction
     data object OnEnableEditMode : FestivalUiAction
     data class OnAddClick(val festival: FestivalModel) : FestivalUiAction
-    data object OnDeleteIconClick : FestivalUiAction
-    data class OnDialogButtonClick(val type: ButtonType, val festival: FestivalModel? = null) : FestivalUiAction
+    data class OnDeleteIconClick(val deleteSelectedFestival: FestivalModel) : FestivalUiAction
+    data class OnDialogButtonClick(val type: ButtonType) : FestivalUiAction
 }
 
 enum class ButtonType {

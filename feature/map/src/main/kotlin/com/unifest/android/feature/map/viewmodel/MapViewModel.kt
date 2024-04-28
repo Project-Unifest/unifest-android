@@ -18,6 +18,7 @@ import com.unifest.android.feature.map.model.BoothDetailMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -261,12 +262,17 @@ class MapViewModel @Inject constructor(
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
-            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDeleteIconClick -> {
+                _uiState.update {
+                    it.copy(deleteSelectedFestival = action.deleteSelectedFestival)
+                }
+                setLikedFestivalDeleteDialogVisible(true)
+            }
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
                     ButtonType.CONFIRM -> {
                         setLikedFestivalDeleteDialogVisible(false)
-                        action.festival?.let { deleteLikedFestival(it) }
+                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
                     }
 
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
@@ -281,7 +287,7 @@ class MapViewModel @Inject constructor(
             likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
+                        likedFestivals = likedFestivalList.toPersistentList(),
                     )
                 }
             }

@@ -22,12 +22,9 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +52,7 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +62,7 @@ import kotlinx.coroutines.launch
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     searchText: TextFieldValue,
-    likedFestivals: MutableList<FestivalModel>,
+    likedFestivals: PersistentList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
     isSearchMode: Boolean,
     isLikedFestivalDeleteDialogVisible: Boolean,
@@ -73,7 +71,6 @@ fun FestivalSearchBottomSheet(
     isEditMode: Boolean = false,
 ) {
     val selectedFestivals = remember { mutableStateListOf<FestivalModel>() }
-    var deleteSelectedFestival by remember { mutableStateOf<FestivalModel?>(null) }
 //    val bottomSheetState = rememberFlexibleBottomSheetState(
 //        containSystemBars = true,
 //        flexibleSheetSize = FlexibleSheetSize(
@@ -109,7 +106,7 @@ fun FestivalSearchBottomSheet(
                 )
             }
         },
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        windowInsets = WindowInsets(top = 0),
         modifier = Modifier
             .fillMaxHeight()
             .padding(top = 18.dp),
@@ -213,8 +210,7 @@ fun FestivalSearchBottomSheet(
                     },
                     isEditMode = isEditMode,
                     onDeleteLikedFestivalClick = { festival ->
-                        deleteSelectedFestival = festival
-                        onFestivalUiAction(FestivalUiAction.OnDeleteIconClick)
+                        onFestivalUiAction(FestivalUiAction.OnDeleteIconClick(festival))
                     },
                 )
             } else {
@@ -230,7 +226,7 @@ fun FestivalSearchBottomSheet(
                     onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CANCEL))
                 },
                 onConfirmClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM, deleteSelectedFestival))
+                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM))
                 },
             )
         }
@@ -244,7 +240,7 @@ fun SchoolSearchBottomSheetPreview() {
         FestivalSearchBottomSheet(
             searchTextHintRes = R.string.festival_search_text_field_hint,
             searchText = TextFieldValue(),
-            likedFestivals = mutableListOf(
+            likedFestivals = persistentListOf(
                 FestivalModel(
                     1,
                     1,
