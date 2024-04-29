@@ -24,10 +24,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +53,7 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Content7
@@ -161,8 +163,9 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_add),
-                                style = Content7,
                                 color = Color(0xFF545454),
+                                style = Content7,
+                                textDecoration = TextDecoration.Underline,
                             )
                         }
                     }
@@ -187,14 +190,7 @@ fun MenuScreen(
                         }
                     }
                 }
-                item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(Color(0xFFF1F3F7)),
-                    )
-                }
+                item { UnifestHorizontalDivider() }
                 item {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -215,8 +211,9 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_watch_more),
-                                style = Content7,
                                 color = Color(0xFF545454),
+                                style = Content7,
+                                textDecoration = TextDecoration.Underline,
                             )
                         }
                     }
@@ -252,14 +249,7 @@ fun MenuScreen(
                         )
                     }
                 }
-                item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(Color(0xFFF1F3F7)),
-                    )
-                }
+                item { UnifestHorizontalDivider() }
                 item {
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
@@ -268,11 +258,9 @@ fun MenuScreen(
                     )
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color(0xFFE0E0E0)),
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFDFDFDF),
                     )
                 }
                 item {
@@ -285,11 +273,9 @@ fun MenuScreen(
                     )
                 }
                 item {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color(0xFFE0E0E0)),
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color(0xFFDFDFDF),
                     )
                 }
                 item {
@@ -360,12 +346,14 @@ fun FestivalItem(
             text = festival.schoolName,
             color = Color(0xFF545454),
             style = Content6,
+            textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = festival.festivalName,
             color = Color.Black,
             style = MenuTitle,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -407,8 +395,8 @@ fun MenuScreenPreview() {
                         "https://picsum.photos/36",
                         "서울대학교",
                         "설대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -418,8 +406,8 @@ fun MenuScreenPreview() {
                         "https://picsum.photos/36",
                         "연세대학교",
                         "연대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),

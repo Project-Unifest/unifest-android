@@ -25,7 +25,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,11 +41,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
@@ -62,6 +63,7 @@ import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -185,18 +187,9 @@ internal fun HomeScreen(
                     )
                 }
             }
-            item {
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .background(Color(0xFFF1F3F7)),
-                )
-            }
+            item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
-            item {
-                IncomingFestivalText()
-            }
+            item { IncomingFestivalText() }
             items(uiState.incomingFestivals) { festival ->
                 IncomingFestivalCard(festival)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -231,7 +224,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
-    likedFestivals: List<FestivalModel>,
+    likedFestivals: ImmutableList<FestivalModel>,
     onHomeUiAction: (HomeUiAction) -> Unit,
     selectedDate: LocalDate,
     starImageClickStates: Map<Int, Boolean>,
@@ -253,7 +246,7 @@ fun FestivalScheduleItem(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = festival.beginDate + " - " + festival.endDate,
+                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content4,
                     color = Color(0xFFC0C0C0),
                 )
@@ -309,7 +302,9 @@ fun FestivalScheduleItem(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(48.dp)
                     .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+                contentPadding = PaddingValues(6.dp),
             ) {
                 Text(
                     text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
@@ -356,7 +351,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = festival.beginDate + " - " + festival.endDate,
+                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content6,
                     color = Color(0xFF848484),
                 )
@@ -397,8 +392,8 @@ fun HomeScreenPreview() {
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -408,8 +403,8 @@ fun HomeScreenPreview() {
 
                     FestivalTodayModel(
                         festivalId = 2,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -418,8 +413,8 @@ fun HomeScreenPreview() {
                     ),
                     FestivalTodayModel(
                         festivalId = 3,
-                        beginDate = "5/20(화)",
-                        endDate = "5/22(목)",
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
                         festivalName = "녹색지대 DAY 1",
                         schoolName = "건국대학교 서울캠퍼스",
                         starInfo = listOf(),
@@ -434,8 +429,8 @@ fun HomeScreenPreview() {
                         "https://picsum.photos/36",
                         "서울대학교",
                         "설대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -445,8 +440,8 @@ fun HomeScreenPreview() {
                         "https://picsum.photos/36",
                         "연세대학교",
                         "연대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),

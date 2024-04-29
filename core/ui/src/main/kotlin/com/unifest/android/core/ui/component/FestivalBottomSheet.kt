@@ -15,10 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,13 +44,13 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     searchText: TextFieldValue,
-    likedFestivals: PersistentList<FestivalModel>,
+    likedFestivals: ImmutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
     isSearchMode: Boolean,
     isLikedFestivalDeleteDialogVisible: Boolean,
@@ -94,12 +94,12 @@ fun FestivalSearchBottomSheet(
                     .padding(top = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                VerticalDivider(
+                HorizontalDivider(
+                    thickness = 5.dp,
+                    color = Color(0xFFA0A0A0),
                     modifier = Modifier
                         .width(80.dp)
-                        .height(5.dp)
-                        .clip(RoundedCornerShape(43.dp))
-                        .background(Color(0xFFA0A0A0)),
+                        .clip(RoundedCornerShape(43.dp)),
                 )
             }
         },
@@ -144,12 +144,7 @@ fun FestivalSearchBottomSheet(
             )
             if (!isSearchMode) {
                 Spacer(modifier = Modifier.height(39.dp))
-                VerticalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .background(Color(0xFFF1F3F7)),
-                )
+                UnifestHorizontalDivider()
                 Spacer(modifier = Modifier.height(21.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -214,6 +209,7 @@ fun FestivalSearchBottomSheet(
                 FestivalSearchResults(
                     searchResults = festivalSearchResults,
                     onFestivalUiAction = onFestivalUiAction,
+                    likedFestivals = likedFestivals,
                 )
             }
         }
@@ -244,8 +240,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "서울대학교",
                     "설대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -255,8 +251,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "연세대학교",
                     "연대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -266,8 +262,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "고려대학교",
                     "고대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -277,8 +273,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "성균관대학교",
                     "성대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -288,8 +284,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "건국대학교",
                     "건대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -301,8 +297,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "서울대학교",
                     "설대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -312,8 +308,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "연세대학교",
                     "연대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -323,8 +319,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "고려대학교",
                     "고대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -334,8 +330,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "성균관대학교",
                     "성대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),
@@ -345,8 +341,8 @@ fun SchoolSearchBottomSheetPreview() {
                     "https://picsum.photos/36",
                     "건국대학교",
                     "건대축제",
-                    "05.06",
-                    "05.08",
+                    "2024-04-21",
+                    "2024-04-23",
                     126.957f,
                     37.460f,
                 ),

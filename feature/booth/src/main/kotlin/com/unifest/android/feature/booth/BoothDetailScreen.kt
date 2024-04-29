@@ -23,7 +23,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -50,6 +49,7 @@ import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
@@ -187,14 +187,7 @@ fun BoothDetailContent(
             )
         }
         item { Spacer(modifier = Modifier.height(32.dp)) }
-        item {
-            VerticalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(Color(0xFFF1F3F7)),
-            )
-        }
+        item { UnifestHorizontalDivider() }
         item { Spacer(modifier = Modifier.height(22.dp)) }
         item { MenuText() }
         item { Spacer(modifier = Modifier.height(16.dp)) }

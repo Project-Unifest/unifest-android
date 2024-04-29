@@ -52,11 +52,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.utils.formatToString
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.UnifestButton
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content1
@@ -115,7 +118,8 @@ fun IntroScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 80.dp),
             ) {
                 InformationText()
                 SearchTextField(
@@ -136,14 +140,12 @@ fun IntroScreen(
                 )
                 if (uiState.selectedFestivals.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(21.dp))
-                    HorizontalDivider(
-                        thickness = 7.dp,
-                        color = Color(0xFFEBECF0),
-                    )
+                    UnifestHorizontalDivider()
                 }
                 AllFestivalsTabRow(
                     festivals = uiState.festivals,
                     onAction = onAction,
+                    selectedFestivals = uiState.selectedFestivals,
                 )
             }
             UnifestButton(
@@ -197,7 +199,7 @@ fun InformationText() {
 
 @Composable
 fun LikedFestivalsRow(
-    selectedFestivals: List<FestivalModel>,
+    selectedFestivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
 ) {
     Column {
@@ -289,7 +291,7 @@ fun FestivalRowItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    festival.beginDate + " - " + festival.endDate,
+                    "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     color = Color(0xFF979797),
                     style = Content3,
                 )
@@ -303,6 +305,7 @@ fun FestivalRowItem(
 fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
+    selectedFestivals: ImmutableList<FestivalModel>,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     val pagerState = rememberPagerState(pageCount = { tabTitles.size })
@@ -376,7 +379,9 @@ fun AllFestivalsTabRow(
                         FestivalItem(
                             festival = festivals[index],
                             onFestivalSelected = { festival ->
-                                onAction(IntroUiAction.OnFestivalSelected(festival))
+                                if (!selectedFestivals.any { it.festivalId == festival.festivalId }) {
+                                    onAction(IntroUiAction.OnFestivalSelected(festival))
+                                }
                             },
                         )
                     }
@@ -399,8 +404,8 @@ fun PreviewIntroScreen() {
                         "https://picsum.photos/36",
                         "서울대학교",
                         "설대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -410,8 +415,8 @@ fun PreviewIntroScreen() {
                         "https://picsum.photos/36",
                         "연세대학교",
                         "연대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -421,8 +426,8 @@ fun PreviewIntroScreen() {
                         "https://picsum.photos/36",
                         "고려대학교",
                         "고대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -432,8 +437,8 @@ fun PreviewIntroScreen() {
                         "https://picsum.photos/36",
                         "성균관대학교",
                         "성대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),
@@ -443,8 +448,8 @@ fun PreviewIntroScreen() {
                         "https://picsum.photos/36",
                         "건국대학교",
                         "건대축제",
-                        "05.06",
-                        "05.08",
+                        "2024-04-21",
+                        "2024-04-23",
                         126.957f,
                         37.460f,
                     ),

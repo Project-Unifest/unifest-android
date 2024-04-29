@@ -60,6 +60,9 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -70,7 +73,7 @@ fun Calendar(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     adjacentMonths: Long = 500,
-    allFestivals: List<FestivalModel>,
+    allFestivals: ImmutableList<FestivalModel>,
 ) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
@@ -104,7 +107,7 @@ fun Calendar(
                 weekState = weekState,
             )
 
-            CalendarHeader(daysOfWeek = daysOfWeek)
+            CalendarHeader(daysOfWeek = daysOfWeek.toImmutableList())
             AnimatedVisibility(visible = !isWeekMode) {
                 HorizontalCalendar(
                     state = monthState,
@@ -273,7 +276,7 @@ fun SimpleCalendarTitle(
 }
 
 @Composable
-fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
+fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -297,7 +300,7 @@ fun Day(
     isSelected: Boolean,
     isSelectable: Boolean,
     onClick: (LocalDate) -> Unit,
-    allFestivals: List<FestivalModel>,
+    allFestivals: ImmutableList<FestivalModel>,
 ) {
     val currentDate = LocalDate.now()
     val isToday = day == currentDate
@@ -359,7 +362,7 @@ private fun CalendarPreview() {
         Calendar(
             selectedDate = LocalDate.now(),
             onDateSelected = {},
-            allFestivals = emptyList(),
+            allFestivals = persistentListOf(),
         )
     }
 }

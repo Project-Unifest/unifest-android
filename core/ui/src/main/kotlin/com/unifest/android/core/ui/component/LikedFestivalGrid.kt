@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.utils.formatToString
+import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -37,13 +39,13 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedFestivalsGrid(
-    selectedFestivals: PersistentList<FestivalModel>,
+    selectedFestivals: ImmutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     onDeleteLikedFestivalClick: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
@@ -131,7 +133,7 @@ fun FestivalItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    festival.beginDate + " - " + festival.endDate,
+                    "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     color = Color(0xFF979797),
                     style = Content3,
                 )
@@ -162,8 +164,8 @@ fun LikedFestivalsGridPreview() {
                 "https://picsum.photos/36",
                 "서울대학교",
                 "설대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
@@ -190,8 +192,8 @@ fun LikedFestivalsGridEditModePreview() {
                 "https://picsum.photos/36",
                 "서울대학교",
                 "설대축제",
-                "05.06",
-                "05.08",
+                "2024-04-21",
+                "2024-04-23",
                 126.957f,
                 37.460f,
             ),
