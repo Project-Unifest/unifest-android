@@ -13,6 +13,7 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -42,12 +43,7 @@ class MenuViewModel @Inject constructor(
 
     fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
-            is MenuUiAction.OnLikedFestivalItemClick -> {
-                viewModelScope.launch {
-                    likedFestivalRepository.setRecentLikedFestival(action.schoolName)
-                    _uiEvent.send(MenuUiEvent.NavigateToMap)
-                }
-            }
+            is MenuUiAction.OnLikedFestivalItemClick -> navigateToMap(action.schoolName)
             is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
             is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
@@ -64,13 +60,22 @@ class MenuViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
+            is FestivalUiAction.OnLikedFestivalSelected -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                navigateToMap(action.festival.schoolName)
+            }
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
-            is FestivalUiAction.OnDeleteIconClick -> setLikedFestivalDeleteDialogVisible(true)
+            is FestivalUiAction.OnDeleteIconClick -> {
+                _uiState.update {
+                    it.copy(deleteSelectedFestival = action.deleteSelectedFestival)
+                }
+                setLikedFestivalDeleteDialogVisible(true)
+            }
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
                     ButtonType.CONFIRM -> {
                         setLikedFestivalDeleteDialogVisible(false)
-                        action.festival?.let { deleteLikedFestival(it) }
+                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
                     }
 
                     ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
@@ -86,7 +91,7 @@ class MenuViewModel @Inject constructor(
             likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
                     it.copy(
-                        likedFestivals = likedFestivalList.toMutableList(),
+                        likedFestivals = likedFestivalList.toPersistentList(),
                     )
                 }
             }
@@ -102,6 +107,13 @@ class MenuViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun navigateToMap(schoolName: String) {
+        viewModelScope.launch {
+            likedFestivalRepository.setRecentLikedFestival(schoolName)
+            _uiEvent.send(MenuUiEvent.NavigateToMap)
         }
     }
 

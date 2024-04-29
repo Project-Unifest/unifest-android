@@ -71,6 +71,7 @@ import java.time.temporal.ChronoUnit
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
+    popBackStack: () -> Unit,
     onShowSnackBar: (message: UiText) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -78,6 +79,7 @@ internal fun HomeRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is HomeUiEvent.NavigateBack -> popBackStack()
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }

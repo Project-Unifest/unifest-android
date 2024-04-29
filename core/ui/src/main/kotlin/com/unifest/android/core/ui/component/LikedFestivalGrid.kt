@@ -39,14 +39,16 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedFestivalsGrid(
-    selectedFestivals: MutableList<FestivalModel>,
+    selectedFestivals: PersistentList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
+    onDeleteLikedFestivalClick: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,
-    onDeleteLikedFestivalClick: (FestivalModel) -> Unit = {},
 ) {
     Column {
         LazyVerticalGrid(
@@ -153,7 +155,7 @@ fun FestivalItem(
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridPreview() {
-    val selectedFestivals = mutableListOf<FestivalModel>()
+    val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
             FestivalModel(
@@ -171,64 +173,9 @@ fun LikedFestivalsGridPreview() {
     }
     UnifestTheme {
         LikedFestivalsGrid(
-            selectedFestivals = mutableListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "성대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
+            selectedFestivals = selectedFestivals,
             onFestivalSelected = {},
+            onDeleteLikedFestivalClick = {},
         )
     }
 }
@@ -236,7 +183,7 @@ fun LikedFestivalsGridPreview() {
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridEditModePreview() {
-    val selectedFestivals = mutableListOf<FestivalModel>()
+    val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
             FestivalModel(
@@ -254,64 +201,9 @@ fun LikedFestivalsGridEditModePreview() {
     }
     UnifestTheme {
         LikedFestivalsGrid(
-            selectedFestivals = mutableListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "성대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
+            selectedFestivals = selectedFestivals,
             onFestivalSelected = {},
+            onDeleteLikedFestivalClick = {},
             isEditMode = true,
         )
     }
