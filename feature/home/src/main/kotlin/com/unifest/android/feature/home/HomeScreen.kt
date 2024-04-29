@@ -63,6 +63,7 @@ import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -223,7 +224,7 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     onAction: (HomeUiAction) -> Unit,
-    likedFestivals: List<FestivalModel>,
+    likedFestivals: ImmutableList<FestivalModel>,
     onHomeUiAction: (HomeUiAction) -> Unit,
     selectedDate: LocalDate,
     starImageClickStates: Map<Int, Boolean>,

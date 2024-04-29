@@ -5,7 +5,6 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.model.BoothDetailMapModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MapUiState(
@@ -17,7 +16,7 @@ data class MapUiState(
     val selectedBoothList: ImmutableList<BoothDetailMapModel> = persistentListOf(),
     val boothSearchText: TextFieldValue = TextFieldValue(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
-    val likedFestivals: PersistentList<FestivalModel> = persistentListOf(),
+    val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
     val deleteSelectedFestival: FestivalModel? = null,
     val isSearchMode: Boolean = false,

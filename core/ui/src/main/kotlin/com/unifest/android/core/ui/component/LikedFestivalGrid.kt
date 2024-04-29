@@ -39,13 +39,13 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LikedFestivalsGrid(
-    selectedFestivals: PersistentList<FestivalModel>,
+    selectedFestivals: ImmutableList<FestivalModel>,
     onFestivalSelected: (FestivalModel) -> Unit,
     onDeleteLikedFestivalClick: (FestivalModel) -> Unit,
     isEditMode: Boolean = false,

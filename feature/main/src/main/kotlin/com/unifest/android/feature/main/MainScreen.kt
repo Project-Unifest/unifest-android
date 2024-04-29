@@ -43,7 +43,7 @@ import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -129,7 +129,7 @@ internal fun MainScreen(
 @Composable
 private fun MainBottomBar(
     visible: Boolean,
-    tabs: PersistentList<MainTab>,
+    tabs: ImmutableList<MainTab>,
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,
 ) {

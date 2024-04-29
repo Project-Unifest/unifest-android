@@ -51,7 +51,6 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,7 +60,7 @@ import kotlinx.coroutines.launch
 fun FestivalSearchBottomSheet(
     @StringRes searchTextHintRes: Int,
     searchText: TextFieldValue,
-    likedFestivals: PersistentList<FestivalModel>,
+    likedFestivals: ImmutableList<FestivalModel>,
     festivalSearchResults: ImmutableList<FestivalModel>,
     isSearchMode: Boolean,
     isLikedFestivalDeleteDialogVisible: Boolean,

@@ -46,7 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    likedFestivals: List<FestivalModel> = emptyList(),
+    likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
 ) {
     if (searchResults.isEmpty()) {
         Column {
@@ -106,7 +106,7 @@ fun FestivalSearchResults(
 fun FestivalSearchResultItem(
     festival: FestivalModel,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    likedFestivals: List<FestivalModel>,
+    likedFestivals: ImmutableList<FestivalModel>,
 ) {
     val isFavorite = likedFestivals.any { it.festivalId == festival.festivalId }
     Row(

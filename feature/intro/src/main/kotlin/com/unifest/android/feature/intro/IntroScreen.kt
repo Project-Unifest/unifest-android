@@ -199,7 +199,7 @@ fun InformationText() {
 
 @Composable
 fun LikedFestivalsRow(
-    selectedFestivals: List<FestivalModel>,
+    selectedFestivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
 ) {
     Column {
@@ -305,7 +305,7 @@ fun FestivalRowItem(
 fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
-    selectedFestivals: List<FestivalModel>,
+    selectedFestivals: ImmutableList<FestivalModel>,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     val pagerState = rememberPagerState(pageCount = { tabTitles.size })
