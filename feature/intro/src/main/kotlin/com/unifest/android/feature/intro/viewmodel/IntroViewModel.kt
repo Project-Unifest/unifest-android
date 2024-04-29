@@ -130,14 +130,14 @@ class IntroViewModel @Inject constructor(
 
     private fun clearSelectedFestivals() {
         _uiState.update {
-            it.copy(selectedFestivals = emptyList())
+            it.copy(selectedFestivals = persistentListOf())
         }
     }
 
     private fun addSelectedFestival(festival: FestivalModel) {
         _uiState.update {
             it.copy(
-                selectedFestivals = it.selectedFestivals.toMutableList().apply { add(festival) },
+                selectedFestivals = it.selectedFestivals.add(festival),
             )
         }
     }
@@ -145,7 +145,7 @@ class IntroViewModel @Inject constructor(
     private fun removeSelectedFestivals(festival: FestivalModel) {
         _uiState.update {
             it.copy(
-                selectedFestivals = it.selectedFestivals.toMutableList().apply { remove(festival) },
+                selectedFestivals = it.selectedFestivals.remove(festival),
             )
         }
     }

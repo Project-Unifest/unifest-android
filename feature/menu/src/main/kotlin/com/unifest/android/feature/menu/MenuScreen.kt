@@ -75,6 +75,7 @@ import timber.log.Timber
 @Composable
 internal fun MenuRoute(
     padding: PaddingValues,
+    popBackStack: () -> Unit,
     navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
@@ -95,6 +96,7 @@ internal fun MenuRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is MenuUiEvent.NavigateBack -> popBackStack()
             is MenuUiEvent.NavigateToMap -> navigateToMap()
             is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)

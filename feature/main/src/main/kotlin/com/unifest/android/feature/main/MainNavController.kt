@@ -65,7 +65,7 @@ internal class MainNavController(
     }
 
     // https://github.com/droidknights/DroidKnights2023_App/pull/243/commits/4bfb6d13908eaaab38ab3a59747d628efa3893cb
-    fun popBackStackIfNotHome() {
+    fun popBackStackIfNotMap() {
         if (!isSameCurrentDestination(MAP_ROUTE)) {
             popBackStack()
         }
