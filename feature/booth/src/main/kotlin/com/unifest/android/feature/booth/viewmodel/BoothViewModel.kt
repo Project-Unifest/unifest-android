@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
@@ -22,6 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
+    @Suppress("unused")
+    private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
