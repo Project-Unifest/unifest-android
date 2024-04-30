@@ -155,7 +155,6 @@ internal fun HomeScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
                             festival = festival,
-                            onAction = onHomeUiAction,
                             likedFestivals = uiState.likedFestivals,
                             selectedDate = uiState.selectedDate,
                             starImageClickStates = uiState.starImageClickStates,
@@ -167,7 +166,6 @@ internal fun HomeScreen(
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
                             modifier = Modifier.padding(horizontal = 20.dp),
-                            thickness = 1.dp,
                         )
                     }
                 }
@@ -223,11 +221,10 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 @Composable
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
-    onAction: (HomeUiAction) -> Unit,
     likedFestivals: ImmutableList<FestivalModel>,
-    onHomeUiAction: (HomeUiAction) -> Unit,
     selectedDate: LocalDate,
     starImageClickStates: Map<Int, Boolean>,
+    onHomeUiAction: (HomeUiAction) -> Unit,
 ) {
     Column {
         Row(
@@ -298,7 +295,7 @@ fun FestivalScheduleItem(
         if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
             UnifestOutlinedButton(
                 onClick = {
-                    onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
