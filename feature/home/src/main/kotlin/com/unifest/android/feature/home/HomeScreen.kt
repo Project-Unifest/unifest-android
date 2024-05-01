@@ -150,18 +150,19 @@ internal fun HomeScreen(
                 itemsIndexed(
                     items = uiState.todayFestivals,
                     key = { _, festival -> festival.festivalId },
-                ) { index, festival ->
+                ) { scheduleIndex, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
                             festival = festival,
+                            scheduleIndex = scheduleIndex,
                             likedFestivals = uiState.likedFestivals,
                             selectedDate = uiState.selectedDate,
-                            starImageClickStates = uiState.starImageClickStates,
+                            isStarImageClicked = uiState.isStarImageClicked[scheduleIndex],
                             onHomeUiAction = onHomeUiAction,
                         )
                     }
-                    if (index < uiState.todayFestivals.size - 1) {
+                    if (scheduleIndex < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
@@ -188,9 +189,11 @@ internal fun HomeScreen(
             item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item { IncomingFestivalText() }
-            items(uiState.incomingFestivals) { festival ->
-                IncomingFestivalCard(festival)
-                Spacer(modifier = Modifier.height(8.dp))
+            if (uiState.incomingFestivals.isNotEmpty()) {
+                items(uiState.incomingFestivals) { festival ->
+                    IncomingFestivalCard(festival)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
         if (uiState.isFestivalSearchBottomSheetVisible) {
@@ -221,9 +224,10 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 @Composable
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
+    scheduleIndex: Int,
     likedFestivals: ImmutableList<FestivalModel>,
     selectedDate: LocalDate,
-    starImageClickStates: Map<Int, Boolean>,
+    isStarImageClicked: ImmutableList<Boolean>,
     onHomeUiAction: (HomeUiAction) -> Unit,
 ) {
     Column {
@@ -271,24 +275,25 @@ fun FestivalScheduleItem(
                 }
             }
             Spacer(modifier = Modifier.width(39.dp))
-            LazyRow {
-                itemsIndexed(festival.starInfo) { index, starInfo ->
-                    StarImage(
-                        imageUrl = starInfo.imgUrl,
-                        onClick = {
-                            if (starImageClickStates[index] == true) {
-                                onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
-                            } else {
-                                onHomeUiAction(HomeUiAction.OnStarImageClick(index))
-                            }
-                        },
-                        isClicked = starImageClickStates[index] ?: false,
-                        label = starInfo.name,
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(CircleShape),
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
+            if (festival.starInfo.isNotEmpty()) {
+                LazyRow {
+                    itemsIndexed(
+                        items = festival.starInfo,
+                        key = { _, starInfo -> starInfo.starId },
+                    ) { starIndex, starInfo ->
+                        StarImage(
+                            imageUrl = starInfo.imgUrl,
+                            onClick = {
+                                onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
+                            },
+                            isClicked = isStarImageClicked[starIndex],
+                            label = starInfo.name,
+                            modifier = Modifier
+                                .size(72.dp)
+                                .clip(CircleShape),
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
                 }
             }
         }

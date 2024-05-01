@@ -11,13 +11,12 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.StarInfoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -79,14 +78,17 @@ class HomeViewModel @Inject constructor(
                         schoolName = "건국대학교",
                         starInfo = listOf(
                             StarInfoModel(
-                                name = "비",
+                                starId = 1,
+                                name = "뉴진스",
                                 imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
+                                starId = 2,
                                 name = "싸이",
                                 imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
+                                starId = 3,
                                 name = "아이유",
                                 imgUrl = "https://picsum.photos/38",
                             ),
@@ -102,15 +104,23 @@ class HomeViewModel @Inject constructor(
                         schoolName = "서울대학교",
                         starInfo = listOf(
                             StarInfoModel(
-                                name = "비",
+                                starId = 4,
+                                name = "아이브",
                                 imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
+                                starId = 2,
                                 name = "싸이",
                                 imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
-                                name = "아이유",
+                                starId = 5,
+                                name = "르세라핌",
+                                imgUrl = "https://picsum.photos/38",
+                            ),
+                            StarInfoModel(
+                                starId = 6,
+                                name = "박재범",
                                 imgUrl = "https://picsum.photos/38",
                             ),
                         ),
@@ -125,15 +135,28 @@ class HomeViewModel @Inject constructor(
                         schoolName = "연세대학교",
                         starInfo = listOf(
                             StarInfoModel(
-                                name = "비",
+                                starId = 7,
+                                name = "지코",
                                 imgUrl = "https://picsum.photos/36",
                             ),
                             StarInfoModel(
+                                starId = 2,
                                 name = "싸이",
                                 imgUrl = "https://picsum.photos/37",
                             ),
                             StarInfoModel(
-                                name = "아이유",
+                                starId = 8,
+                                name = "아일릿",
+                                imgUrl = "https://picsum.photos/38",
+                            ),
+                            StarInfoModel(
+                                starId = 9,
+                                name = "헤이즈",
+                                imgUrl = "https://picsum.photos/38",
+                            ),
+                            StarInfoModel(
+                                starId = 10,
+                                name = "10cm",
                                 imgUrl = "https://picsum.photos/38",
                             ),
                         ),
@@ -143,6 +166,13 @@ class HomeViewModel @Inject constructor(
                 ),
             )
         }
+        _uiState.update {
+            it.copy(
+                isStarImageClicked = it.todayFestivals.map { festival ->
+                    persistentListOf<Boolean>().addAll(List(festival.starInfo.size) { false }).toImmutableList()
+                }.toImmutableList()
+            )
+        }
     }
 
     fun onHomeUiAction(action: HomeUiAction) {
@@ -150,8 +180,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnDateSelected -> setSelectedDate(action.date)
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
-            is HomeUiAction.OnStarImageClick -> toggleStarImageClicked(action.index, true)
-            is HomeUiAction.OnStarImageDismiss -> toggleStarImageClicked(action.index, false)
+            is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
         }
     }
 
@@ -170,6 +199,7 @@ class HomeViewModel @Inject constructor(
                 }
                 setLikedFestivalDeleteDialogVisible(true)
             }
+
             is FestivalUiAction.OnDialogButtonClick -> {
                 when (action.type) {
                     ButtonType.CONFIRM -> {
@@ -326,11 +356,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun toggleStarImageClicked(index: Int, isClicked: Boolean) {
+    private fun toggleStarImageClicked(scheduleIndex: Int, starIndex: Int, flag: Boolean) {
         _uiState.update { currentState ->
-            val newStates = currentState.starImageClickStates.toMutableMap()
-            newStates[index] = isClicked
-            currentState.copy(starImageClickStates = newStates.toImmutableMap())
+            val updatedList = currentState.isStarImageClicked.mapIndexed { index, list ->
+                if (index == scheduleIndex) {
+                    list.toMutableList().apply {
+                        this[starIndex] = flag
+                    }.toImmutableList()
+                } else {
+                    list
+                }
+            }.toImmutableList()
+            currentState.copy(isStarImageClicked = updatedList)
         }
     }
 }
