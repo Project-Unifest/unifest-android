@@ -170,7 +170,7 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 isStarImageClicked = it.todayFestivals.map { festival ->
                     persistentListOf<Boolean>().addAll(List(festival.starInfo.size) { false }).toImmutableList()
-                }.toImmutableList()
+                }.toImmutableList(),
             )
         }
     }
