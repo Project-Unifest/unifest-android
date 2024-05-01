@@ -67,6 +67,8 @@ data class FestivalToday(
 
 @Serializable
 data class StarInfo(
+    @SerialName("starId")
+    val starId: Long,
     @SerialName("name")
     val name: String,
     @SerialName("imgUrl")

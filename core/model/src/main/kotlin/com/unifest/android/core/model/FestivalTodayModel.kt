@@ -16,6 +16,7 @@ data class FestivalTodayModel(
 
 @Stable
 data class StarInfoModel(
+    val starId: Long,
     val name: String,
     val imgUrl: String,
 )

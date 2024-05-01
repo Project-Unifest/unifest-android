@@ -32,10 +32,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -85,8 +86,7 @@ fun Calendar(
         modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
         Column(
-            modifier = Modifier
-                .background(Color.White),
+            modifier = Modifier.background(Color.White),
         ) {
             val monthState = rememberCalendarState(
                 startMonth = startMonth,
@@ -157,15 +157,14 @@ fun ModeToggleButton(
     isWeekMode: Boolean,
     onModeChange: (Boolean) -> Unit,
 ) {
-    val icon = if (isWeekMode) painterResource(id = R.drawable.ic_calender_down) else painterResource(id = R.drawable.ic_calender_up)
-    val contentDescription = if (isWeekMode) "Month" else "Week"
-    val backgroundPainter = painterResource(id = R.drawable.calender_bottom)
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .requiredHeight(40.dp)
-            .paint(painter = backgroundPainter, contentScale = ContentScale.FillBounds)
+            .paint(
+                painter = painterResource(id = R.drawable.calender_bottom),
+                contentScale = ContentScale.FillBounds,
+            )
             .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
@@ -173,8 +172,9 @@ fun ModeToggleButton(
             onClick = { onModeChange(!isWeekMode) },
         ) {
             Icon(
-                painter = icon,
-                contentDescription = contentDescription,
+                imageVector = if (isWeekMode) ImageVector.vectorResource(id = R.drawable.ic_calender_down)
+                else ImageVector.vectorResource(id = R.drawable.ic_calender_up),
+                contentDescription = if (isWeekMode) "Month" else "Week",
                 tint = Color(0xFFD9D9D9),
             )
         }
@@ -183,7 +183,7 @@ fun ModeToggleButton(
 
 @Composable
 private fun CalendarNavigationIcon(
-    icon: Painter,
+    icon: ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
 ) = Box(
@@ -198,7 +198,7 @@ private fun CalendarNavigationIcon(
             .fillMaxSize()
             .padding(4.dp)
             .align(Alignment.Center),
-        painter = icon,
+        imageVector = icon,
         contentDescription = contentDescription,
         tint = Color.Gray,
     )
@@ -247,10 +247,10 @@ fun MonthAndWeekCalendarTitle(
 @Composable
 fun SimpleCalendarTitle(
     // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
-    modifier: Modifier,
     currentMonth: Month,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.height(40.dp),
@@ -263,12 +263,12 @@ fun SimpleCalendarTitle(
             textAlign = TextAlign.Start,
         )
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_left),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_right),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_right),
             contentDescription = "Next",
             onClick = goToNext,
         )
@@ -299,8 +299,8 @@ fun Day(
     day: LocalDate,
     isSelected: Boolean,
     isSelectable: Boolean,
-    onClick: (LocalDate) -> Unit,
     allFestivals: ImmutableList<FestivalModel>,
+    onClick: (LocalDate) -> Unit,
 ) {
     val currentDate = LocalDate.now()
     val isToday = day == currentDate

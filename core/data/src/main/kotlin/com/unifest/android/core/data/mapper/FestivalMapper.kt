@@ -36,6 +36,7 @@ internal fun FestivalToday.toModel(): FestivalTodayModel {
 
 internal fun StarInfo.toModel(): StarInfoModel {
     return StarInfoModel(
+        starId = starId,
         name = name,
         imgUrl = imgUrl,
     )
