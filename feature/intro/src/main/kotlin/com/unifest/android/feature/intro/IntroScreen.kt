@@ -337,6 +337,7 @@ fun AllFestivalsTabRow(
                 Tab(
                     selected = isSelected,
                     onClick = {
+                        onAction(IntroUiAction.OnRegionTapClicked(title))
                         scope.launch {
                             pagerState.animateScrollToPage(index)
                         }

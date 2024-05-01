@@ -13,9 +13,15 @@ interface UnifestService {
     suspend fun getAllFestivals(): FestivalSearchResponse
 
     @GET("festival")
-    suspend fun searchFestival(
+    suspend fun searchSchool(
         @Query("name") name: String,
     ): FestivalSearchResponse
+
+    @GET("festival/region")
+    suspend fun searchRegion(
+        @Query("region") region: String,
+    ): FestivalSearchResponse
+
 
     @GET("festival/after")
     suspend fun getIncomingFestivals(): FestivalSearchResponse

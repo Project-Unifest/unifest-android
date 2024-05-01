@@ -3,6 +3,7 @@ package com.unifest.android.feature.intro.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class IntroViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
+    private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(IntroUiState())
@@ -109,6 +111,8 @@ class IntroViewModel @Inject constructor(
         when (action) {
             is IntroUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
             is IntroUiAction.OnSearchTextCleared -> clearSearchText()
+            is IntroUiAction.OnSearch -> searchSchool(action.searchText.text)
+            is IntroUiAction.OnRegionTapClicked -> searchRegion(action.region)
             is IntroUiAction.OnClearSelectionClick -> clearSelectedFestivals()
             is IntroUiAction.OnFestivalSelected -> addSelectedFestival(action.festival)
             is IntroUiAction.OnFestivalDeselected -> removeSelectedFestivals(action.festival)
@@ -125,6 +129,18 @@ class IntroViewModel @Inject constructor(
     private fun clearSearchText() {
         _uiState.update {
             it.copy(searchText = TextFieldValue())
+        }
+    }
+
+    private fun searchSchool(searchText: String) {
+        viewModelScope.launch {
+            festivalRepository.searchSchool(searchText)
+        }
+    }
+
+    private fun searchRegion(region: String) {
+        viewModelScope.launch {
+            festivalRepository.searchRegion(region)
         }
     }
 
