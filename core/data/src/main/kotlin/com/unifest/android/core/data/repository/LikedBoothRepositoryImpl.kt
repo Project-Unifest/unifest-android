@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LikedBoothRepositoryImpl @Inject constructor(
+internal class LikedBoothRepositoryImpl @Inject constructor(
     private val likedBoothDao: LikedBoothDao,
 ) : LikedBoothRepository {
     override fun getLikedBoothList(): Flow<List<BoothDetailModel>> {

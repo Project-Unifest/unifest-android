@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LikedFestivalRepositoryImpl @Inject constructor(
+internal class LikedFestivalRepositoryImpl @Inject constructor(
     private val likedFestivalDao: LikedFestivalDao,
     private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
 ) : LikedFestivalRepository {

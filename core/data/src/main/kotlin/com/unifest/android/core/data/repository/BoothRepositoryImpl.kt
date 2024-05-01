@@ -5,7 +5,7 @@ import com.unifest.android.core.network.service.UnifestService
 import com.unifest.android.core.data.util.runSuspendCatching
 import javax.inject.Inject
 
-class BoothRepositoryImpl @Inject constructor(
+internal class BoothRepositoryImpl @Inject constructor(
     private val service: UnifestService,
 ) : BoothRepository {
     override suspend fun getPopularBooths(festivalId: Long) = runSuspendCatching {
