@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -245,7 +246,9 @@ fun FestivalScheduleItem(
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Column {
+            Column(
+                modifier = Modifier.width(172.dp),
+            ) {
                 Text(
                     text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content4,
@@ -254,6 +257,8 @@ fun FestivalScheduleItem(
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -274,7 +279,6 @@ fun FestivalScheduleItem(
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(39.dp))
             if (festival.starInfo.isNotEmpty()) {
                 LazyRow {
                     itemsIndexed(
