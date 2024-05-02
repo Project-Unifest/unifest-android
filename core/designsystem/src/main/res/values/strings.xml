@@ -24,6 +24,7 @@
         <item>경상도</item>
     </string-array>
     <string name="total_festivals_count">총 %d개</string>
+    <string name="intro_no_result">검색 결과가 없어요</string>
 
     <!--    Home    -->
     <string name="home_festival_schedule_text">의 축제 일정</string>

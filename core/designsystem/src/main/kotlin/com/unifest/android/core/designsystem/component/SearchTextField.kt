@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
@@ -47,7 +48,7 @@ fun SearchTextField(
     searchText: TextFieldValue,
     updateSearchText: (TextFieldValue) -> Unit,
     @StringRes searchTextHintRes: Int,
-    onSearch: (String) -> Unit,
+    onSearch: (TextFieldValue) -> Unit,
     clearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.White,
@@ -60,6 +61,11 @@ fun SearchTextField(
             onValueChange = updateSearchText,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearch(searchText)
+                },
+            ),
             textStyle = TextStyle(color = Color.Black),
             decorationBox = { innerTextField ->
                 Row(
@@ -88,9 +94,9 @@ fun SearchTextField(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                             contentDescription = "Search Icon",
                             tint = Color.Unspecified,
-                            modifier = Modifier.clickable {
-                                onSearch(searchText.text)
-                            },
+//                            modifier = Modifier.clickable {
+//                                onSearch(searchText)
+//                            },
                         )
                     } else {
                         Icon(
