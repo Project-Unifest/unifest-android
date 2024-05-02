@@ -24,6 +24,16 @@ data class PopularBoothsResponse(
 )
 
 @Serializable
+data class AllBoothsResponse(
+    @SerialName("code")
+    val code: String,
+    @SerialName("message")
+    val message: String,
+    @SerialName("data")
+    val data: List<AllBooths>,
+)
+
+@Serializable
 data class BoothDetail(
     @SerialName("id")
     val id: Long,
@@ -60,4 +70,24 @@ data class Menu(
     val price: Int,
     @SerialName("imgUrl")
     val imgUrl: String,
+)
+
+@Serializable
+data class AllBooths(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("name")
+    val name: String,
+    @SerialName("category")
+    val category: String,
+    @SerialName("description")
+    val description: String,
+    @SerialName("thumbnail")
+    val thumbnail: String,
+    @SerialName("location")
+    val location: String,
+    @SerialName("latitude")
+    val latitude: Float,
+    @SerialName("longitude")
+    val longitude: Float,
 )

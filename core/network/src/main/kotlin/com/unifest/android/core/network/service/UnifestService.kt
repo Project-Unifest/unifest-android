@@ -1,6 +1,7 @@
 package com.unifest.android.core.network.service
 
 import com.unifest.android.core.network.request.LikeBoothRequest
+import com.unifest.android.core.network.response.AllBoothsResponse
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
@@ -36,8 +37,13 @@ interface UnifestService {
 
     @GET("api/booths")
     suspend fun getPopularBooths(
-        @Query("festival") festivalId: Long,
+        @Query("festivalId") festivalId: Long,
     ): PopularBoothsResponse
+
+    @GET("api/booths/{festival-id}/booths")
+    suspend fun getAllBooths(
+        @Path("festival-id") festivalId: Long,
+    ): AllBoothsResponse
 
     @GET("api/booths/{booth-id}")
     suspend fun getBoothDetail(

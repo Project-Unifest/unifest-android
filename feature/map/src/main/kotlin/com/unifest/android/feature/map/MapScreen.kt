@@ -82,14 +82,16 @@ import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
-import com.unifest.android.feature.map.model.BoothDetailMapModel
+import com.unifest.android.feature.map.model.AllBoothsMapModel
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
@@ -227,15 +229,15 @@ fun MapContent(
                 isLocationButtonEnabled = true,
             ),
         ) {
-            var clusterManager by remember { mutableStateOf<Clusterer<BoothDetailMapModel>?>(null) }
+            var clusterManager by remember { mutableStateOf<Clusterer<AllBoothsMapModel>?>(null) }
             DisposableMapEffect(uiState.boothList) { map ->
                 if (clusterManager == null) {
-                    clusterManager = Clusterer.Builder<BoothDetailMapModel>()
+                    clusterManager = Clusterer.Builder<AllBoothsMapModel>()
                         .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
                             override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
                                 super.updateClusterMarker(info, marker)
-                                marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_normal)
-                                marker.captionColor = getColor(context, R.color.black)
+                                marker.iconTintColor = getColor(context, R.color.main_color)
+                                marker.captionColor = getColor(context, R.color.white)
                             }
                         })
                         .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
@@ -243,7 +245,7 @@ fun MapContent(
                                 super.updateLeafMarker(info, marker)
                                 marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_normal)
                                 marker.onClickListener = Overlay.OnClickListener {
-                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothDetailMapModel)))
+                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as AllBoothsMapModel)))
                                     true
                                 }
                             }
@@ -288,7 +290,7 @@ fun MapContent(
 //            }
         }
         MapTopAppBar(
-            title = uiState.selectedSchoolName,
+            title = uiState.festivalInfo.schoolName,
             boothSearchText = uiState.boothSearchText,
             onAction = onMapUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,
@@ -310,7 +312,7 @@ fun MapContent(
                     .background(Color.White)
                     .border(
                         width = 1.dp,
-                        color = Color(0xFFF5687E),
+                        color = MainColor,
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
@@ -324,7 +326,7 @@ fun MapContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.map_popular_booth),
-                        color = Color(0xFFF5687E),
+                        color = MainColor,
                         style = Title4,
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -414,7 +416,7 @@ fun MapTopAppBar(
 
 @Composable
 fun BoothItem(
-    boothInfo: BoothDetailMapModel,
+    boothInfo: AllBoothsMapModel,
     isPopularMode: Boolean,
     ranking: Int,
     onAction: (MapUiAction) -> Unit,
@@ -483,7 +485,7 @@ fun RankingBadge(ranking: Int) {
             .size(width = 43.dp, height = 45.dp)
             .padding(start = 7.dp, top = 9.dp)
             .clip(CircleShape)
-            .background(Color(0xFFF5687E), CircleShape),
+            .background(MainColor, CircleShape),
         contentAlignment = Alignment.TopStart,
     ) {
         Text(
@@ -498,15 +500,14 @@ fun RankingBadge(ranking: Int) {
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
-    val boothList = persistentListOf<BoothDetailMapModel>()
+    val boothList = persistentListOf<AllBoothsMapModel>()
     repeat(5) { index ->
         boothList.add(
-            BoothDetailMapModel(
+            AllBoothsMapModel(
                 id = index.toLong(),
                 name = "컴공 주점",
                 category = "",
                 description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                warning = "",
                 location = "청심대 앞",
             ),
         )
@@ -516,7 +517,9 @@ fun MapScreenPreview() {
         MapScreen(
             padding = PaddingValues(),
             uiState = MapUiState(
-                selectedSchoolName = "건국대학교",
+                festivalInfo = FestivalModel(
+                    schoolName = "건국대학교",
+                ),
                 boothList = boothList,
             ),
             onMapUiAction = {},
@@ -543,12 +546,11 @@ fun MapTopAppBarPreview() {
 fun BoothItemPreview() {
     UnifestTheme {
         BoothItem(
-            boothInfo = BoothDetailMapModel(
+            boothInfo = AllBoothsMapModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",
                 description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                warning = "",
                 location = "청심대 앞",
             ),
             isPopularMode = true,
