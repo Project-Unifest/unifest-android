@@ -298,7 +298,7 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text =  warning,
+                text = warning,
                 modifier = Modifier.alignByBaseline(),
                 style = BoothCaution,
                 color = MainColor,

@@ -8,7 +8,8 @@ enum class MarkerCategory(val value: String) {
     EVENT("EVENT"),
     NORMAL("NORMAL"),
     MEDICAL("MEDICAL"),
-    TOILET("TOILET");
+    TOILET("TOILET"),
+    ;
 
     companion object {
         fun fromString(value: String): MarkerCategory {
