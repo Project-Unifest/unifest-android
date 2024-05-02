@@ -20,7 +20,7 @@ data class PopularBoothsResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<BoothDetail>,
+    val data: List<AllBooths>,
 )
 
 @Serializable
