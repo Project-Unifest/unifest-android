@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(
     private val likedFestivalRepository: LikedFestivalRepository,
+    private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
@@ -153,10 +155,15 @@ class MenuViewModel @Inject constructor(
 
     private fun deleteLikedBooth(booth: BoothDetailModel) {
         viewModelScope.launch {
-            updateLikedBooth(booth)
-            delay(500)
-            likedBoothRepository.deleteLikedBooth(booth)
-            _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmark_removed_message)))
+            boothRepository.likeBooth(booth.id)
+                .onSuccess {
+                    updateLikedBooth(booth)
+                    delay(500)
+                    likedBoothRepository.deleteLikedBooth(booth)
+                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                }.onFailure {
+                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                }
         }
     }
 

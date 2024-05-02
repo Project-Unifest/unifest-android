@@ -92,7 +92,7 @@ class BoothViewModel @Inject constructor(
                     }
                     if (currentBookmarkFlag) {
                         likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmark_removed_message),))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message),))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
                         _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmarked_message)))
