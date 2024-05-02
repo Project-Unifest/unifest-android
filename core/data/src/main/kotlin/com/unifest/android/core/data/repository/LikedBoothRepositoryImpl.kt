@@ -30,4 +30,8 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
     override suspend fun updateLikedBooth(booth: BoothDetailModel) {
         likedBoothDao.updateLikedBooth(booth.id, booth.isLiked)
     }
+
+    override suspend fun isLikedBooth(booth: BoothDetailModel): Boolean {
+        return likedBoothDao.isLikedBooth(booth.id)
+    }
 }
