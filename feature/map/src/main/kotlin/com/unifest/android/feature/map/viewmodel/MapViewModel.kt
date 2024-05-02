@@ -6,12 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.AllBoothsMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,168 +49,6 @@ class MapViewModel @Inject constructor(
         checkMapOnboardingCompletion()
         checkFestivalOnboardingCompletion()
         observeLikedFestivals()
-
-//        val boothList = listOf(
-//            BoothDetailModel(
-//                id = 1L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54053013863604F,
-//                longitude = 127.07505652524804F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 2L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54111712868565F,
-//                longitude = 127.07839319326257F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 3L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.5414744247141F,
-//                longitude = 127.07779237844323F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 4L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54224856023523F,
-//                longitude = 127.07605430700158F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 5L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54003672313541F,
-//                longitude = 127.07653710462426F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 6L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.53998567996623F,
-//                longitude = 37.53998567996623F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 7L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54152546686414F,
-//                longitude = 127.07353303052759F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 8L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54047909580466F,
-//                longitude = 127.07398364164209F,
-//                menus = emptyList(),
-//            ),
-//        )
-//
-//        _uiState.update {
-//            it.copy(
-//                festivalInfo = FestivalModel(
-//                    schoolName = "건국대학교",
-//                    latitude = 126.957f,
-//                    longitude = 37.460f,
-//                ),
-//                boothList = boothList
-//                    .map { booth -> booth.toMapModel() }
-//                    .toImmutableList(),
-//                selectedBoothList = persistentListOf(),
-//                festivalSearchResults = persistentListOf(
-//                    FestivalModel(
-//                        1,
-//                        1,
-//                        "https://picsum.photos/36",
-//                        "서울대학교",
-//                        "설대축제",
-//                        "2024-04-21",
-//                        "2024-04-23",
-//                        126.957f,
-//                        37.460f,
-//                    ),
-//                    FestivalModel(
-//                        2,
-//                        2,
-//                        "https://picsum.photos/36",
-//                        "연세대학교",
-//                        "연대축제",
-//                        "2024-04-21",
-//                        "2024-04-23",
-//                        126.957f,
-//                        37.460f,
-//                    ),
-//                    FestivalModel(
-//                        3,
-//                        3,
-//                        "https://picsum.photos/36",
-//                        "고려대학교",
-//                        "고대축제",
-//                        "2024-04-21",
-//                        "2024-04-23",
-//                        126.957f,
-//                        37.460f,
-//                    ),
-//                    FestivalModel(
-//                        4,
-//                        4,
-//                        "https://picsum.photos/36",
-//                        "성균관대학교",
-//                        "성대축제",
-//                        "2024-04-21",
-//                        "2024-04-23",
-//                        126.957f,
-//                        37.460f,
-//                    ),
-//                    FestivalModel(
-//                        5,
-//                        5,
-//                        "https://picsum.photos/36",
-//                        "건국대학교",
-//                        "건대축제",
-//                        "2024-04-21",
-//                        "2024-04-23",
-//                        126.957f,
-//                        37.460f,
-//                    ),
-//                ),
-//            )
-//        }
     }
 
     fun onPermissionResult(isGranted: Boolean) {
@@ -453,77 +293,26 @@ class MapViewModel @Inject constructor(
     }
 
     private fun setEnablePopularMode() {
-//        val popularBoothList = listOf(
-//            BoothDetailModel(
-//                id = 1L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54053013863604F,
-//                longitude = 127.07505652524804F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 2L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54111712868565F,
-//                longitude = 127.07839319326257F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 3L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.5414744247141F,
-//                longitude = 127.07779237844323F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 4L,
-//                name = "학생회 부스",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                location = "청심대 앞",
-//                warning = "",
-//                latitude = 37.54224856023523F,
-//                longitude = 127.07605430700158F,
-//                menus = emptyList(),
-//            ),
-//            BoothDetailModel(
-//                id = 5L,
-//                name = "컴공 주점",
-//                category = "",
-//                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-//                warning = "",
-//                location = "청심대 앞",
-//                latitude = 37.54003672313541F,
-//                longitude = 127.07653710462426F,
-//                menus = emptyList(),
-//            ),
-//        )
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                _uiState.update {
-                    it.copy(
-                        isBoothSelectionMode = false,
-                    )
-                }
-                delay(500)
-                _uiState.update {
-                    it.copy(
-                        selectedBoothList = _uiState.value.popularBoothList.map { it.toMapModel() }.toImmutableList(),
-                        isPopularMode = true,
-                    )
-                }
+                boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
+                    .onSuccess { booths ->
+                        _uiState.update {
+                            it.copy(
+                                selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
+                                isBoothSelectionMode = false,
+                            )
+                        }
+                        delay(500)
+                        _uiState.update {
+                            it.copy(
+                                selectedBoothList = _uiState.value.popularBoothList.map { it.toMapModel() }.toImmutableList(),
+                                isPopularMode = true,
+                            )
+                        }
+                    }.onFailure {
+                        _uiEvent.send(MapUiEvent.ShowSnackBar(UiText.StringResource(R.string.map_popular_booth_update_failed_message)))
+                    }
             }
         } else {
             _uiState.update {
