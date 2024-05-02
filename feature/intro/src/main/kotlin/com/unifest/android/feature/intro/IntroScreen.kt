@@ -117,15 +117,14 @@ fun IntroScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 80.dp),
+                    .verticalScroll(rememberScrollState()),
             ) {
                 InformationText()
                 SearchTextField(
                     searchText = uiState.searchText,
                     updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
                     searchTextHintRes = R.string.intro_search_text_hint,
-                    onSearch = { onAction(IntroUiAction.OnSearch(it))},
+                    onSearch = { onAction(IntroUiAction.OnSearch(it)) },
                     clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                     modifier = Modifier
                         .height(46.dp)
@@ -143,8 +142,10 @@ fun IntroScreen(
                 }
                 AllFestivalsTabRow(
                     festivals = uiState.festivals,
+                    isSearchLoading = uiState.isSearchLoading,
                     onAction = onAction,
                     selectedFestivals = uiState.selectedFestivals,
+                    modifier = Modifier.weight(1f),
                 )
             }
             UnifestButton(
@@ -303,15 +304,17 @@ fun FestivalRowItem(
 @Composable
 fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
+    isSearchLoading: Boolean,
     onAction: (IntroUiAction) -> Unit,
     selectedFestivals: ImmutableList<FestivalModel>,
+    modifier: Modifier = Modifier,
 ) {
     val tabTitles = LocalContext.current.resources.getStringArray(R.array.region_tab_titles).toList()
     val pagerState = rememberPagerState(pageCount = { tabTitles.size })
     val scope = rememberCoroutineScope()
     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
-    Column {
+    Column(modifier) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = Color.White,
@@ -362,29 +365,52 @@ fun AllFestivalsTabRow(
         )
         HorizontalPager(
             state = pagerState,
+            modifier = Modifier.fillMaxSize(),
         ) {
-            Column(modifier = Modifier.padding(top = 8.dp)) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    items(
-                        count = festivals.size,
-                        key = { index -> festivals[index].festivalId },
-                    ) { index ->
-                        FestivalItem(
-                            festival = festivals[index],
-                            onFestivalSelected = { festival ->
-                                if (!selectedFestivals.any { it.festivalId == festival.festivalId }) {
-                                    onAction(IntroUiAction.OnFestivalSelected(festival))
-                                }
-                            },
-                        )
+            Box(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (festivals.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.intro_no_result),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(bottom = 92.dp),
+                        color = Color(0xFF7E7E7E),
+                        style = Content3,
+                    )
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(3),
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        items(
+                            count = festivals.size,
+                            key = { index -> festivals[index].festivalId },
+                        ) { index ->
+                            FestivalItem(
+                                festival = festivals[index],
+                                onFestivalSelected = { festival ->
+                                    if (!selectedFestivals.any { it.festivalId == festival.festivalId }) {
+                                        onAction(IntroUiAction.OnFestivalSelected(festival))
+                                    }
+                                },
+                            )
+                        }
                     }
+                }
+                if (isSearchLoading) {
+                    LoadingWheel(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center)
+                            .background(Color.White)
+                            .padding(bottom = 92.dp),
+                    )
                 }
             }
         }
@@ -393,7 +419,7 @@ fun AllFestivalsTabRow(
 
 @DevicePreview
 @Composable
-fun PreviewIntroScreen() {
+fun IntroScreenPreview() {
     UnifestTheme {
         IntroScreen(
             uiState = IntroUiState(
@@ -454,6 +480,19 @@ fun PreviewIntroScreen() {
                         37.460f,
                     ),
                 ),
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@DevicePreview
+@Composable
+fun IntroScreenEmptyPreview() {
+    UnifestTheme {
+        IntroScreen(
+            uiState = IntroUiState(
+                festivals = persistentListOf(),
             ),
             onAction = {},
         )

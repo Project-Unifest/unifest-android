@@ -138,9 +138,11 @@ class IntroViewModel @Inject constructor(
     }
 
     private fun searchSchool(searchText: String) {
+        if (searchText.isEmpty()) return
+
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isLoading = true)
+                it.copy(isSearchLoading = true)
             }
             festivalRepository.searchSchool(searchText)
                 .onSuccess { festivals ->
@@ -153,7 +155,7 @@ class IntroViewModel @Inject constructor(
                     handleException(exception, this@IntroViewModel)
                 }
             _uiState.update {
-                it.copy(isLoading = false)
+                it.copy(isSearchLoading = false)
             }
         }
     }
@@ -162,7 +164,7 @@ class IntroViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoading = true,
+                    isSearchLoading = true,
                     selectedRegion = region,
                 )
             }
@@ -177,7 +179,7 @@ class IntroViewModel @Inject constructor(
                     handleException(exception, this@IntroViewModel)
                 }
             _uiState.update {
-                it.copy(isLoading = false)
+                it.copy(isSearchLoading = false)
             }
         }
     }

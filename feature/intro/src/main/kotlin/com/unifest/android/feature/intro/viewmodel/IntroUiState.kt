@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class IntroUiState(
     val isLoading: Boolean = false,
+    val isSearchLoading: Boolean = false,
     val searchText: TextFieldValue = TextFieldValue(),
     val festivals: ImmutableList<FestivalModel> = persistentListOf(),
     val selectedFestivals: PersistentList<FestivalModel> = persistentListOf(),
