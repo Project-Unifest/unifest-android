@@ -1,6 +1,5 @@
 package com.unifest.android.feature.home.viewmodel
 
-import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.model.FestivalTodayModel
 import java.time.LocalDate
 

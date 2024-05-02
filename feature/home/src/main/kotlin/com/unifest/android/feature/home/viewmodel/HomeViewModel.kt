@@ -8,13 +8,11 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.core.model.StarInfoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -176,7 +174,7 @@ class HomeViewModel @Inject constructor(
                             todayFestivals = festivals.toImmutableList(),
                             isStarImageClicked = festivals.map { festival ->
                                 List(festival.starInfo.size) { false }.toImmutableList()
-                            }.toImmutableList()
+                            }.toImmutableList(),
                         )
                     }
                 }
