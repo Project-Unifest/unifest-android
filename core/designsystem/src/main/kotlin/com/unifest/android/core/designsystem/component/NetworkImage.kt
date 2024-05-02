@@ -18,7 +18,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun NetworkImage(
-    imageUrl: String?,
+    imgUrl: String?,
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     contentScale: ContentScale = ContentScale.Crop,
@@ -32,7 +32,7 @@ fun NetworkImage(
         )
     } else {
         CoilImage(
-            imageModel = { imageUrl },
+            imageModel = { imgUrl },
             modifier = modifier,
             component = rememberImageComponent {
                 +PlaceholderPlugin.Loading(placeholder)
@@ -51,6 +51,6 @@ fun NetworkImage(
 @Composable
 fun NetworkImagePreview() {
     UnifestTheme {
-        NetworkImage(imageUrl = "")
+        NetworkImage(imgUrl = "")
     }
 }

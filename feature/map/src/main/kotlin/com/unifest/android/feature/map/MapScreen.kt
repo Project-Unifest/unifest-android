@@ -433,7 +433,7 @@ fun BoothItem(
                 modifier = Modifier.padding(15.dp),
             ) {
                 NetworkImage(
-                    imageUrl = "https://picsum.photos/86",
+                    imgUrl = "https://picsum.photos/86",
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),

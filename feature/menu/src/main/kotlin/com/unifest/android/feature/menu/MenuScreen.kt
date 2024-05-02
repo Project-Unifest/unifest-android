@@ -335,7 +335,7 @@ fun FestivalItem(
             contentAlignment = Alignment.Center,
         ) {
             NetworkImage(
-                imageUrl = "https://picsum.photos/86",
+                imgUrl = "https://picsum.photos/86",
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape),

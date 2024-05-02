@@ -16,7 +16,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun StarImage(
-    imageUrl: String?,
+    imgUrl: String?,
     onClick: () -> Unit,
     isClicked: Boolean,
     label: String,
@@ -31,7 +31,7 @@ fun StarImage(
         contentAlignment = Alignment.Center,
     ) {
         NetworkImage(
-            imageUrl = imageUrl,
+            imgUrl = imgUrl,
             modifier = Modifier.matchParentSize(),
             placeholder = placeholder,
             contentScale = contentScale,
@@ -58,7 +58,7 @@ fun StarImage(
 fun StarImagePreview() {
     UnifestTheme {
         StarImage(
-            imageUrl = "",
+            imgUrl = "",
             onClick = {},
             isClicked = false,
             label = "",
