@@ -176,9 +176,9 @@ class IntroViewModel @Inject constructor(
 
     private fun searchRegion(region: String) {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(isSearchLoading = true)
-            }
+//            _uiState.update {
+//                it.copy(isSearchLoading = true)
+//            }
             if (region == "전체") {
                 getAllFestivals()
             } else {
@@ -196,9 +196,9 @@ class IntroViewModel @Inject constructor(
                         handleException(exception, this@IntroViewModel)
                     }
             }
-            _uiState.update {
-                it.copy(isSearchLoading = false)
-            }
+//            _uiState.update {
+//                it.copy(isSearchLoading = false)
+//            }
         }
     }
 
