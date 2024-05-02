@@ -54,6 +54,7 @@ import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
@@ -214,7 +215,7 @@ fun BottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
+    val bookMarkColor = if (isBookmarked) MainColor else Color(0xFF4B4B4B)
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -300,7 +301,7 @@ fun BoothDescription(
                 text =  warning,
                 modifier = Modifier.alignByBaseline(),
                 style = BoothCaution,
-                color = Color(0xFFF5687E),
+                color = MainColor,
             )
         }
         Spacer(modifier = Modifier.height(15.dp))

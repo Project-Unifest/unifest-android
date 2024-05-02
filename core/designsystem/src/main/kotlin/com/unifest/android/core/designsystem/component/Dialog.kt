@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -91,7 +92,7 @@ fun UnifestDialog(
                                 Modifier
                             },
                         ),
-                    containerColor = Color(0xFFF5687E),
+                    containerColor = MainColor,
                     contentColor = Color.White,
                 ) {
                     Text(

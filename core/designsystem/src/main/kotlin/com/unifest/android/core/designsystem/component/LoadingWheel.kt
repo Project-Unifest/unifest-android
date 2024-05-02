@@ -5,9 +5,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -18,7 +18,7 @@ fun LoadingWheel(
         modifier = modifier.noRippleClickable { },
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(color = Color(0xFFF5687E))
+        CircularProgressIndicator(color = MainColor)
     }
 }
 

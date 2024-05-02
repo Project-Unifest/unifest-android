@@ -41,6 +41,7 @@ import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
@@ -163,7 +164,7 @@ fun SchoolSearchTitleWithToolTip(
         setHeight(BalloonSizeSpec.WRAP)
         setPadding(9)
         setCornerRadius(8f)
-        setBackgroundColor(Color(0xFFF5687E))
+        setBackgroundColor(MainColor)
         setBalloonAnimation(BalloonAnimation.FADE)
         setDismissWhenClicked(true)
         setDismissWhenTouchOutside(false)
