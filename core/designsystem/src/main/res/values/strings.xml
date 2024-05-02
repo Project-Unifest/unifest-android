@@ -44,6 +44,7 @@
     <string name="booth_bookmarked_message">관심 주점으로 저장했습니다.</string>
     <string name="liked_booth_removed_message">관심 주점에서 삭제했습니다.</string>
     <string name="liked_booth_removed_failed_message">관심 주점에서 삭제를 실패했습니다.</string>
+    <string name="booth_empty_menu">등록된 메뉴가 없어요.</string>
 
     <!--    Map    -->
     <string name="map_booth_search_text_field_hint">부스 / 주점을 검색해보세요.</string>

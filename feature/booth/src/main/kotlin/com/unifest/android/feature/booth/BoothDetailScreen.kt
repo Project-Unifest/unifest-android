@@ -54,6 +54,7 @@ import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
@@ -204,7 +205,26 @@ fun BoothDetailContent(
         item { Spacer(modifier = Modifier.height(22.dp)) }
         item { MenuText() }
         item { Spacer(modifier = Modifier.height(16.dp)) }
-        items(uiState.boothDetailInfo.menus) { menu -> MenuItem(menu) }
+        if (uiState.boothDetailInfo.menus.isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.booth_empty_menu),
+                        modifier = Modifier.padding(top = 76.dp),
+                        color = Color(0xFF7E7E7E),
+                        style = Content3,
+                    )
+                }
+            }
+        } else {
+            items(
+                items = uiState.boothDetailInfo.menus,
+                key = { it.id },
+            ) { menu -> MenuItem(menu) }
+        }
     }
 }
 
