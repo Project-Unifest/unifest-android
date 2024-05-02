@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -150,24 +151,23 @@ internal fun HomeScreen(
                 itemsIndexed(
                     items = uiState.todayFestivals,
                     key = { _, festival -> festival.festivalId },
-                ) { index, festival ->
+                ) { scheduleIndex, festival ->
                     Column {
                         Spacer(modifier = Modifier.height(16.dp))
                         FestivalScheduleItem(
                             festival = festival,
-                            onAction = onHomeUiAction,
+                            scheduleIndex = scheduleIndex,
                             likedFestivals = uiState.likedFestivals,
                             selectedDate = uiState.selectedDate,
-                            starImageClickStates = uiState.starImageClickStates,
+                            isStarImageClicked = uiState.isStarImageClicked[scheduleIndex],
                             onHomeUiAction = onHomeUiAction,
                         )
                     }
-                    if (index < uiState.todayFestivals.size - 1) {
+                    if (scheduleIndex < uiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
                             modifier = Modifier.padding(horizontal = 20.dp),
-                            thickness = 1.dp,
                         )
                     }
                 }
@@ -190,9 +190,11 @@ internal fun HomeScreen(
             item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item { IncomingFestivalText() }
-            items(uiState.incomingFestivals) { festival ->
-                IncomingFestivalCard(festival)
-                Spacer(modifier = Modifier.height(8.dp))
+            if (uiState.incomingFestivals.isNotEmpty()) {
+                items(uiState.incomingFestivals) { festival ->
+                    IncomingFestivalCard(festival)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
         if (uiState.isFestivalSearchBottomSheetVisible) {
@@ -223,11 +225,11 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
 @Composable
 fun FestivalScheduleItem(
     festival: FestivalTodayModel,
-    onAction: (HomeUiAction) -> Unit,
+    scheduleIndex: Int,
     likedFestivals: ImmutableList<FestivalModel>,
-    onHomeUiAction: (HomeUiAction) -> Unit,
     selectedDate: LocalDate,
-    starImageClickStates: Map<Int, Boolean>,
+    isStarImageClicked: ImmutableList<Boolean>,
+    onHomeUiAction: (HomeUiAction) -> Unit,
 ) {
     Column {
         Row(
@@ -244,7 +246,9 @@ fun FestivalScheduleItem(
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Column {
+            Column(
+                modifier = Modifier.width(172.dp),
+            ) {
                 Text(
                     text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
                     style = Content4,
@@ -253,6 +257,8 @@ fun FestivalScheduleItem(
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(7.dp))
@@ -273,32 +279,32 @@ fun FestivalScheduleItem(
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(39.dp))
-            LazyRow {
-                itemsIndexed(festival.starInfo) { index, starInfo ->
-                    StarImage(
-                        imageUrl = starInfo.imgUrl,
-                        onClick = {
-                            if (starImageClickStates[index] == true) {
-                                onHomeUiAction(HomeUiAction.OnStarImageDismiss(index))
-                            } else {
-                                onHomeUiAction(HomeUiAction.OnStarImageClick(index))
-                            }
-                        },
-                        isClicked = starImageClickStates[index] ?: false,
-                        label = starInfo.name,
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(CircleShape),
-                    )
-                    Spacer(modifier = Modifier.width(10.dp))
+            if (festival.starInfo.isNotEmpty()) {
+                LazyRow {
+                    itemsIndexed(
+                        items = festival.starInfo,
+                        key = { _, starInfo -> starInfo.starId },
+                    ) { starIndex, starInfo ->
+                        StarImage(
+                            imageUrl = starInfo.imgUrl,
+                            onClick = {
+                                onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
+                            },
+                            isClicked = isStarImageClicked[starIndex],
+                            label = starInfo.name,
+                            modifier = Modifier
+                                .size(72.dp)
+                                .clip(CircleShape),
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
                 }
             }
         }
         if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
             UnifestOutlinedButton(
                 onClick = {
-                    onAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
                 },
                 modifier = Modifier
                     .fillMaxWidth()

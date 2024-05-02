@@ -1,11 +1,17 @@
 package com.unifest.android.core.data.repository
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.provider.Settings
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.network.service.UnifestService
 import com.unifest.android.core.data.util.runSuspendCatching
+import com.unifest.android.core.network.request.LikeBoothRequest
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-internal class BoothRepositoryImpl @Inject constructor(
+class BoothRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val service: UnifestService,
 ) : BoothRepository {
     override suspend fun getPopularBooths(festivalId: Long) = runSuspendCatching {
@@ -14,5 +20,19 @@ internal class BoothRepositoryImpl @Inject constructor(
 
     override suspend fun getBoothDetail(boothId: Long) = runSuspendCatching {
         service.getBoothDetail(boothId).data.toModel()
+    }
+
+    override suspend fun likeBooth(boothId: Long): Result<Unit> = runSuspendCatching {
+        service.likeBooth(
+            LikeBoothRequest(
+                boothId = boothId,
+                token = getDeviceId(context),
+            ),
+        )
+    }
+
+    @SuppressLint("HardwareIds")
+    fun getDeviceId(context: Context): String {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }

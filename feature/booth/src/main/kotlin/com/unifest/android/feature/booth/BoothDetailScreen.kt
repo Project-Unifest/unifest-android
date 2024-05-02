@@ -1,6 +1,5 @@
 package com.unifest.android.feature.booth
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,9 +45,9 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
+import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
@@ -336,8 +334,8 @@ fun MenuItem(menu: MenuModel) {
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.booth_menu_image_example),
+        NetworkImage(
+            imageUrl = "https://picsum.photos/80",
             contentDescription = menu.name,
             modifier = Modifier.size(88.dp),
         )

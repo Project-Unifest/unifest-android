@@ -4,9 +4,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import java.time.LocalDate
 
 data class HomeUiState(
@@ -25,5 +23,5 @@ data class HomeUiState(
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
     val showAddToFavoritesButton: Boolean = false,
-    val starImageClickStates: ImmutableMap<Int, Boolean> = persistentMapOf(),
+    val isStarImageClicked: ImmutableList<ImmutableList<Boolean>> = persistentListOf(persistentListOf()),
 )

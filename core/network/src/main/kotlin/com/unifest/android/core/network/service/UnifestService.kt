@@ -1,10 +1,14 @@
 package com.unifest.android.core.network.service
 
+import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
+import com.unifest.android.core.network.response.LikeBoothResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -39,4 +43,9 @@ interface UnifestService {
     suspend fun getBoothDetail(
         @Path("booth-id") boothId: Long,
     ): BoothDetailResponse
+
+    @POST("api/likes")
+    suspend fun likeBooth(
+        @Body likeBoothRequest: LikeBoothRequest,
+    ): LikeBoothResponse
 }
