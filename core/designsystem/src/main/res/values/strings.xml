@@ -62,6 +62,7 @@
     <string name="menu_admin_mode">운영자 모드 진입</string>
     <string name="menu_liked_booth_empty">관심 부스 없음</string>
     <string name="menu_insert_liked_booth">지도에서 관심있는 부스를 추가해주세요</string>
+    <string name="menu_interest_festival_snack_bar">현재는 건국대학교만 서비스중이에요!</string>
 
     <!--    Liked Booth List   -->
     <string name="liked_booth_title">관심 부스</string>
