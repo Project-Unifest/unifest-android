@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
@@ -70,6 +71,11 @@ fun BoothLocationScreen(
         NaverMap(
             cameraPositionState = cameraPositionState,
             modifier = Modifier.fillMaxSize(),
+            uiSettings = MapUiSettings(
+                isZoomControlEnabled = false,
+                isScaleBarEnabled = false,
+                isLogoClickEnabled = false,
+            ),
         ) {
             Marker(
                 state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
