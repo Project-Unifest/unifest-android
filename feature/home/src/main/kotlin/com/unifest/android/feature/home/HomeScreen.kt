@@ -112,6 +112,8 @@ internal fun HomeScreen(
                     selectedDate = uiState.selectedDate,
                     onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
                     allFestivals = uiState.allFestivals,
+                    isWeekMode = uiState.isWeekMode,
+                    ocClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
                 )
             }
             item {

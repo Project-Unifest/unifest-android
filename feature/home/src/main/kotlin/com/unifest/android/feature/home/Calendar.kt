@@ -75,13 +75,14 @@ fun Calendar(
     onDateSelected: (LocalDate) -> Unit,
     adjacentMonths: Long = 500,
     allFestivals: ImmutableList<FestivalModel>,
+    isWeekMode: Boolean = false,
+    ocClickWeekMode: () -> Unit,
 ) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
     val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
     val daysOfWeek = remember { daysOfWeek() }
-    var isWeekMode by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
@@ -145,7 +146,7 @@ fun Calendar(
 
             ModeToggleButton(
                 isWeekMode = isWeekMode,
-                onModeChange = { isWeekMode = it },
+                onModeChange = { ocClickWeekMode() },
             )
         }
     }
@@ -363,6 +364,8 @@ private fun CalendarPreview() {
             selectedDate = LocalDate.now(),
             onDateSelected = {},
             allFestivals = persistentListOf(),
+            isWeekMode = false,
+            ocClickWeekMode = {},
         )
     }
 }

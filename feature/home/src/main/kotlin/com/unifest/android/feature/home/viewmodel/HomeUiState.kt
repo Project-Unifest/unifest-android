@@ -24,4 +24,5 @@ data class HomeUiState(
     val isNetworkErrorDialogVisible: Boolean = false,
     val showAddToFavoritesButton: Boolean = false,
     val isStarImageClicked: ImmutableList<ImmutableList<Boolean>> = persistentListOf(persistentListOf()),
+    val isWeekMode: Boolean = false,
 )

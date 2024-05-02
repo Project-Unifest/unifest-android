@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-//        getAllFestivals()
+        getIncomingFestivals()
         _uiState.update {
             it.copy(
                 incomingFestivals = persistentListOf(
@@ -181,6 +181,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
+            is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
         }
     }
 
@@ -368,6 +369,12 @@ class HomeViewModel @Inject constructor(
                 }
             }.toImmutableList()
             currentState.copy(isStarImageClicked = updatedList)
+        }
+    }
+
+    private fun setWeekMode(flag: Boolean) {
+        _uiState.update {
+            it.copy(isWeekMode = flag)
         }
     }
 }
