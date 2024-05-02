@@ -429,7 +429,7 @@ fun BoothItem(
                 modifier = Modifier.padding(15.dp),
             ) {
                 NetworkImage(
-                    imgUrl = "https://picsum.photos/86",
+                    imgUrl = boothInfo.thumbnail,
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),

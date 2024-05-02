@@ -28,7 +28,6 @@ class BoothViewModel @Inject constructor(
     private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
-    @Suppress("unused")
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 
     private val _uiState = MutableStateFlow(BoothUiState())
@@ -52,7 +51,7 @@ class BoothViewModel @Inject constructor(
 
     private fun getBoothDetail() {
         viewModelScope.launch {
-            boothRepository.getBoothDetail(2)
+            boothRepository.getBoothDetail(boothId)
                 .onSuccess { booth ->
                     _uiState.update {
                         it.copy(
