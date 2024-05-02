@@ -234,14 +234,14 @@ fun MapContent(
                         .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
                             override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
                                 super.updateClusterMarker(info, marker)
-                                marker.icon = OverlayImage.fromResource(R.drawable.ic_general)
+                                marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_normal)
                                 marker.captionColor = getColor(context, R.color.black)
                             }
                         })
                         .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
                             override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
                                 super.updateLeafMarker(info, marker)
-                                marker.icon = OverlayImage.fromResource(R.drawable.ic_general)
+                                marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_normal)
                                 marker.onClickListener = Overlay.OnClickListener {
                                     onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothDetailMapModel)))
                                     true
