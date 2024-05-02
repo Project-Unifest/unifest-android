@@ -11,11 +11,13 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         name = name,
         category = category,
         description = description,
+        thumbnail = thumbnail,
         warning = warning,
         location = location,
         latitude = latitude,
         longitude = longitude,
         menus = menus.map { it.toModel() },
+        likes = likes,
         isLiked = false,
     )
 }

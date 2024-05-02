@@ -26,23 +26,27 @@ data class PopularBoothsResponse(
 @Serializable
 data class BoothDetail(
     @SerialName("id")
-    val id: Long = 0L,
+    val id: Long,
     @SerialName("name")
-    val name: String = "",
+    val name: String,
     @SerialName("category")
-    val category: String = "",
+    val category: String,
     @SerialName("description")
-    val description: String = "",
+    val description: String,
+    @SerialName("thumbnail")
+    val thumbnail: String,
     @SerialName("warning")
-    val warning: String = "",
+    val warning: String,
     @SerialName("location")
-    val location: String = "",
+    val location: String,
     @SerialName("latitude")
-    val latitude: Float = 0F,
+    val latitude: Float,
     @SerialName("longitude")
-    val longitude: Float = 0F,
+    val longitude: Float,
     @SerialName("menus")
-    val menus: List<Menu> = emptyList(),
+    val menus: List<Menu>,
+    @SerialName("likes")
+    val likes: Int,
     val isLiked: Boolean = false,
 )
 

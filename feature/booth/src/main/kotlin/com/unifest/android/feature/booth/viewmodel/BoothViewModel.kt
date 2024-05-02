@@ -3,12 +3,12 @@ package com.unifest.android.feature.booth.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +27,7 @@ class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : ViewModel(), ErrorHandlerActions {
     @Suppress("unused")
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 
@@ -38,25 +38,7 @@ class BoothViewModel @Inject constructor(
     val uiEvent: Flow<BoothUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        _uiState.update {
-            it.copy(
-                boothDetailInfo = BoothDetailModel(
-                    id = 0L,
-                    name = "컴공 주점",
-                    category = "컴퓨터공학부 전용 부스",
-                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                    location = "청심대 앞",
-                    latitude = 37.54224856023523f,
-                    longitude = 127.07605430700158f,
-                    menus = listOf(
-                        MenuModel(1L, "모둠 사시미", 45000, ""),
-                        MenuModel(2L, "모둠 사시미", 45000, ""),
-                        MenuModel(3L, "모둠 사시미", 45000, ""),
-                        MenuModel(4L, "모둠 사시미", 45000, ""),
-                    ),
-                ),
-            )
-        }
+        getBoothDetail()
     }
 
     fun onAction(action: BoothUiAction) {
@@ -64,6 +46,23 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnBackClick -> navigateBack()
             is BoothUiAction.OnCheckLocationClick -> navigateToBoothLocation()
             is BoothUiAction.OnToggleBookmark -> toggleBookmark()
+            is BoothUiAction.OnRetryClick -> refresh(action.error)
+        }
+    }
+
+    private fun getBoothDetail() {
+        viewModelScope.launch {
+            boothRepository.getBoothDetail(2)
+                .onSuccess { booth ->
+                    _uiState.update {
+                        it.copy(
+                            boothDetailInfo = booth,
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
         }
     }
 
@@ -80,7 +79,7 @@ class BoothViewModel @Inject constructor(
     }
 
     private fun toggleBookmark() {
-        val currentBookmarkFlag = _uiState.value.isBookmarked
+        val currentBookmarkFlag = _uiState.value.boothDetailInfo.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
             if (currentBookmarkFlag) {
@@ -88,18 +87,38 @@ class BoothViewModel @Inject constructor(
             } else {
                 likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
             }
-            _uiState.update {
-                it.copy(
-                    isBookmarked = newBookmarkFlag,
-                    bookmarkCount = it.bookmarkCount + if (newBookmarkFlag) 1 else -1,
-                )
-            }
+//            _uiState.update {
+//                it.copy(
+//                    isBookmarked = newBookmarkFlag,
+//                    bookmarkCount = it.bookmarkCount + if (newBookmarkFlag) 1 else -1,
+//                )
+//            }
             _uiEvent.send(
                 BoothUiEvent.ShowSnackBar(
                     if (newBookmarkFlag) UiText.StringResource(R.string.booth_bookmarked_message)
                     else UiText.StringResource(R.string.booth_bookmark_removed_message),
                 ),
             )
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getBoothDetail()
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
+        }
+    }
+
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
 }

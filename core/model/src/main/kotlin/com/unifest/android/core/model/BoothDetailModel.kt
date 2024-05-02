@@ -8,11 +8,13 @@ data class BoothDetailModel(
     val name: String = "",
     val category: String = "",
     val description: String = "",
+    val thumbnail: String = "",
     val warning: String = "",
     val location: String = "",
     val latitude: Float = 0F,
     val longitude: Float = 0F,
     val menus: List<MenuModel> = emptyList(),
+    val likes: Int = 0,
     val isLiked: Boolean = false,
 )
 
