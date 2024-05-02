@@ -59,7 +59,7 @@ data class FestivalToday(
     val festivalName: String,
     @SerialName("schoolName")
     val schoolName: String,
-    @SerialName("starInfo")
+    @SerialName("starList")
     val starInfo: List<StarInfo>,
     @SerialName("thumbnail")
     val thumbnail: String,

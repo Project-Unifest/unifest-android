@@ -8,4 +8,5 @@ sealed interface HomeUiAction {
     data class OnAddAsLikedFestivalClick(val festivalTodayModel: FestivalTodayModel) : HomeUiAction
     data object OnAddLikedFestivalClick : HomeUiAction
     data class OnToggleStarImageClick(val scheduleIndex: Int, val starIndex: Int, val flag: Boolean) : HomeUiAction
+    data object OnClickWeekMode : HomeUiAction
 }
