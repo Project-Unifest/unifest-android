@@ -81,7 +81,6 @@ import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 internal fun IntroRoute(
@@ -126,7 +125,7 @@ fun IntroScreen(
                     searchText = uiState.searchText,
                     updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
                     searchTextHintRes = R.string.intro_search_text_hint,
-                    onSearch = { query -> Timber.d("검색: $query") },
+                    onSearch = { onAction(IntroUiAction.OnSearch(it))},
                     clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                     modifier = Modifier
                         .height(46.dp)

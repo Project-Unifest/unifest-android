@@ -44,7 +44,7 @@ class MapViewModel @Inject constructor(
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        // getAllFestivals()
+        getAllFestivals()
         getPopularBooths()
         checkMapOnboardingCompletion()
         checkFestivalOnboardingCompletion()
