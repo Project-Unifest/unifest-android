@@ -22,7 +22,6 @@ interface UnifestService {
         @Query("region") region: String,
     ): FestivalSearchResponse
 
-
     @GET("festival/after")
     suspend fun getIncomingFestivals(): FestivalSearchResponse
 
