@@ -49,16 +49,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.getColor
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
-import com.naver.maps.map.clustering.ClusterMarkerInfo
-import com.naver.maps.map.clustering.Clusterer
-import com.naver.maps.map.clustering.DefaultClusterMarkerUpdater
-import com.naver.maps.map.clustering.DefaultLeafMarkerUpdater
-import com.naver.maps.map.clustering.LeafMarkerInfo
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -67,13 +61,12 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
-import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.goToAppSettings
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -98,6 +91,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
+import ted.gun0912.clustering.naver.TedNaverClustering
 
 @Composable
 internal fun MapRoute(
@@ -229,65 +223,65 @@ fun MapContent(
                 isLocationButtonEnabled = true,
             ),
         ) {
-            var clusterManager by remember { mutableStateOf<Clusterer<AllBoothsMapModel>?>(null) }
-            DisposableMapEffect(uiState.boothList) { map ->
-                if (clusterManager == null) {
-                    clusterManager = Clusterer.Builder<AllBoothsMapModel>()
-                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
-                            override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
-                                super.updateClusterMarker(info, marker)
-                                marker.iconTintColor = getColor(context, R.color.main_color)
-                                marker.captionColor = getColor(context, R.color.white)
-                            }
-                        })
-                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
-                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
-                                super.updateLeafMarker(info, marker)
-                                marker.icon = OverlayImage.fromResource(R.drawable.ic_marker_normal)
-                                marker.onClickListener = Overlay.OnClickListener {
-                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as AllBoothsMapModel)))
-                                    true
-                                }
-                            }
-                        })
-                        .build()
-                        .apply { this.map = map }
-                }
-                val boothListMap = buildMap(uiState.boothList.size) {
-                    uiState.boothList.forEachIndexed { index, booth ->
-                        put(booth, index)
-                    }
-                }
-                clusterManager?.addAll(boothListMap)
-                onDispose {
-                    clusterManager?.clear()
-                }
-            }
-
-//            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothDetailMapModel>?>(null) }
+//            var clusterManager by remember { mutableStateOf<Clusterer<AllBoothsMapModel>?>(null) }
 //            DisposableMapEffect(uiState.boothList) { map ->
 //                if (clusterManager == null) {
-//                    clusterManager = TedNaverClustering.with<BoothDetailMapModel>(context, map)
-//                        .customMarker {
-//                            Marker().apply {
-//                                icon = OverlayImage.fromResource(R.drawable.ic_general)
+//                    clusterManager = Clusterer.Builder<AllBoothsMapModel>()
+//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
+//                            override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
+//                                super.updateClusterMarker(info, marker)
+//                                marker.iconTintColor = getColor(context, R.color.main_color)
+//                                marker.captionColor = getColor(context, R.color.white)
 //                            }
-//                        }
-//                        .markerClickListener { booth ->
-//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
-//                        }
-//                        .clusterClickListener { booths ->
-//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
-//                        }
-//                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-//                        .clickToCenter(false)
-//                        .make()
+//                        })
+//                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
+//                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
+//                                super.updateLeafMarker(info, marker)
+//                                marker.icon = MarkerCategory.fromString((info.key as AllBoothsMapModel).category).getMarkerIcon()
+//                                marker.onClickListener = Overlay.OnClickListener {
+//                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as AllBoothsMapModel)))
+//                                    true
+//                                }
+//                            }
+//                        })
+//                        .build()
+//                        .apply { this.map = map }
 //                }
-//                clusterManager?.addItems(uiState.boothList)
+//                val boothListMap = buildMap(uiState.boothList.size) {
+//                    uiState.boothList.forEachIndexed { index, booth ->
+//                        put(booth, index)
+//                    }
+//                }
+//                clusterManager?.addAll(boothListMap)
 //                onDispose {
-//                    clusterManager?.clearItems()
+//                    clusterManager?.clear()
 //                }
 //            }
+
+            var clusterManager by remember { mutableStateOf<TedNaverClustering<AllBoothsMapModel>?>(null) }
+            DisposableMapEffect(uiState.boothList) { map ->
+                if (clusterManager == null) {
+                    clusterManager = TedNaverClustering.with<AllBoothsMapModel>(context, map)
+                        .customMarker {
+                            Marker().apply {
+                                icon = MarkerCategory.fromString(it.category).getMarkerIcon()
+                            }
+                        }
+                        .markerClickListener { booth ->
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+                        }
+                        .clusterClickListener { booths ->
+                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+                        }
+                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+                        .clickToCenter(false)
+                        .make()
+                }
+                clusterManager?.addItems(uiState.boothList)
+                onDispose {
+                    clusterManager?.clearItems()
+                }
+            }
         }
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
