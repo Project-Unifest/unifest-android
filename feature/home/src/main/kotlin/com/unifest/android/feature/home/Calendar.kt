@@ -21,11 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,11 +35,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -59,6 +54,8 @@ import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
+import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -286,9 +283,8 @@ fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
             Text(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
-                fontSize = 15.sp,
                 text = dayOfWeek.displayText(),
-                fontWeight = FontWeight.Bold,
+                style = Content6,
                 color = Color.Gray,
             )
         }
@@ -340,8 +336,7 @@ fun Day(
             Text(
                 text = day.dayOfMonth.toString(),
                 color = textColor,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+                style = Title5,
             )
         }
         if (showFestivalDot) {
