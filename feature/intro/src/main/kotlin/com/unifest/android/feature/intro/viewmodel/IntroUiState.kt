@@ -12,7 +12,7 @@ data class IntroUiState(
     val searchText: TextFieldValue = TextFieldValue(),
     val festivals: ImmutableList<FestivalModel> = persistentListOf(),
     val selectedFestivals: PersistentList<FestivalModel> = persistentListOf(),
-    val selectedRegion: String = "전체",
+    val selectedRegion: String = "",
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
 )

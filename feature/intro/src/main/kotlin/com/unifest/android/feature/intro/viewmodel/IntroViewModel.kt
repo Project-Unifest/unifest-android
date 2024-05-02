@@ -39,7 +39,7 @@ class IntroViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            searchRegion(_uiState.value.selectedRegion)
+            getAllFestivals()
             if (onboardingRepository.checkIntroCompletion()) {
                 _uiEvent.send(IntroUiEvent.NavigateToMain)
             } else {
@@ -137,6 +137,20 @@ class IntroViewModel @Inject constructor(
         }
     }
 
+    private fun getAllFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getAllFestivals()
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(festivals = festivals.toImmutableList())
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@IntroViewModel)
+                }
+        }
+    }
+
     private fun searchSchool(searchText: String) {
         if (searchText.isEmpty()) return
 
@@ -163,21 +177,25 @@ class IntroViewModel @Inject constructor(
     private fun searchRegion(region: String) {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(
-                    isSearchLoading = true,
-                    selectedRegion = region,
-                )
+                it.copy(isSearchLoading = true)
             }
-            festivalRepository.searchRegion(region)
-                .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(
-                            festivals = festivals.toImmutableList(),
-                        )
-                    }
-                }.onFailure { exception ->
-                    handleException(exception, this@IntroViewModel)
+            if (region == "전체") {
+                getAllFestivals()
+            } else {
+                _uiState.update {
+                    it.copy(
+                        selectedRegion = region,
+                    )
                 }
+                festivalRepository.searchRegion(region)
+                    .onSuccess { festivals ->
+                        _uiState.update {
+                            it.copy(festivals = festivals.toImmutableList())
+                        }
+                    }.onFailure { exception ->
+                        handleException(exception, this@IntroViewModel)
+                    }
+            }
             _uiState.update {
                 it.copy(isSearchLoading = false)
             }
