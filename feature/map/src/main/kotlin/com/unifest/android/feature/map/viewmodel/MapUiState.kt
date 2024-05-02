@@ -1,19 +1,18 @@
 package com.unifest.android.feature.map.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.AllBoothsModel
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.feature.map.model.BoothDetailMapModel
+import com.unifest.android.feature.map.model.AllBoothsMapModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MapUiState(
-    val selectedSchoolName: String = "",
-    val festivalId: Long = 0L,
+    val festivalInfo: FestivalModel = FestivalModel(),
     val festivalList: ImmutableList<FestivalModel> = persistentListOf(),
-    val boothList: ImmutableList<BoothDetailMapModel> = persistentListOf(),
-    val popularBoothList: ImmutableList<BoothDetailModel> = persistentListOf(),
-    val selectedBoothList: ImmutableList<BoothDetailMapModel> = persistentListOf(),
+    val boothList: ImmutableList<AllBoothsMapModel> = persistentListOf(),
+    val popularBoothList: ImmutableList<AllBoothsModel> = persistentListOf(),
+    val selectedBoothList: ImmutableList<AllBoothsMapModel> = persistentListOf(),
     val boothSearchText: TextFieldValue = TextFieldValue(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),

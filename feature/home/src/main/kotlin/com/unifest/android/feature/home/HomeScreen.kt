@@ -288,7 +288,7 @@ fun FestivalScheduleItem(
                         key = { _, starInfo -> starInfo.starId },
                     ) { starIndex, starInfo ->
                         StarImage(
-                            imageUrl = starInfo.imgUrl,
+                            imgUrl = starInfo.imgUrl,
                             onClick = {
                                 onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
                             },
@@ -349,7 +349,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NetworkImage(
-                imageUrl = festival.thumbnail,
+                imgUrl = festival.thumbnail,
                 modifier = Modifier
                     .size(52.dp)
                     .clip(CircleShape),

@@ -47,6 +47,7 @@ import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content5
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
@@ -117,7 +118,7 @@ fun FestivalSearchBottomSheet(
             setHeight(BalloonSizeSpec.WRAP)
             setPadding(9)
             setCornerRadius(8f)
-            setBackgroundColor(Color(0xFFF5687E))
+            setBackgroundColor(MainColor)
             setBalloonAnimation(BalloonAnimation.FADE)
             setDismissWhenClicked(true)
             setDismissWhenTouchOutside(false)

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.model.BoothDetailModel
@@ -38,7 +39,7 @@ fun LikedBoothItem(
     deleteLikedBooth: (BoothDetailModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookMarkColor = if (booth.isLiked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
+    val bookMarkColor = if (booth.isLiked) MainColor else Color(0xFF4B4B4B)
     Column(
         modifier = modifier.padding(horizontal = 20.dp),
     ) {
@@ -47,7 +48,7 @@ fun LikedBoothItem(
             modifier = Modifier.fillMaxSize(),
         ) {
             NetworkImage(
-                imageUrl = "https://picsum.photos/86",
+                imgUrl = "https://picsum.photos/86",
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),

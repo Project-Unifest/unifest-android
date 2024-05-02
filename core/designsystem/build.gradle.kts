@@ -18,6 +18,7 @@ dependencies {
         libs.timber,
         libs.ballon.compose,
         libs.compose.keyboard.state,
+        libs.bundles.naver.map.compose,
 
         libs.bundles.landscapist,
     )

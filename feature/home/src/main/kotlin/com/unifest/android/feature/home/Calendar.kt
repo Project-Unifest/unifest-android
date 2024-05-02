@@ -56,6 +56,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title5
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -319,17 +320,17 @@ fun Day(
                 .aspectRatio(1f) // This is important for square-sizing!
                 .padding(10.dp)
                 .clip(CircleShape)
-                .background(color = if (isSelected) Color(0xFFF5687E) else Color.Transparent)
+                .background(color = if (isSelected) MainColor else Color.Transparent)
                 .then(
                     if (day == currentDate) {
-                        Modifier.border(2.dp, Color(0xFFF5687E), CircleShape)
+                        Modifier.border(2.dp, MainColor, CircleShape)
                     } else Modifier,
                 ),
             contentAlignment = Alignment.Center,
         ) {
             val textColor = when {
                 isSelected -> Color.White
-                isToday -> Color(0xFFF5687E)
+                isToday -> MainColor
                 isSelectable -> Color.Unspecified
                 else -> colorResource(R.color.inactive_text_color)
             }

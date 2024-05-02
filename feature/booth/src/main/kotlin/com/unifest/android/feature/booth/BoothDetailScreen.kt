@@ -42,7 +42,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
@@ -52,6 +54,7 @@ import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
@@ -64,6 +67,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth.viewmodel.ErrorType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
@@ -148,8 +152,8 @@ fun BoothDetailScreen(
                 .padding(padding),
         )
         BottomBar(
-            isBookmarked = uiState.isBookmarked,
-            bookmarkCount = uiState.bookmarkCount,
+            isBookmarked = uiState.boothDetailInfo.isLiked,
+            bookmarkCount = uiState.boothDetailInfo.likes,
             onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
@@ -159,6 +163,17 @@ fun BoothDetailScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 112.dp),
         )
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.SERVER)) },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
     }
 }
 
@@ -172,13 +187,13 @@ fun BoothDetailContent(
         modifier = modifier.fillMaxSize(),
     ) {
         item {
-            BoothImage()
+            BoothImage(uiState.boothDetailInfo.thumbnail)
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
             BoothDescription(
                 name = uiState.boothDetailInfo.name,
-                category = uiState.boothDetailInfo.category,
+                warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
                 onAction = onAction,
@@ -200,7 +215,7 @@ fun BottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookMarkColor = if (isBookmarked) Color(0xFFF5687E) else Color(0xFF4B4B4B)
+    val bookMarkColor = if (isBookmarked) MainColor else Color(0xFF4B4B4B)
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -254,9 +269,11 @@ fun BottomBar(
 }
 
 @Composable
-fun BoothImage() {
+fun BoothImage(
+    imgUrl: String,
+) {
     NetworkImage(
-        imageUrl = "https://picsum.photos/200/300",
+        imgUrl = imgUrl,
         modifier = Modifier
             .height(260.dp)
             .fillMaxWidth(),
@@ -267,7 +284,7 @@ fun BoothImage() {
 @Composable
 fun BoothDescription(
     name: String,
-    category: String,
+    warning: String,
     description: String,
     location: String,
     onAction: (BoothUiAction) -> Unit,
@@ -281,10 +298,10 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = category,
+                text = warning,
                 modifier = Modifier.alignByBaseline(),
                 style = BoothCaution,
-                color = Color(0xFFF5687E),
+                color = MainColor,
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
@@ -335,7 +352,7 @@ fun MenuItem(menu: MenuModel) {
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
         NetworkImage(
-            imageUrl = "https://picsum.photos/80",
+            imgUrl = menu.imgUrl,
             contentDescription = menu.name,
             modifier = Modifier.size(88.dp),
         )

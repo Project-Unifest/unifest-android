@@ -35,7 +35,7 @@ import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
-import com.naver.maps.map.overlay.OverlayImage
+import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Title1
@@ -69,11 +69,11 @@ fun BoothLocationScreen(
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             Marker(
                 state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
-                icon = OverlayImage.fromResource(R.drawable.ic_general),
+                icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(),
                 onClick = { true },
             )
         }

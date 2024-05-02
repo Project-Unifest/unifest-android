@@ -67,6 +67,7 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
@@ -254,7 +255,7 @@ fun FestivalRowItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFF5687E)),
+        border = BorderStroke(1.dp, MainColor),
         modifier = Modifier
             .height(130.dp)
             .width(120.dp),
@@ -272,7 +273,7 @@ fun FestivalRowItem(
                     .padding(16.dp),
             ) {
                 NetworkImage(
-                    imageUrl = festival.thumbnail,
+                    imgUrl = festival.thumbnail,
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
@@ -331,7 +332,7 @@ fun AllFestivalsTabRow(
             tabTitles.forEachIndexed { index, title ->
                 val isSelected = selectedTabIndex == index
                 val tabTitleColor by animateColorAsState(
-                    targetValue = if (isSelected) Color(0xFFF5687E) else Color.Black,
+                    targetValue = if (isSelected) MainColor else Color.Black,
                 )
                 val tabTitleFontWeight by animateFloatAsState(
                     targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),

@@ -1,49 +1,28 @@
 package com.unifest.android.feature.map.mapper
 
-import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.model.MenuModel
-import com.unifest.android.feature.map.model.BoothDetailMapModel
-import com.unifest.android.feature.map.model.MenuMapModel
-import kotlinx.collections.immutable.toImmutableList
+import com.unifest.android.core.model.AllBoothsModel
+import com.unifest.android.feature.map.model.AllBoothsMapModel
 
-internal fun BoothDetailModel.toMapModel() =
-    BoothDetailMapModel(
+internal fun AllBoothsModel.toMapModel() =
+    AllBoothsMapModel(
         id = id,
         name = name,
         category = category,
         description = description,
-        warning = warning,
+        thumbnail = thumbnail,
         location = location,
         latitude = latitude.toDouble(),
         longitude = longitude.toDouble(),
-        menus = menus.map { it.toMapModel() }.toImmutableList(),
     )
 
-internal fun MenuModel.toMapModel() =
-    MenuMapModel(
-        id = id,
-        name = name,
-        price = price,
-        imgUrl = imgUrl,
-    )
-
-internal fun BoothDetailMapModel.toModel() =
-    BoothDetailModel(
+internal fun AllBoothsMapModel.toModel() =
+    AllBoothsModel(
         id = id,
         name = name,
         category = category,
         description = description,
-        warning = warning,
+        thumbnail = thumbnail,
         location = location,
         latitude = latitude.toFloat(),
         longitude = longitude.toFloat(),
-        menus = menus.map { it.toModel() }.toImmutableList(),
-    )
-
-internal fun MenuMapModel.toModel() =
-    MenuModel(
-        id = id,
-        name = name,
-        price = price,
-        imgUrl = imgUrl,
     )

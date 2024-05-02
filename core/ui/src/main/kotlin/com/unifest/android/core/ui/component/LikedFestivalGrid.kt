@@ -114,7 +114,7 @@ fun FestivalItem(
                     .padding(16.dp),
             ) {
                 NetworkImage(
-                    imageUrl = festival.thumbnail,
+                    imgUrl = festival.thumbnail,
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
