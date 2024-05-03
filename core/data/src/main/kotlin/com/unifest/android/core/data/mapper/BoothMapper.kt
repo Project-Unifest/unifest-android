@@ -7,7 +7,7 @@ import com.unifest.android.core.network.response.AllBooths
 import com.unifest.android.core.network.response.BoothDetail
 import com.unifest.android.core.network.response.Menu
 
-internal fun BoothDetail.toDetailModel(): BoothDetailModel {
+internal fun BoothDetail.toModel(): BoothDetailModel {
     return BoothDetailModel(
         id = id,
         name = name,
@@ -30,19 +30,6 @@ internal fun Menu.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl,
-    )
-}
-
-internal fun BoothDetail.toAllModel(): AllBoothsModel {
-    return AllBoothsModel(
-        id = id,
-        name = name,
-        category = category,
-        description = description,
-        thumbnail = thumbnail,
-        location = location,
-        latitude = latitude,
-        longitude = longitude,
     )
 }
 

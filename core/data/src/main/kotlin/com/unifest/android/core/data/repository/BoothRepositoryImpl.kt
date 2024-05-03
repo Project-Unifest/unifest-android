@@ -3,8 +3,6 @@ package com.unifest.android.core.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
-import com.unifest.android.core.data.mapper.toAllModel
-import com.unifest.android.core.data.mapper.toDetailModel
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.network.request.LikeBoothRequest
@@ -17,7 +15,7 @@ class BoothRepositoryImpl @Inject constructor(
     private val service: UnifestService,
 ) : BoothRepository {
     override suspend fun getPopularBooths(festivalId: Long) = runSuspendCatching {
-        service.getPopularBooths(festivalId).data.map { it.toAllModel() }
+        service.getPopularBooths(festivalId).data.map { it.toModel() }
     }
 
     override suspend fun getAllBooths(festivalId: Long) = runSuspendCatching {
@@ -25,7 +23,7 @@ class BoothRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getBoothDetail(boothId: Long) = runSuspendCatching {
-        service.getBoothDetail(boothId).data.toDetailModel()
+        service.getBoothDetail(boothId).data.toModel()
     }
 
     override suspend fun likeBooth(boothId: Long): Result<Unit> = runSuspendCatching {

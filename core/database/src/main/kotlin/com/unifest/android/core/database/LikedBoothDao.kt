@@ -21,4 +21,7 @@ interface LikedBoothDao {
 
     @Query("UPDATE liked_booth SET is_liked = :isLiked WHERE id = :id")
     suspend fun updateLikedBooth(id: Long, isLiked: Boolean)
+
+    @Query("SELECT EXISTS(SELECT * FROM liked_booth WHERE id = :id)")
+    suspend fun isLikedBooth(id: Long): Boolean
 }

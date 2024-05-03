@@ -67,7 +67,7 @@ fun LikedBoothItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.category,
+                    text = booth.warning,
                     style = Title5,
                     color = Color(0xFF545454),
                     maxLines = 1,

@@ -8,4 +8,5 @@ interface LikedBoothRepository {
     suspend fun insertLikedBooth(booth: BoothDetailModel)
     suspend fun deleteLikedBooth(booth: BoothDetailModel)
     suspend fun updateLikedBooth(booth: BoothDetailModel)
+    suspend fun isLikedBooth(booth: BoothDetailModel): Boolean
 }

@@ -63,6 +63,7 @@ import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.goToAppSettings
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -97,6 +98,7 @@ import ted.gun0912.clustering.naver.TedNaverClustering
 internal fun MapRoute(
     padding: PaddingValues,
     navigateToBoothDetail: (Long) -> Unit,
+    onShowSnackBar: (UiText) -> Unit,
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -123,6 +125,7 @@ internal fun MapRoute(
 
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+            is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
 

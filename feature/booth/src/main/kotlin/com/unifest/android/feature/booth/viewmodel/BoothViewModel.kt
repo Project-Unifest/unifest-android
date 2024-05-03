@@ -23,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
-    @Suppress("unused")
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
@@ -54,9 +53,16 @@ class BoothViewModel @Inject constructor(
             boothRepository.getBoothDetail(boothId)
                 .onSuccess { booth ->
                     _uiState.update {
-                        it.copy(
-                            boothDetailInfo = booth,
-                        )
+                        it.copy(boothDetailInfo = booth)
+                    }
+                    if (likedBoothRepository.isLikedBooth(booth)) {
+                        _uiState.update {
+                            it.copy(
+                                boothDetailInfo = it.boothDetailInfo.copy(
+                                    isLiked = true,
+                                ),
+                            )
+                        }
                     }
                 }
                 .onFailure { exception ->
@@ -81,23 +87,27 @@ class BoothViewModel @Inject constructor(
         val currentBookmarkFlag = _uiState.value.boothDetailInfo.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
-            if (currentBookmarkFlag) {
-                likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
-            } else {
-                likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-            }
-//            _uiState.update {
-//                it.copy(
-//                    isBookmarked = newBookmarkFlag,
-//                    bookmarkCount = it.bookmarkCount + if (newBookmarkFlag) 1 else -1,
-//                )
-//            }
-            _uiEvent.send(
-                BoothUiEvent.ShowSnackBar(
-                    if (newBookmarkFlag) UiText.StringResource(R.string.booth_bookmarked_message)
-                    else UiText.StringResource(R.string.booth_bookmark_removed_message),
-                ),
-            )
+            boothRepository.likeBooth(boothId)
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            boothDetailInfo = it.boothDetailInfo.copy(
+                                isLiked = newBookmarkFlag,
+                                likes = it.boothDetailInfo.likes + if (newBookmarkFlag) 1 else -1,
+                            ),
+                        )
+                    }
+                    if (currentBookmarkFlag) {
+                        likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                    } else {
+                        likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmarked_message)))
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
         }
     }
 
