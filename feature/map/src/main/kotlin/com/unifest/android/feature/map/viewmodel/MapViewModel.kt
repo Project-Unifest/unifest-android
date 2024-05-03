@@ -55,9 +55,7 @@ class MapViewModel @Inject constructor(
 
     fun onPermissionResult(isGranted: Boolean) {
         if (!isGranted) {
-            _uiState.update {
-                it.copy(isPermissionDialogVisible = true)
-            }
+            _uiState.update { it.copy(isPermissionDialogVisible = true) }
         }
     }
 
@@ -72,6 +70,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
+            is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> {
                 when (action.buttonType) {
                     PermissionDialogButtonType.CONFIRM -> {
@@ -130,6 +129,30 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    private fun updateSelectedBoothChipList(chipName: String) {
+        _uiState.update {
+            val newChips = it.selectedBoothTypeChips.toMutableList().apply {
+                if (contains(chipName)) {
+                    remove(chipName)
+                } else {
+                    add(chipName)
+                }
+            }.toImmutableList()
+            it.copy(selectedBoothTypeChips = newChips)
+        }
+        filterBoothsByType(_uiState.value.selectedBoothTypeChips)
+    }
+
+    private fun filterBoothsByType(chipList: List<String>) {
+        val englishCategories = chipList.map { it.toEnglishCategory() }
+        val filteredBooths = _uiState.value.boothList.filter { booth ->
+            englishCategories.contains(booth.category)
+        }
+        _uiState.update {
+            it.copy(filteredBoothsList = filteredBooths.toImmutableList())
+        }
+    }
+
     private fun observeLikedFestivals() {
         viewModelScope.launch {
             likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
@@ -159,9 +182,7 @@ class MapViewModel @Inject constructor(
             festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(
-                            festivalInfo = festivals[0],
-                        )
+                        it.copy(festivalInfo = festivals[0])
                     }
                     getPopularBooths()
                     getAllBooths()
@@ -196,6 +217,7 @@ class MapViewModel @Inject constructor(
                                 .toImmutableList(),
                         )
                     }
+                    filterBoothsByType(_uiState.value.selectedBoothTypeChips)
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
                 }
@@ -410,6 +432,18 @@ class MapViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isFestivalOnboardingCompleted = true)
             }
+        }
+    }
+
+    private fun String.toEnglishCategory(): String {
+        return when (this) {
+            "주점" -> "BAR"
+            "먹거리" -> "FOOD"
+            "이벤트" -> "EVENT"
+            "일반" -> "NORMAL"
+            "의무실" -> "MEDICAL"
+            "화장실" -> "TOILET"
+            else -> ""
         }
     }
 }

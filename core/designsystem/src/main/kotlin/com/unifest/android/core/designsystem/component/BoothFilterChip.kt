@@ -16,27 +16,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun BoothFilterChip(
     filterName: String,
-    onChipClick: () -> Unit,
+    onChipClick: (String) -> Unit,
+    isSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.padding(4.dp),
         shape = RoundedCornerShape(34.dp),
         colors = CardColors(
-            containerColor = Color(0xFFFFF0F3),
-            contentColor = Color(0xFFf5678E),
+            containerColor = if (isSelected) Color(0xFFFFF0F3) else Color.White,
+            contentColor = if (isSelected) MainColor else Color(0xFF4B4B4B),
             disabledContainerColor = Color.White,
             disabledContentColor = Color(0xFF585858),
         ),
-        border = BorderStroke(1.dp, Color(0xFFf5678E)),
+        border = BorderStroke(1.dp, if (isSelected) MainColor else Color(0xFFD2D2D2)),
     ) {
         Box(
-            modifier = Modifier.clickable { onChipClick() },
+            modifier = Modifier.clickable(onClick = { onChipClick(filterName) }),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -58,6 +60,7 @@ fun BoothFilterChipPreview() {
         BoothFilterChip(
             filterName = "주점",
             onChipClick = {},
+            isSelected = false,
         )
     }
 }
