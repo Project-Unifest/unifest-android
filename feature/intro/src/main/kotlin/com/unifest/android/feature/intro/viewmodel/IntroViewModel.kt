@@ -43,67 +43,6 @@ class IntroViewModel @Inject constructor(
             if (onboardingRepository.checkIntroCompletion()) {
                 _uiEvent.send(IntroUiEvent.NavigateToMain)
             } else {
-//                _uiState.update {
-//                    it.copy(
-//                        festivals = persistentListOf(
-//                            FestivalModel(
-//                                1,
-//                                1,
-//                                "https://picsum.photos/36",
-//                                "서울대학교",
-//                                "설대축제",
-//                                "2024-04-21",
-//                                "2024-04-23",
-//                                126.957f,
-//                                37.460f,
-//                            ),
-//                            FestivalModel(
-//                                2,
-//                                2,
-//                                "https://picsum.photos/36",
-//                                "연세대학교",
-//                                "연대축제",
-//                                "2024-04-21",
-//                                "2024-04-23",
-//                                126.957f,
-//                                37.460f,
-//                            ),
-//                            FestivalModel(
-//                                3,
-//                                3,
-//                                "https://picsum.photos/36",
-//                                "고려대학교",
-//                                "고대축제",
-//                                "2024-04-21",
-//                                "2024-04-23",
-//                                126.957f,
-//                                37.460f,
-//                            ),
-//                            FestivalModel(
-//                                4,
-//                                4,
-//                                "https://picsum.photos/36",
-//                                "성균관대학교",
-//                                "성대축제",
-//                                "2024-04-21",
-//                                "2024-04-23",
-//                                126.957f,
-//                                37.460f,
-//                            ),
-//                            FestivalModel(
-//                                5,
-//                                5,
-//                                "https://picsum.photos/36",
-//                                "건국대학교",
-//                                "건대축제",
-//                                "2024-04-21",
-//                                "2024-04-23",
-//                                126.957f,
-//                                37.460f,
-//                            ),
-//                        ),
-//                    )
-//                }
                 _uiState.update {
                     it.copy(isLoading = false)
                 }
@@ -160,10 +99,18 @@ class IntroViewModel @Inject constructor(
             }
             festivalRepository.searchSchool(searchText)
                 .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(
-                            festivals = festivals.toImmutableList(),
-                        )
+                    if (_uiState.value.selectedRegion == "전체") {
+                        _uiState.update {
+                            it.copy(festivals = festivals.toImmutableList())
+                        }
+                    } else {
+                        festivals.filter { festival ->
+                            festival.region == _uiState.value.selectedRegion
+                        }.let { filteredFestivals ->
+                            _uiState.update {
+                                it.copy(festivals = filteredFestivals.toImmutableList())
+                            }
+                        }
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@IntroViewModel)
@@ -183,12 +130,25 @@ class IntroViewModel @Inject constructor(
                 getAllFestivals()
             } else {
                 _uiState.update {
-                    it.copy(
-                        selectedRegion = region,
-                    )
+                    it.copy(selectedRegion = region)
                 }
                 festivalRepository.searchRegion(region)
                     .onSuccess { festivals ->
+                        if (_uiState.value.searchText.text.isEmpty()) {
+                            _uiState.update {
+                                it.copy(festivals = festivals.toImmutableList())
+                            }
+                        } else {
+                            festivals.filter { festival ->
+                                // 축제 이름이 영어 일 수 있으므로, 영어 대소문자를 구분하지 않는 옵션(ignoreCase = true) 추가
+                                festival.schoolName.contains(_uiState.value.searchText.text, ignoreCase = true) ||
+                                    festival.festivalName.contains(_uiState.value.searchText.text, ignoreCase = true)
+                            }.let { filteredFestivals ->
+                                _uiState.update {
+                                    it.copy(festivals = filteredFestivals.toImmutableList())
+                                }
+                            }
+                        }
                         _uiState.update {
                             it.copy(festivals = festivals.toImmutableList())
                         }

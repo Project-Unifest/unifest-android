@@ -13,6 +13,7 @@ internal fun Festival.toModel(): FestivalModel {
         schoolId = schoolId,
         thumbnail = thumbnail,
         schoolName = schoolName,
+        region = region,
         festivalName = festivalName,
         beginDate = beginDate,
         endDate = endDate,

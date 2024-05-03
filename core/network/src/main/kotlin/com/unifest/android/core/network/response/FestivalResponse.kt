@@ -23,6 +23,8 @@ data class Festival(
     val thumbnail: String,
     @SerialName("schoolName")
     val schoolName: String,
+    @SerialName("region")
+    val region: String,
     @SerialName("festivalName")
     val festivalName: String,
     @SerialName("beginDate")

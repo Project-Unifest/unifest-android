@@ -15,23 +15,23 @@ data class LikedFestivalEntity(
     @ColumnInfo(name = "school_id")
     val schoolId: Long,
 
+    @ColumnInfo(name = "thumbnail")
+    val thumbnail: String,
+
     @ColumnInfo(name = "school_name")
     val schoolName: String,
+
+    @ColumnInfo(name = "region")
+    val region: String? = null,
 
     @ColumnInfo(name = "festival_name")
     val festivalName: String,
 
-    @ColumnInfo(name = "date")
-    val date: String? = null,
-
-    @ColumnInfo(name = "thumbnail")
-    val thumbnail: String? = null,
-
     @ColumnInfo(name = "begin_date")
-    val beginDate: String? = null,
+    val beginDate: String,
 
     @ColumnInfo(name = "end_date")
-    val endDate: String? = null,
+    val endDate: String,
 
     @ColumnInfo(name = "star_list")
     val starInfo: List<StarInfoEntity>? = null,
@@ -45,6 +45,7 @@ data class LikedFestivalEntity(
 
 @Serializable
 data class StarInfoEntity(
-    val name: String = "",
-    val imgUrl: String = "",
+    val starId: Long,
+    val name: String,
+    val imgUrl: String,
 )
