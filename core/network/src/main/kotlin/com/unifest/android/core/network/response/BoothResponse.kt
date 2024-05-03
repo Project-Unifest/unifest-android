@@ -20,7 +20,7 @@ data class PopularBoothsResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<AllBooths>,
+    val data: List<Booth>,
 )
 
 @Serializable
@@ -30,7 +30,7 @@ data class AllBoothsResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<AllBooths>,
+    val data: List<Booth>,
 )
 
 @Serializable
@@ -73,7 +73,7 @@ data class Menu(
 )
 
 @Serializable
-data class AllBooths(
+data class Booth(
     @SerialName("id")
     val id: Long,
     @SerialName("name")

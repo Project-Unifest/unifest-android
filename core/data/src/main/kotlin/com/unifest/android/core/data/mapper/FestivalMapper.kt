@@ -4,10 +4,10 @@ import com.unifest.android.core.model.StarInfoModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.network.response.StarInfo
-import com.unifest.android.core.network.response.FestivalSearch
+import com.unifest.android.core.network.response.Festival
 import com.unifest.android.core.network.response.FestivalToday
 
-internal fun FestivalSearch.toModel(): FestivalModel {
+internal fun Festival.toModel(): FestivalModel {
     return FestivalModel(
         festivalId = festivalId,
         schoolId = schoolId,
