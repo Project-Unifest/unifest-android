@@ -157,7 +157,7 @@ class MapViewModel @Inject constructor(
 
     private fun searchSchoolName() {
         viewModelScope.launch {
-            festivalRepository.searchSchool("건국대 서울캠")
+            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
                 .onSuccess { festivals ->
                     _uiState.update {
                         it.copy(
