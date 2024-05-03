@@ -1,5 +1,6 @@
 package com.unifest.android.feature.map.viewmodel
 
+import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,11 +46,22 @@ class MapViewModel @Inject constructor(
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        searchSchoolName()
-        getAllFestivals()
-        checkMapOnboardingCompletion()
-        checkFestivalOnboardingCompletion()
-        observeLikedFestivals()
+        viewModelScope.launch {
+            searchSchoolName()
+            getAllFestivals()
+            checkMapOnboardingCompletion()
+            checkFestivalOnboardingCompletion()
+            observeLikedFestivals()
+            initializeDefaultChips()
+        }
+    }
+
+    private fun initializeDefaultChips() {
+        val defaultChips = listOf("주점", "먹거리", "이벤트", "일반")
+        defaultChips.forEach { chip ->
+            updateSelectedBoothChipList(chip)
+            Timber.tag("MapViewModel").d("Default chip initialized: %s", chip)
+        }
     }
 
     fun onPermissionResult(isGranted: Boolean) {
@@ -224,6 +237,7 @@ class MapViewModel @Inject constructor(
                                 .toImmutableList(),
                         )
                     }
+                    Timber.tag("MapViewModel").d("Filtered booths: " + _uiState.value.boothList + " found")
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
                 }
