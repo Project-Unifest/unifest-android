@@ -289,7 +289,7 @@ fun MapContent(
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
             boothSearchText = uiState.boothSearchText,
-            onAction = onMapUiAction,
+            onMapUiAction = onMapUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,
             modifier = Modifier
                 .fillMaxWidth()
@@ -366,7 +366,7 @@ fun MapTopAppBar(
     title: String,
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
-    onAction: (MapUiAction) -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -382,16 +382,16 @@ fun MapTopAppBar(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
-                onTitleClick = { onAction(MapUiAction.OnTitleClick) },
+                onTitleClick = { onMapUiAction(MapUiAction.OnTitleClick) },
                 isOnboardingCompleted = isOnboardingCompleted,
-                onTooltipClick = { onAction(MapUiAction.OnTooltipClick) },
+                onTooltipClick = { onMapUiAction(MapUiAction.OnTooltipClick) },
             )
             SearchTextField(
                 searchText = boothSearchText,
-                updateSearchText = { text -> onAction(MapUiAction.OnSearchTextUpdated(text)) },
+                updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
-                onSearch = {},
-                clearSearchText = { onAction(MapUiAction.OnSearchTextCleared) },
+                onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchText)) },
+                clearSearchText = { onMapUiAction(MapUiAction.OnSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -533,7 +533,7 @@ fun MapTopAppBarPreview() {
             title = "건국대학교",
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
-            onAction = {},
+            onMapUiAction = {},
         )
     }
 }

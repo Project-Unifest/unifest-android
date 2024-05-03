@@ -62,8 +62,9 @@ class MapViewModel @Inject constructor(
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
-            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.text)
+            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
+            is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
@@ -249,6 +250,14 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    private fun searchBooth() {
+        val searchBoothResult = _uiState.value.boothList.filter {
+            it.name.contains(_uiState.value.boothSearchText.text, ignoreCase = true) ||
+                it.description.contains(_uiState.value.boothSearchText.text, ignoreCase = true)
+        }
+        updateSelectedBoothList(searchBoothResult)
+    }
+
     private fun updateFestivalSearchText(text: TextFieldValue) {
         _uiState.update {
             it.copy(festivalSearchText = text)
@@ -328,9 +337,7 @@ class MapViewModel @Inject constructor(
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {
-                    it.copy(
-                        isPopularMode = false,
-                    )
+                    it.copy(isPopularMode = false)
                 }
                 delay(500)
                 _uiState.update {
