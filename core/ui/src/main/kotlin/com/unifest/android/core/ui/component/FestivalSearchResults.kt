@@ -85,7 +85,7 @@ fun FestivalSearchResults(
             items(
                 count = searchResults.size,
                 key = { index -> searchResults[index].festivalId },
-            ) {index ->
+            ) { index ->
                 Column {
                     FestivalSearchResultItem(
                         festival = searchResults[index],
