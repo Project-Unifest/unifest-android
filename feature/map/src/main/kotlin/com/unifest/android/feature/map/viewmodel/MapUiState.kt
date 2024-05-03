@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class MapUiState(
     val festivalInfo: FestivalModel = FestivalModel(),
-    val festivalList: ImmutableList<FestivalModel> = persistentListOf(),
+    val festivals: ImmutableList<FestivalModel> = persistentListOf(),
     val boothList: ImmutableList<BoothMapModel> = persistentListOf(),
     val popularBoothList: ImmutableList<BoothModel> = persistentListOf(),
     val selectedBoothList: ImmutableList<BoothMapModel> = persistentListOf(),

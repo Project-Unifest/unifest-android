@@ -116,7 +116,7 @@ fun FestivalSearchResultItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         NetworkImage(
-            imgUrl = "https://picsum.photos/54",
+            imgUrl = festival.thumbnail,
             modifier = Modifier
                 .size(54.dp)
                 .clip(CircleShape),

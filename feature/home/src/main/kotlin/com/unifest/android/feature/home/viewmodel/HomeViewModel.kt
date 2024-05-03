@@ -98,7 +98,7 @@ class HomeViewModel @Inject constructor(
     fun onFestivalUiAction(action: FestivalUiAction) {
         when (action) {
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -202,15 +202,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateSearchText(text: TextFieldValue) {
+    private fun updateSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(festivalSearchText = text)
+            it.copy(
+                festivalSearchText = searchText,
+                festivalSearchResults = it.allFestivals.filter { festival ->
+                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
+                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                }.toImmutableList(),
+            )
         }
     }
 
     private fun clearSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(
+                festivalSearchText = TextFieldValue(),
+                festivalSearchResults = persistentListOf(),
+            )
         }
     }
 

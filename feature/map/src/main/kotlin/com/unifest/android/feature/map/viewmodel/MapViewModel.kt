@@ -12,11 +12,12 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
@@ -100,7 +101,7 @@ class MapViewModel @Inject constructor(
     fun onFestivalUiAction(action: FestivalUiAction) {
         when (action) {
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.text)
+            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -132,9 +133,7 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch {
             likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivalList.toPersistentList(),
-                    )
+                    it.copy(likedFestivals = likedFestivalList.toPersistentList())
                 }
             }
         }
@@ -145,9 +144,7 @@ class MapViewModel @Inject constructor(
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(
-                            festivalList = festivals.toImmutableList(),
-                        )
+                        it.copy(festivals = festivals.toImmutableList())
                     }
                 }
                 .onFailure { exception ->
@@ -238,9 +235,15 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateBoothSearchText(text: TextFieldValue) {
+    private fun updateBoothSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(boothSearchText = text)
+            it.copy(
+                boothSearchText = searchText,
+                festivalSearchResults = it.festivals.filter { festival ->
+                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
+                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                }.toImmutableList(),
+            )
         }
     }
 
@@ -258,15 +261,24 @@ class MapViewModel @Inject constructor(
         updateSelectedBoothList(searchBoothResult)
     }
 
-    private fun updateFestivalSearchText(text: TextFieldValue) {
+    private fun updateFestivalSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(festivalSearchText = text)
+            it.copy(
+                festivalSearchText = searchText,
+                festivalSearchResults = it.festivals.filter { festival ->
+                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
+                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                }.toImmutableList(),
+            )
         }
     }
 
     private fun clearFestivalSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(
+                festivalSearchText = TextFieldValue(),
+                festivalSearchResults = persistentListOf(),
+            )
         }
     }
 
