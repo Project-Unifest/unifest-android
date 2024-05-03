@@ -8,6 +8,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
@@ -88,6 +89,7 @@ class HomeViewModel @Inject constructor(
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
             }
+
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
@@ -207,8 +209,7 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 festivalSearchText = searchText,
                 festivalSearchResults = it.allFestivals.filter { festival ->
-                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
-                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                    matchesSearchText(festival, searchText)
                 }.toImmutableList(),
             )
         }

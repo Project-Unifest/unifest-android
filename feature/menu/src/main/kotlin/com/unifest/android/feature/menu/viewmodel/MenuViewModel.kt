@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
@@ -180,8 +181,7 @@ class MenuViewModel @Inject constructor(
             it.copy(
                 festivalSearchText = searchText,
                 festivalSearchResults = it.festivals.filter { festival ->
-                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
-                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                    matchesSearchText(festival, searchText)
                 }.toImmutableList(),
             )
         }

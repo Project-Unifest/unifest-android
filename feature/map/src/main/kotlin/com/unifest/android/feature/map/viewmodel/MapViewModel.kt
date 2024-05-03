@@ -8,6 +8,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
@@ -176,9 +177,7 @@ class MapViewModel @Inject constructor(
             boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
-                        it.copy(
-                            popularBoothList = booths.toImmutableList(),
-                        )
+                        it.copy(popularBoothList = booths.toImmutableList())
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -240,8 +239,8 @@ class MapViewModel @Inject constructor(
             it.copy(
                 boothSearchText = searchText,
                 festivalSearchResults = it.festivals.filter { festival ->
-                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
-                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                    festival.schoolName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true) ||
+                        festival.festivalName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true)
                 }.toImmutableList(),
             )
         }
@@ -255,8 +254,8 @@ class MapViewModel @Inject constructor(
 
     private fun searchBooth() {
         val searchBoothResult = _uiState.value.boothList.filter {
-            it.name.contains(_uiState.value.boothSearchText.text, ignoreCase = true) ||
-                it.description.contains(_uiState.value.boothSearchText.text, ignoreCase = true)
+            it.name.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true) ||
+                it.description.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true)
         }
         updateSelectedBoothList(searchBoothResult)
     }
@@ -266,8 +265,7 @@ class MapViewModel @Inject constructor(
             it.copy(
                 festivalSearchText = searchText,
                 festivalSearchResults = it.festivals.filter { festival ->
-                    festival.schoolName.contains(searchText.text, ignoreCase = true) ||
-                        festival.festivalName.contains(searchText.text, ignoreCase = true)
+                    matchesSearchText(festival, searchText)
                 }.toImmutableList(),
             )
         }
