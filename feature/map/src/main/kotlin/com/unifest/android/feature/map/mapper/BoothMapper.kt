@@ -1,10 +1,10 @@
 package com.unifest.android.feature.map.mapper
 
-import com.unifest.android.core.model.AllBoothsModel
-import com.unifest.android.feature.map.model.AllBoothsMapModel
+import com.unifest.android.core.model.BoothModel
+import com.unifest.android.feature.map.model.BoothMapModel
 
-internal fun AllBoothsModel.toMapModel() =
-    AllBoothsMapModel(
+internal fun BoothModel.toMapModel() =
+    BoothMapModel(
         id = id,
         name = name,
         category = category,
@@ -15,8 +15,8 @@ internal fun AllBoothsModel.toMapModel() =
         longitude = longitude.toDouble(),
     )
 
-internal fun AllBoothsMapModel.toModel() =
-    AllBoothsModel(
+internal fun BoothMapModel.toModel() =
+    BoothModel(
         id = id,
         name = name,
         category = category,

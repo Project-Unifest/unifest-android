@@ -85,7 +85,7 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
-import com.unifest.android.feature.map.model.AllBoothsMapModel
+import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
@@ -261,10 +261,10 @@ fun MapContent(
 //                }
 //            }
 
-            var clusterManager by remember { mutableStateOf<TedNaverClustering<AllBoothsMapModel>?>(null) }
+            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
             DisposableMapEffect(uiState.filteredBoothsList) { map ->
                 if (clusterManager == null) {
-                    clusterManager = TedNaverClustering.with<AllBoothsMapModel>(context, map)
+                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
                         .customMarker {
                             Marker().apply {
                                 icon = MarkerCategory.fromString(it.category).getMarkerIcon()
@@ -416,7 +416,7 @@ fun MapTopAppBar(
 
 @Composable
 fun BoothItem(
-    boothInfo: AllBoothsMapModel,
+    boothInfo: BoothMapModel,
     isPopularMode: Boolean,
     ranking: Int,
     onAction: (MapUiAction) -> Unit,
@@ -500,10 +500,10 @@ fun RankingBadge(ranking: Int) {
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
-    val boothList = persistentListOf<AllBoothsMapModel>()
+    val boothList = persistentListOf<BoothMapModel>()
     repeat(5) { index ->
         boothList.add(
-            AllBoothsMapModel(
+            BoothMapModel(
                 id = index.toLong(),
                 name = "컴공 주점",
                 category = "",
@@ -547,7 +547,7 @@ fun MapTopAppBarPreview() {
 fun BoothItemPreview() {
     UnifestTheme {
         BoothItem(
-            boothInfo = AllBoothsMapModel(
+            boothInfo = BoothMapModel(
                 id = 1L,
                 name = "컴공 주점",
                 category = "",

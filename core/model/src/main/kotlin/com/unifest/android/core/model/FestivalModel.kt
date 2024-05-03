@@ -8,6 +8,7 @@ data class FestivalModel(
     val schoolId: Long = 0L,
     val thumbnail: String = "",
     val schoolName: String = "",
+    val region: String = "",
     val festivalName: String = "",
     val beginDate: String = "",
     val endDate: String = "",

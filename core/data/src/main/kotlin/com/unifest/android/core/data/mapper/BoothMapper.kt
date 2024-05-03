@@ -1,9 +1,9 @@
 package com.unifest.android.core.data.mapper
 
-import com.unifest.android.core.model.AllBoothsModel
+import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
-import com.unifest.android.core.network.response.AllBooths
+import com.unifest.android.core.network.response.Booth
 import com.unifest.android.core.network.response.BoothDetail
 import com.unifest.android.core.network.response.Menu
 
@@ -33,8 +33,8 @@ internal fun Menu.toModel(): MenuModel {
     )
 }
 
-internal fun AllBooths.toModel(): AllBoothsModel {
-    return AllBoothsModel(
+internal fun Booth.toModel(): BoothModel {
+    return BoothModel(
         id = id,
         name = name,
         category = category,

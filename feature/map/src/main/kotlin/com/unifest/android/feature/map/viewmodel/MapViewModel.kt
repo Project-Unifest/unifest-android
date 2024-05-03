@@ -15,7 +15,7 @@ import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.feature.map.mapper.toMapModel
-import com.unifest.android.feature.map.model.AllBoothsMapModel
+import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -182,7 +182,7 @@ class MapViewModel @Inject constructor(
 
     private fun searchSchoolName() {
         viewModelScope.launch {
-            festivalRepository.searchSchool("건국대 서울캠")
+            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
                 .onSuccess { festivals ->
                     _uiState.update {
                         it.copy(
@@ -349,7 +349,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedBoothList(booths: List<AllBoothsMapModel>) {
+    private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {

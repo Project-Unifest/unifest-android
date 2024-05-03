@@ -114,8 +114,9 @@ class MenuViewModel @Inject constructor(
 
     private fun navigateToMap(schoolName: String) {
         viewModelScope.launch {
-            if (schoolName == "건국대학교") {
-                likedFestivalRepository.setRecentLikedFestival(schoolName)
+            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+                // 현재는 필요 없는 로직
+                // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 _uiEvent.send(MenuUiEvent.NavigateToMap)
             } else {
                 _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
