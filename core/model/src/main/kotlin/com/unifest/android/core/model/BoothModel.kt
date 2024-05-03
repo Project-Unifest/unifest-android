@@ -1,6 +1,6 @@
 package com.unifest.android.core.model
 
-data class AllBoothsModel(
+data class BoothModel(
     val id: Long = 0L,
     val name: String = "",
     val category: String = "",

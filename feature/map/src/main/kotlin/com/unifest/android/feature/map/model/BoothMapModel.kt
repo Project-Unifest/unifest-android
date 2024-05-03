@@ -6,7 +6,7 @@ import ted.gun0912.clustering.clustering.TedClusterItem
 import ted.gun0912.clustering.geometry.TedLatLng
 
 // @Parcelize
-// data class AllBoothsMapModel(
+// data class BoothMapModel(
 //     val id: Long = 0L,
 //     val name: String = "",
 //     val category: String = "",
@@ -22,7 +22,7 @@ import ted.gun0912.clustering.geometry.TedLatLng
 // }
 
 @Parcelize
-data class AllBoothsMapModel(
+data class BoothMapModel(
     val id: Long = 0L,
     val name: String = "",
     val category: String = "",

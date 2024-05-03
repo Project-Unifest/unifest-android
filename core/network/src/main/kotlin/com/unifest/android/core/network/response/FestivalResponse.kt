@@ -10,11 +10,11 @@ data class FestivalSearchResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<FestivalSearch>,
+    val data: List<Festival>,
 )
 
 @Serializable
-data class FestivalSearch(
+data class Festival(
     @SerialName("schoolId")
     val schoolId: Long,
     @SerialName("festivalId")
@@ -23,6 +23,8 @@ data class FestivalSearch(
     val thumbnail: String,
     @SerialName("schoolName")
     val schoolName: String,
+    @SerialName("region")
+    val region: String,
     @SerialName("festivalName")
     val festivalName: String,
     @SerialName("beginDate")
