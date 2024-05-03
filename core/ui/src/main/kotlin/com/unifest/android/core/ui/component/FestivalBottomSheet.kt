@@ -217,10 +217,10 @@ fun FestivalSearchBottomSheet(
         if (isLikedFestivalDeleteDialogVisible) {
             LikedFestivalDeleteDialog(
                 onCancelClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CANCEL))
+                    onFestivalUiAction(FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CANCEL))
                 },
                 onConfirmClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDialogButtonClick(ButtonType.CONFIRM))
+                    onFestivalUiAction(FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CONFIRM))
                 },
             )
         }

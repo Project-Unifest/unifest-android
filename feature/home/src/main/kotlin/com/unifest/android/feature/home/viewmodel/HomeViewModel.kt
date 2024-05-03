@@ -8,6 +8,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
@@ -88,6 +89,7 @@ class HomeViewModel @Inject constructor(
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
             }
+
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
@@ -98,7 +100,7 @@ class HomeViewModel @Inject constructor(
     fun onFestivalUiAction(action: FestivalUiAction) {
         when (action) {
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -111,17 +113,7 @@ class HomeViewModel @Inject constructor(
                 setLikedFestivalDeleteDialogVisible(true)
             }
 
-            is FestivalUiAction.OnDialogButtonClick -> {
-                when (action.type) {
-                    ButtonType.CONFIRM -> {
-                        setLikedFestivalDeleteDialogVisible(false)
-                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
-                    }
-
-                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
-                }
-            }
-
+            is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             else -> {}
         }
     }
@@ -148,6 +140,17 @@ class HomeViewModel @Inject constructor(
     private fun addLikeFestivalAtBottomSheet(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    private fun handleDeleteDialogButtonClick(buttonType: ButtonType) {
+        when (buttonType) {
+            ButtonType.CONFIRM -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
+            }
+
+            ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
         }
     }
 
@@ -202,15 +205,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateSearchText(text: TextFieldValue) {
+    private fun updateSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(festivalSearchText = text)
+            it.copy(
+                festivalSearchText = searchText,
+                festivalSearchResults = it.allFestivals.filter { festival ->
+                    matchesSearchText(festival, searchText)
+                }.toImmutableList(),
+            )
         }
     }
 
     private fun clearSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(
+                festivalSearchText = TextFieldValue(),
+                festivalSearchResults = persistentListOf(),
+            )
         }
     }
 

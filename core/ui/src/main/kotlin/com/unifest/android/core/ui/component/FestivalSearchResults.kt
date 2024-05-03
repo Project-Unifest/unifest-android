@@ -31,13 +31,13 @@ import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -85,17 +85,19 @@ fun FestivalSearchResults(
             items(
                 count = searchResults.size,
                 key = { index -> searchResults[index].festivalId },
-            ) {
+            ) { index ->
                 Column {
                     FestivalSearchResultItem(
-                        festival = searchResults[it],
+                        festival = searchResults[index],
                         onFestivalUiAction = onFestivalUiAction,
                         likedFestivals = likedFestivals,
                     )
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color(0xFFDFDFDF),
-                    )
+                    if (index != searchResults.size - 1) {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = Color(0xFFDFDFDF),
+                        )
+                    }
                 }
             }
         }
@@ -116,7 +118,7 @@ fun FestivalSearchResultItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         NetworkImage(
-            imgUrl = "https://picsum.photos/54",
+            imgUrl = festival.thumbnail,
             modifier = Modifier
                 .size(54.dp)
                 .clip(CircleShape),

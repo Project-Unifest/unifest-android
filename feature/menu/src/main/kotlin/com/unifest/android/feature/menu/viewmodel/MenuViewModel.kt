@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
@@ -13,6 +14,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
@@ -58,7 +60,7 @@ class MenuViewModel @Inject constructor(
     fun onFestivalUiAction(action: FestivalUiAction) {
         when (action) {
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.text)
+            is FestivalUiAction.OnSearchTextUpdated -> updateSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -66,6 +68,7 @@ class MenuViewModel @Inject constructor(
                 setLikedFestivalDeleteDialogVisible(false)
                 navigateToMap(action.festival.schoolName)
             }
+
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -73,17 +76,8 @@ class MenuViewModel @Inject constructor(
                 }
                 setLikedFestivalDeleteDialogVisible(true)
             }
-            is FestivalUiAction.OnDialogButtonClick -> {
-                when (action.type) {
-                    ButtonType.CONFIRM -> {
-                        setLikedFestivalDeleteDialogVisible(false)
-                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
-                    }
 
-                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
-                }
-            }
-
+            is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             else -> {}
         }
     }
@@ -148,6 +142,17 @@ class MenuViewModel @Inject constructor(
         }
     }
 
+    private fun handleDeleteDialogButtonClick(buttonType: ButtonType) {
+        when (buttonType) {
+            ButtonType.CONFIRM -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
+            }
+
+            ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
+        }
+    }
+
     private fun navigateToBoothDetail(boothId: Long) {
         viewModelScope.launch {
             _uiEvent.send(MenuUiEvent.NavigateToBoothDetail(boothId))
@@ -172,15 +177,23 @@ class MenuViewModel @Inject constructor(
         likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
     }
 
-    private fun updateSearchText(text: TextFieldValue) {
+    private fun updateSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(festivalSearchText = text)
+            it.copy(
+                festivalSearchText = searchText,
+                festivalSearchResults = it.festivals.filter { festival ->
+                    matchesSearchText(festival, searchText)
+                }.toImmutableList(),
+            )
         }
     }
 
     private fun clearSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(
+                festivalSearchText = TextFieldValue(),
+                festivalSearchResults = persistentListOf(),
+            )
         }
     }
 

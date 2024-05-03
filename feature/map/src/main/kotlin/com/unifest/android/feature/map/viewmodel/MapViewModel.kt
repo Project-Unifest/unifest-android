@@ -8,6 +8,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
@@ -17,6 +18,7 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.channels.Channel
@@ -60,45 +62,23 @@ class MapViewModel @Inject constructor(
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnTitleClick -> setFestivalSearchBottomSheetVisible(true)
-            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.text)
+            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
+            is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
-            is MapUiAction.OnPermissionDialogButtonClick -> {
-                when (action.buttonType) {
-                    PermissionDialogButtonType.CONFIRM -> {
-                        viewModelScope.launch {
-                            _uiState.update {
-                                it.copy(isPermissionDialogVisible = false)
-                            }
-                            _uiEvent.send(MapUiEvent.RequestLocationPermission)
-                        }
-                    }
-
-                    PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
-                        viewModelScope.launch {
-                            _uiEvent.send(MapUiEvent.GoToAppSettings)
-                        }
-                    }
-
-                    PermissionDialogButtonType.DISMISS -> {
-                        _uiState.update {
-                            it.copy(isPermissionDialogVisible = false)
-                        }
-                    }
-                }
-            }
+            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
         }
     }
 
     fun onFestivalUiAction(action: FestivalUiAction) {
         when (action) {
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.text)
+            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -110,18 +90,7 @@ class MapViewModel @Inject constructor(
                 }
                 setLikedFestivalDeleteDialogVisible(true)
             }
-
-            is FestivalUiAction.OnDialogButtonClick -> {
-                when (action.type) {
-                    ButtonType.CONFIRM -> {
-                        setLikedFestivalDeleteDialogVisible(false)
-                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
-                    }
-
-                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
-                }
-            }
-
+            is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
     }
@@ -138,6 +107,31 @@ class MapViewModel @Inject constructor(
             it.copy(selectedBoothTypeChips = newChips)
         }
         filterBoothsByType(_uiState.value.selectedBoothTypeChips)
+    }
+
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+        when (buttonType) {
+            PermissionDialogButtonType.CONFIRM -> {
+                viewModelScope.launch {
+                    _uiState.update {
+                        it.copy(isPermissionDialogVisible = false)
+                    }
+                    _uiEvent.send(MapUiEvent.RequestLocationPermission)
+                }
+            }
+
+            PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
+                viewModelScope.launch {
+                    _uiEvent.send(MapUiEvent.GoToAppSettings)
+                }
+            }
+
+            PermissionDialogButtonType.DISMISS -> {
+                _uiState.update {
+                    it.copy(isPermissionDialogVisible = false)
+                }
+            }
+        }
     }
 
     private fun filterBoothsByType(chipList: List<String>) {
@@ -165,7 +159,7 @@ class MapViewModel @Inject constructor(
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(festivalList = festivals.toImmutableList())
+                        it.copy(festivals = festivals.toImmutableList())
                     }
                 }
                 .onFailure { exception ->
@@ -253,9 +247,15 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateBoothSearchText(text: TextFieldValue) {
+    private fun updateBoothSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(boothSearchText = text)
+            it.copy(
+                boothSearchText = searchText,
+                festivalSearchResults = it.festivals.filter { festival ->
+                    festival.schoolName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true) ||
+                        festival.festivalName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true)
+                }.toImmutableList(),
+            )
         }
     }
 
@@ -265,15 +265,36 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateFestivalSearchText(text: TextFieldValue) {
+    private fun searchBooth() {
+        val searchBoothResult = _uiState.value.boothList.filter {
+            it.name.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true) ||
+                it.description.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true)
+        }
+        updateSelectedBoothList(searchBoothResult)
+        if (searchBoothResult.isEmpty()) {
+            viewModelScope.launch {
+                _uiEvent.send(MapUiEvent.ShowSnackBar(UiText.StringResource(R.string.map_search_no_result_message)))
+            }
+        }
+    }
+
+    private fun updateFestivalSearchText(searchText: TextFieldValue) {
         _uiState.update {
-            it.copy(festivalSearchText = text)
+            it.copy(
+                festivalSearchText = searchText,
+                festivalSearchResults = it.festivals.filter { festival ->
+                    matchesSearchText(festival, searchText)
+                }.toImmutableList(),
+            )
         }
     }
 
     private fun clearFestivalSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(
+                festivalSearchText = TextFieldValue(),
+                festivalSearchResults = persistentListOf(),
+            )
         }
     }
 
@@ -293,6 +314,17 @@ class MapViewModel @Inject constructor(
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    private fun handleDeleteDialogButtonClick(buttonType: ButtonType) {
+        when (buttonType) {
+            ButtonType.CONFIRM -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
+            }
+
+            ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
         }
     }
 

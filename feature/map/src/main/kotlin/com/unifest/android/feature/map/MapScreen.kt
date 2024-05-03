@@ -290,7 +290,7 @@ fun MapContent(
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
             boothSearchText = uiState.boothSearchText,
-            onAction = onMapUiAction,
+            onMapUiAction = onMapUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,
             selectedChips = uiState.selectedBoothTypeChips,
             modifier = Modifier
@@ -368,7 +368,7 @@ fun MapTopAppBar(
     title: String,
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
-    onAction: (MapUiAction) -> Unit,
+    onMapUiAction: (MapUiAction) -> Unit,
     selectedChips: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -385,16 +385,16 @@ fun MapTopAppBar(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
-                onTitleClick = { onAction(MapUiAction.OnTitleClick) },
+                onTitleClick = { onMapUiAction(MapUiAction.OnTitleClick) },
                 isOnboardingCompleted = isOnboardingCompleted,
-                onTooltipClick = { onAction(MapUiAction.OnTooltipClick) },
+                onTooltipClick = { onMapUiAction(MapUiAction.OnTooltipClick) },
             )
             SearchTextField(
                 searchText = boothSearchText,
-                updateSearchText = { text -> onAction(MapUiAction.OnSearchTextUpdated(text)) },
+                updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
-                onSearch = {},
-                clearSearchText = { onAction(MapUiAction.OnSearchTextCleared) },
+                onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchText)) },
+                clearSearchText = { onMapUiAction(MapUiAction.OnSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
@@ -402,7 +402,7 @@ fun MapTopAppBar(
             )
             Spacer(modifier = Modifier.height(10.dp))
             BoothFilterChips(
-                onChipClick = { chip -> onAction(MapUiAction.OnBoothTypeChipClick(chip)) },
+                onChipClick = { chip -> onMapUiAction(MapUiAction.OnBoothTypeChipClick(chip)) },
                 selectedChips = selectedChips,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -537,7 +537,7 @@ fun MapTopAppBarPreview() {
             title = "건국대학교",
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
-            onAction = {},
+            onMapUiAction = {},
             selectedChips = persistentListOf("주점", "먹거리"),
         )
     }

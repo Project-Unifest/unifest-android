@@ -5,7 +5,7 @@ import com.unifest.android.core.model.FestivalModel
 
 sealed interface FestivalUiAction {
     data object OnDismiss : FestivalUiAction
-    data class OnSearchTextUpdated(val text: TextFieldValue) : FestivalUiAction
+    data class OnSearchTextUpdated(val searchText: TextFieldValue) : FestivalUiAction
     data object OnSearchTextCleared : FestivalUiAction
     data object OnTooltipClick : FestivalUiAction
     data class OnEnableSearchMode(val flag: Boolean) : FestivalUiAction
@@ -13,7 +13,7 @@ sealed interface FestivalUiAction {
     data class OnLikedFestivalSelected(val festival: FestivalModel) : FestivalUiAction
     data class OnAddClick(val festival: FestivalModel) : FestivalUiAction
     data class OnDeleteIconClick(val deleteSelectedFestival: FestivalModel) : FestivalUiAction
-    data class OnDialogButtonClick(val type: ButtonType) : FestivalUiAction
+    data class OnDeleteDialogButtonClick(val buttonType: ButtonType) : FestivalUiAction
 }
 
 enum class ButtonType {

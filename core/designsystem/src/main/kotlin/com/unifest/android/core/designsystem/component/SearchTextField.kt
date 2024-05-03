@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -56,6 +57,8 @@ fun SearchTextField(
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
             value = searchText,
@@ -65,6 +68,7 @@ fun SearchTextField(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     onSearch(searchText)
+                    keyboardController?.hide()
                 },
             ),
             textStyle = TextStyle(color = Color.Black),
