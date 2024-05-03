@@ -113,17 +113,7 @@ class HomeViewModel @Inject constructor(
                 setLikedFestivalDeleteDialogVisible(true)
             }
 
-            is FestivalUiAction.OnDialogButtonClick -> {
-                when (action.type) {
-                    ButtonType.CONFIRM -> {
-                        setLikedFestivalDeleteDialogVisible(false)
-                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
-                    }
-
-                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
-                }
-            }
-
+            is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             else -> {}
         }
     }
@@ -150,6 +140,17 @@ class HomeViewModel @Inject constructor(
     private fun addLikeFestivalAtBottomSheet(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    private fun handleDeleteDialogButtonClick(buttonType: ButtonType) {
+        when (buttonType) {
+            ButtonType.CONFIRM -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
+            }
+
+            ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
         }
     }
 

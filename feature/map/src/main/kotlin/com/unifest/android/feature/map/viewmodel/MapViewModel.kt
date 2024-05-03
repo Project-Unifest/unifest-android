@@ -71,30 +71,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
-            is MapUiAction.OnPermissionDialogButtonClick -> {
-                when (action.buttonType) {
-                    PermissionDialogButtonType.CONFIRM -> {
-                        viewModelScope.launch {
-                            _uiState.update {
-                                it.copy(isPermissionDialogVisible = false)
-                            }
-                            _uiEvent.send(MapUiEvent.RequestLocationPermission)
-                        }
-                    }
-
-                    PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
-                        viewModelScope.launch {
-                            _uiEvent.send(MapUiEvent.GoToAppSettings)
-                        }
-                    }
-
-                    PermissionDialogButtonType.DISMISS -> {
-                        _uiState.update {
-                            it.copy(isPermissionDialogVisible = false)
-                        }
-                    }
-                }
-            }
+            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
         }
     }
 
@@ -113,18 +90,7 @@ class MapViewModel @Inject constructor(
                 }
                 setLikedFestivalDeleteDialogVisible(true)
             }
-
-            is FestivalUiAction.OnDialogButtonClick -> {
-                when (action.type) {
-                    ButtonType.CONFIRM -> {
-                        setLikedFestivalDeleteDialogVisible(false)
-                        _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
-                    }
-
-                    ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
-                }
-            }
-
+            is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
     }
@@ -141,6 +107,31 @@ class MapViewModel @Inject constructor(
             it.copy(selectedBoothTypeChips = newChips)
         }
         filterBoothsByType(_uiState.value.selectedBoothTypeChips)
+    }
+
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+        when (buttonType) {
+            PermissionDialogButtonType.CONFIRM -> {
+                viewModelScope.launch {
+                    _uiState.update {
+                        it.copy(isPermissionDialogVisible = false)
+                    }
+                    _uiEvent.send(MapUiEvent.RequestLocationPermission)
+                }
+            }
+
+            PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
+                viewModelScope.launch {
+                    _uiEvent.send(MapUiEvent.GoToAppSettings)
+                }
+            }
+
+            PermissionDialogButtonType.DISMISS -> {
+                _uiState.update {
+                    it.copy(isPermissionDialogVisible = false)
+                }
+            }
+        }
     }
 
     private fun filterBoothsByType(chipList: List<String>) {
@@ -323,6 +314,17 @@ class MapViewModel @Inject constructor(
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+        }
+    }
+
+    private fun handleDeleteDialogButtonClick(buttonType: ButtonType) {
+        when (buttonType) {
+            ButtonType.CONFIRM -> {
+                setLikedFestivalDeleteDialogVisible(false)
+                _uiState.value.deleteSelectedFestival?.let { deleteLikedFestival(it) }
+            }
+
+            ButtonType.CANCEL -> setLikedFestivalDeleteDialogVisible(false)
         }
     }
 

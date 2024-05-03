@@ -402,7 +402,7 @@ fun MapTopAppBar(
             )
             Spacer(modifier = Modifier.height(10.dp))
             BoothFilterChips(
-                onChipClick = { chip -> onAction(MapUiAction.OnBoothTypeChipClick(chip)) },
+                onChipClick = { chip -> onMapUiAction(MapUiAction.OnBoothTypeChipClick(chip)) },
                 selectedChips = selectedChips,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
