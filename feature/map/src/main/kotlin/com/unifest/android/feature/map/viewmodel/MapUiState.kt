@@ -17,6 +17,8 @@ data class MapUiState(
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
+    val selectedBoothTypeChips: ImmutableList<String> = persistentListOf("주점", "먹거리", "이벤트", "일반"),
+    val filteredBoothsList: ImmutableList<BoothMapModel> = persistentListOf(),
     val deleteSelectedFestival: FestivalModel? = null,
     val isSearchMode: Boolean = false,
     val isEditMode: Boolean = false,

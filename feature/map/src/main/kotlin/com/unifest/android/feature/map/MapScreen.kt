@@ -91,6 +91,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import ted.gun0912.clustering.naver.TedNaverClustering
 
@@ -262,7 +263,7 @@ fun MapContent(
 //            }
 
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
-            DisposableMapEffect(uiState.boothList) { map ->
+            DisposableMapEffect(uiState.filteredBoothsList) { map ->
                 if (clusterManager == null) {
                     clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
                         .customMarker {
@@ -280,7 +281,7 @@ fun MapContent(
                         .clickToCenter(false)
                         .make()
                 }
-                clusterManager?.addItems(uiState.boothList)
+                clusterManager?.addItems(uiState.filteredBoothsList)
                 onDispose {
                     clusterManager?.clearItems()
                 }
@@ -291,6 +292,7 @@ fun MapContent(
             boothSearchText = uiState.boothSearchText,
             onAction = onMapUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,
+            selectedChips = uiState.selectedBoothTypeChips,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
@@ -367,6 +369,7 @@ fun MapTopAppBar(
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
     onAction: (MapUiAction) -> Unit,
+    selectedChips: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -399,7 +402,8 @@ fun MapTopAppBar(
             )
             Spacer(modifier = Modifier.height(10.dp))
             BoothFilterChips(
-                onChipClick = {},
+                onChipClick = { chip -> onAction(MapUiAction.OnBoothTypeChipClick(chip)) },
+                selectedChips = selectedChips,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .clip(
@@ -534,6 +538,7 @@ fun MapTopAppBarPreview() {
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
             onAction = {},
+            selectedChips = persistentListOf("주점", "먹거리"),
         )
     }
 }

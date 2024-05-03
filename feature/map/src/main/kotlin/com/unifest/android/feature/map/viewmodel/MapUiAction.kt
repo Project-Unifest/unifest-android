@@ -13,6 +13,7 @@ sealed interface MapUiAction {
     data class OnBoothItemClick(val boothId: Long) : MapUiAction
     data class OnRetryClick(val error: ErrorType) : MapUiAction
     data class OnPermissionDialogButtonClick(val buttonType: PermissionDialogButtonType) : MapUiAction
+    data class OnBoothTypeChipClick(val chipName: String) : MapUiAction
 }
 
 enum class ErrorType {

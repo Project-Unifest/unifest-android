@@ -12,8 +12,8 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,9 +53,7 @@ class MapViewModel @Inject constructor(
 
     fun onPermissionResult(isGranted: Boolean) {
         if (!isGranted) {
-            _uiState.update {
-                it.copy(isPermissionDialogVisible = true)
-            }
+            _uiState.update { it.copy(isPermissionDialogVisible = true) }
         }
     }
 
@@ -69,6 +67,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
+            is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> {
                 when (action.buttonType) {
                     PermissionDialogButtonType.CONFIRM -> {
@@ -127,13 +126,35 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    private fun updateSelectedBoothChipList(chipName: String) {
+        _uiState.update {
+            val newChips = it.selectedBoothTypeChips.toMutableList().apply {
+                if (contains(chipName)) {
+                    remove(chipName)
+                } else {
+                    add(chipName)
+                }
+            }.toImmutableList()
+            it.copy(selectedBoothTypeChips = newChips)
+        }
+        filterBoothsByType(_uiState.value.selectedBoothTypeChips)
+    }
+
+    private fun filterBoothsByType(chipList: List<String>) {
+        val englishCategories = chipList.map { it.toEnglishCategory() }
+        val filteredBooths = _uiState.value.boothList.filter { booth ->
+            englishCategories.contains(booth.category)
+        }
+        _uiState.update {
+            it.copy(filteredBoothsList = filteredBooths.toImmutableList())
+        }
+    }
+
     private fun observeLikedFestivals() {
         viewModelScope.launch {
             likedFestivalRepository.getLikedFestivals().collect { likedFestivalList ->
                 _uiState.update {
-                    it.copy(
-                        likedFestivals = likedFestivalList.toPersistentList(),
-                    )
+                    it.copy(likedFestivals = likedFestivalList.toPersistentList())
                 }
             }
         }
@@ -144,9 +165,7 @@ class MapViewModel @Inject constructor(
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(
-                            festivalList = festivals.toImmutableList(),
-                        )
+                        it.copy(festivalList = festivals.toImmutableList())
                     }
                 }
                 .onFailure { exception ->
@@ -160,9 +179,7 @@ class MapViewModel @Inject constructor(
             festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(
-                            festivalInfo = festivals[0],
-                        )
+                        it.copy(festivalInfo = festivals[0])
                     }
                     getPopularBooths()
                     getAllBooths()
@@ -178,9 +195,7 @@ class MapViewModel @Inject constructor(
             boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
-                        it.copy(
-                            popularBoothList = booths.toImmutableList(),
-                        )
+                        it.copy(popularBoothList = booths.toImmutableList())
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -199,6 +214,7 @@ class MapViewModel @Inject constructor(
                                 .toImmutableList(),
                         )
                     }
+                    filterBoothsByType(_uiState.value.selectedBoothTypeChips)
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
                 }
@@ -328,9 +344,7 @@ class MapViewModel @Inject constructor(
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {
-                    it.copy(
-                        isPopularMode = false,
-                    )
+                    it.copy(isPopularMode = false)
                 }
                 delay(500)
                 _uiState.update {
@@ -388,6 +402,18 @@ class MapViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isFestivalOnboardingCompleted = true)
             }
+        }
+    }
+
+    private fun String.toEnglishCategory(): String {
+        return when (this) {
+            "주점" -> "BAR"
+            "먹거리" -> "FOOD"
+            "이벤트" -> "EVENT"
+            "일반" -> "NORMAL"
+            "의무실" -> "MEDICAL"
+            "화장실" -> "TOILET"
+            else -> ""
         }
     }
 }
