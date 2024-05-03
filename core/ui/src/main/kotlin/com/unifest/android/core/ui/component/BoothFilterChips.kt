@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.BoothFilterChip
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 val boothFilters = persistentListOf("주점", "먹거리", "이벤트", "일반", "의무실", "화장실")
@@ -15,7 +16,7 @@ val boothFilters = persistentListOf("주점", "먹거리", "이벤트", "일반"
 fun BoothFilterChips(
     onChipClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    selectedChips: List<String>,
+    selectedChips: ImmutableList<String>,
 ) {
     LazyRow(
         modifier = modifier,
@@ -39,7 +40,7 @@ fun BoothFilterChipsPreview() {
     UnifestTheme {
         BoothFilterChips(
             onChipClick = {},
-            selectedChips = listOf("주점"),
+            selectedChips = persistentListOf("주점", "먹거리")
         )
     }
 }

@@ -91,6 +91,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import ted.gun0912.clustering.naver.TedNaverClustering
 
@@ -368,7 +369,7 @@ fun MapTopAppBar(
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
     onAction: (MapUiAction) -> Unit,
-    selectedChips: List<String>,
+    selectedChips: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -537,7 +538,7 @@ fun MapTopAppBarPreview() {
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
             onAction = {},
-            selectedChips = listOf("주점", "먹거리"),
+            selectedChips = persistentListOf("주점", "먹거리"),
         )
     }
 }

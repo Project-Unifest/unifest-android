@@ -18,7 +18,7 @@ data class MapUiState(
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
     val selectedBoothTypeChips: ImmutableList<String> = persistentListOf(),
-    val filteredBoothsList: ImmutableList<MapUiState> = persistentListOf(),
+    val filteredBoothsList: ImmutableList<BoothMapModel> = persistentListOf(),
     val deleteSelectedFestival: FestivalModel? = null,
     val isSearchMode: Boolean = false,
     val isEditMode: Boolean = false,
