@@ -22,9 +22,9 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 @Composable
 fun BoothFilterChip(
     filterName: String,
-    onChipClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    onChipClick: (String) -> Unit,
     isSelected: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier.padding(4.dp),
@@ -38,7 +38,7 @@ fun BoothFilterChip(
         border = BorderStroke(1.dp, if (isSelected) MainColor else Color(0xFFD2D2D2)),
     ) {
         Box(
-            modifier = Modifier.clickable(onClick = onChipClick),
+            modifier = Modifier.clickable(onClick = { onChipClick(filterName) }),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
