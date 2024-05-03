@@ -13,8 +13,9 @@ val boothFilters = persistentListOf("주점", "먹거리", "이벤트", "일반"
 
 @Composable
 fun BoothFilterChips(
-    onChipClick: () -> Unit,
+    onChipClick: (String) -> Unit,
     modifier: Modifier = Modifier,
+    selectedChips: List<String>,
 ) {
     LazyRow(
         modifier = modifier,
@@ -25,7 +26,8 @@ fun BoothFilterChips(
         ) {
             BoothFilterChip(
                 filterName = it,
-                onChipClick = onChipClick,
+                onChipClick = { onChipClick(it) },
+                isSelected = selectedChips.contains(it),
             )
         }
     }
@@ -35,6 +37,9 @@ fun BoothFilterChips(
 @Composable
 fun BoothFilterChipsPreview() {
     UnifestTheme {
-        BoothFilterChips(onChipClick = {})
+        BoothFilterChips(
+            onChipClick = {},
+            selectedChips = listOf("주점"),
+        )
     }
 }
