@@ -258,6 +258,11 @@ class MapViewModel @Inject constructor(
                 it.description.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true)
         }
         updateSelectedBoothList(searchBoothResult)
+        if (searchBoothResult.isEmpty()) {
+            viewModelScope.launch {
+                _uiEvent.send(MapUiEvent.ShowSnackBar(UiText.StringResource(R.string.map_search_no_result_message)))
+            }
+        }
     }
 
     private fun updateFestivalSearchText(searchText: TextFieldValue) {
