@@ -47,7 +47,7 @@ class MenuViewModel @Inject constructor(
 
     fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
-            is MenuUiAction.OnLikedFestivalItemClick -> navigateToMap(action.schoolName)
+            is MenuUiAction.OnLikedFestivalItemClick -> setRecentLikedFestival(action.schoolName)
             is MenuUiAction.OnAddClick -> setFestivalSearchBottomSheetVisible(true)
             is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
@@ -64,11 +64,7 @@ class MenuViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
-            is FestivalUiAction.OnLikedFestivalSelected -> {
-                setLikedFestivalDeleteDialogVisible(false)
-                navigateToMap(action.festival.schoolName)
-            }
-
+            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -102,18 +98,6 @@ class MenuViewModel @Inject constructor(
                         likedBoothList = likedBoothList.toImmutableList(),
                     )
                 }
-            }
-        }
-    }
-
-    private fun navigateToMap(schoolName: String) {
-        viewModelScope.launch {
-            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
-                // 현재는 필요 없는 로직
-                // likedFestivalRepository.setRecentLikedFestival(schoolName)
-                _uiEvent.send(MenuUiEvent.NavigateToMap)
-            } else {
-                _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
             }
         }
     }
@@ -212,6 +196,18 @@ class MenuViewModel @Inject constructor(
     private fun setEnableEditMode() {
         _uiState.update {
             it.copy(isEditMode = !_uiState.value.isEditMode)
+        }
+    }
+
+    private fun setRecentLikedFestival(schoolName: String) {
+        viewModelScope.launch {
+            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+                // likedFestivalRepository.setRecentLikedFestival(schoolName)
+                setFestivalSearchBottomSheetVisible(false)
+                _uiEvent.send(MenuUiEvent.NavigateBack)
+            } else {
+                _uiEvent.send(MenuUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+            }
         }
     }
 

@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestScaffold
+import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.navigation.boothNavGraph
@@ -81,7 +82,12 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackBarState)
+            SnackbarHost(
+                hostState = snackBarState,
+                snackbar = {
+                    UnifestSnackBar(snackBarData = it)
+                },
+            )
         },
         containerColor = White,
     ) { innerPadding ->

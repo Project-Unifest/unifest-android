@@ -305,16 +305,12 @@ class MapViewModel @Inject constructor(
     }
 
     private fun setRecentLikedFestival(schoolName: String) {
-//        viewModelScope.launch {
-//            likedFestivalRepository.setRecentLikedFestival(schoolName)
-//        }
-//        setFestivalSearchBottomSheetVisible(false)
         viewModelScope.launch {
             if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+                // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 setFestivalSearchBottomSheetVisible(false)
             } else {
-                setFestivalSearchBottomSheetVisible(false)
-                _uiEvent.send(MapUiEvent.ShowSnackBar(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+                _uiEvent.send(MapUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
             }
         }
     }

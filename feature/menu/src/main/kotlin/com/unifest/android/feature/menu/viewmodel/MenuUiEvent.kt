@@ -10,4 +10,5 @@ sealed interface MenuUiEvent {
     data object NavigateToContact : MenuUiEvent
     data object NavigateToAdministratorMode : MenuUiEvent
     data class ShowSnackBar(val message: UiText) : MenuUiEvent
+    data class ShowToast(val message: UiText) : MenuUiEvent
 }

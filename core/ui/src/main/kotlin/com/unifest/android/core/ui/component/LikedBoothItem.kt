@@ -48,7 +48,7 @@ fun LikedBoothItem(
             modifier = Modifier.fillMaxSize(),
         ) {
             NetworkImage(
-                imgUrl = "https://picsum.photos/86",
+                imgUrl = booth.thumbnail,
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),

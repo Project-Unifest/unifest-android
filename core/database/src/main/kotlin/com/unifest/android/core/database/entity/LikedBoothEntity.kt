@@ -17,6 +17,8 @@ data class LikedBoothEntity(
     val category: String,
     @ColumnInfo(name = "description")
     val description: String,
+    @ColumnInfo(name = "thumbnail")
+    val thumbnail: String,
     @ColumnInfo(name = "warning")
     val warning: String,
     @ColumnInfo(name = "location")

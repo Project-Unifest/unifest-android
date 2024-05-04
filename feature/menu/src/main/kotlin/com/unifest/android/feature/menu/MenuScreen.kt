@@ -1,6 +1,7 @@
 package com.unifest.android.feature.menu
 
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -105,6 +106,7 @@ internal fun MenuRoute(
             is MenuUiEvent.NavigateToContact -> uriHandler.openUri(BuildConfig.UNIFEST_CONTACT_URL)
             is MenuUiEvent.NavigateToAdministratorMode -> uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
             is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is MenuUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -335,7 +337,7 @@ fun FestivalItem(
             contentAlignment = Alignment.Center,
         ) {
             NetworkImage(
-                imgUrl = "https://picsum.photos/86",
+                imgUrl = festival.thumbnail,
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape),
