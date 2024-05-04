@@ -102,11 +102,15 @@ class BoothViewModel @Inject constructor(
                         _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmarked_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_message)))
                     }
                 }
-                .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                .onFailure {
+                    if (currentBookmarkFlag) {
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    } else {
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                    }
                 }
         }
     }
