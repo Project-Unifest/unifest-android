@@ -149,7 +149,7 @@ private fun MainBottomBar(
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn() + slideIn { IntOffset(0, it.height) },
-        exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+        exit = fadeOut() + slideOut { IntOffset(0, it.height) },
     ) {
         Box(modifier = Modifier.background(White)) {
             Column {
