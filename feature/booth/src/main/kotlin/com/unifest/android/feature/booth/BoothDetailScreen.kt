@@ -90,16 +90,14 @@ internal fun BoothDetailRoute(
     val snackBarState = remember { SnackbarHostState() }
 
     DisposableEffect(systemUiController) {
-        systemUiController.setSystemBarsColor(
+        systemUiController.setStatusBarColor(
             color = Color.Transparent,
             darkIcons = false,
-            isNavigationBarContrastEnforced = false,
         )
         onDispose {
-            systemUiController.setSystemBarsColor(
+            systemUiController.setStatusBarColor(
                 color = Color.White,
                 darkIcons = true,
-                isNavigationBarContrastEnforced = false,
             )
         }
     }
