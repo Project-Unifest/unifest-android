@@ -232,10 +232,19 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun setRecentLikedFestival(schoolName: String) {
+//        viewModelScope.launch {
+//            likedFestivalRepository.setRecentLikedFestival(schoolName)
+//            _uiEvent.send(HomeUiEvent.NavigateBack)
+//            setLikedFestivalDeleteDialogVisible(false)
+//        }
         viewModelScope.launch {
-            likedFestivalRepository.setRecentLikedFestival(schoolName)
-            _uiEvent.send(HomeUiEvent.NavigateBack)
-            setLikedFestivalDeleteDialogVisible(false)
+            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+                setFestivalSearchBottomSheetVisible(false)
+                _uiEvent.send(HomeUiEvent.NavigateBack)
+            } else {
+                setFestivalSearchBottomSheetVisible(false)
+                _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+            }
         }
     }
 
