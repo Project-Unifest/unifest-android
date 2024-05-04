@@ -239,20 +239,12 @@ fun MapContent(
 //            DisposableMapEffect(uiState.boothList) { map ->
 //                if (clusterManager == null) {
 //                    clusterManager = Clusterer.Builder<BoothMapModel>()
-//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
-//                            override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
-//                                super.updateClusterMarker(info, marker)
-//                                marker.apply {
-//                                    // iconTintColor = getColor(context, R.color.main_color)
-//                                    // captionColor = getColor(context, R.color.white)
-//                                }
-//                            }
-//                        })
+//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {})
 //                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
 //                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
 //                                super.updateLeafMarker(info, marker)
 //                                marker.apply {
-//                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category).getMarkerIcon()
+//                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category).getMarkerIcon((info.key as BoothMapModel).isSelected)
 //                                    onClickListener = Overlay.OnClickListener {
 //                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
 //                                        true
@@ -280,7 +272,7 @@ fun MapContent(
 //                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
 //                        .customMarker {
 //                            Marker().apply {
-//                                icon = MarkerCategory.fromString(it.category).getMarkerIcon()
+//                                icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
 //                            }
 //                        }
 //                        .markerClickListener { booth ->

@@ -32,6 +32,7 @@ import kotlinx.parcelize.Parcelize
 //    val location: String = "",
 //    val latitude: Double = 0.toDouble(),
 //    val longitude: Double = 0.toDouble(),
+//    val isSelected: Boolean = false,
 //) : Parcelable, TedClusterItem {
 //    override fun getTedLatLng(): TedLatLng {
 //        return TedLatLng(latitude, longitude)

@@ -435,6 +435,19 @@ class MapViewModel @Inject constructor(
                 )
             }
         }
+        if (booths.size == 1) {
+            _uiState.update {
+                it.copy(
+                    filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                        if (boothMapModel.id == booths[0].id) {
+                            boothMapModel.copy(isSelected = true)
+                        } else {
+                            boothMapModel.copy(isSelected = false)
+                        }
+                    }.toImmutableList(),
+                )
+            }
+        }
     }
 
     private fun setLikedFestivalDeleteDialogVisible(flag: Boolean) {
