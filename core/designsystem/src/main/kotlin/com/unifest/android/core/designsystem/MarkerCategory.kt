@@ -18,7 +18,7 @@ enum class MarkerCategory(val value: String) {
     }
 
     fun getMarkerIcon(isSelected: Boolean): OverlayImage {
-        if (isSelected ){
+        if (isSelected) {
             return when (this) {
                 BAR -> OverlayImage.fromResource(R.drawable.ic_marker_bar_selected)
                 FOOD -> OverlayImage.fromResource(R.drawable.ic_marker_food_selected)
