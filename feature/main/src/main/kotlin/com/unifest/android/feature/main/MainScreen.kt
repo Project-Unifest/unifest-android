@@ -1,5 +1,10 @@
 package com.unifest.android.feature.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -30,6 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import com.unifest.android.core.common.UiText
@@ -45,7 +51,7 @@ import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -76,7 +82,7 @@ internal fun MainScreen(
         bottomBar = {
             MainBottomBar(
                 visible = navigator.shouldShowBottomBar(),
-                tabs = MainTab.entries.toPersistentList(),
+                tabs = MainTab.entries.toImmutableList(),
                 currentTab = navigator.currentTab,
                 onTabSelected = { navigator.navigate(it) },
             )
@@ -140,7 +146,11 @@ private fun MainBottomBar(
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,
 ) {
-    if (visible) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn() + slideIn { IntOffset(0, it.height) },
+        exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+    ) {
         Box(modifier = Modifier.background(White)) {
             Column {
                 HorizontalDivider(color = Color(0xFFEBEBEB))
@@ -210,7 +220,7 @@ fun MainBottomBarPreview() {
     UnifestTheme {
         MainBottomBar(
             visible = true,
-            tabs = MainTab.entries.toPersistentList(),
+            tabs = MainTab.entries.toImmutableList(),
             currentTab = MainTab.HOME,
             onTabSelected = {},
         )
