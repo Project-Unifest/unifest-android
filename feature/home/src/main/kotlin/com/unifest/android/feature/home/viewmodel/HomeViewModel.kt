@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
             festivalRepository.getIncomingFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(incomingFestivals = festivals.toImmutableList(),)
+                        it.copy(incomingFestivals = festivals.toImmutableList())
                     }
                 }
                 .onFailure { exception ->
