@@ -17,14 +17,25 @@ enum class MarkerCategory(val value: String) {
         }
     }
 
-    fun getMarkerIcon(): OverlayImage {
-        return when (this) {
-            BAR -> OverlayImage.fromResource(R.drawable.ic_marker_bar)
-            FOOD -> OverlayImage.fromResource(R.drawable.ic_marker_food)
-            EVENT -> OverlayImage.fromResource(R.drawable.ic_marker_event)
-            NORMAL -> OverlayImage.fromResource(R.drawable.ic_marker_normal)
-            MEDICAL -> OverlayImage.fromResource(R.drawable.ic_marker_medical)
-            TOILET -> OverlayImage.fromResource(R.drawable.ic_marker_toilet)
+    fun getMarkerIcon(isSelected: Boolean): OverlayImage {
+        if (isSelected ){
+            return when (this) {
+                BAR -> OverlayImage.fromResource(R.drawable.ic_marker_bar_selected)
+                FOOD -> OverlayImage.fromResource(R.drawable.ic_marker_food_selected)
+                EVENT -> OverlayImage.fromResource(R.drawable.ic_marker_event_selected)
+                NORMAL -> OverlayImage.fromResource(R.drawable.ic_marker_normal_selected)
+                MEDICAL -> OverlayImage.fromResource(R.drawable.ic_marker_medical_selected)
+                TOILET -> OverlayImage.fromResource(R.drawable.ic_marker_toilet_selected)
+            }
+        } else {
+            return when (this) {
+                BAR -> OverlayImage.fromResource(R.drawable.ic_marker_bar)
+                FOOD -> OverlayImage.fromResource(R.drawable.ic_marker_food)
+                EVENT -> OverlayImage.fromResource(R.drawable.ic_marker_event)
+                NORMAL -> OverlayImage.fromResource(R.drawable.ic_marker_normal)
+                MEDICAL -> OverlayImage.fromResource(R.drawable.ic_marker_medical)
+                TOILET -> OverlayImage.fromResource(R.drawable.ic_marker_toilet)
+            }
         }
     }
 }
