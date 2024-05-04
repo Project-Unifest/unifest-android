@@ -80,6 +80,21 @@ fun FestivalSearchBottomSheet(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
     )
+    val scope = rememberCoroutineScope()
+    val builder = rememberBalloonBuilder {
+        setArrowSize(10)
+        setArrowPosition(0.1f)
+        setArrowOrientation(ArrowOrientation.BOTTOM)
+        setWidth(BalloonSizeSpec.WRAP)
+        setHeight(BalloonSizeSpec.WRAP)
+        setPadding(9)
+        setCornerRadius(8f)
+        setBackgroundColor(MainColor)
+        setBalloonAnimation(BalloonAnimation.FADE)
+        setDismissWhenClicked(true)
+        setDismissWhenTouchOutside(false)
+        setFocusable(false)
+    }
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -109,21 +124,6 @@ fun FestivalSearchBottomSheet(
             .fillMaxHeight()
             .padding(top = 18.dp),
     ) {
-        val scope = rememberCoroutineScope()
-        val builder = rememberBalloonBuilder {
-            setArrowSize(10)
-            setArrowPosition(0.1f)
-            setArrowOrientation(ArrowOrientation.BOTTOM)
-            setWidth(BalloonSizeSpec.WRAP)
-            setHeight(BalloonSizeSpec.WRAP)
-            setPadding(9)
-            setCornerRadius(8f)
-            setBackgroundColor(MainColor)
-            setBalloonAnimation(BalloonAnimation.FADE)
-            setDismissWhenClicked(true)
-            setDismissWhenTouchOutside(false)
-            setFocusable(false)
-        }
         Column(
             modifier = Modifier
                 .background(Color.White)

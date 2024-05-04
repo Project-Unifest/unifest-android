@@ -1,6 +1,7 @@
 package com.unifest.android.feature.map
 
 import android.Manifest
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -127,6 +128,7 @@ internal fun MapRoute(
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is MapUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 

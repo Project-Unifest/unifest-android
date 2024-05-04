@@ -159,9 +159,7 @@ class HomeViewModel @Inject constructor(
             festivalRepository.getIncomingFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
-                        it.copy(
-                            incomingFestivals = festivals.toImmutableList(),
-                        )
+                        it.copy(incomingFestivals = festivals.toImmutableList(),)
                     }
                 }
                 .onFailure { exception ->
@@ -232,18 +230,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun setRecentLikedFestival(schoolName: String) {
-//        viewModelScope.launch {
-//            likedFestivalRepository.setRecentLikedFestival(schoolName)
-//            _uiEvent.send(HomeUiEvent.NavigateBack)
-//            setLikedFestivalDeleteDialogVisible(false)
-//        }
         viewModelScope.launch {
             if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+                // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 setFestivalSearchBottomSheetVisible(false)
                 _uiEvent.send(HomeUiEvent.NavigateBack)
             } else {
-                setFestivalSearchBottomSheetVisible(false)
-                _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+                _uiEvent.send(HomeUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
             }
         }
     }

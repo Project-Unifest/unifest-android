@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.compose.NavHost
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -81,7 +82,10 @@ internal fun MainScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackBarState)
+            SnackbarHost(
+                hostState = snackBarState,
+                modifier = Modifier.zIndex(1f)
+            )
         },
         containerColor = White,
     ) { innerPadding ->
