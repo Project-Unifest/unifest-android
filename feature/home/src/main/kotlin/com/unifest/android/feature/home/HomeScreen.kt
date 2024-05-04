@@ -258,7 +258,7 @@ fun FestivalScheduleItem(
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = festival.festivalName + " Day " + ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate),
+                    text = festival.festivalName + " Day " + (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = Title2,
