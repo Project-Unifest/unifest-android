@@ -39,4 +39,8 @@ class BoothRepositoryImpl @Inject constructor(
     fun getDeviceId(context: Context): String {
         return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
+
+    override suspend fun getBoothLikes(boothId: Long) = runSuspendCatching {
+        service.getBoothLikes(boothId).data
+    }
 }
