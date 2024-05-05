@@ -59,6 +59,7 @@ import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Marker
@@ -263,7 +264,13 @@ fun MapContent(
 //                    clusterManager?.clear()
 //                }
 //            }
-
+            PolygonOverlay(
+                coords = uiState.outerCords,
+                color = Color.Gray.copy(alpha = 0.3f),
+                outlineColor = Color.Gray,
+                outlineWidth = 1.dp,
+                holes = persistentListOf(uiState.innerHole),
+            )
             var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
             DisposableMapEffect(uiState.filteredBoothsList) { map ->
                 if (clusterManager == null) {
