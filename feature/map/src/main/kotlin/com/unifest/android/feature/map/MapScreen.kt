@@ -222,7 +222,6 @@ fun MapContent(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
-                isLocationButtonEnabled = true,
             ),
         ) {
             uiState.filteredBoothsList.forEach { booth ->
