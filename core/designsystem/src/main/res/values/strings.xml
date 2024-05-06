@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--   main-->
-    <string name="network_error_message">네트워크 연결이 불안해요.\n잠시후 다시 이용해주세요.</string>
-    <string name="server_error_message">이용에 불편을 드려 죄송합니다.\n잠시후 다시 이용해주세요.</string>
-    <string name="unknown_error_message">알 수 없는 오류가 발생하였습니다.</string>
-
     <!--    intro-->
     <string name="intro_top_app_bar_title">Uni-Fest</string>
     <string name="intro_add_complete">추가 완료</string>
@@ -41,7 +36,8 @@
     <string name="booth_menu">메뉴</string>
     <string name="booth_waiting_button">웨이팅 하기</string>
     <string name="booth_waiting_button_invalid">웨이팅 기능을 지원하지 않는 부스입니다</string>
-    <string name="booth_bookmarked_message">관심 주점으로 저장했습니다.</string>
+    <string name="liked_booth_saved_message">관심 주점으로 저장했습니다.</string>
+    <string name="liked_booth_saved_failed_message">관심 주점으로 저장을 실패했습니다.</string>
     <string name="liked_booth_removed_message">관심 주점에서 삭제했습니다.</string>
     <string name="liked_booth_removed_failed_message">관심 주점에서 삭제를 실패했습니다.</string>
     <string name="booth_empty_menu">등록된 메뉴가 없어요.</string>

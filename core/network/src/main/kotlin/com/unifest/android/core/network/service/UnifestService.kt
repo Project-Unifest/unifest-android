@@ -54,4 +54,9 @@ interface UnifestService {
     suspend fun likeBooth(
         @Body likeBoothRequest: LikeBoothRequest,
     ): LikeBoothResponse
+
+    @GET("api/likes/{booth-id}")
+    suspend fun getBoothLikes(
+        @Path("booth-id") boothId: Long,
+    ): LikeBoothResponse
 }

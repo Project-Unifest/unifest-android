@@ -66,7 +66,8 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
-            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
@@ -90,6 +91,7 @@ class MapViewModel @Inject constructor(
                 }
                 setLikedFestivalDeleteDialogVisible(true)
             }
+
             is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
             is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
@@ -376,6 +378,41 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    private fun updateSelectedBooth(booth: BoothMapModel) {
+        if (_uiState.value.isPopularMode) {
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(isPopularMode = false)
+                }
+                delay(500)
+                _uiState.update {
+                    it.copy(
+                        isBoothSelectionMode = true,
+                        selectedBoothList = listOf(booth).toImmutableList(),
+                    )
+                }
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isBoothSelectionMode = true,
+                    selectedBoothList = listOf(booth).toImmutableList(),
+                )
+            }
+        }
+        _uiState.update {
+            it.copy(
+                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                    if (boothMapModel.id == booth.id) {
+                        boothMapModel.copy(isSelected = true)
+                    } else {
+                        boothMapModel.copy(isSelected = false)
+                    }
+                }.toImmutableList(),
+            )
+        }
+    }
+
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
@@ -395,6 +432,19 @@ class MapViewModel @Inject constructor(
                 it.copy(
                     isBoothSelectionMode = true,
                     selectedBoothList = booths.toImmutableList(),
+                )
+            }
+        }
+        if (booths.size == 1) {
+            _uiState.update {
+                it.copy(
+                    filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                        if (boothMapModel.id == booths[0].id) {
+                            boothMapModel.copy(isSelected = true)
+                        } else {
+                            boothMapModel.copy(isSelected = false)
+                        }
+                    }.toImmutableList(),
                 )
             }
         }

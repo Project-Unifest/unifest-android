@@ -88,7 +88,7 @@ fun BoothLocationScreen(
             )
             Marker(
                 state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
-                icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(),
+                icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(false),
                 onClick = { true },
             )
         }

@@ -1,7 +1,6 @@
 package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -29,9 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -90,16 +93,14 @@ internal fun BoothDetailRoute(
     val snackBarState = remember { SnackbarHostState() }
 
     DisposableEffect(systemUiController) {
-        systemUiController.setSystemBarsColor(
+        systemUiController.setStatusBarColor(
             color = Color.Transparent,
             darkIcons = false,
-            isNavigationBarContrastEnforced = false,
         )
         onDispose {
-            systemUiController.setSystemBarsColor(
+            systemUiController.setStatusBarColor(
                 color = Color.White,
                 darkIcons = true,
-                isNavigationBarContrastEnforced = false,
             )
         }
     }
@@ -263,7 +264,7 @@ fun BottomBar(
                         imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
                         tint = bookMarkColor,
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickableSingle {
                             onAction(BoothUiAction.OnToggleBookmark)
                         },
                     )
@@ -298,10 +299,11 @@ fun BoothImage(
 ) {
     NetworkImage(
         imgUrl = imgUrl,
+        contentDescription = "Booth Image",
         modifier = Modifier
             .height(260.dp)
             .fillMaxWidth(),
-        contentDescription = "Booth Image",
+        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
     )
 }
 
@@ -378,7 +380,10 @@ fun MenuItem(menu: MenuModel) {
         NetworkImage(
             imgUrl = menu.imgUrl,
             contentDescription = menu.name,
-            modifier = Modifier.size(88.dp),
+            placeholder = painterResource(id = R.drawable.ic_item_placeholder),
+            modifier = Modifier
+                .size(86.dp)
+                .clip(RoundedCornerShape(16.dp)),
         )
         Spacer(modifier = Modifier.width(13.dp))
         Column(
