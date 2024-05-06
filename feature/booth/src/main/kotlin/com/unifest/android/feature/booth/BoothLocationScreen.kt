@@ -35,6 +35,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
@@ -44,6 +45,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BoothLocationRoute(
@@ -77,6 +79,13 @@ fun BoothLocationScreen(
                 isLogoClickEnabled = false,
             ),
         ) {
+            PolygonOverlay(
+                coords = uiState.outerCords,
+                color = Color.Gray.copy(alpha = 0.3f),
+                outlineColor = Color.Gray,
+                outlineWidth = 1.dp,
+                holes = persistentListOf(uiState.innerHole),
+            )
             Marker(
                 state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
                 icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(false),

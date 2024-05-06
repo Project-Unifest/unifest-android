@@ -58,6 +58,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.unifest.android.core.common.FestivalUiAction
@@ -225,6 +226,13 @@ fun MapContent(
                 isLogoClickEnabled = false,
             ),
         ) {
+            PolygonOverlay(
+                coords = uiState.outerCords,
+                color = Color.Gray.copy(alpha = 0.3f),
+                outlineColor = Color.Gray,
+                outlineWidth = 1.dp,
+                holes = persistentListOf(uiState.innerHole),
+            )
             uiState.filteredBoothsList.forEach { booth ->
                 Marker(
                     state = MarkerState(position = booth.position),
