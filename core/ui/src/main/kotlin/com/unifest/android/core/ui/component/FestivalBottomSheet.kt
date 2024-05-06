@@ -2,6 +2,7 @@ package com.unifest.android.core.ui.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -21,40 +21,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.skydoves.balloon.ArrowOrientation
-import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.BalloonSizeSpec
-import com.skydoves.balloon.compose.Balloon
-import com.skydoves.balloon.compose.rememberBalloonBuilder
-import com.skydoves.balloon.compose.setBackgroundColor
 import com.unifest.android.core.common.ButtonType
 import com.unifest.android.core.common.FestivalUiAction
-import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.LikedFestivalToolTip
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.Content5
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +53,7 @@ fun FestivalSearchBottomSheet(
     isSearchMode: Boolean,
     isLikedFestivalDeleteDialogVisible: Boolean,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    isOnboardingCompleted: Boolean = true,
+    isOnboardingCompleted: Boolean = false,
     isEditMode: Boolean = false,
 ) {
 //    val bottomSheetState = rememberFlexibleBottomSheetState(
@@ -80,21 +67,6 @@ fun FestivalSearchBottomSheet(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
     )
-    val scope = rememberCoroutineScope()
-    val builder = rememberBalloonBuilder {
-        setArrowSize(10)
-        setArrowPosition(0.1f)
-        setArrowOrientation(ArrowOrientation.BOTTOM)
-        setWidth(BalloonSizeSpec.WRAP)
-        setHeight(BalloonSizeSpec.WRAP)
-        setPadding(9)
-        setCornerRadius(8f)
-        setBackgroundColor(MainColor)
-        setBalloonAnimation(BalloonAnimation.FADE)
-        setDismissWhenClicked(true)
-        setDismissWhenTouchOutside(false)
-        setFocusable(false)
-    }
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -159,31 +131,18 @@ fun FestivalSearchBottomSheet(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     if (!isOnboardingCompleted) {
-                        Balloon(
-                            builder = builder,
-                            balloonContent = {
-                                Text(
-                                    modifier = Modifier
-                                        .wrapContentWidth()
-                                        .noRippleClickable {
-                                            onFestivalUiAction(FestivalUiAction.OnTooltipClick)
-                                        },
-                                    text = stringResource(id = R.string.festival_search_onboarding_title),
-                                    textAlign = TextAlign.Center,
-                                    color = Color.White,
-                                    style = Content5,
-                                )
+                        LikedFestivalToolTip(
+                            completeOnboarding = {
+                                onFestivalUiAction(FestivalUiAction.OnTooltipClick)
                             },
-                        ) { balloonWindow ->
-                            LaunchedEffect(key1 = Unit) {
-                                scope.launch {
-                                    delay(500L)
-                                    balloonWindow.awaitAlignEnd()
-                                }
-                            }
-                        }
+                        )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     TextButton(
                         onClick = {
                             onFestivalUiAction(FestivalUiAction.OnEnableEditMode)

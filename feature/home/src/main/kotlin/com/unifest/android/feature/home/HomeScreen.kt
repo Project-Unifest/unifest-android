@@ -213,6 +213,7 @@ internal fun HomeScreen(
                 isEditMode = uiState.isEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
+                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted
             )
         }
     }
