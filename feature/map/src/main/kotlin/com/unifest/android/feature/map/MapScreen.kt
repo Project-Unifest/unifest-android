@@ -273,6 +273,31 @@ fun MapContent(
 //                    clusterManager?.clear()
 //                }
 //            }
+
+//            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
+//            DisposableMapEffect(uiState.filteredBoothsList) { map ->
+//                if (clusterManager == null) {
+//                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
+//                        .customMarker {
+//                            Marker().apply {
+//                                icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
+//                            }
+//                        }
+//                        .markerClickListener { booth ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+//                        }
+//                        .clusterClickListener { booths ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+//                        }
+//                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+//                        .clickToCenter(false)
+//                        .make()
+//                }
+//                clusterManager?.addItems(uiState.filteredBoothsList)
+//                onDispose {
+//                    clusterManager?.clearItems()
+//                }
+//            }
         }
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
