@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -440,9 +441,11 @@ fun BoothItem(
             ) {
                 NetworkImage(
                     imgUrl = boothInfo.thumbnail,
+                    contentDescription = "Booth Thumbnail",
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),
+                    placeholder = painterResource(id = R.drawable.ic_item_placeholder),
                 )
                 Column(
                     modifier = Modifier.padding(start = 15.dp),

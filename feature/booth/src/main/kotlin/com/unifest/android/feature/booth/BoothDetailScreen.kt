@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -298,10 +299,11 @@ fun BoothImage(
 ) {
     NetworkImage(
         imgUrl = imgUrl,
+        contentDescription = "Booth Image",
         modifier = Modifier
             .height(260.dp)
             .fillMaxWidth(),
-        contentDescription = "Booth Image",
+        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
     )
 }
 
@@ -378,6 +380,7 @@ fun MenuItem(menu: MenuModel) {
         NetworkImage(
             imgUrl = menu.imgUrl,
             contentDescription = menu.name,
+            placeholder = painterResource(id = R.drawable.ic_item_placeholder),
             modifier = Modifier
                 .size(86.dp)
                 .clip(RoundedCornerShape(16.dp)),

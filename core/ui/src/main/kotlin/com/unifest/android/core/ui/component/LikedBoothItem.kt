@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,9 +50,11 @@ fun LikedBoothItem(
         ) {
             NetworkImage(
                 imgUrl = booth.thumbnail,
+                contentDescription = "Booth Thumbnail",
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),
+                placeholder = painterResource(id = R.drawable.ic_item_placeholder),
             )
             Spacer(modifier = Modifier.width(14.dp))
             Column(
