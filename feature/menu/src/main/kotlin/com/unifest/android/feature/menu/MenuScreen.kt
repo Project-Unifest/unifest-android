@@ -307,7 +307,7 @@ fun MenuScreen(
                 isSearchMode = uiState.isSearchMode,
                 isEditMode = uiState.isEditMode,
                 onFestivalUiAction = onFestivalUiAction,
-                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted
+                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
     }

@@ -85,7 +85,7 @@ fun ToolTip(
 
 @Composable
 fun LikedFestivalToolTip(
-    completeOnboarding: (Boolean) -> Unit
+    completeOnboarding: (Boolean) -> Unit,
 ) {
     ToolTip(
         description = stringResource(id = R.string.festival_search_onboarding_title),
