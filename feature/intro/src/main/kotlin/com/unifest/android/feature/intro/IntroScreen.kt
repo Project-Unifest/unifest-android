@@ -274,6 +274,7 @@ fun FestivalRowItem(
             ) {
                 NetworkImage(
                     imgUrl = festival.thumbnail,
+                    contentDescription = "Festival Thumbnail",
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),

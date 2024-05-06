@@ -37,6 +37,7 @@ class BoothViewModel @Inject constructor(
 
     init {
         getBoothDetail()
+        getBoothLikes()
     }
 
     fun onAction(action: BoothUiAction) {
@@ -63,6 +64,24 @@ class BoothViewModel @Inject constructor(
                                 ),
                             )
                         }
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
+        }
+    }
+
+    private fun getBoothLikes() {
+        viewModelScope.launch {
+            boothRepository.getBoothLikes(boothId)
+                .onSuccess { likes ->
+                    _uiState.update {
+                        it.copy(
+                            boothDetailInfo = it.boothDetailInfo.copy(
+                                likes = likes,
+                            ),
+                        )
                     }
                 }
                 .onFailure { exception ->
@@ -102,11 +121,15 @@ class BoothViewModel @Inject constructor(
                         _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_bookmarked_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_message)))
                     }
                 }
-                .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                .onFailure {
+                    if (currentBookmarkFlag) {
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    } else {
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                    }
                 }
         }
     }

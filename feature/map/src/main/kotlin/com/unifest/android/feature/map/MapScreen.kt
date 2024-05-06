@@ -35,9 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +42,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -55,13 +53,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
-import com.naver.maps.map.overlay.Marker
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
@@ -94,7 +92,6 @@ import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import ted.gun0912.clustering.naver.TedNaverClustering
 
 @Composable
 internal fun MapRoute(
@@ -214,7 +211,7 @@ fun MapContent(
     pagerState: PagerState,
     onMapUiAction: (MapUiAction) -> Unit,
 ) {
-    val context = LocalContext.current
+    // val context = LocalContext.current
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
@@ -226,27 +223,32 @@ fun MapContent(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
-                isLocationButtonEnabled = true,
             ),
         ) {
-//            var clusterManager by remember { mutableStateOf<Clusterer<AllBoothsMapModel>?>(null) }
+            uiState.filteredBoothsList.forEach { booth ->
+                Marker(
+                    state = MarkerState(position = booth.position),
+                    icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
+                    onClick = {
+                        onMapUiAction(MapUiAction.OnBoothMarkerClick(booth))
+                        true
+                    },
+                )
+            }
+//            var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
 //            DisposableMapEffect(uiState.boothList) { map ->
 //                if (clusterManager == null) {
-//                    clusterManager = Clusterer.Builder<AllBoothsMapModel>()
-//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {
-//                            override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
-//                                super.updateClusterMarker(info, marker)
-//                                marker.iconTintColor = getColor(context, R.color.main_color)
-//                                marker.captionColor = getColor(context, R.color.white)
-//                            }
-//                        })
+//                    clusterManager = Clusterer.Builder<BoothMapModel>()
+//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {})
 //                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
 //                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
 //                                super.updateLeafMarker(info, marker)
-//                                marker.icon = MarkerCategory.fromString((info.key as AllBoothsMapModel).category).getMarkerIcon()
-//                                marker.onClickListener = Overlay.OnClickListener {
-//                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as AllBoothsMapModel)))
-//                                    true
+//                                marker.apply {
+//                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category).getMarkerIcon((info.key as BoothMapModel).isSelected)
+//                                    onClickListener = Overlay.OnClickListener {
+//                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
+//                                        true
+//                                    }
 //                                }
 //                            }
 //                        })
@@ -264,30 +266,30 @@ fun MapContent(
 //                }
 //            }
 
-            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
-            DisposableMapEffect(uiState.filteredBoothsList) { map ->
-                if (clusterManager == null) {
-                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
-                        .customMarker {
-                            Marker().apply {
-                                icon = MarkerCategory.fromString(it.category).getMarkerIcon()
-                            }
-                        }
-                        .markerClickListener { booth ->
-                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
-                        }
-                        .clusterClickListener { booths ->
-                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
-                        }
-                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-                        .clickToCenter(false)
-                        .make()
-                }
-                clusterManager?.addItems(uiState.filteredBoothsList)
-                onDispose {
-                    clusterManager?.clearItems()
-                }
-            }
+//            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
+//            DisposableMapEffect(uiState.filteredBoothsList) { map ->
+//                if (clusterManager == null) {
+//                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
+//                        .customMarker {
+//                            Marker().apply {
+//                                icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
+//                            }
+//                        }
+//                        .markerClickListener { booth ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+//                        }
+//                        .clusterClickListener { booths ->
+//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+//                        }
+//                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+//                        .clickToCenter(false)
+//                        .make()
+//                }
+//                clusterManager?.addItems(uiState.filteredBoothsList)
+//                onDispose {
+//                    clusterManager?.clearItems()
+//                }
+//            }
         }
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
@@ -439,9 +441,11 @@ fun BoothItem(
             ) {
                 NetworkImage(
                     imgUrl = boothInfo.thumbnail,
+                    contentDescription = "Booth Thumbnail",
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),
+                    placeholder = painterResource(id = R.drawable.ic_item_placeholder),
                 )
                 Column(
                     modifier = Modifier.padding(start = 15.dp),

@@ -354,6 +354,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
         ) {
             NetworkImage(
                 imgUrl = festival.thumbnail,
+                contentDescription = "Festival Thumbnail",
                 modifier = Modifier
                     .size(52.dp)
                     .clip(CircleShape),

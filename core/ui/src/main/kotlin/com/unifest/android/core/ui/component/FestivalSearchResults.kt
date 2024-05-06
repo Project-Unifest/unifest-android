@@ -119,6 +119,7 @@ fun FestivalSearchResultItem(
     ) {
         NetworkImage(
             imgUrl = festival.thumbnail,
+            contentDescription = "Festival Thumbnail",
             modifier = Modifier
                 .size(54.dp)
                 .clip(CircleShape),

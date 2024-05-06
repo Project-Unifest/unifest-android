@@ -8,4 +8,5 @@ interface BoothRepository {
     suspend fun getAllBooths(festivalId: Long): Result<List<BoothModel>>
     suspend fun getBoothDetail(boothId: Long): Result<BoothDetailModel>
     suspend fun likeBooth(boothId: Long): Result<Unit>
+    suspend fun getBoothLikes(boothId: Long): Result<Int>
 }
