@@ -11,6 +11,7 @@ import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +38,7 @@ class BoothViewModel @Inject constructor(
 
     init {
         getBoothDetail()
-        getBoothLikes()
+        getLikedBooths()
     }
 
     fun onAction(action: BoothUiAction) {
@@ -56,15 +57,7 @@ class BoothViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(boothDetailInfo = booth)
                     }
-                    if (likedBoothRepository.isLikedBooth(booth)) {
-                        _uiState.update {
-                            it.copy(
-                                boothDetailInfo = it.boothDetailInfo.copy(
-                                    isLiked = true,
-                                ),
-                            )
-                        }
-                    }
+                    getBoothLikes()
                 }
                 .onFailure { exception ->
                     handleException(exception, this@BoothViewModel)
@@ -90,6 +83,28 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    private fun getLikedBooths() {
+        viewModelScope.launch {
+            likedBoothRepository.getLikedBooths()
+                .onSuccess { likedBooths ->
+                    _uiState.update {
+                        it.copy(likedBooths = likedBooths.toImmutableList())
+                    }
+                    checkLikedBooth()
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
+        }
+    }
+
+    private fun checkLikedBooth() {
+        val isLiked = _uiState.value.likedBooths.any { it.id == boothId }
+        _uiState.update {
+            it.copy(isLiked = isLiked)
+        }
+    }
+
     private fun navigateBack() {
         viewModelScope.launch {
             _uiEvent.send(BoothUiEvent.NavigateBack)
@@ -103,7 +118,7 @@ class BoothViewModel @Inject constructor(
     }
 
     private fun toggleBookmark() {
-        val currentBookmarkFlag = _uiState.value.boothDetailInfo.isLiked
+        val currentBookmarkFlag = _uiState.value.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
             boothRepository.likeBooth(boothId)
@@ -111,9 +126,9 @@ class BoothViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             boothDetailInfo = it.boothDetailInfo.copy(
-                                isLiked = newBookmarkFlag,
                                 likes = it.boothDetailInfo.likes + if (newBookmarkFlag) 1 else -1,
                             ),
+                            isLiked = newBookmarkFlag,
                         )
                     }
                     if (currentBookmarkFlag) {

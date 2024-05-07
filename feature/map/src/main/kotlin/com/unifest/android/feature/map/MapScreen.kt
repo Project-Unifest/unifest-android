@@ -148,7 +148,7 @@ internal fun MapScreen(
 ) {
     val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.5420642972944, 127.07674893093665), 14.8)
+        position = CameraPosition(LatLng(37.54118132567716, 127.07673671067072), 14.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
