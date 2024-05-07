@@ -10,6 +10,7 @@ import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.FestivalModel
@@ -33,6 +34,7 @@ class MenuViewModel @Inject constructor(
     private val likedFestivalRepository: LikedFestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
+    private val onboardingRepository: OnboardingRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
@@ -43,6 +45,7 @@ class MenuViewModel @Inject constructor(
     init {
         observeLikedFestivals()
         observeLikedBooth()
+        checkFestivalOnboardingCompletion()
     }
 
     fun onMenuUiAction(action: MenuUiAction) {
@@ -64,7 +67,10 @@ class MenuViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
-            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
+            is FestivalUiAction.OnLikedFestivalSelected -> {
+                completeFestivalOnboarding()
+                setRecentLikedFestival(action.festival.schoolName)
+            }
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -74,7 +80,7 @@ class MenuViewModel @Inject constructor(
             }
 
             is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
-            else -> {}
+            is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
     }
 
@@ -98,6 +104,14 @@ class MenuViewModel @Inject constructor(
                         likedBoothList = likedBoothList.toImmutableList(),
                     )
                 }
+            }
+        }
+    }
+
+    private fun checkFestivalOnboardingCompletion() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isFestivalOnboardingCompleted = onboardingRepository.checkFestivalOnboardingCompletion())
             }
         }
     }
@@ -220,6 +234,15 @@ class MenuViewModel @Inject constructor(
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.deleteLikedFestival(festival)
+        }
+    }
+
+    private fun completeFestivalOnboarding() {
+        viewModelScope.launch {
+            onboardingRepository.completeFestivalOnboarding(true)
+            _uiState.update {
+                it.copy(isFestivalOnboardingCompleted = true)
+            }
         }
     }
 }

@@ -17,4 +17,5 @@ data class MenuUiState(
     val isEditMode: Boolean = false,
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
+    val isFestivalOnboardingCompleted: Boolean = false,
 )

@@ -83,7 +83,10 @@ class MapViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
-            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
+            is FestivalUiAction.OnLikedFestivalSelected -> {
+                completeFestivalOnboarding()
+                setRecentLikedFestival(action.festival.schoolName)
+            }
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {

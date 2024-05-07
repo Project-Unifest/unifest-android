@@ -1,4 +1,4 @@
-package com.unifest.android.core.designsystem.component
+package com.unifest.android.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 

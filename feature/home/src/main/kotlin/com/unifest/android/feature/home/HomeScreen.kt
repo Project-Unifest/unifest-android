@@ -48,7 +48,7 @@ import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
-import com.unifest.android.core.designsystem.component.StarImage
+import com.unifest.android.core.ui.component.StarImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -213,6 +213,7 @@ internal fun HomeScreen(
                 isEditMode = uiState.isEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
+                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
     }

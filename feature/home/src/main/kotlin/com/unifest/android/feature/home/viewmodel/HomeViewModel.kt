@@ -11,6 +11,7 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
@@ -33,6 +34,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
+    private val onboardingRepository: OnboardingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -44,43 +46,8 @@ class HomeViewModel @Inject constructor(
         observeLikedFestivals()
         getIncomingFestivals()
         getAllFestivals()
-        _uiState.update {
-            it.copy(
-                incomingFestivals = persistentListOf(
-                    FestivalModel(
-                        1,
-                        1,
-                        "https://picsum.photos/36",
-                        "서울대학교",
-                        "서울",
-                        "설대축제",
-                        "2024-04-21",
-                        "2024-04-23",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        2,
-                        2,
-                        "https://picsum.photos/36",
-                        "연세대학교",
-                        "서울",
-                        "연대축제",
-                        "2024-04-21",
-                        "2024-04-23",
-                        126.957f,
-                        37.460f,
-                    ),
-                ),
-            )
-        }
-        _uiState.update {
-            it.copy(
-                isStarImageClicked = it.todayFestivals.map { festival ->
-                    persistentListOf<Boolean>().addAll(List(festival.starInfo.size) { false }).toImmutableList()
-                }.toImmutableList(),
-            )
-        }
+        checkFestivalOnboardingCompletion()
+        initStarImageClicked()
     }
 
     fun onHomeUiAction(action: HomeUiAction) {
@@ -104,7 +71,10 @@ class HomeViewModel @Inject constructor(
             is FestivalUiAction.OnSearchTextCleared -> clearSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
-            is FestivalUiAction.OnLikedFestivalSelected -> setRecentLikedFestival(action.festival.schoolName)
+            is FestivalUiAction.OnLikedFestivalSelected -> {
+                completeFestivalOnboarding()
+                setRecentLikedFestival(action.festival.schoolName)
+            }
             is FestivalUiAction.OnAddClick -> addLikeFestivalAtBottomSheet(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -114,7 +84,7 @@ class HomeViewModel @Inject constructor(
             }
 
             is FestivalUiAction.OnDeleteDialogButtonClick -> handleDeleteDialogButtonClick(action.buttonType)
-            else -> {}
+            is FestivalUiAction.OnTooltipClick -> completeFestivalOnboarding()
         }
     }
 
@@ -200,6 +170,24 @@ class HomeViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@HomeViewModel)
                 }
+        }
+    }
+
+    private fun checkFestivalOnboardingCompletion() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isFestivalOnboardingCompleted = onboardingRepository.checkFestivalOnboardingCompletion())
+            }
+        }
+    }
+
+    private fun initStarImageClicked() {
+        _uiState.update {
+            it.copy(
+                isStarImageClicked = it.todayFestivals.map { festival ->
+                    persistentListOf<Boolean>().addAll(List(festival.starInfo.size) { false }).toImmutableList()
+                }.toImmutableList(),
+            )
         }
     }
 
@@ -303,6 +291,15 @@ class HomeViewModel @Inject constructor(
     private fun setWeekMode(flag: Boolean) {
         _uiState.update {
             it.copy(isWeekMode = flag)
+        }
+    }
+
+    private fun completeFestivalOnboarding() {
+        viewModelScope.launch {
+            onboardingRepository.completeFestivalOnboarding(true)
+            _uiState.update {
+                it.copy(isFestivalOnboardingCompleted = true)
+            }
         }
     }
 
