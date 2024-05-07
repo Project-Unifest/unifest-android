@@ -47,7 +47,6 @@ class MenuViewModel @Inject constructor(
     init {
         observeLikedFestivals()
         // observeLikedBooth()
-        getLikedBooths()
         checkFestivalOnboardingCompletion()
     }
 
@@ -101,7 +100,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun getLikedBooths() {
+    fun getLikedBooths() {
         viewModelScope.launch {
             likedBoothRepository.getLikedBooths()
                 .onSuccess { likedBooths ->

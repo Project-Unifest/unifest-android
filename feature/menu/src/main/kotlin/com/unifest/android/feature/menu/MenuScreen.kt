@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -99,6 +100,10 @@ internal fun MenuRoute(
             Timber.tag("AppVersion").e(e, "Failed to get package info")
             "Unknown"
         }
+    }
+
+    LaunchedEffect(key1 = null) {
+        viewModel.getLikedBooths()
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
