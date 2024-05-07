@@ -360,15 +360,18 @@ class MapViewModel @Inject constructor(
             viewModelScope.launch {
                 boothRepository.getPopularBooths(1)
                     .onSuccess { booths ->
-                        _uiState.update {
-                            it.copy(
+                        _uiState.update { currentState ->
+                            currentState.copy(
                                 selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
                                 isBoothSelectionMode = false,
+                                filteredBoothsList = currentState.filteredBoothsList.map { booth ->
+                                    booth.copy(isSelected = false)
+                                }.toImmutableList(),
                             )
                         }
                         delay(500)
-                        _uiState.update {
-                            it.copy(
+                        _uiState.update { currentState ->
+                            currentState.copy(
                                 selectedBoothList = _uiState.value.popularBoothList.map { it.toMapModel() }.toImmutableList(),
                                 isPopularMode = true,
                             )
