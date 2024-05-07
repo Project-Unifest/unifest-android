@@ -1,14 +1,14 @@
 package com.unifest.android.feature.menu.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MenuUiState(
     val festivals: ImmutableList<FestivalModel> = persistentListOf(),
-    val likedBoothList: ImmutableList<BoothDetailModel> = persistentListOf(),
+    val likedBooths: ImmutableList<BoothModel> = persistentListOf(),
     val festivalSearchText: TextFieldValue = TextFieldValue(),
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
@@ -18,4 +18,6 @@ data class MenuUiState(
     val isFestivalSearchBottomSheetVisible: Boolean = false,
     val isLikedFestivalDeleteDialogVisible: Boolean = false,
     val isFestivalOnboardingCompleted: Boolean = false,
+    val isNetworkErrorDialogVisible: Boolean = false,
+    val isServerErrorDialogVisible: Boolean = false,
 )

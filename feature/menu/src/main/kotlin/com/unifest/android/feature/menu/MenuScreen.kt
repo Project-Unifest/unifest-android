@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -53,7 +54,9 @@ import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
@@ -63,12 +66,13 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.menu.viewmodel.ErrorType
 import com.unifest.android.feature.menu.viewmodel.MenuUiAction
 import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
@@ -96,6 +100,10 @@ internal fun MenuRoute(
             Timber.tag("AppVersion").e(e, "Failed to get package info")
             "Unknown"
         }
+    }
+
+    LaunchedEffect(key1 = null) {
+        viewModel.getLikedBooths()
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
@@ -221,7 +229,7 @@ fun MenuScreen(
                         }
                     }
                 }
-                if (uiState.likedBoothList.isEmpty()) {
+                if (uiState.likedBooths.isEmpty()) {
                     item {
                         EmptyLikedBoothItem(
                             modifier = Modifier
@@ -231,13 +239,13 @@ fun MenuScreen(
                     }
                 } else {
                     itemsIndexed(
-                        items = uiState.likedBoothList.take(3),
+                        items = uiState.likedBooths.take(3),
                         key = { _, booth -> booth.id },
                     ) { index, booth ->
                         LikedBoothItem(
                             booth = booth,
                             index = index,
-                            totalCount = uiState.likedBoothList.size,
+                            totalCount = uiState.likedBooths.size,
                             deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
                             modifier = Modifier
                                 .clickable {
@@ -297,6 +305,18 @@ fun MenuScreen(
                 }
             }
         }
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onMenuUiAction(MenuUiAction.OnRetryClick(ErrorType.SERVER)) },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onMenuUiAction(MenuUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
+
         if (uiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = uiState.festivalSearchText,
@@ -420,21 +440,21 @@ fun MenuScreenPreview() {
                         37.460f,
                     ),
                 ),
-                likedBoothList = persistentListOf(
-                    BoothDetailModel(
+                likedBooths = persistentListOf(
+                    BoothModel(
                         id = 1,
                         name = "부스 이름",
                         category = "부스 카테고리",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 2,
                         name = "부스 이름",
                         category = "부스 카테고리",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                     ),
                 ),

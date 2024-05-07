@@ -4,15 +4,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ButtonType
+import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -35,7 +37,7 @@ class MenuViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     private val onboardingRepository: OnboardingRepository,
-) : ViewModel() {
+) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
@@ -44,7 +46,7 @@ class MenuViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-        observeLikedBooth()
+        // observeLikedBooth()
         checkFestivalOnboardingCompletion()
     }
 
@@ -57,6 +59,7 @@ class MenuViewModel @Inject constructor(
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
             is MenuUiAction.OnAdministratorModeClick -> navigateToAdministratorMode()
+            is MenuUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
@@ -71,6 +74,7 @@ class MenuViewModel @Inject constructor(
                 completeFestivalOnboarding()
                 setRecentLikedFestival(action.festival.schoolName)
             }
+
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -96,17 +100,32 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun observeLikedBooth() {
+    fun getLikedBooths() {
         viewModelScope.launch {
-            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
-                _uiState.update {
-                    it.copy(
-                        likedBoothList = likedBoothList.toImmutableList(),
-                    )
+            likedBoothRepository.getLikedBooths()
+                .onSuccess { likedBooths ->
+                    _uiState.update {
+                        it.copy(
+                            likedBooths = likedBooths.toImmutableList(),
+                        )
+                    }
+                }.onFailure { exception ->
+                    handleException(exception, this@MenuViewModel)
                 }
-            }
         }
     }
+
+//    private fun observeLikedBooth() {
+//        viewModelScope.launch {
+//            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
+//                _uiState.update {
+//                    it.copy(
+//                        likedBooths = likedBoothList.toImmutableList(),
+//                    )
+//                }
+//            }
+//        }
+//    }
 
     private fun checkFestivalOnboardingCompletion() {
         viewModelScope.launch {
@@ -157,13 +176,13 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun deleteLikedBooth(booth: BoothDetailModel) {
+    private fun deleteLikedBooth(booth: BoothModel) {
         viewModelScope.launch {
             boothRepository.likeBooth(booth.id)
                 .onSuccess {
                     updateLikedBooth(booth)
                     delay(500)
-                    likedBoothRepository.deleteLikedBooth(booth)
+                    getLikedBooths()
                     _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
                 }.onFailure {
                     _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
@@ -171,9 +190,38 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
-        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
+//    private fun deleteLikedBooth(booth: BoothDetailModel) {
+//        viewModelScope.launch {
+//            boothRepository.likeBooth(booth.id)
+//                .onSuccess {
+//                    updateLikedBooth(booth)
+//                    delay(500)
+//                    likedBoothRepository.deleteLikedBooth(booth)
+//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+//                }.onFailure {
+//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+//                }
+//        }
+//    }
+
+    private fun updateLikedBooth(booth: BoothModel) {
+        _uiState.update {
+            it.copy(
+                likedBooths = it.likedBooths
+                    .map { likedBooth ->
+                        if (likedBooth.id == booth.id) {
+                            likedBooth.copy(isLiked = false)
+                        } else {
+                            likedBooth
+                        }
+                    }.toImmutableList(),
+            )
+        }
     }
+
+//    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
+//        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
+//    }
 
     private fun updateSearchText(searchText: TextFieldValue) {
         _uiState.update {
@@ -243,6 +291,26 @@ class MenuViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isFestivalOnboardingCompleted = true)
             }
+        }
+    }
+
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getLikedBooths()
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }

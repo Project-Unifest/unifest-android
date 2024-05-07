@@ -1,8 +1,7 @@
 package com.unifest.android.core.data.repository
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.Settings
+import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.network.request.LikeBoothRequest
@@ -33,11 +32,6 @@ class BoothRepositoryImpl @Inject constructor(
                 token = getDeviceId(context),
             ),
         )
-    }
-
-    @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context): String {
-        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     override suspend fun getBoothLikes(boothId: Long) = runSuspendCatching {

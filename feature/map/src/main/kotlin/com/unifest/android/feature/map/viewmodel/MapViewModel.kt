@@ -87,6 +87,7 @@ class MapViewModel @Inject constructor(
                 completeFestivalOnboarding()
                 setRecentLikedFestival(action.festival.schoolName)
             }
+
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -180,8 +181,6 @@ class MapViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(festivalInfo = festivals[0])
                     }
-                    getPopularBooths()
-                    getAllBooths()
                 }
                 .onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -189,12 +188,19 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun getPopularBooths() {
+    fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(1)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
+                    }
+                    if (_uiState.value.isPopularMode) {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
+                            )
+                        }
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -202,7 +208,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun getAllBooths() {
+    fun getAllBooths() {
         viewModelScope.launch {
             boothRepository.getAllBooths(1)
                 .onSuccess { booths ->
@@ -354,15 +360,18 @@ class MapViewModel @Inject constructor(
             viewModelScope.launch {
                 boothRepository.getPopularBooths(1)
                     .onSuccess { booths ->
-                        _uiState.update {
-                            it.copy(
+                        _uiState.update { currentState ->
+                            currentState.copy(
                                 selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
                                 isBoothSelectionMode = false,
+                                filteredBoothsList = currentState.filteredBoothsList.map { booth ->
+                                    booth.copy(isSelected = false)
+                                }.toImmutableList(),
                             )
                         }
                         delay(500)
-                        _uiState.update {
-                            it.copy(
+                        _uiState.update { currentState ->
+                            currentState.copy(
                                 selectedBoothList = _uiState.value.popularBoothList.map { it.toMapModel() }.toImmutableList(),
                                 isPopularMode = true,
                             )

@@ -9,4 +9,5 @@ data class BoothModel(
     val location: String = "",
     val latitude: Float = 0F,
     val longitude: Float = 0F,
+    val isLiked: Boolean = true,
 )

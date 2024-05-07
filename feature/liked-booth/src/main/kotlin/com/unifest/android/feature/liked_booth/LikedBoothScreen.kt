@@ -24,14 +24,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.liked_booth.viewmodel.ErrorType
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiAction
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiEvent
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
@@ -88,19 +90,18 @@ internal fun LikedBoothScreen(
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
             )
-            if (uiState.likedBoothList.isEmpty()) {
+            if (uiState.likedBooths.isEmpty()) {
                 EmptyLikedBoothItem(modifier = Modifier.fillMaxSize())
             }
             LazyColumn {
                 itemsIndexed(
-                    uiState.likedBoothList,
+                    uiState.likedBooths,
                     key = { _, booth -> booth.id },
                 ) { index, booth ->
-                    // TODO onAction 으로 묶기
                     LikedBoothItem(
                         booth = booth,
                         index = index,
-                        totalCount = uiState.likedBoothList.size,
+                        totalCount = uiState.likedBooths.size,
                         deleteLikedBooth = { onAction(LikedBoothUiAction.OnToggleBookmark(booth)) },
                         modifier = Modifier
                             .clickable {
@@ -116,6 +117,17 @@ internal fun LikedBoothScreen(
                 }
             }
         }
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onAction(LikedBoothUiAction.OnRetryClick(ErrorType.SERVER)) },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onAction(LikedBoothUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
     }
 }
 
@@ -126,114 +138,66 @@ fun LikedBoothScreenPreview() {
         LikedBoothScreen(
             padding = PaddingValues(),
             uiState = LikedBoothUiState(
-                likedBoothList = persistentListOf(
-                    BoothDetailModel(
+                likedBooths = persistentListOf(
+                    BoothModel(
                         id = 1,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 2,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 3,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 4,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 5,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
-                    BoothDetailModel(
+                    BoothModel(
                         id = 6,
                         name = "부스 이름",
                         category = "음식",
                         description = "부스 설명",
-                        warning = "주의사항",
+                        thumbnail = "",
                         location = "부스 위치",
                         latitude = 0.0f,
                         longitude = 0.0f,
-                        menus = listOf(
-                            MenuModel(
-                                id = 1,
-                                name = "메뉴 이름",
-                                price = 1000,
-                                imgUrl = "",
-                            ),
-                        ),
                     ),
                 ),
             ),

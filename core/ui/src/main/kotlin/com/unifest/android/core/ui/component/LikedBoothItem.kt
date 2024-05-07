@@ -1,6 +1,5 @@
 package com.unifest.android.core.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,20 +23,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
-import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.BoothModel
 
 @Composable
 fun LikedBoothItem(
-    booth: BoothDetailModel,
+    booth: BoothModel,
     index: Int,
     totalCount: Int,
-    deleteLikedBooth: (BoothDetailModel) -> Unit,
+    deleteLikedBooth: (BoothModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val bookMarkColor = if (booth.isLiked) MainColor else Color(0xFF4B4B4B)
@@ -70,7 +70,7 @@ fun LikedBoothItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.warning,
+                    text = booth.location,
                     style = Title5,
                     color = Color(0xFF545454),
                     maxLines = 1,
@@ -98,7 +98,7 @@ fun LikedBoothItem(
                 tint = bookMarkColor,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(
+                    .clickableSingle(
                         onClick = {
                             deleteLikedBooth(booth)
                         },
@@ -120,14 +120,13 @@ fun LikedBoothItem(
 @Composable
 fun LikedBoothItemPreview() {
     LikedBoothItem(
-        booth = BoothDetailModel(
+        booth = BoothModel(
             id = 1,
             name = "부스 이름",
             category = "부스 카테고리",
             description = "부스 설명",
-            warning = "",
+            thumbnail = "",
             location = "부스 위치",
-            isLiked = true,
         ),
         index = 0,
         totalCount = 1,

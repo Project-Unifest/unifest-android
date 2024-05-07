@@ -155,7 +155,7 @@ fun BoothDetailScreen(
                 .padding(padding),
         )
         BottomBar(
-            isBookmarked = uiState.boothDetailInfo.isLiked,
+            isBookmarked = uiState.isLiked,
             bookmarkCount = uiState.boothDetailInfo.likes,
             onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),

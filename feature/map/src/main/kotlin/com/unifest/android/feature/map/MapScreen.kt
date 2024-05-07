@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +44,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -117,6 +120,11 @@ internal fun MapRoute(
         },
     )
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getAllBooths()
+        viewModel.getPopularBooths()
+    }
+
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is MapUiEvent.RequestLocationPermission -> {
@@ -148,7 +156,7 @@ internal fun MapScreen(
 ) {
     val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.540470588662664, 127.0765263757882), 14.0)
+        position = CameraPosition(LatLng(37.54118132567716, 127.07673671067072), 14.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
@@ -218,6 +226,7 @@ fun MapContent(
         // TODO 클러스터링 마커 커스텀
         // TODO 지도 중앙 위치 조정
         NaverMap(
+            modifier = Modifier.padding(top = 128.dp),
             cameraPositionState = cameraPositionState,
             locationSource = rememberFusedLocationSource(),
             uiSettings = MapUiSettings(
@@ -351,9 +360,6 @@ fun MapContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
-                LaunchedEffect(uiState.isPopularMode, uiState.isBoothSelectionMode) {
-                    pagerState.animateScrollToPage(page = 0)
-                }
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier.wrapContentHeight(),
@@ -435,6 +441,12 @@ fun BoothItem(
     onAction: (MapUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val density = LocalDensity.current
+    val textStyle = Content2
+    val textHeight = remember(textStyle) {
+        with(density) { Content2.fontSize.toDp() * 2 }
+    }
+
     Card(
         modifier = modifier.clickable {
             onAction(MapUiAction.OnBoothItemClick(boothInfo.id))
@@ -468,6 +480,7 @@ fun BoothItem(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = Content2,
+                        modifier = Modifier.heightIn(min = textHeight),
                     )
                     Spacer(modifier = Modifier.height(3.dp))
                     Row(

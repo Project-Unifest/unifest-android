@@ -75,8 +75,7 @@
 Google Recommend Architecture based on [Now in Android](https://github.com/android/nowinandroid)
 
 ## Module
-<img width="1196" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/0ed17cc6-7a41-4edb-8181-cdcaa09d7587">
-
+<img width="1221" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/d551317c-2472-4465-be3a-9e6b583fc36e">
 
 ## Package Structure
 ```
