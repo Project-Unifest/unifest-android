@@ -6,12 +6,7 @@
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 <br/>
 
-Unifest(유니페스트) - 대학 축제에 지도를 펼치다
-
-<p align="center">
-<img src="https://github.com/Project-Unifest/unifest-android/assets/51016231/943ba4fc-bc8b-4e80-8e15-684b4a612c16" width="30%"/>
-<img src="https://github.com/Project-Unifest/unifest-android/assets/51016231/8e235345-e085-4bed-81cc-65806b271d0a" width="30%"/>
-</p>
+![unifest_graphic_image](https://github.com/Project-Unifest/unifest-android/assets/51016231/f81c1776-67b4-4d95-895b-4f7c404c3198)
 
 <p align="center">
 <img src="https://github.com/Project-Unifest/unifest-android/assets/51016231/4d73d229-fdae-4b43-9499-dfb366085820" width="30%"/>
