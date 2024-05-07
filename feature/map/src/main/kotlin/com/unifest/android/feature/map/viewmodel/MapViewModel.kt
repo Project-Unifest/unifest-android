@@ -191,7 +191,7 @@ class MapViewModel @Inject constructor(
 
     private fun getPopularBooths() {
         viewModelScope.launch {
-            boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
+            boothRepository.getPopularBooths(1)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
@@ -204,7 +204,7 @@ class MapViewModel @Inject constructor(
 
     private fun getAllBooths() {
         viewModelScope.launch {
-            boothRepository.getAllBooths(_uiState.value.festivalInfo.festivalId)
+            boothRepository.getAllBooths(1)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
@@ -352,7 +352,7 @@ class MapViewModel @Inject constructor(
     private fun setEnablePopularMode() {
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
+                boothRepository.getPopularBooths(1)
                     .onSuccess { booths ->
                         _uiState.update {
                             it.copy(
