@@ -357,9 +357,6 @@ fun MapContent(
             }
             Spacer(modifier = Modifier.height(10.dp))
             AnimatedVisibility(uiState.isPopularMode || uiState.isBoothSelectionMode) {
-                LaunchedEffect(uiState.isPopularMode, uiState.isBoothSelectionMode) {
-                    pagerState.animateScrollToPage(page = 0)
-                }
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier.wrapContentHeight(),

@@ -87,6 +87,7 @@ class MapViewModel @Inject constructor(
                 completeFestivalOnboarding()
                 setRecentLikedFestival(action.festival.schoolName)
             }
+
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
             is FestivalUiAction.OnDeleteIconClick -> {
                 _uiState.update {
@@ -193,6 +194,13 @@ class MapViewModel @Inject constructor(
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
+                    }
+                    if (_uiState.value.isPopularMode) {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
+                            )
+                        }
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@MapViewModel)
