@@ -17,7 +17,6 @@ internal class AndroidFeatureConventionPlugin : BuildLogicConventionPlugin(
             implementation(project(path = ":core:designsystem"))
             implementation(project(path = ":core:model"))
             implementation(project(path = ":core:ui"))
-            implementation(project(path = ":feature:navigator"))
 
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.hilt.navigation.compose)

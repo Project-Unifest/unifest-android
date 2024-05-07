@@ -18,6 +18,7 @@ dependencies {
         projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,
+        projects.feature.navigator,
         projects.feature.waiting,
 
         libs.androidx.activity.compose,
