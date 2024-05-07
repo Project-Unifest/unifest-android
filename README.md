@@ -63,7 +63,7 @@ Unifest(유니페스트) - 대학 축제에 지도를 펼치다
 - [ComposeExtensions](https://github.com/taehwandev/ComposeExtensions)
 - [ComposeInvestigator](https://github.com/jisungbin/ComposeInvestigator)
 - [Naver-Map-Compose](https://github.com/fornewid/naver-map-compose)
-- [Ballon](https://github.com/skydoves/Balloon)
+- [Balloon](https://github.com/skydoves/Balloon)
 - [Calendar](https://github.com/kizitonwose/Calendar)
 - Firebase(Analytics, Crashlytics)
 
