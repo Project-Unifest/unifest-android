@@ -180,8 +180,6 @@ class MapViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(festivalInfo = festivals[0])
                     }
-                    getPopularBooths()
-                    getAllBooths()
                 }
                 .onFailure { exception ->
                     handleException(exception, this@MapViewModel)
@@ -189,7 +187,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun getPopularBooths() {
+    fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(1)
                 .onSuccess { booths ->
@@ -202,7 +200,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun getAllBooths() {
+    fun getAllBooths() {
         viewModelScope.launch {
             boothRepository.getAllBooths(1)
                 .onSuccess { booths ->

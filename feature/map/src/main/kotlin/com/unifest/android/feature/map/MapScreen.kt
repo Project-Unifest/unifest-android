@@ -117,6 +117,11 @@ internal fun MapRoute(
         },
     )
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getAllBooths()
+        viewModel.getPopularBooths()
+    }
+
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is MapUiEvent.RequestLocationPermission -> {
