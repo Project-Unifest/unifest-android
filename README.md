@@ -79,6 +79,10 @@ Unifest(유니페스트) - 대학 축제에 지도를 펼치다
 ## Architecture
 Google Recommend Architecture based on [Now in Android](https://github.com/android/nowinandroid)
 
+## Module
+<img width="1196" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/0ed17cc6-7a41-4edb-8181-cdcaa09d7587">
+
+
 ## Package Structure
 ```
 ├── app
