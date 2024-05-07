@@ -55,7 +55,6 @@ data class BoothDetail(
     val longitude: Float,
     @SerialName("menus")
     val menus: List<Menu>,
-    val isLiked: Boolean = false,
 )
 
 @Serializable
