@@ -10,8 +10,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementations(
+        projects.core.data,
+        projects.feature.navigator,
+
         libs.kotlinx.collections.immutable,
         libs.androidx.activity.compose,
         libs.androidx.splash,
