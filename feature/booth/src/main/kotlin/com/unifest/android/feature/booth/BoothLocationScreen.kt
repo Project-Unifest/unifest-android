@@ -68,7 +68,7 @@ fun BoothLocationScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(37.5420, 127.07673671067072), 14.8)
+            position = CameraPosition(LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble()), 14.8)
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
