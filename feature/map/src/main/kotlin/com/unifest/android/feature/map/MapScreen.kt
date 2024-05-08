@@ -156,7 +156,7 @@ internal fun MapScreen(
 ) {
     val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.54118132567716, 127.07673671067072), 14.8)
+        position = CameraPosition(LatLng(37.5430, 127.07673671067072), 14.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
@@ -226,7 +226,6 @@ fun MapContent(
         // TODO 클러스터링 마커 커스텀
         // TODO 지도 중앙 위치 조정
         NaverMap(
-            modifier = Modifier.padding(top = 128.dp),
             cameraPositionState = cameraPositionState,
             locationSource = rememberFusedLocationSource(),
             uiSettings = MapUiSettings(
