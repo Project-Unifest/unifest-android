@@ -68,7 +68,7 @@ fun BoothLocationScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble()), 14.0)
+            position = CameraPosition(LatLng(37.5420, 127.07673671067072), 14.8)
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
@@ -117,7 +117,7 @@ fun BoothLocationAppBar(
                 color = Color.White,
                 shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
             )
-            .padding(8.dp),
+            .padding(vertical = 8.dp, horizontal = 12.dp),
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
