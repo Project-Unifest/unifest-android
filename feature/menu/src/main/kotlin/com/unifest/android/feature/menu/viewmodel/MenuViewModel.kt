@@ -14,8 +14,8 @@ import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -176,7 +176,7 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun deleteLikedBooth(booth: BoothModel) {
+    private fun deleteLikedBooth(booth: LikedBoothModel) {
         viewModelScope.launch {
             boothRepository.likeBooth(booth.id)
                 .onSuccess {
@@ -204,7 +204,7 @@ class MenuViewModel @Inject constructor(
 //        }
 //    }
 
-    private fun updateLikedBooth(booth: BoothModel) {
+    private fun updateLikedBooth(booth: LikedBoothModel) {
         _uiState.update {
             it.copy(
                 likedBooths = it.likedBooths

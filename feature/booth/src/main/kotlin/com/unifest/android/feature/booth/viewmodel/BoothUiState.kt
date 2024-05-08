@@ -2,14 +2,14 @@ package com.unifest.android.feature.booth.viewmodel
 
 import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.model.BoothModel
+import com.unifest.android.core.model.LikedBoothModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class BoothUiState(
     val isLoading: Boolean = false,
     val boothDetailInfo: BoothDetailModel = BoothDetailModel(),
-    val likedBooths: List<BoothModel> = emptyList(),
+    val likedBooths: ImmutableList<LikedBoothModel> = persistentListOf(),
     val isLiked: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,

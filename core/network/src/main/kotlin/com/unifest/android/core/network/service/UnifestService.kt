@@ -6,6 +6,7 @@ import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
 import com.unifest.android.core.network.response.LikeBoothResponse
+import com.unifest.android.core.network.response.LikedBoothsResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -58,7 +59,7 @@ interface UnifestService {
     @GET("api/likes")
     suspend fun getLikedBooths(
         @Query("token") token: String,
-    ): AllBoothsResponse
+    ): LikedBoothsResponse
 
     @GET("api/likes/{booth-id}")
     suspend fun getBoothLikes(

@@ -66,8 +66,8 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
@@ -441,21 +441,21 @@ fun MenuScreenPreview() {
                     ),
                 ),
                 likedBooths = persistentListOf(
-                    BoothModel(
+                    LikedBoothModel(
                         id = 1,
                         name = "부스 이름",
                         category = "부스 카테고리",
                         description = "부스 설명",
-                        thumbnail = "",
                         location = "부스 위치",
+                        warning = "학과 전용 부스",
                     ),
-                    BoothModel(
+                    LikedBoothModel(
                         id = 2,
                         name = "부스 이름",
                         category = "부스 카테고리",
                         description = "부스 설명",
-                        thumbnail = "",
                         location = "부스 위치",
+                        warning = "학과 전용 부스",
                     ),
                 ),
             ),
