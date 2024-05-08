@@ -272,7 +272,7 @@ class MapViewModel @Inject constructor(
 
     private fun clearBoothSearchText() {
         _uiState.update {
-            it.copy(festivalSearchText = TextFieldValue())
+            it.copy(boothSearchText = TextFieldValue())
         }
     }
 
