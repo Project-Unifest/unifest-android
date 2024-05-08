@@ -18,7 +18,7 @@ class BoothRepositoryImpl @Inject constructor(
         service.getPopularBooths(festivalId).data.map { it.toModel() }
     }
 
-    override suspend fun getAllBooths(festivalId: Long): Result<List<BoothModel>> = runSuspendCatching {
+    override suspend fun getAllBooths(festivalId: Long) = runSuspendCatching {
         service.getAllBooths(festivalId).data.map { it.toModel() }
     }
 
