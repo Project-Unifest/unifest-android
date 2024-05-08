@@ -30,14 +30,14 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
-import com.unifest.android.core.model.BoothModel
+import com.unifest.android.core.model.LikedBoothModel
 
 @Composable
 fun LikedBoothItem(
-    booth: BoothModel,
+    booth: LikedBoothModel,
     index: Int,
     totalCount: Int,
-    deleteLikedBooth: (BoothModel) -> Unit,
+    deleteLikedBooth: (LikedBoothModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val bookMarkColor = if (booth.isLiked) MainColor else Color(0xFF4B4B4B)
@@ -70,7 +70,7 @@ fun LikedBoothItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.location,
+                    text = booth.warning,
                     style = Title5,
                     color = Color(0xFF545454),
                     maxLines = 1,
@@ -120,13 +120,13 @@ fun LikedBoothItem(
 @Composable
 fun LikedBoothItemPreview() {
     LikedBoothItem(
-        booth = BoothModel(
+        booth = LikedBoothModel(
             id = 1,
             name = "부스 이름",
             category = "부스 카테고리",
             description = "부스 설명",
-            thumbnail = "",
             location = "부스 위치",
+            warning = "학과 전용 부스",
         ),
         index = 0,
         totalCount = 1,

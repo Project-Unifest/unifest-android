@@ -1,10 +1,12 @@
 package com.unifest.android.core.data.mapper
 
-import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.model.BoothModel
+import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.network.response.Booth
 import com.unifest.android.core.network.response.BoothDetail
+import com.unifest.android.core.network.response.LikedBooth
 import com.unifest.android.core.network.response.Menu
 
 internal fun BoothDetail.toModel(): BoothDetailModel {
@@ -41,5 +43,19 @@ internal fun Booth.toModel(): BoothModel {
         location = location,
         latitude = latitude,
         longitude = longitude,
+    )
+}
+
+internal fun LikedBooth.toModel(): LikedBoothModel {
+    return LikedBoothModel(
+        id = id,
+        name = name,
+        category = category,
+        description = description,
+        thumbnail = thumbnail,
+        location = location,
+        latitude = latitude,
+        longitude = longitude,
+        warning = warning,
     )
 }

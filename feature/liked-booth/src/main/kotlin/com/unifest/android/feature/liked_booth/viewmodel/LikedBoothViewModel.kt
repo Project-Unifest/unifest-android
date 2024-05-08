@@ -8,7 +8,7 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.model.BoothModel
+import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -84,7 +84,7 @@ class LikedBoothViewModel @Inject constructor(
         }
     }
 
-    private fun deleteLikedBooth(booth: BoothModel) {
+    private fun deleteLikedBooth(booth: LikedBoothModel) {
         viewModelScope.launch {
             boothRepository.likeBooth(booth.id)
                 .onSuccess {
@@ -112,7 +112,7 @@ class LikedBoothViewModel @Inject constructor(
 //        }
 //    }
 
-    private fun updateLikedBooth(booth: BoothModel) {
+    private fun updateLikedBooth(booth: LikedBoothModel) {
         _uiState.update {
             it.copy(
                 likedBooths = it.likedBooths
