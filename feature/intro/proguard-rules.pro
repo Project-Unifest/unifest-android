@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
- -keep class com.unifest.android.feature.map.model.** { *; }
+-dontwarn java.lang.invoke.StringConcatFactory

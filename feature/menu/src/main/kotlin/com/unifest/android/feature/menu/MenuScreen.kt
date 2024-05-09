@@ -279,7 +279,7 @@ fun MenuScreen(
                         icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
                         title = stringResource(id = R.string.menu_admin_mode),
                         onClick = {
-                            onMenuUiAction(MenuUiAction.OnContactClick)
+                            onMenuUiAction(MenuUiAction.OnAdministratorModeClick)
                         },
                     )
                 }
