@@ -1,0 +1,94 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "7c0b7c76cc3256d4228b85b9f8ab0b05",
+    "entities": [
+      {
+        "tableName": "liked_festival",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`festival_id` INTEGER NOT NULL, `school_id` INTEGER NOT NULL, `thumbnail` TEXT NOT NULL, `school_name` TEXT NOT NULL, `region` TEXT, `festival_name` TEXT NOT NULL, `begin_date` TEXT NOT NULL, `end_date` TEXT NOT NULL, `star_list` TEXT, `latitude` REAL, `longitude` REAL, PRIMARY KEY(`festival_id`))",
+        "fields": [
+          {
+            "fieldPath": "festivalId",
+            "columnName": "festival_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "school_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "thumbnail",
+            "columnName": "thumbnail",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schoolName",
+            "columnName": "school_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "region",
+            "columnName": "region",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "festivalName",
+            "columnName": "festival_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beginDate",
+            "columnName": "begin_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "end_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "starInfo",
+            "columnName": "star_list",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "festival_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7c0b7c76cc3256d4228b85b9f8ab0b05')"
+    ]
+  }
+}

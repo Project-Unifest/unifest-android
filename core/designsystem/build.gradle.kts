@@ -6,12 +6,20 @@ plugins {
 }
 
 android {
-    namespace = "com.nexters.ilab.android.core.designsystem"
+    namespace = "com.unifest.android.core.designsystem"
 }
 
 dependencies {
     implementations(
-        libs.androidx.core,
+        projects.core.common,
+
+        libs.androidx.splash,
         libs.coil.compose,
+        libs.timber,
+        libs.ballon.compose,
+        libs.compose.keyboard.state,
+        libs.bundles.naver.map.compose,
+
+        libs.bundles.landscapist,
     )
 }

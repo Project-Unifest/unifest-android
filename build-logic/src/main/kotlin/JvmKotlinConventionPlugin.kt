@@ -1,5 +1,5 @@
-import com.unifest.android.ApplicationConfig
 import com.unifest.android.Plugins
+import com.unifest.android.ApplicationConfig
 import com.unifest.android.applyPlugins
 import com.unifest.android.detektPlugins
 import com.unifest.android.libs

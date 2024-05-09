@@ -2,7 +2,7 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
-    alias(libs.plugins.compose.investigator)
+    // alias(libs.plugins.compose.investigator)
 }
 
 android {
@@ -12,7 +12,6 @@ android {
 dependencies {
     implementations(
         libs.kotlinx.collections.immutable,
-        libs.androidx.core,
         libs.timber,
     )
 }

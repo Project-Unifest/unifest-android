@@ -2,7 +2,8 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
-    alias(libs.plugins.compose.investigator)
+    // alias(libs.plugins.compose.investigator)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -11,8 +12,13 @@ android {
 
 dependencies {
     implementations(
+        projects.core.data,
+
         libs.kotlinx.collections.immutable,
-        libs.androidx.core,
         libs.timber,
+        libs.compose.system.ui.controller,
+        libs.android.play.services.location,
+
+        libs.bundles.naver.map.compose,
     )
 }

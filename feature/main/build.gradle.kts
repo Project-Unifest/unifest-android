@@ -3,7 +3,7 @@
 plugins {
     alias(libs.plugins.unifest.android.feature)
     alias(libs.plugins.unifest.android.retrofit)
-    alias(libs.plugins.compose.investigator)
+    // alias(libs.plugins.compose.investigator)
 }
 
 android {
@@ -12,15 +12,18 @@ android {
 
 dependencies {
     implementations(
+        projects.feature.booth,
         projects.feature.home,
+        projects.feature.likedBooth,
         projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,
+        projects.feature.navigator,
         projects.feature.waiting,
 
-        libs.androidx.core,
         libs.androidx.activity.compose,
         libs.kotlinx.collections.immutable,
         libs.coil.compose,
+        libs.compose.system.ui.controller,
     )
 }

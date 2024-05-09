@@ -14,7 +14,8 @@ android {
 
 dependencies {
     implementations(
-        libs.androidx.core,
+        projects.core.model,
+
         libs.androidx.hilt.navigation.compose,
 
         libs.timber,

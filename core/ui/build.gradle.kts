@@ -11,9 +11,14 @@ android {
 
 dependencies {
     implementations(
-        projects.core.designsystem,
         projects.core.common,
+        projects.core.designsystem,
+        projects.core.model,
 
+        libs.kotlinx.collections.immutable,
         libs.coil.compose,
+        libs.flexible.bottomsheet,
+        libs.timber,
+        libs.ballon.compose,
     )
 }

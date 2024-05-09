@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://devrepo.kakao.com/nexus/content/groups/public/") }
+        maven("https://repository.map.naver.com/archive/maven")
     }
 }
 
@@ -26,15 +27,17 @@ include(
 
     ":core:common",
     ":core:data",
+    ":core:database",
+    ":core:datastore",
     ":core:designsystem",
-    ":core:datastore",
-    ":core:domain",
+    ":core:model",
     ":core:network",
-    ":core:datastore",
     ":core:ui",
 
+    ":feature:booth",
     ":feature:home",
     ":feature:intro",
+    ":feature:liked-booth",
     ":feature:main",
     ":feature:map",
     ":feature:menu",

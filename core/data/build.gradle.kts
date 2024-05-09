@@ -3,7 +3,6 @@
 plugins {
     alias(libs.plugins.unifest.android.library)
     alias(libs.plugins.unifest.android.hilt)
-    alias(libs.plugins.unifest.android.retrofit)
     id("kotlinx-serialization")
 }
 
@@ -13,8 +12,11 @@ android {
 
 dependencies {
     implementations(
-        projects.core.network,
+        projects.core.common,
+        projects.core.database,
         projects.core.datastore,
+        projects.core.model,
+        projects.core.network,
 
         libs.timber,
     )

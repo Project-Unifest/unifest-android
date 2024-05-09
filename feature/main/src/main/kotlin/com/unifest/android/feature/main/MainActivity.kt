@@ -3,44 +3,42 @@ package com.unifest.android.feature.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.feature.navigator.IntroNavigator
+import dagger.hilt.android.AndroidEntryPoint
+import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var introNavigator: IntroNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
+            val navigator: MainNavController = rememberMainNavController()
+            val systemUiController = rememberExSystemUiController()
+
+            DisposableEffect(systemUiController) {
+                systemUiController.setSystemBarsColor(
+                    color = Color.White,
+                    darkIcons = true,
+                    isNavigationBarContrastEnforced = false,
+                )
+
+                onDispose {}
+            }
+
             UnifestTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    Greeting("Android")
-                }
+                MainScreen(
+                    navigator = navigator,
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    UnifestTheme {
-        Greeting("Android")
     }
 }

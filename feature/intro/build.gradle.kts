@@ -2,7 +2,7 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
-    alias(libs.plugins.compose.investigator)
+    // alias(libs.plugins.compose.investigator)
 }
 
 android {
@@ -11,9 +11,13 @@ android {
 
 dependencies {
     implementations(
-        libs.androidx.core,
+        projects.core.data,
+        projects.feature.navigator,
+
+        libs.kotlinx.collections.immutable,
         libs.androidx.activity.compose,
         libs.androidx.splash,
+        libs.compose.system.ui.controller,
         libs.timber,
     )
 }
