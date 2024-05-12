@@ -25,5 +25,7 @@ dependencies {
         libs.kotlinx.collections.immutable,
         libs.coil.compose,
         libs.compose.system.ui.controller,
+        libs.androidx.navigation.compose,
+
     )
 }
