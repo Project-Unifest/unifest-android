@@ -102,8 +102,8 @@ internal fun MainScreen(
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            enterTransition = { EnterTransition.None},
-            exitTransition = { ExitTransition.None},
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
             modifier = Modifier.fillMaxSize(),
         ) {
             homeNavGraph(
