@@ -389,6 +389,7 @@ fun AllFestivalsTabRow(
                             .height(if (festivals.isEmpty()) 0.dp else (((festivals.size - 1) / 3 + 1) * 140).dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(bottom = 48.dp),
                     ) {
                         items(
                             count = festivals.size,
