@@ -118,7 +118,8 @@ fun IntroScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 60.dp),
             ) {
                 InformationText()
                 SearchTextField(
