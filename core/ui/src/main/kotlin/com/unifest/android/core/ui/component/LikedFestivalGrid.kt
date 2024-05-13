@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
@@ -126,12 +127,14 @@ fun FestivalItem(
                 Text(
                     text = festival.schoolName,
                     color = Color.Black,
+                    textAlign = TextAlign.Center,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = festival.festivalName,
                     color = Color.Black,
+                    textAlign = TextAlign.Center,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))

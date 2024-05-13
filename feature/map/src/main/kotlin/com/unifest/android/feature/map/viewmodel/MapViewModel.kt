@@ -178,8 +178,10 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch {
             festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
                 .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(festivalInfo = festivals[0])
+                    if (festivals.isNotEmpty()) {
+                        _uiState.update {
+                            it.copy(festivalInfo = festivals[0])
+                        }
                     }
                 }
                 .onFailure { exception ->
