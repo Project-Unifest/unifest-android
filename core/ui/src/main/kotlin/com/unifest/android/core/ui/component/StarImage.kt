@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
@@ -46,9 +47,10 @@ fun StarImage(
             )
             Text(
                 text = label,
-                color = Color.White,
-                style = Content9,
                 modifier = Modifier.align(Alignment.Center),
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                style = Content9,
             )
         }
     }
@@ -63,6 +65,19 @@ fun StarImagePreview() {
             onClick = {},
             isClicked = false,
             label = "",
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun StarImageClickedPreview() {
+    UnifestTheme {
+        StarImage(
+            imgUrl = "",
+            onClick = {},
+            isClicked = true,
+            label = "키스오브라이프",
         )
     }
 }
