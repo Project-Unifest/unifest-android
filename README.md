@@ -6,6 +6,7 @@
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 <br/>
 
+유니페스 : 대학 축제 지도를 펼쳐라! [PlayStore](https://play.google.com/store/apps/details?id=com.unifest.android)
 ![unifest_graphic_image](https://github.com/Project-Unifest/unifest-android/assets/51016231/f81c1776-67b4-4d95-895b-4f7c404c3198)
 
 <p align="center">

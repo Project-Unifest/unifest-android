@@ -3,6 +3,7 @@
 
     <style name="Theme.Unifest.Splash" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.Unifest</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

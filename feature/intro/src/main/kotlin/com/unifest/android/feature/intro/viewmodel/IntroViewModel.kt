@@ -189,7 +189,7 @@ class IntroViewModel @Inject constructor(
             _uiState.value.selectedFestivals.forEach { festival ->
                 likedFestivalRepository.insertLikedFestivalAtSearch(festival)
             }
-            likedFestivalRepository.setRecentLikedFestival("건국대 서울캠")
+            likedFestivalRepository.setRecentLikedFestival("건국대")
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)
         }
