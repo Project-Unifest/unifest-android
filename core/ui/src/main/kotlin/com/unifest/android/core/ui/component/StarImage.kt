@@ -3,15 +3,14 @@ package com.unifest.android.core.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -45,11 +44,9 @@ fun StarImage(
                     .matchParentSize()
                     .background(Color.Black.copy(alpha = 0.6f)),
             )
-            Text(
+            AutoResizedText(
                 text = label,
-                modifier = Modifier.align(Alignment.Center),
                 color = Color.White,
-                textAlign = TextAlign.Center,
                 style = Content9,
             )
         }
