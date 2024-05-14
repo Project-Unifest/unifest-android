@@ -36,8 +36,12 @@ jobs:
 
             -   name: Generate secrets.properties
                 run: |
-                    echo "SERVER_BASE_URL=${{ secrets.SERVER_BASE_URL }}" >> secrets.properties
                     echo "NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}" >> secrets.properties
+
+            -   name: Generate local.properties
+                run: |
+                    echo "RELEASE_SERVER_BASE_URL=${{ secrets.RELEASE_SERVER_BASE_URL }}" >> local.properties
+                    echo "DEBUG_SERVER_BASE_URL=${{ secrets.DEBUG_SERVER_BASE_URL }}" >> local.properties
 
             -   name: Generate keystore.properties
                 run: |
