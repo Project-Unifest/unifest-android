@@ -17,7 +17,7 @@ fun AutoResizedText(
     text: String,
     style: TextStyle,
     modifier: Modifier = Modifier,
-    color: Color = style.color
+    color: Color = style.color,
 ) {
     var resizedTextStyle by remember {
         mutableStateOf(style)
@@ -42,15 +42,15 @@ fun AutoResizedText(
             if (result.didOverflowWidth) {
                 if (style.fontSize.isUnspecified) {
                     resizedTextStyle = resizedTextStyle.copy(
-                        fontSize = defaultFontSize
+                        fontSize = defaultFontSize,
                     )
                 }
                 resizedTextStyle = resizedTextStyle.copy(
-                    fontSize = resizedTextStyle.fontSize * 0.95
+                    fontSize = resizedTextStyle.fontSize * 0.95,
                 )
             } else {
                 shouldDraw = true
             }
-        }
+        },
     )
 }
