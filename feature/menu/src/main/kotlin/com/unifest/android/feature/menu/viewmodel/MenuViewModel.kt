@@ -10,6 +10,7 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.BoothRepository
+import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
@@ -33,6 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
+    private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
@@ -47,6 +49,7 @@ class MenuViewModel @Inject constructor(
     init {
         observeLikedFestivals()
         // observeLikedBooth()
+        getAllFestivals()
         checkFestivalOnboardingCompletion()
     }
 
@@ -97,6 +100,20 @@ class MenuViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun getAllFestivals() {
+        viewModelScope.launch {
+            festivalRepository.getAllFestivals()
+                .onSuccess { festivals ->
+                    _uiState.update {
+                        it.copy(festivals = festivals.toImmutableList())
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@MenuViewModel)
+                }
         }
     }
 
