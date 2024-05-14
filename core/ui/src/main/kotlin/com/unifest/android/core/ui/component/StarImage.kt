@@ -3,7 +3,6 @@ package com.unifest.android.core.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -44,11 +44,10 @@ fun StarImage(
                     .matchParentSize()
                     .background(Color.Black.copy(alpha = 0.6f)),
             )
-            Text(
+            AutoResizedText(
                 text = label,
                 color = Color.White,
                 style = Content9,
-                modifier = Modifier.align(Alignment.Center),
             )
         }
     }
@@ -63,6 +62,19 @@ fun StarImagePreview() {
             onClick = {},
             isClicked = false,
             label = "",
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun StarImageClickedPreview() {
+    UnifestTheme {
+        StarImage(
+            imgUrl = "",
+            onClick = {},
+            isClicked = true,
+            label = "키스오브라이프",
         )
     }
 }
