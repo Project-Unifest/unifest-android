@@ -311,7 +311,7 @@ fun Day(
     Column(
         modifier = Modifier.clickable(
             enabled = isSelectable,
-            showRipple = !isSelected,
+            showRipple = false,
             onClick = { onClick(day) },
         ),
     ) {
