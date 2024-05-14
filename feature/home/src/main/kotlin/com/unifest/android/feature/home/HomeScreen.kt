@@ -258,20 +258,20 @@ fun FestivalScheduleItem(
             Column(
                 modifier = Modifier.width(172.dp),
             ) {
+                Text(
+                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
+                    style = Content4,
+                    color = Color(0xFFC0C0C0),
+                )
+                Spacer(modifier = Modifier.height(5.dp))
                 if (isDataReady) {
                     Text(
-                        text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
-                        style = Content4,
-                        color = Color(0xFFC0C0C0),
+                        text = festival.festivalName + " Day " + (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = Title2,
                     )
                 }
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = festival.festivalName + " Day " + (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = Title2,
-                )
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
                     Icon(
