@@ -40,8 +40,8 @@ jobs:
 
             -   name: Generate local.properties
                 run: |
-                    echo "RELEASE_SERVER_BASE_URL=${{ secrets.RELEASE_SERVER_BASE_URL }}" >> local.properties
-                    echo "DEBUG_SERVER_BASE_URL=${{ secrets.DEBUG_SERVER_BASE_URL }}" >> local.properties
+                    echo "RELEASE_SERVER_BASE_URL=\"${{ secrets.RELEASE_SERVER_BASE_URL }}\"" >> local.properties
+                    echo "DEBUG_SERVER_BASE_URL=\"${{ secrets.DEBUG_SERVER_BASE_URL }}\"" >> local.properties
 
             -   name: Generate keystore.properties
                 run: |
