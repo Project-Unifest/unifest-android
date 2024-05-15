@@ -19,6 +19,7 @@ import javax.inject.Inject
 class SplashActivity : ComponentActivity() {
     @Inject
     lateinit var introNavigator: IntroNavigator
+
     @Inject
     lateinit var mainNavigator: MainNavigator
 

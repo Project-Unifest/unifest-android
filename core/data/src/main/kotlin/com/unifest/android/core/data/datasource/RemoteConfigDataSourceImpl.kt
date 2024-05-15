@@ -10,19 +10,22 @@ import kotlin.coroutines.suspendCoroutine
 
 class RemoteConfigDataSourceImpl @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
-): RemoteConfigDataSource {
+) : RemoteConfigDataSource {
     override suspend fun getValue(key: String): FirebaseRemoteConfigValue? = suspendCoroutine { continuation ->
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                continuation.resume(remoteConfig[key].also {
-                    Timber.d("FirebaseRemoteConfigValue: ${it.asString()}")
-                })
+                continuation.resume(
+                    remoteConfig[key].also {
+                        Timber.d("FirebaseRemoteConfigValue: ${it.asString()}")
+                    },
+                )
             } else {
                 Timber.e(task.exception, "getValue: $key")
                 continuation.resume(null)
             }
         }
     }
+
     override suspend fun getString(key: String): String? = getValue(key)?.asString()
     override suspend fun getString(key: String, defaultValue: String): String = getValue(key)?.asString() ?: defaultValue
 
