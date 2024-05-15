@@ -5,7 +5,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.unifest.android.application)
     alias(libs.plugins.unifest.android.application.compose)
-    alias(libs.plugins.unifest.android.application.firebase)
+    alias(libs.plugins.unifest.android.firebase)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.google.secrets)
 }

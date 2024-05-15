@@ -42,6 +42,7 @@ coil-compose = "2.6.0"
 timber = "5.0.1"
 firebase-bom = "32.8.1"
 firebase-crashlytics = "2.9.9"
+firebase-config = "21.6.3"
 ksp = "1.9.23-1.0.20"
 compose-extensions = "1.6.5"
 compose-stable-marker = "1.0.4"
@@ -109,6 +110,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
@@ -149,7 +151,7 @@ compose-investigator = { id = "land.sungbin.composeinvestigator", version.ref = 
 # Plugins defined by this project
 unifest-android-application = { id = "unifest.android.application", version = "unspecified" }
 unifest-android-application-compose = { id = "unifest.android.application.compose", version = "unspecified" }
-unifest-android-application-firebase = { id = "unifest.android.application.firebase", version = "unspecified" }
+unifest-android-firebase = { id = "unifest.android.firebase", version = "unspecified" }
 unifest-android-library = { id = "unifest.android.library", version = "unspecified" }
 unifest-android-library-compose = { id = "unifest.android.library.compose", version = "unspecified" }
 unifest-android-feature = { id = "unifest.android.feature", version = "unspecified" }
