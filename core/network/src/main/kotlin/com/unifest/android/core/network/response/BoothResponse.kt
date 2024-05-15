@@ -54,7 +54,7 @@ data class BoothDetail(
     @SerialName("description")
     val description: String? = null,
     @SerialName("thumbnail")
-    val thumbnail: String,
+    val thumbnail: String? = null,
     @SerialName("warning")
     val warning: String? = null,
     @SerialName("location")

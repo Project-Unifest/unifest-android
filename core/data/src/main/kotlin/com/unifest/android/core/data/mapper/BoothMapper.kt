@@ -15,7 +15,7 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         name = name,
         category = category,
         description = description ?: "",
-        thumbnail = thumbnail,
+        thumbnail = thumbnail ?: "",
         warning = warning ?: "",
         location = location,
         latitude = latitude,
