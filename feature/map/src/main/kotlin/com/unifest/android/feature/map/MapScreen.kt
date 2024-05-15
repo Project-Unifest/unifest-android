@@ -198,7 +198,6 @@ internal fun MapScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
                 isEditMode = uiState.isEditMode,
-                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
         if (uiState.isPermissionDialogVisible) {

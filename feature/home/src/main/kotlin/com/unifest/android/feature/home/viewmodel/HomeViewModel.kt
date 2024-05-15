@@ -53,10 +53,12 @@ class HomeViewModel @Inject constructor(
     fun onHomeUiAction(action: HomeUiAction) {
         when (action) {
             is HomeUiAction.OnDateSelected -> {
+                _uiState.update {
+                    it.copy(isDataReady = false)
+                }
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
             }
-
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
@@ -148,6 +150,7 @@ class HomeViewModel @Inject constructor(
                             isStarImageClicked = festivals.map { festival ->
                                 List(festival.starInfo.size) { false }.toImmutableList()
                             }.toImmutableList(),
+                            isDataReady = true,
                         )
                     }
                 }
