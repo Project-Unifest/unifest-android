@@ -7,6 +7,14 @@ plugins {
 
 android {
     namespace = "com.unifest.android.feature.intro"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "PACKAGE_NAME", "\"${libs.versions.packageName.get()}\"")
+    }
 }
 
 dependencies {

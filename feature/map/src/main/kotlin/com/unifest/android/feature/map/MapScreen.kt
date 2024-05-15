@@ -423,9 +423,7 @@ fun MapTopAppBar(
                 selectedChips = selectedChips,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp),
-                    ),
+                    .clip(RoundedCornerShape(16.dp)),
             )
             Spacer(modifier = Modifier.height(10.dp))
         }

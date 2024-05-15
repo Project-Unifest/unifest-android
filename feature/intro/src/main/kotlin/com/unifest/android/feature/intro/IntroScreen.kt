@@ -1,5 +1,7 @@
 package com.unifest.android.feature.intro
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -49,12 +51,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
@@ -88,15 +93,34 @@ internal fun IntroRoute(
     navigateToMain: () -> Unit,
     viewModel: IntroViewModel = hiltViewModel(),
 ) {
+    val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val activity = context.findActivity()
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is IntroUiEvent.NavigateToMain -> navigateToMain()
+            is IntroUiEvent.NavigateToMain -> {
+                // navigateToMain()
+            }
+
+            is IntroUiEvent.NavigateToPlayStore -> {
+                val playStoreUrl = "http://play.google.com/store/apps/details?id=${BuildConfig.PACKAGE_NAME}"
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(playStoreUrl)
+                    setPackage("com.android.vending")
+                }
+                startActivity(context, intent, null)
+            }
+
+            is IntroUiEvent.CloseApp -> {
+                activity.finish()
+            }
         }
     }
 
     IntroScreen(
+        shouldUpdate = shouldUpdate,
         uiState = uiState,
         onAction = viewModel::onAction,
     )
@@ -104,74 +128,94 @@ internal fun IntroRoute(
 
 @Composable
 fun IntroScreen(
+    shouldUpdate: Boolean?,
     uiState: IntroUiState,
     onAction: (IntroUiAction) -> Unit,
 ) {
     UnifestScaffold(
         containerColor = Color.White,
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            Column(
+        if (uiState.isLoading) {
+            LoadingWheel(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 60.dp),
-            ) {
-                InformationText()
-                SearchTextField(
-                    searchText = uiState.searchText,
-                    updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
-                    searchTextHintRes = R.string.intro_search_text_hint,
-                    onSearch = { onAction(IntroUiAction.OnSearch(it)) },
-                    clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
-                    modifier = Modifier
-                        .height(46.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                )
-                Spacer(modifier = Modifier.height(18.dp))
-                LikedFestivalsRow(
-                    selectedFestivals = uiState.selectedFestivals,
-                    onAction = onAction,
-                )
-                if (uiState.selectedFestivals.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(21.dp))
-                    UnifestHorizontalDivider()
-                }
-                AllFestivalsTabRow(
-                    festivals = uiState.festivals,
-                    isSearchLoading = uiState.isSearchLoading,
-                    onAction = onAction,
-                    selectedFestivals = uiState.selectedFestivals,
-                    modifier = Modifier.weight(1f),
-                )
-            }
-            UnifestButton(
-                onClick = { onAction(IntroUiAction.OnAddCompleteClick) },
+                    .background(Color.White),
+            )
+        }
+        if (shouldUpdate == true) {
+            AppUpdateDialog(
+                onDismissRequest = { onAction(IntroUiAction.OnUpdateDismissClick) },
+                onUpdateClick = { onAction(IntroUiAction.OnUpdateClick) },
+            )
+        }
+        IntroContent(
+            uiState = uiState,
+            onAction = onAction,
+            innerPadding = innerPadding,
+        )
+    }
+}
+
+@Composable
+fun IntroContent(
+    uiState: IntroUiState,
+    onAction: (IntroUiAction) -> Unit,
+    innerPadding: PaddingValues,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 60.dp),
+        ) {
+            InformationText()
+            SearchTextField(
+                searchText = uiState.searchText,
+                updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
+                searchTextHintRes = R.string.intro_search_text_hint,
+                onSearch = { onAction(IntroUiAction.OnSearch(it)) },
+                clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
+                    .height(46.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
-                contentPadding = PaddingValues(vertical = 17.dp),
-                enabled = uiState.selectedFestivals.isNotEmpty(),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.intro_add_complete),
-                    style = Title4,
-                    fontSize = 14.sp,
-                )
+                    .padding(horizontal = 20.dp),
+            )
+            Spacer(modifier = Modifier.height(18.dp))
+            LikedFestivalsRow(
+                selectedFestivals = uiState.selectedFestivals,
+                onAction = onAction,
+            )
+            if (uiState.selectedFestivals.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(21.dp))
+                UnifestHorizontalDivider()
             }
-            if (uiState.isLoading) {
-                LoadingWheel(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White),
-                )
-            }
+            AllFestivalsTabRow(
+                festivals = uiState.festivals,
+                isSearchLoading = uiState.isSearchLoading,
+                onAction = onAction,
+                selectedFestivals = uiState.selectedFestivals,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        UnifestButton(
+            onClick = { onAction(IntroUiAction.OnAddCompleteClick) },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            contentPadding = PaddingValues(vertical = 17.dp),
+            enabled = uiState.selectedFestivals.isNotEmpty(),
+        ) {
+            Text(
+                text = stringResource(id = R.string.intro_add_complete),
+                style = Title4,
+                fontSize = 14.sp,
+            )
         }
     }
 }
@@ -426,6 +470,7 @@ fun AllFestivalsTabRow(
 fun IntroScreenPreview() {
     UnifestTheme {
         IntroScreen(
+            shouldUpdate = false,
             uiState = IntroUiState(
                 festivals = persistentListOf(
                     FestivalModel(
@@ -500,6 +545,7 @@ fun IntroScreenPreview() {
 fun IntroScreenEmptyPreview() {
     UnifestTheme {
         IntroScreen(
+            shouldUpdate = false,
             uiState = IntroUiState(
                 festivals = persistentListOf(),
             ),

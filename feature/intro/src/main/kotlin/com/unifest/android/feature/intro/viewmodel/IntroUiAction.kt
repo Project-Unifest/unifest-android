@@ -13,6 +13,8 @@ sealed interface IntroUiAction {
     data class OnFestivalDeselected(val festival: FestivalModel) : IntroUiAction
     data object OnAddCompleteClick : IntroUiAction
     data class OnRetryClick(val error: ErrorType) : IntroUiAction
+    data object OnUpdateClick : IntroUiAction
+    data object OnUpdateDismissClick : IntroUiAction
 }
 
 enum class ErrorType {

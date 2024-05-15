@@ -8,6 +8,7 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.data.repository.RemoteConfigRepository
 import com.unifest.android.core.model.FestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -27,6 +28,7 @@ class IntroViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
     private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
+    remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
@@ -35,20 +37,10 @@ class IntroViewModel @Inject constructor(
     val uiEvent: Flow<IntroUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
-            getAllFestivals()
-            if (onboardingRepository.checkIntroCompletion()) {
-                _uiEvent.send(IntroUiEvent.NavigateToMain)
-            } else {
-                _uiState.update {
-                    it.copy(isLoading = false)
-                }
-            }
-        }
+        checkIntroCompletion()
     }
+
+    val shouldUpdate = remoteConfigRepository.shouldUpdate()
 
     fun onAction(action: IntroUiAction) {
         when (action) {
@@ -61,6 +53,24 @@ class IntroViewModel @Inject constructor(
             is IntroUiAction.OnFestivalDeselected -> removeSelectedFestivals(action.festival)
             is IntroUiAction.OnAddCompleteClick -> addLikedFestivals()
             is IntroUiAction.OnRetryClick -> refresh(action.error)
+            is IntroUiAction.OnUpdateClick -> navigateToPlayStore()
+            is IntroUiAction.OnUpdateDismissClick -> closeApp()
+        }
+    }
+
+    private fun checkIntroCompletion() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+            if (onboardingRepository.checkIntroCompletion()) {
+                _uiEvent.send(IntroUiEvent.NavigateToMain)
+            } else {
+                getAllFestivals()
+                _uiState.update {
+                    it.copy(isLoading = false)
+                }
+            }
         }
     }
 
@@ -211,6 +221,18 @@ class IntroViewModel @Inject constructor(
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)
+        }
+    }
+
+    private fun navigateToPlayStore() {
+        viewModelScope.launch {
+            _uiEvent.send(IntroUiEvent.NavigateToPlayStore)
+        }
+    }
+
+    private fun closeApp() {
+        viewModelScope.launch {
+            _uiEvent.send(IntroUiEvent.CloseApp)
         }
     }
 }
