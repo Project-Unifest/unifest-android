@@ -53,7 +53,6 @@ fun FestivalSearchBottomSheet(
     isSearchMode: Boolean,
     isLikedFestivalDeleteDialogVisible: Boolean,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    isOnboardingCompleted: Boolean = false,
     isEditMode: Boolean = false,
 ) {
 //    val bottomSheetState = rememberFlexibleBottomSheetState(
@@ -121,6 +120,7 @@ fun FestivalSearchBottomSheet(
                 Spacer(modifier = Modifier.height(21.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
@@ -129,20 +129,6 @@ fun FestivalSearchBottomSheet(
                         text = stringResource(id = R.string.intro_liked_festivals_title),
                         style = Title3,
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    if (!isOnboardingCompleted) {
-                        LikedFestivalToolTip(
-                            completeOnboarding = {
-                                onFestivalUiAction(FestivalUiAction.OnTooltipClick)
-                            },
-                        )
-                    }
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
                     TextButton(
                         onClick = {
                             onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
@@ -320,7 +306,6 @@ fun SchoolSearchBottomSheetPreview() {
             isSearchMode = false,
             isEditMode = false,
             isLikedFestivalDeleteDialogVisible = false,
-            isOnboardingCompleted = true,
             onFestivalUiAction = {},
         )
     }
