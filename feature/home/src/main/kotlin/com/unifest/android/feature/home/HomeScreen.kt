@@ -264,13 +264,21 @@ fun FestivalScheduleItem(
                     color = Color(0xFFC0C0C0),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                if (isDataReady) {
+                Row {
                     Text(
-                        text = festival.festivalName + " Day " + (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1),
+                        text = festival.festivalName + " Day ",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = Title2,
                     )
+                    if (isDataReady) {
+                        Text(
+                            text = (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1).toString(),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = Title2,
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
