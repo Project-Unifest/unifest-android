@@ -74,6 +74,7 @@ dependencies {
         projects.feature.main,
         projects.feature.map,
         projects.feature.menu,
+        projects.feature.splash,
         projects.feature.waiting,
 
         libs.androidx.activity.compose,

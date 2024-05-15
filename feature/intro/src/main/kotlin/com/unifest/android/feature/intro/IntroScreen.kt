@@ -1,7 +1,5 @@
 package com.unifest.android.feature.intro
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
@@ -51,18 +49,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestScaffold
@@ -80,6 +77,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.feature.intro.viewmodel.ErrorType
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 import com.unifest.android.feature.intro.viewmodel.IntroUiEvent
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
@@ -93,34 +91,17 @@ internal fun IntroRoute(
     navigateToMain: () -> Unit,
     viewModel: IntroViewModel = hiltViewModel(),
 ) {
-    val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val activity = context.findActivity()
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is IntroUiEvent.NavigateToMain -> {
-                // navigateToMain()
-            }
-
-            is IntroUiEvent.NavigateToPlayStore -> {
-                val playStoreUrl = "http://play.google.com/store/apps/details?id=${BuildConfig.PACKAGE_NAME}"
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(playStoreUrl)
-                    setPackage("com.android.vending")
-                }
-                startActivity(context, intent, null)
-            }
-
-            is IntroUiEvent.CloseApp -> {
-                activity.finish()
+                navigateToMain()
             }
         }
     }
 
     IntroScreen(
-        shouldUpdate = shouldUpdate,
         uiState = uiState,
         onAction = viewModel::onAction,
     )
@@ -128,13 +109,18 @@ internal fun IntroRoute(
 
 @Composable
 fun IntroScreen(
-    shouldUpdate: Boolean?,
     uiState: IntroUiState,
     onAction: (IntroUiAction) -> Unit,
 ) {
     UnifestScaffold(
         containerColor = Color.White,
     ) { innerPadding ->
+        IntroContent(
+            uiState = uiState,
+            onAction = onAction,
+            innerPadding = innerPadding,
+        )
+
         if (uiState.isLoading) {
             LoadingWheel(
                 modifier = Modifier
@@ -142,17 +128,18 @@ fun IntroScreen(
                     .background(Color.White),
             )
         }
-        if (shouldUpdate == true) {
-            AppUpdateDialog(
-                onDismissRequest = { onAction(IntroUiAction.OnUpdateDismissClick) },
-                onUpdateClick = { onAction(IntroUiAction.OnUpdateClick) },
+
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onAction(IntroUiAction.OnRetryClick(ErrorType.SERVER)) },
             )
         }
-        IntroContent(
-            uiState = uiState,
-            onAction = onAction,
-            innerPadding = innerPadding,
-        )
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onAction(IntroUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
     }
 }
 
@@ -470,7 +457,6 @@ fun AllFestivalsTabRow(
 fun IntroScreenPreview() {
     UnifestTheme {
         IntroScreen(
-            shouldUpdate = false,
             uiState = IntroUiState(
                 festivals = persistentListOf(
                     FestivalModel(
@@ -545,7 +531,6 @@ fun IntroScreenPreview() {
 fun IntroScreenEmptyPreview() {
     UnifestTheme {
         IntroScreen(
-            shouldUpdate = false,
             uiState = IntroUiState(
                 festivals = persistentListOf(),
             ),
