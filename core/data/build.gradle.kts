@@ -9,6 +9,15 @@ plugins {
 
 android {
     namespace = "com.unifest.android.core.data"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "APP_VERSION", "\"${libs.versions.versionName.get()}\"")
+        buildConfigField("String", "PACKAGE_NAME", "\"${libs.versions.packageName.get()}\"")
+    }
 }
 
 dependencies {
