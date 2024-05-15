@@ -14,9 +14,9 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         id = id,
         name = name,
         category = category,
-        description = description,
+        description = description ?: "",
         thumbnail = thumbnail,
-        warning = warning,
+        warning = warning ?: "",
         location = location,
         latitude = latitude,
         longitude = longitude,
@@ -29,7 +29,7 @@ internal fun Menu.toModel(): MenuModel {
         id = id,
         name = name,
         price = price,
-        imgUrl = imgUrl,
+        imgUrl = imgUrl ?: "",
     )
 }
 

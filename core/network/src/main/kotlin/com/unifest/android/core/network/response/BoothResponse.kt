@@ -52,11 +52,11 @@ data class BoothDetail(
     @SerialName("category")
     val category: String,
     @SerialName("description")
-    val description: String,
+    val description: String? = null,
     @SerialName("thumbnail")
     val thumbnail: String,
     @SerialName("warning")
-    val warning: String,
+    val warning: String? = null,
     @SerialName("location")
     val location: String,
     @SerialName("latitude")
@@ -76,7 +76,7 @@ data class Menu(
     @SerialName("price")
     val price: Int,
     @SerialName("imgUrl")
-    val imgUrl: String,
+    val imgUrl: String? = null,
 )
 
 @Serializable
