@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -44,10 +45,12 @@ fun UnifestDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
+    properties: DialogProperties = DialogProperties(),
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
+        properties = properties,
     ) {
         Column(
             modifier = Modifier
@@ -182,6 +185,10 @@ fun LikedFestivalDeleteDialog(
 fun AppUpdateDialog(
     onDismissRequest: () -> Unit,
     onUpdateClick: () -> Unit,
+    properties: DialogProperties = DialogProperties(
+        dismissOnBackPress = true,
+        dismissOnClickOutside = false,
+    ),
 ) {
     UnifestDialog(
         onDismissRequest = onDismissRequest,
@@ -193,6 +200,7 @@ fun AppUpdateDialog(
         cancelTextResId = null,
         onCancelClick = {},
         onConfirmClick = onUpdateClick,
+        properties = properties,
     )
 }
 
