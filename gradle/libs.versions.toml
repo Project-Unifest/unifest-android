@@ -1,5 +1,12 @@
 [versions]
 
+minSdk = "26"
+targetSdk = "34"
+compileSdk = "34"
+versionCode = "8"
+versionName = "0.1.7"
+packageName = "com.unifest.android"
+
 android-gradle-plugin = "8.2.2"
 kotlin-core = "1.9.23"
 gradle-dependency-handler-extensions = "1.1.0"
@@ -42,6 +49,7 @@ coil-compose = "2.6.0"
 timber = "5.0.1"
 firebase-bom = "32.8.1"
 firebase-crashlytics = "2.9.9"
+firebase-config = "21.6.3"
 ksp = "1.9.23-1.0.20"
 compose-extensions = "1.6.5"
 compose-stable-marker = "1.0.4"
@@ -54,6 +62,11 @@ flexible-bottomsheet = "0.1.2"
 naver-map-compose = "1.5.7"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.12.0"
 
 [libraries]
 
@@ -109,6 +122,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
@@ -121,6 +135,11 @@ flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottoms
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 
@@ -149,7 +168,7 @@ compose-investigator = { id = "land.sungbin.composeinvestigator", version.ref = 
 # Plugins defined by this project
 unifest-android-application = { id = "unifest.android.application", version = "unspecified" }
 unifest-android-application-compose = { id = "unifest.android.application.compose", version = "unspecified" }
-unifest-android-application-firebase = { id = "unifest.android.application.firebase", version = "unspecified" }
+unifest-android-firebase = { id = "unifest.android.firebase", version = "unspecified" }
 unifest-android-library = { id = "unifest.android.library", version = "unspecified" }
 unifest-android-library-compose = { id = "unifest.android.library.compose", version = "unspecified" }
 unifest-android-feature = { id = "unifest.android.feature", version = "unspecified" }

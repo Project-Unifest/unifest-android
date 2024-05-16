@@ -10,7 +10,7 @@ gradlePlugin {
     val conventionPluginClasses = listOf(
         "android.application" to "AndroidApplicationConventionPlugin",
         "android.application.compose" to "AndroidApplicationComposeConventionPlugin",
-        "android.application.firebase" to "AndroidApplicationFirebaseConventionPlugin",
+        "android.firebase" to "AndroidFirebaseConventionPlugin",
         "android.library" to "AndroidLibraryConventionPlugin",
         "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
         "android.feature" to "AndroidFeatureConventionPlugin",
