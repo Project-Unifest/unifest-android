@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.model.StarInfoModel
 import com.unifest.android.core.ui.component.LargeStarImage
 
@@ -33,6 +34,9 @@ fun StarImageDialog(
         modifier = modifier
             .size(dialogSize)
             .clip(CircleShape),
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+        ),
     ) {
         LargeStarImage(
             imgUrl = starInfo.imgUrl,
