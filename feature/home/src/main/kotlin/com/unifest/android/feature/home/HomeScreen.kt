@@ -219,7 +219,7 @@ internal fun HomeScreen(
         if (uiState.isStarImageDialogVisible && uiState.selectedStarInfo != null) {
             StarImageDialog(
                 onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
-                starInfo = uiState.selectedStarInfo
+                starInfo = uiState.selectedStarInfo,
             )
         }
     }
