@@ -109,14 +109,15 @@ internal fun MapRoute(
     val activity = context.findActivity()
 
     val locationPermissions = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
     )
 
     val locationPermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
-            viewModel.onPermissionResult(isGranted = permissions.none { it.value })
+            val allPermissionsGranted = permissions.all { it.value }
+            viewModel.onPermissionResult(isGranted = allPermissionsGranted)
         },
     )
 
@@ -223,7 +224,6 @@ fun MapContent(
     Box {
         // TODO 같은 속성의 Marker 들만 클러스터링 되도록 구현
         // TODO 클러스터링 마커 커스텀
-        // TODO 지도 중앙 위치 조정
         NaverMap(
             cameraPositionState = cameraPositionState,
             locationSource = rememberFusedLocationSource(),
