@@ -235,7 +235,7 @@ fun MapContent(
                 isLogoClickEnabled = false,
             ),
             properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.Follow,
+                locationTrackingMode = LocationTrackingMode.NoFollow,
             ),
         ) {
             PolygonOverlay(
