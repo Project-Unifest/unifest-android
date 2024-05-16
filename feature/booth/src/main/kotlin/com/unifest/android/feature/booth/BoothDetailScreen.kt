@@ -45,6 +45,7 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
@@ -169,6 +170,11 @@ fun BoothDetailScreen(
                 UnifestSnackBar(snackBarData = it)
             },
         )
+
+        if (uiState.isLoading) {
+            LoadingWheel(modifier = Modifier.fillMaxSize())
+        }
+
         if (uiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
                 onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.SERVER)) },
