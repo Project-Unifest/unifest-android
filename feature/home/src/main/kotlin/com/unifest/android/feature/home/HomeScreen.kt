@@ -216,6 +216,12 @@ internal fun HomeScreen(
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
+        if (uiState.isStarImageDialogVisible && uiState.selectedStarInfo != null) {
+            StarImageDialog(
+                onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
+                starInfo = uiState.selectedStarInfo
+            )
+        }
     }
 }
 
@@ -307,6 +313,9 @@ fun FestivalScheduleItem(
                             imgUrl = starInfo.imgUrl,
                             onClick = {
                                 onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
+                            },
+                            onLongClick = {
+                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
                             },
                             isClicked = isStarImageClicked[starIndex],
                             label = starInfo.name,

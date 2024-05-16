@@ -3,6 +3,7 @@ package com.unifest.android.feature.home.viewmodel
 import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.core.model.StarInfoModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
@@ -27,4 +28,6 @@ data class HomeUiState(
     val isWeekMode: Boolean = false,
     val isFestivalOnboardingCompleted: Boolean = false,
     val isDataReady: Boolean = true,
+    val isStarImageDialogVisible: Boolean = false,
+    val selectedStarInfo: StarInfoModel? = null,
 )
