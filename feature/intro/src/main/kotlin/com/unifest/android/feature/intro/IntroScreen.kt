@@ -56,8 +56,10 @@ import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.LoadingWheel
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.SearchTextField
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestScaffold
@@ -75,6 +77,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.feature.intro.viewmodel.ErrorType
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 import com.unifest.android.feature.intro.viewmodel.IntroUiEvent
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
@@ -92,7 +95,9 @@ internal fun IntroRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is IntroUiEvent.NavigateToMain -> navigateToMain()
+            is IntroUiEvent.NavigateToMain -> {
+                navigateToMain()
+            }
         }
     }
 
@@ -110,68 +115,94 @@ fun IntroScreen(
     UnifestScaffold(
         containerColor = Color.White,
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            Column(
+        IntroContent(
+            uiState = uiState,
+            onAction = onAction,
+            innerPadding = innerPadding,
+        )
+
+        if (uiState.isLoading) {
+            LoadingWheel(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 60.dp),
-            ) {
-                InformationText()
-                SearchTextField(
-                    searchText = uiState.searchText,
-                    updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
-                    searchTextHintRes = R.string.intro_search_text_hint,
-                    onSearch = { onAction(IntroUiAction.OnSearch(it)) },
-                    clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
-                    modifier = Modifier
-                        .height(46.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                )
-                Spacer(modifier = Modifier.height(18.dp))
-                LikedFestivalsRow(
-                    selectedFestivals = uiState.selectedFestivals,
-                    onAction = onAction,
-                )
-                if (uiState.selectedFestivals.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(21.dp))
-                    UnifestHorizontalDivider()
-                }
-                AllFestivalsTabRow(
-                    festivals = uiState.festivals,
-                    isSearchLoading = uiState.isSearchLoading,
-                    onAction = onAction,
-                    selectedFestivals = uiState.selectedFestivals,
-                    modifier = Modifier.weight(1f),
-                )
-            }
-            UnifestButton(
-                onClick = { onAction(IntroUiAction.OnAddCompleteClick) },
+                    .background(Color.White),
+            )
+        }
+
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onAction(IntroUiAction.OnRetryClick(ErrorType.SERVER)) },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onAction(IntroUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
+    }
+}
+
+@Composable
+fun IntroContent(
+    uiState: IntroUiState,
+    onAction: (IntroUiAction) -> Unit,
+    innerPadding: PaddingValues,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 60.dp),
+        ) {
+            InformationText()
+            SearchTextField(
+                searchText = uiState.searchText,
+                updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
+                searchTextHintRes = R.string.intro_search_text_hint,
+                onSearch = { onAction(IntroUiAction.OnSearch(it)) },
+                clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
+                    .height(46.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
-                contentPadding = PaddingValues(vertical = 17.dp),
-                enabled = uiState.selectedFestivals.isNotEmpty(),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.intro_add_complete),
-                    style = Title4,
-                    fontSize = 14.sp,
-                )
+                    .padding(horizontal = 20.dp),
+            )
+            Spacer(modifier = Modifier.height(18.dp))
+            LikedFestivalsRow(
+                selectedFestivals = uiState.selectedFestivals,
+                onAction = onAction,
+            )
+            if (uiState.selectedFestivals.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(21.dp))
+                UnifestHorizontalDivider()
             }
-            if (uiState.isLoading) {
-                LoadingWheel(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White),
-                )
-            }
+            AllFestivalsTabRow(
+                festivals = uiState.festivals,
+                isSearchLoading = uiState.isSearchLoading,
+                onAction = onAction,
+                selectedFestivals = uiState.selectedFestivals,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        UnifestButton(
+            onClick = { onAction(IntroUiAction.OnAddCompleteClick) },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            contentPadding = PaddingValues(vertical = 17.dp),
+            enabled = uiState.selectedFestivals.isNotEmpty(),
+        ) {
+            Text(
+                text = stringResource(id = R.string.intro_add_complete),
+                style = Title4,
+                fontSize = 14.sp,
+            )
         }
     }
 }

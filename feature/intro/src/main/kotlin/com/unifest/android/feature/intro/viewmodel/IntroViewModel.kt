@@ -35,19 +35,7 @@ class IntroViewModel @Inject constructor(
     val uiEvent: Flow<IntroUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
-            getAllFestivals()
-            if (onboardingRepository.checkIntroCompletion()) {
-                _uiEvent.send(IntroUiEvent.NavigateToMain)
-            } else {
-                _uiState.update {
-                    it.copy(isLoading = false)
-                }
-            }
-        }
+        getAllFestivals()
     }
 
     fun onAction(action: IntroUiAction) {
@@ -78,6 +66,9 @@ class IntroViewModel @Inject constructor(
 
     private fun getAllFestivals() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
             festivalRepository.getAllFestivals()
                 .onSuccess { festivals ->
                     _uiState.update {
@@ -87,6 +78,9 @@ class IntroViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@IntroViewModel)
                 }
+            _uiState.update {
+                it.copy(isLoading = false)
+            }
         }
     }
 

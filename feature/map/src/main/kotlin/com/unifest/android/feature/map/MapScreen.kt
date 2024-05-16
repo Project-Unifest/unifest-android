@@ -198,7 +198,6 @@ internal fun MapScreen(
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
                 isEditMode = uiState.isEditMode,
-                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
         if (uiState.isPermissionDialogVisible) {
@@ -423,9 +422,7 @@ fun MapTopAppBar(
                 selectedChips = selectedChips,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .clip(
-                        RoundedCornerShape(16.dp),
-                    ),
+                    .clip(RoundedCornerShape(16.dp)),
             )
             Spacer(modifier = Modifier.height(10.dp))
         }

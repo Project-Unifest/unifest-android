@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.intro"
+    namespace = "com.unifest.android.feature.splash"
 
     buildFeatures {
         buildConfig = true

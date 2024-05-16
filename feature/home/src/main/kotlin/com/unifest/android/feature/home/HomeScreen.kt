@@ -165,6 +165,7 @@ internal fun HomeScreen(
                             scheduleIndex = scheduleIndex,
                             likedFestivals = uiState.likedFestivals,
                             selectedDate = uiState.selectedDate,
+                            isDataReady = uiState.isDataReady,
                             isStarImageClicked = uiState.isStarImageClicked[scheduleIndex],
                             onHomeUiAction = onHomeUiAction,
                         )
@@ -213,7 +214,6 @@ internal fun HomeScreen(
                 isEditMode = uiState.isEditMode,
                 isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
-                isOnboardingCompleted = uiState.isFestivalOnboardingCompleted,
             )
         }
     }
@@ -236,6 +236,7 @@ fun FestivalScheduleItem(
     likedFestivals: ImmutableList<FestivalModel>,
     selectedDate: LocalDate,
     isStarImageClicked: ImmutableList<Boolean>,
+    isDataReady: Boolean,
     onHomeUiAction: (HomeUiAction) -> Unit,
 ) {
     Column {
@@ -262,12 +263,22 @@ fun FestivalScheduleItem(
                     color = Color(0xFFC0C0C0),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = festival.festivalName + " Day " + (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = Title2,
-                )
+                Row {
+                    Text(
+                        text = festival.festivalName + " Day ",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = Title2,
+                    )
+                    if (isDataReady) {
+                        Text(
+                            text = (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1).toString(),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = Title2,
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
                     Icon(
