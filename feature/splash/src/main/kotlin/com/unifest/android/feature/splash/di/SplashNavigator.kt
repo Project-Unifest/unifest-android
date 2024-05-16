@@ -1,10 +1,10 @@
-package com.unifest.android.feature.intro.di
+package com.unifest.android.feature.splash.di
 
 import android.app.Activity
 import android.content.Intent
 import com.unifest.android.core.common.extension.startActivityWithAnimation
-import com.unifest.android.feature.intro.IntroActivity
-import com.unifest.feature.navigator.IntroNavigator
+import com.unifest.android.feature.splash.SplashActivity
+import com.unifest.feature.navigator.SplashNavigator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,13 +12,13 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-internal class IntroNavigatorImpl @Inject constructor() : IntroNavigator {
+internal class SplashNavigatorImpl @Inject constructor() : SplashNavigator {
     override fun navigateFrom(
         activity: Activity,
         withFinish: Boolean,
         intentBuilder: Intent.() -> Intent,
     ) {
-        activity.startActivityWithAnimation<IntroActivity>(
+        activity.startActivityWithAnimation<SplashActivity>(
             withFinish = withFinish,
             intentBuilder = intentBuilder,
         )
@@ -27,8 +27,8 @@ internal class IntroNavigatorImpl @Inject constructor() : IntroNavigator {
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class IntroNavigatorModule {
+internal abstract class SplashNavigatorModule {
     @Singleton
     @Binds
-    abstract fun bindIntroNavigator(introNavigatorImpl: IntroNavigatorImpl): IntroNavigator
+    abstract fun bindSplashNavigator(splashNavigatorImpl: SplashNavigatorImpl): SplashNavigator
 }

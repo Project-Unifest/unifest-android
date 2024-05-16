@@ -3,11 +3,21 @@
 plugins {
     alias(libs.plugins.unifest.android.library)
     alias(libs.plugins.unifest.android.hilt)
+    alias(libs.plugins.unifest.android.firebase)
     id("kotlinx-serialization")
 }
 
 android {
     namespace = "com.unifest.android.core.data"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField("String", "APP_VERSION", "\"${libs.versions.versionName.get()}\"")
+        buildConfigField("String", "PACKAGE_NAME", "\"${libs.versions.packageName.get()}\"")
+    }
 }
 
 dependencies {

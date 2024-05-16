@@ -88,6 +88,9 @@
     <string name="liked_festival_delete_description">정말 삭제하실 건가요?</string>
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
+    <string name="app_update_title">업데이트가 필요합니다</string>
+    <string name="app_update_description">원활한 서비스 이용을 위해\n최신 버전으로 업데이트가 필요합니다</string>
+    <string name="app_update_confirm">업데이트 하기</string>
 
     <!--   Contact-->
     <string name="contact_title">이용문의</string>

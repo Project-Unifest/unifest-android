@@ -44,3 +44,4 @@ include(
     ":feature:navigator",
     ":feature:waiting",
 )
+include(":feature:splash")

@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -33,6 +35,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UnifestDialog(
+    onDismissRequest: () -> Unit,
     @StringRes titleResId: Int,
     iconResId: Int?,
     iconDescription: String?,
@@ -42,10 +45,12 @@ fun UnifestDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
+    properties: DialogProperties = DialogProperties(),
 ) {
     BasicAlertDialog(
-        onDismissRequest = onCancelClick,
+        onDismissRequest = onDismissRequest,
         modifier = modifier,
+        properties = properties,
     ) {
         Column(
             modifier = Modifier
@@ -72,6 +77,7 @@ fun UnifestDialog(
             Text(
                 text = stringResource(id = descriptionResId),
                 color = Color(0xFF545454),
+                textAlign = TextAlign.Center,
                 style = BoothLocation,
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -128,6 +134,7 @@ fun ServerErrorDialog(
     onRetryClick: () -> Unit,
 ) {
     UnifestDialog(
+        onDismissRequest = {},
         titleResId = R.string.server_error_title,
         iconResId = R.drawable.ic_caution,
         iconDescription = "Caution Icon",
@@ -144,6 +151,7 @@ fun NetworkErrorDialog(
     onRetryClick: () -> Unit,
 ) {
     UnifestDialog(
+        onDismissRequest = {},
         titleResId = R.string.network_error_title,
         iconResId = R.drawable.ic_network,
         iconDescription = "Network Error Icon",
@@ -161,6 +169,7 @@ fun LikedFestivalDeleteDialog(
     onConfirmClick: () -> Unit,
 ) {
     UnifestDialog(
+        onDismissRequest = {},
         titleResId = R.string.liked_festival_delete_title,
         iconResId = R.drawable.ic_caution,
         iconDescription = "Caution Icon",
@@ -169,6 +178,29 @@ fun LikedFestivalDeleteDialog(
         cancelTextResId = R.string.cancel,
         onCancelClick = onCancelClick,
         onConfirmClick = onConfirmClick,
+    )
+}
+
+@Composable
+fun AppUpdateDialog(
+    onDismissRequest: () -> Unit,
+    onUpdateClick: () -> Unit,
+    properties: DialogProperties = DialogProperties(
+        dismissOnBackPress = true,
+        dismissOnClickOutside = false,
+    ),
+) {
+    UnifestDialog(
+        onDismissRequest = onDismissRequest,
+        titleResId = R.string.app_update_title,
+        iconResId = R.drawable.ic_caution,
+        iconDescription = "Caution Icon",
+        descriptionResId = R.string.app_update_description,
+        confirmTextResId = R.string.app_update_confirm,
+        cancelTextResId = null,
+        onCancelClick = {},
+        onConfirmClick = onUpdateClick,
+        properties = properties,
     )
 }
 
@@ -195,6 +227,17 @@ fun LikedFestivalDeleteDialogPreview() {
         LikedFestivalDeleteDialog(
             onCancelClick = {},
             onConfirmClick = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun AppUpdateDialogPreview() {
+    UnifestTheme {
+        AppUpdateDialog(
+            onDismissRequest = {},
+            onUpdateClick = {},
         )
     }
 }

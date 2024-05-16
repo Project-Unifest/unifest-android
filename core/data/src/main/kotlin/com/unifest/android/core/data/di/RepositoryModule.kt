@@ -10,6 +10,8 @@ import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepositoryImpl
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.OnboardingRepositoryImpl
+import com.unifest.android.core.data.repository.RemoteConfigRepository
+import com.unifest.android.core.data.repository.RemoteConfigRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -38,4 +40,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindOnboardingRepository(onboardingRepositoryImpl: OnboardingRepositoryImpl): OnboardingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRemoteConfigRepository(remoteConfigRepositoryImpl: RemoteConfigRepositoryImpl): RemoteConfigRepository
 }

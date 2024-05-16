@@ -1,8 +1,8 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.unifest.android.ApplicationConfig
 import com.unifest.android.Plugins
 import com.unifest.android.applyPlugins
 import com.unifest.android.configureAndroid
+import com.unifest.android.libs
 import org.gradle.kotlin.dsl.configure
 
 internal class AndroidApplicationConventionPlugin : BuildLogicConventionPlugin(
@@ -13,9 +13,9 @@ internal class AndroidApplicationConventionPlugin : BuildLogicConventionPlugin(
             configureAndroid(this)
 
             defaultConfig {
-                targetSdk = ApplicationConfig.TargetSdk
-                versionCode = ApplicationConfig.VersionCode
-                versionName = ApplicationConfig.VersionName
+                targetSdk = libs.versions.targetSdk.get().toInt()
+                versionCode = libs.versions.versionCode.get().toInt()
+                versionName = libs.versions.versionName.get()
             }
         }
     },
