@@ -86,7 +86,9 @@ internal fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toImmutableList(),
                 currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) },
+                onTabSelected = {
+                    navigator.navigate(it)
+                },
             )
         },
         snackbarHost = {
@@ -169,7 +171,11 @@ private fun MainBottomBar(
                         MainBottomBarItem(
                             tab = tab,
                             selected = tab == currentTab,
-                            onClick = { onTabSelected(tab) },
+                            onClick = {
+                                if (tab != currentTab) {
+                                    onTabSelected(tab)
+                                }
+                            },
                         )
                     }
                 }
