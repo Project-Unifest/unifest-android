@@ -46,11 +46,18 @@ class MapViewModel @Inject constructor(
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
+        requestLocationPermission()
         searchSchoolName()
         getAllFestivals()
         checkMapOnboardingCompletion()
         checkFestivalOnboardingCompletion()
         observeLikedFestivals()
+    }
+
+    private fun requestLocationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.RequestLocationPermission)
+        }
     }
 
     fun onPermissionResult(isGranted: Boolean) {

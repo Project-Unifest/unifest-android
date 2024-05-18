@@ -52,6 +52,9 @@ class BoothViewModel @Inject constructor(
 
     private fun getBoothDetail() {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
             boothRepository.getBoothDetail(boothId)
                 .onSuccess { booth ->
                     _uiState.update {
@@ -62,6 +65,9 @@ class BoothViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@BoothViewModel)
                 }
+            _uiState.update {
+                it.copy(isLoading = false)
+            }
         }
     }
 

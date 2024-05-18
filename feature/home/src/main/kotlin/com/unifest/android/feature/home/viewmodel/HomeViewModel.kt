@@ -48,6 +48,7 @@ class HomeViewModel @Inject constructor(
         getAllFestivals()
         checkFestivalOnboardingCompletion()
         initStarImageClicked()
+        getTodayFestivals(_uiState.value.selectedDate.toString())
     }
 
     fun onHomeUiAction(action: HomeUiAction) {
