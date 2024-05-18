@@ -495,6 +495,8 @@ fun BoothItem(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = boothInfo.location,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = Title5,
                         )
                     }
