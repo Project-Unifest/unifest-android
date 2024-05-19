@@ -55,8 +55,8 @@ import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -113,7 +113,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == DayPosition.MonthDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -130,7 +130,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == WeekDayPosition.RangeDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -308,17 +308,18 @@ fun Day(
         !(day.isBefore(beginDate) || day.isAfter(endDate))
     }
 
-    Column(
-        modifier = Modifier.clickable(
-            enabled = isSelectable,
-            showRipple = false,
-            onClick = { onClick(day) },
-        ),
+    Box(
+        modifier = Modifier
+            .clickable(
+                enabled = isSelectable,
+                showRipple = false,
+                onClick = { onClick(day) },
+            ),
     ) {
         Box(
             modifier = Modifier
                 .aspectRatio(1f) // This is important for square-sizing!
-                .padding(10.dp)
+                .padding(16.dp)
                 .clip(CircleShape)
                 .background(color = if (isSelected) MainColor else Color.Transparent)
                 .then(
@@ -343,10 +344,10 @@ fun Day(
         if (showFestivalDot) {
             Box(
                 modifier = Modifier
-                    .size(7.dp)
+                    .size(9.dp)
                     .clip(CircleShape)
                     .background(Color(0xFF1FC0BA))
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.BottomCenter),
             )
         }
     }
