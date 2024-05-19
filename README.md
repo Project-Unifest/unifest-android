@@ -76,7 +76,7 @@
 Google Recommend Architecture based on [Now in Android](https://github.com/android/nowinandroid)
 
 ## Module
-<img width="1221" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/d551317c-2472-4465-be3a-9e6b583fc36e">
+<img width="1309" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/c195f537-bc3f-42ba-98ca-d0ffaacb01ae">
 
 ## Package Structure
 ```
@@ -101,6 +101,7 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 │   ├── map
 │   ├── menu
 │   ├── navigator
+│   ├── splash
 │   └── waiting
 ├── gradle
 │   └── libs.versions.toml
