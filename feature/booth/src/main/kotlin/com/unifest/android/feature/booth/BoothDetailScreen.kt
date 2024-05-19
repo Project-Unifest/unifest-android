@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,6 +67,7 @@ import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
+import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
@@ -322,10 +325,17 @@ fun BoothDescription(
     onAction: (BoothUiAction) -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+        val configuration = LocalConfiguration.current
+        val maxWidth = remember(configuration) {
+            val screenWidth = configuration.screenWidthDp.dp - 40.dp
+            screenWidth * (2 / 3f)
+        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = name,
-                modifier = Modifier.alignByBaseline(),
+                modifier = Modifier
+                    .widthIn(max = maxWidth)
+                    .alignByBaseline(),
                 style = BoothTitle1,
             )
             Spacer(modifier = Modifier.width(5.dp))
@@ -364,7 +374,10 @@ fun BoothDescription(
             onClick = { onAction(BoothUiAction.OnCheckLocationClick) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(text = stringResource(id = R.string.booth_check_locaiton))
+            Text(
+                text = stringResource(id = R.string.booth_check_locaiton),
+                style = Title5,
+            )
         }
     }
 }
