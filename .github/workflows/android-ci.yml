@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
     ci-build:
-        runs-on: macos-latest
+        runs-on: ubuntu-latest
 
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip-ci') }}
 
