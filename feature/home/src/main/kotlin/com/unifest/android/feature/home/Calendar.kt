@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -55,8 +57,8 @@ import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title5
+import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -113,7 +115,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == DayPosition.MonthDate
                         Day(
-                            day = day.date,
+                            day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -130,7 +132,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == WeekDayPosition.RangeDate
                         Day(
-                            day = day.date,
+                            day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -211,12 +213,14 @@ fun MonthAndWeekCalendarTitle(
 ) {
     val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
     val currentMonth = visibleMonth.yearMonth.month
+    val currentYear = visibleMonth.yearMonth.year
 
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
             modifier = Modifier.padding(20.dp),
             currentMonth = currentMonth,
+            currentYear = currentYear,
             goToPrevious = {
                 coroutineScope.launch {
                     if (isWeekMode) {
@@ -247,20 +251,33 @@ fun MonthAndWeekCalendarTitle(
 fun SimpleCalendarTitle(
     // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
     currentMonth: Month,
+    currentYear: Int,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.height(40.dp),
+        modifier = modifier
+            .height(40.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
+        Row(
             modifier = Modifier.weight(1f),
-            text = currentMonth.displayText(),
-            style = BoothTitle0,
-            textAlign = TextAlign.Start,
-        )
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            Text(
+                text = "${currentYear}년 ${currentMonth.displayText()}",
+                style = BoothTitle0,
+                textAlign = TextAlign.Start,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            ColorCircleWithText(color = Color(0xFF1FC0BA), text = "1개")
+            Spacer(modifier = Modifier.width(4.dp))
+            ColorCircleWithText(color = Color(0xFFFF8A1F), text = "2개")
+            Spacer(modifier = Modifier.width(4.dp))
+            ColorCircleWithText(color = Color(0xFFFF3939), text = "3개 이상")
+        }
         CalendarNavigationIcon(
             icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
             contentDescription = "Previous",
@@ -271,6 +288,23 @@ fun SimpleCalendarTitle(
             contentDescription = "Next",
             onClick = goToNext,
         )
+    }
+}
+
+@Composable
+fun ColorCircleWithText(color: Color, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 4.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(7.dp)
+                .clip(CircleShape)
+                .background(color),
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(text = text, style = Content6)
     }
 }
 
@@ -302,24 +336,23 @@ fun Day(
 ) {
     val currentDate = LocalDate.now()
     val isToday = day == currentDate
-    val showFestivalDot = allFestivals.any { festival ->
+    val festivalCount = allFestivals.count { festival ->
         val beginDate = festival.beginDate.toLocalDate()
         val endDate = festival.endDate.toLocalDate()
         !(day.isBefore(beginDate) || day.isAfter(endDate))
     }
 
-    Box(
-        modifier = Modifier
-            .clickable(
-                enabled = isSelectable,
-                showRipple = false,
-                onClick = { onClick(day) },
-            ),
+    Column(
+        modifier = Modifier.clickable(
+            enabled = isSelectable,
+            showRipple = false,
+            onClick = { onClick(day) },
+        ),
     ) {
         Box(
             modifier = Modifier
                 .aspectRatio(1f) // This is important for square-sizing!
-                .padding(16.dp)
+                .padding(10.dp)
                 .clip(CircleShape)
                 .background(color = if (isSelected) MainColor else Color.Transparent)
                 .then(
@@ -341,13 +374,18 @@ fun Day(
                 style = Title5,
             )
         }
-        if (showFestivalDot) {
+        if (festivalCount > 0) {
+            val festivalDotColor = when (festivalCount) {
+                1 -> Color(0xFF1FC0BA)
+                2 -> Color(0xFFFF8A1F)
+                else -> Color(0xFFFF3939)
+            }
             Box(
                 modifier = Modifier
-                    .size(9.dp)
+                    .size(7.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF1FC0BA))
-                    .align(Alignment.BottomCenter),
+                    .background(festivalDotColor)
+                    .align(Alignment.CenterHorizontally),
             )
         }
     }
