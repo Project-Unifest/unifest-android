@@ -43,7 +43,7 @@ jobs:
                 run: echo "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > app/google-services.json
 
             -   name: Generate unifest.jks
-                run: echo "${{ secrets.UNIFEST_KEYSTORE }}" | base64 --decode > .app/unifest.jks
+                run: echo "${{ secrets.UNIFEST_KEYSTORE }}" | base64 --decode > app/unifest.jks
 
             -   name: Extract Version Name
                 run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
