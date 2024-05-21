@@ -1,0 +1,75 @@
+name: Android CD
+
+env:
+    GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false"
+    GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    cd-build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Set up JDK 17
+                uses: actions/setup-java@v3
+                with:
+                    distribution: 'corretto'
+                    java-version: 17
+
+            -   name: Generate secrets.properties
+                run: |
+                    echo "NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}" >> secrets.properties
+
+            -   name: Generate local.properties
+                run: |
+                    echo "RELEASE_SERVER_BASE_URL=\"${{ secrets.RELEASE_SERVER_BASE_URL }}\"" >> local.properties
+                    echo "DEBUG_SERVER_BASE_URL=\"${{ secrets.DEBUG_SERVER_BASE_URL }}\"" >> local.properties
+
+            -   name: Generate keystore.properties
+                run: |
+                    echo "STORE_FILE=${{ secrets.STORE_FILE }}" >> keystore.properties
+                    echo "STORE_PASSWORD=${{ secrets.STORE_PASSWORD }}" >> keystore.properties
+                    echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> keystore.properties
+                    echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> keystore.properties
+
+            -   name: Generate google-services.json
+                run: echo "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > app/google-services.json
+
+            -   name: Extract Version Name
+                run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+                id: extract_version
+
+            -   name: Build Release APK
+                run: |
+                    ./gradlew :app:assembleRelease
+
+            -   name: Upload Release Build to Artifacts
+                uses: actions/upload-artifact@v3
+                with:
+                    name: release-artifacts
+                    path: app/build/outputs/apk/release/
+                    if-no-files-found: error
+
+            -   name: Create Github Release
+                uses: softprops/action-gh-release@v1
+                with:
+                    tag_name: ${{ steps.extract_version.outputs.version }}
+                    release_name: ${{ steps.extract_version.outputs.version }}
+                    generate_release_notes: true
+                    files: |
+                        app/build/outputs/apk/release/app-release.apk
+
+            -   name: Upload artifact to Firebase App Distribution
+                uses: wzieba/Firebase-Distribution-Github-Action@v1
+                with:
+                    appId: ${{secrets.FIREBASE_APP_ID}}
+                    serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+                    groups: testers
+                    file: app/build/outputs/apk/release/app-release.apk
