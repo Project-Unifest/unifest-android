@@ -5,9 +5,9 @@ env:
     GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
 on:
-    push:
-        tags:
-            - "v*.*.*"
+    pull_request:
+        branches:
+            - main
 
 jobs:
     cd-build:
@@ -42,6 +42,10 @@ jobs:
             -   name: Generate google-services.json
                 run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > app/google-services.json
 
+            -   name: Extract Version Name
+                run: echo "##[set-output name=version;]$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+                id: extract_version
+
             -   name: Build Release APK
                 run: |
                     ./gradlew :app:assembleRelease
@@ -56,9 +60,11 @@ jobs:
             -   name: Create Github Release
                 uses: softprops/action-gh-release@v1
                 with:
+                    tag_name: ${{ steps.extract_version.outputs.version }}
+                    release_name: ${{ steps.extract_version.outputs.version }}
                     generate_release_notes: true
                     files: |
-                        android/app/build/outputs/apk/release/app-release.apk
+                        app/build/outputs/apk/release/app-release.apk
 
             -   name: Upload artifact to Firebase App Distribution
                 uses: wzieba/Firebase-Distribution-Github-Action@v1
