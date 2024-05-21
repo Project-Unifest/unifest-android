@@ -24,7 +24,7 @@ jobs:
                     java-version: 17
 
             -   name: Generate unifest.jks
-                run: echo '${{ secrets.UNIFEST_KEYSTORE }}' | base64 --decode > ./app/unifest.jks
+                run: echo '${{ secrets.UNIFEST_KEYSTORE }}' | base64 --d > ./app/unifest.jks
 
             -   name: Generate secrets.properties
                 run: |
