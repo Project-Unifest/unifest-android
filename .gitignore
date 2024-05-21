@@ -60,3 +60,5 @@ secrets.properties
 /report/*
 
 /app/release/*
+
+/app/google-services.json
