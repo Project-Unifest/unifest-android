@@ -304,7 +304,12 @@ fun ColorCircleWithText(color: Color, text: String) {
                 .background(color),
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text = text, style = Content6)
+        Text(
+            text = text,
+            style = Content6,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
