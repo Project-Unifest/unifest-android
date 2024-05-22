@@ -115,7 +115,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == DayPosition.MonthDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -132,7 +132,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == WeekDayPosition.RangeDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
