@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,7 +56,6 @@ import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
-import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.MainColor
@@ -196,7 +193,7 @@ private fun CalendarNavigationIcon(
         .clip(CircleShape)
         .clickable(
             role = Role.Button,
-            onClick = onClick
+            onClick = onClick,
         ),
 ) {
     Icon(
