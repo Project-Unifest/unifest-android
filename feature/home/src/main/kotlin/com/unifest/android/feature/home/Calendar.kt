@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -190,15 +191,13 @@ private fun CalendarNavigationIcon(
     onClick: () -> Unit,
 ) = Box(
     modifier = Modifier
-        .fillMaxHeight()
-        .aspectRatio(1f)
-        .clip(shape = CircleShape)
+        .size(20.dp)
         .clickable(role = Role.Button, onClick = onClick),
 ) {
     Icon(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp)
+            .height(15.dp)
+            .width(8.dp)
             .align(Alignment.Center),
         imageVector = icon,
         contentDescription = contentDescription,
@@ -219,7 +218,7 @@ fun MonthAndWeekCalendarTitle(
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(start = 20.dp, end = 7.dp, top = 20.dp, bottom = 20.dp),
             currentMonth = currentMonth,
             currentYear = currentYear,
             goToPrevious = {
@@ -262,10 +261,11 @@ fun SimpleCalendarTitle(
             .height(40.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.Bottom,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "${currentYear}년 ${currentMonth.displayText()}",
@@ -280,12 +280,13 @@ fun SimpleCalendarTitle(
             ColorCircleWithText(color = Color(0xFFFF3939), text = "3개 이상")
         }
         CalendarNavigationIcon(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_calender_left),
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
+        Spacer(modifier = Modifier.width(10.dp))
         CalendarNavigationIcon(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_right),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_calender_right),
             contentDescription = "Next",
             onClick = goToNext,
         )
