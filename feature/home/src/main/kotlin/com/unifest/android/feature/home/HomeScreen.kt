@@ -92,7 +92,6 @@ internal fun HomeRoute(
         when (event) {
             is HomeUiEvent.NavigateBack -> popBackStack()
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
-            is HomeUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 
