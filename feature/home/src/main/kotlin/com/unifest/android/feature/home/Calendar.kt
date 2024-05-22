@@ -58,6 +58,7 @@ import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
+import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.MainColor
@@ -192,7 +193,11 @@ private fun CalendarNavigationIcon(
 ) = Box(
     modifier = Modifier
         .size(20.dp)
-        .clickable(role = Role.Button, onClick = onClick),
+        .clip(CircleShape)
+        .clickable(
+            role = Role.Button,
+            onClick = onClick
+        ),
 ) {
     Icon(
         modifier = Modifier
@@ -269,10 +274,10 @@ fun SimpleCalendarTitle(
         ) {
             Text(
                 text = "${currentYear}년 ${currentMonth.displayText()}",
-                style = BoothTitle0,
+                style = BoothTitle1,
                 textAlign = TextAlign.Start,
             )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(6.dp))
             ColorCircleWithText(color = Color(0xFF1FC0BA), text = "1개")
             Spacer(modifier = Modifier.width(4.dp))
             ColorCircleWithText(color = Color(0xFFFF8A1F), text = "2개")
