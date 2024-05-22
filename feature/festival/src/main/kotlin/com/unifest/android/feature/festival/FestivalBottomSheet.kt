@@ -1,4 +1,4 @@
-package com.unifest.android.core.ui.component
+package com.unifest.android.feature.festival
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -28,10 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.unifest.android.core.common.ButtonType
-import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
@@ -39,6 +36,10 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.ui.component.LikedFestivalsGrid
+import com.unifest.android.feature.festival.viewmodel.ButtonType
+import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.core.designsystem.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -161,10 +162,14 @@ fun FestivalSearchBottomSheet(
         if (isLikedFestivalDeleteDialogVisible) {
             LikedFestivalDeleteDialog(
                 onCancelClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CANCEL))
+                    onFestivalUiAction(
+                        FestivalUiAction.OnDeleteDialogButtonClick(
+                            ButtonType.CANCEL))
                 },
                 onConfirmClick = {
-                    onFestivalUiAction(FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CONFIRM))
+                    onFestivalUiAction(
+                        FestivalUiAction.OnDeleteDialogButtonClick(
+                            ButtonType.CONFIRM))
                 },
             )
         }

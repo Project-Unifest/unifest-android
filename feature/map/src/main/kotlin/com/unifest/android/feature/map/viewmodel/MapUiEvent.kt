@@ -7,5 +7,4 @@ sealed interface MapUiEvent {
     data object GoToAppSettings : MapUiEvent
     data class NavigateToBoothDetail(val boothId: Long) : MapUiEvent
     data class ShowSnackBar(val message: UiText) : MapUiEvent
-    data class ShowToast(val message: UiText) : MapUiEvent
 }

@@ -41,16 +41,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
-import com.unifest.android.core.ui.component.StarImage
-import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
+import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
@@ -61,7 +59,12 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.core.ui.component.StarImage
+import com.unifest.android.feature.festival.FestivalSearchBottomSheet
+import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
+import com.unifest.android.feature.festival.viewmodel.FestivalUiState
+import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -77,12 +80,15 @@ internal fun HomeRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
     onShowSnackBar: (message: UiText) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    festivalViewModel: FestivalViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
 
-    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+    ObserveAsEvents(flow = homeViewModel.uiEvent) { event ->
         when (event) {
             is HomeUiEvent.NavigateBack -> popBackStack()
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
@@ -90,18 +96,27 @@ internal fun HomeRoute(
         }
     }
 
+    ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
+        when (event) {
+            is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     HomeScreen(
         padding = padding,
-        uiState = uiState,
-        onHomeUiAction = viewModel::onHomeUiAction,
-        onFestivalUiAction = viewModel::onFestivalUiAction,
+        homeUiState = homeUiState,
+        festivalUiState = festivalUiState,
+        onHomeUiAction = homeViewModel::onHomeUiAction,
+        onFestivalUiAction = festivalViewModel::onFestivalUiAction,
     )
 }
 
 @Composable
 internal fun HomeScreen(
     padding: PaddingValues,
-    uiState: HomeUiState,
+    homeUiState: HomeUiState,
+    festivalUiState: FestivalUiState,
     onHomeUiAction: (HomeUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
@@ -113,17 +128,17 @@ internal fun HomeScreen(
         LazyColumn {
             item {
                 Calendar(
-                    selectedDate = uiState.selectedDate,
+                    selectedDate = homeUiState.selectedDate,
                     onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
-                    allFestivals = uiState.allFestivals,
-                    isWeekMode = uiState.isWeekMode,
+                    allFestivals = homeUiState.allFestivals,
+                    isWeekMode = homeUiState.isWeekMode,
                     ocClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
                 )
             }
             item {
-                FestivalScheduleText(selectedDate = uiState.selectedDate)
+                FestivalScheduleText(selectedDate = homeUiState.selectedDate)
             }
-            if (uiState.todayFestivals.isEmpty()) {
+            if (homeUiState.todayFestivals.isEmpty()) {
                 item {
                     Box(
                         contentAlignment = Alignment.Center,
@@ -155,7 +170,7 @@ internal fun HomeScreen(
                 }
             } else {
                 itemsIndexed(
-                    items = uiState.todayFestivals,
+                    items = homeUiState.todayFestivals,
                     key = { _, festival -> festival.festivalId },
                 ) { scheduleIndex, festival ->
                     Column {
@@ -163,14 +178,14 @@ internal fun HomeScreen(
                         FestivalScheduleItem(
                             festival = festival,
                             scheduleIndex = scheduleIndex,
-                            likedFestivals = uiState.likedFestivals,
-                            selectedDate = uiState.selectedDate,
-                            isDataReady = uiState.isDataReady,
-                            isStarImageClicked = uiState.isStarImageClicked[scheduleIndex],
+                            likedFestivals = homeUiState.likedFestivals,
+                            selectedDate = homeUiState.selectedDate,
+                            isDataReady = homeUiState.isDataReady,
+                            isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
                             onHomeUiAction = onHomeUiAction,
                         )
                     }
-                    if (scheduleIndex < uiState.todayFestivals.size - 1) {
+                    if (scheduleIndex < homeUiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             color = Color(0xFFDFDFDF),
@@ -181,7 +196,7 @@ internal fun HomeScreen(
             }
             item {
                 UnifestOutlinedButton(
-                    onClick = { onHomeUiAction(HomeUiAction.OnAddLikedFestivalClick) },
+                    onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
@@ -197,22 +212,22 @@ internal fun HomeScreen(
             item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item { IncomingFestivalText() }
-            if (uiState.incomingFestivals.isNotEmpty()) {
-                items(uiState.incomingFestivals) { festival ->
+            if (homeUiState.incomingFestivals.isNotEmpty()) {
+                items(homeUiState.incomingFestivals) { festival ->
                     IncomingFestivalCard(festival)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
-        if (uiState.isFestivalSearchBottomSheetVisible) {
+        if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = uiState.festivalSearchText,
+                searchText = festivalUiState.festivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                likedFestivals = uiState.likedFestivals,
-                festivalSearchResults = uiState.festivalSearchResults,
-                isSearchMode = uiState.isSearchMode,
-                isEditMode = uiState.isEditMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                likedFestivals = festivalUiState.likedFestivals,
+                festivalSearchResults = festivalUiState.festivalSearchResults,
+                isSearchMode = festivalUiState.isSearchMode,
+                isEditMode = festivalUiState.isEditMode,
+                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
@@ -413,7 +428,7 @@ fun HomeScreenPreview() {
     UnifestTheme {
         HomeScreen(
             padding = PaddingValues(),
-            uiState = HomeUiState(
+            homeUiState = HomeUiState(
                 todayFestivals = persistentListOf(
                     FestivalTodayModel(
                         festivalId = 1,
@@ -474,6 +489,7 @@ fun HomeScreenPreview() {
                     ),
                 ),
             ),
+            festivalUiState = FestivalUiState(),
             onHomeUiAction = {},
             onFestivalUiAction = {},
         )
