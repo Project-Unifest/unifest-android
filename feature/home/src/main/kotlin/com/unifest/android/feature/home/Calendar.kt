@@ -223,7 +223,7 @@ fun MonthAndWeekCalendarTitle(
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
-            modifier = Modifier.padding(start = 20.dp, end = 7.dp, top = 20.dp, bottom = 20.dp),
+            modifier = Modifier.padding(start = 18.dp, end = 7.dp, top = 20.dp, bottom = 20.dp),
             currentMonth = currentMonth,
             currentYear = currentYear,
             goToPrevious = {
@@ -274,7 +274,7 @@ fun SimpleCalendarTitle(
         ) {
             Text(
                 text = "${currentYear}년 ${currentMonth.displayText()}",
-                style = BoothTitle1,
+                style = BoothTitle0,
                 textAlign = TextAlign.Start,
             )
             Spacer(modifier = Modifier.width(6.dp))
