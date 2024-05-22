@@ -342,17 +342,18 @@ fun Day(
         !(day.isBefore(beginDate) || day.isAfter(endDate))
     }
 
-    Column(
-        modifier = Modifier.clickable(
-            enabled = isSelectable,
-            showRipple = false,
-            onClick = { onClick(day) },
-        ),
+    Box(
+        modifier = Modifier
+            .clickable(
+                enabled = isSelectable,
+                showRipple = false,
+                onClick = { onClick(day) },
+            ),
     ) {
         Box(
             modifier = Modifier
                 .aspectRatio(1f) // This is important for square-sizing!
-                .padding(10.dp)
+                .padding(16.dp)
                 .clip(CircleShape)
                 .background(color = if (isSelected) MainColor else Color.Transparent)
                 .then(
@@ -382,10 +383,10 @@ fun Day(
             }
             Box(
                 modifier = Modifier
-                    .size(7.dp)
+                    .size(9.dp)
                     .clip(CircleShape)
                     .background(festivalDotColor)
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.BottomCenter),
             )
         }
     }
