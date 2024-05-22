@@ -81,7 +81,7 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 ## Package Structure
 ```
 ├── app
-│   └── Application
+│   └── application
 ├── build-logic
 ├── core
 │   ├── common
