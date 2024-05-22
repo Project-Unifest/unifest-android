@@ -163,13 +163,13 @@ fun FestivalSearchBottomSheet(
             LikedFestivalDeleteDialog(
                 onCancelClick = {
                     onFestivalUiAction(
-                        FestivalUiAction.OnDeleteDialogButtonClick(
-                            ButtonType.CANCEL))
+                        FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CANCEL),
+                    )
                 },
                 onConfirmClick = {
                     onFestivalUiAction(
-                        FestivalUiAction.OnDeleteDialogButtonClick(
-                            ButtonType.CONFIRM))
+                        FestivalUiAction.OnDeleteDialogButtonClick(ButtonType.CONFIRM),
+                    )
                 },
             )
         }
