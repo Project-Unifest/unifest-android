@@ -1,6 +1,7 @@
 package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -174,6 +176,13 @@ fun BoothDetailScreen(
             },
         )
 
+        if (uiState.isMenuImageDialogVisible && uiState.selectedMenu != null) {
+            MenuImageDialog(
+                onDismissRequest = { onAction(BoothUiAction.OnMenuImageDialogDismiss) },
+                menu = uiState.selectedMenu,
+            )
+        }
+
         if (uiState.isLoading) {
             LoadingWheel(modifier = Modifier.fillMaxSize())
         }
@@ -237,7 +246,12 @@ fun BoothDetailContent(
             items(
                 items = uiState.boothDetailInfo.menus,
                 key = { it.id },
-            ) { menu -> MenuItem(menu) }
+            ) { menu ->
+                MenuItem(
+                    menu = menu,
+                    onAction = onAction,
+                )
+            }
         }
     }
 }
@@ -324,24 +338,25 @@ fun BoothDescription(
     location: String,
     onAction: (BoothUiAction) -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val maxWidth = remember(configuration) {
+        val screenWidth = configuration.screenWidthDp.dp - 40.dp
+        screenWidth * (2 / 3f)
+    }
+
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        val configuration = LocalConfiguration.current
-        val maxWidth = remember(configuration) {
-            val screenWidth = configuration.screenWidthDp.dp - 40.dp
-            screenWidth * (2 / 3f)
-        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = name,
                 modifier = Modifier
                     .widthIn(max = maxWidth)
-                    .alignByBaseline(),
+                    .alignBy(LastBaseline),
                 style = BoothTitle1,
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
                 text = warning,
-                modifier = Modifier.alignByBaseline(),
+                modifier = Modifier.alignBy(LastBaseline),
                 style = BoothCaution,
                 color = MainColor,
             )
@@ -392,7 +407,10 @@ fun MenuText() {
 }
 
 @Composable
-fun MenuItem(menu: MenuModel) {
+fun MenuItem(
+    menu: MenuModel,
+    onAction: (BoothUiAction) -> Unit,
+) {
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
@@ -402,7 +420,14 @@ fun MenuItem(menu: MenuModel) {
             placeholder = painterResource(id = R.drawable.ic_item_placeholder),
             modifier = Modifier
                 .size(86.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
+                .clickable(
+                    onClick = {
+                        if (menu.imgUrl.isNotEmpty()) {
+                            onAction(BoothUiAction.OnMenuImageClick(menu))
+                        }
+                    },
+                ),
         )
         Spacer(modifier = Modifier.width(13.dp))
         Column(

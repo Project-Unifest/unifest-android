@@ -9,6 +9,7 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -47,6 +48,8 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnCheckLocationClick -> navigateToBoothLocation()
             is BoothUiAction.OnToggleBookmark -> toggleBookmark()
             is BoothUiAction.OnRetryClick -> refresh(action.error)
+            is BoothUiAction.OnMenuImageClick -> showMenuImageDialog(action.menu)
+            is BoothUiAction.OnMenuImageDialogDismiss -> hideMenuImageDialog()
         }
     }
 
@@ -160,6 +163,24 @@ class BoothViewModel @Inject constructor(
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)
+        }
+    }
+
+    private fun showMenuImageDialog(menu: MenuModel) {
+        _uiState.update {
+            it.copy(
+                isMenuImageDialogVisible = true,
+                selectedMenu = menu,
+            )
+        }
+    }
+
+    private fun hideMenuImageDialog() {
+        _uiState.update {
+            it.copy(
+                isMenuImageDialogVisible = false,
+                selectedMenu = null,
+            )
         }
     }
 

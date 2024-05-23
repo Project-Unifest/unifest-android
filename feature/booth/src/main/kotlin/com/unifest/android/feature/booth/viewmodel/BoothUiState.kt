@@ -3,6 +3,7 @@ package com.unifest.android.feature.booth.viewmodel
 import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.LikedBoothModel
+import com.unifest.android.core.model.MenuModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -13,6 +14,8 @@ data class BoothUiState(
     val isLiked: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
+    val isMenuImageDialogVisible: Boolean = false,
+    val selectedMenu: MenuModel? = null,
     val outerCords: ImmutableList<LatLng> = persistentListOf(
         LatLng(50.0, 150.0),
         LatLng(50.0, 100.0),

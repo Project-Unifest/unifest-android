@@ -50,7 +50,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
@@ -70,8 +69,12 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
-import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.festival.FestivalSearchBottomSheet
+import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
+import com.unifest.android.feature.festival.viewmodel.FestivalUiState
+import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.menu.viewmodel.ErrorType
 import com.unifest.android.feature.menu.viewmodel.MenuUiAction
 import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
@@ -84,13 +87,14 @@ import timber.log.Timber
 internal fun MenuRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
-    navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
-    viewModel: MenuViewModel = hiltViewModel(),
+    menuViewModel: MenuViewModel = hiltViewModel(),
+    festivalViewModel: FestivalViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val menuUiState by menuViewModel.uiState.collectAsStateWithLifecycle()
+    val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val appVersion = remember {
@@ -103,13 +107,12 @@ internal fun MenuRoute(
     }
 
     LaunchedEffect(key1 = null) {
-        viewModel.getLikedBooths()
+        menuViewModel.getLikedBooths()
     }
 
-    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+    ObserveAsEvents(flow = menuViewModel.uiEvent) { event ->
         when (event) {
             is MenuUiEvent.NavigateBack -> popBackStack()
-            is MenuUiEvent.NavigateToMap -> navigateToMap()
             is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MenuUiEvent.NavigateToContact -> uriHandler.openUri(BuildConfig.UNIFEST_CONTACT_URL)
@@ -119,12 +122,21 @@ internal fun MenuRoute(
         }
     }
 
+    ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
+        when (event) {
+            is FestivalUiEvent.NavigateBack -> popBackStack()
+            is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     MenuScreen(
         padding = padding,
-        uiState = uiState,
+        menuUiState = menuUiState,
+        festivalUiState = festivalUiState,
         appVersion = appVersion,
-        onMenuUiAction = viewModel::onMenuUiAction,
-        onFestivalUiAction = viewModel::onFestivalUiAction,
+        onMenuUiAction = menuViewModel::onMenuUiAction,
+        onFestivalUiAction = festivalViewModel::onFestivalUiAction,
     )
 }
 
@@ -132,7 +144,8 @@ internal fun MenuRoute(
 @Composable
 fun MenuScreen(
     padding: PaddingValues,
-    uiState: MenuUiState,
+    menuUiState: MenuUiState,
+    festivalUiState: FestivalUiState,
     appVersion: String,
     onMenuUiAction: (MenuUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
@@ -169,7 +182,7 @@ fun MenuScreen(
                             style = Title3,
                         )
                         TextButton(
-                            onClick = { onMenuUiAction(MenuUiAction.OnAddClick) },
+                            onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
                             modifier = Modifier.padding(end = 8.dp),
                         ) {
                             Text(
@@ -186,16 +199,16 @@ fun MenuScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 20.dp)
-                            .height(if (uiState.likedFestivals.isEmpty()) 0.dp else ((uiState.likedFestivals.size / 5 + 1) * 140).dp),
+                            .height(if (menuUiState.likedFestivals.isEmpty()) 0.dp else ((menuUiState.likedFestivals.size / 5 + 1) * 140).dp),
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         items(
-                            uiState.likedFestivals.size,
-                            key = { index -> uiState.likedFestivals[index].festivalId },
+                            menuUiState.likedFestivals.size,
+                            key = { index -> menuUiState.likedFestivals[index].festivalId },
                         ) { index ->
                             FestivalItem(
-                                festival = uiState.likedFestivals[index],
+                                festival = menuUiState.likedFestivals[index],
                                 onMenuUiAction = onMenuUiAction,
                             )
                         }
@@ -229,7 +242,7 @@ fun MenuScreen(
                         }
                     }
                 }
-                if (uiState.likedBooths.isEmpty()) {
+                if (menuUiState.likedBooths.isEmpty()) {
                     item {
                         EmptyLikedBoothItem(
                             modifier = Modifier
@@ -239,13 +252,13 @@ fun MenuScreen(
                     }
                 } else {
                     itemsIndexed(
-                        items = uiState.likedBooths.take(3),
+                        items = menuUiState.likedBooths.take(3),
                         key = { _, booth -> booth.id },
                     ) { index, booth ->
                         LikedBoothItem(
                             booth = booth,
                             index = index,
-                            totalCount = uiState.likedBooths.size,
+                            totalCount = menuUiState.likedBooths.size,
                             deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
                             modifier = Modifier
                                 .clickable {
@@ -305,27 +318,27 @@ fun MenuScreen(
                 }
             }
         }
-        if (uiState.isServerErrorDialogVisible) {
+        if (menuUiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
                 onRetryClick = { onMenuUiAction(MenuUiAction.OnRetryClick(ErrorType.SERVER)) },
             )
         }
 
-        if (uiState.isNetworkErrorDialogVisible) {
+        if (menuUiState.isNetworkErrorDialogVisible) {
             NetworkErrorDialog(
                 onRetryClick = { onMenuUiAction(MenuUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
 
-        if (uiState.isFestivalSearchBottomSheetVisible) {
+        if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = uiState.festivalSearchText,
+                searchText = festivalUiState.festivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                likedFestivals = uiState.likedFestivals,
-                festivalSearchResults = uiState.festivalSearchResults,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
-                isSearchMode = uiState.isSearchMode,
-                isEditMode = uiState.isEditMode,
+                likedFestivals = festivalUiState.likedFestivals,
+                festivalSearchResults = festivalUiState.festivalSearchResults,
+                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                isSearchMode = festivalUiState.isSearchMode,
+                isEditMode = festivalUiState.isEditMode,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
@@ -412,7 +425,7 @@ fun MenuScreenPreview() {
     UnifestTheme {
         MenuScreen(
             padding = PaddingValues(),
-            uiState = MenuUiState(
+            menuUiState = MenuUiState(
                 festivals = persistentListOf(
                     FestivalModel(
                         1,
@@ -458,6 +471,7 @@ fun MenuScreenPreview() {
                     ),
                 ),
             ),
+            festivalUiState = FestivalUiState(),
             appVersion = "1.0.0",
             onMenuUiAction = {},
             onFestivalUiAction = {},

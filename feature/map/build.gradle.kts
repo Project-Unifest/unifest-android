@@ -13,10 +13,10 @@ android {
 dependencies {
     implementations(
         projects.core.data,
+        projects.feature.festival,
 
         libs.kotlinx.collections.immutable,
         libs.timber,
-        libs.compose.system.ui.controller,
         libs.android.play.services.location,
 
         libs.bundles.naver.map.compose,
