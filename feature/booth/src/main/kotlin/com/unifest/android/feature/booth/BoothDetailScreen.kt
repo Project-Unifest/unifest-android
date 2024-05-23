@@ -1,6 +1,7 @@
 package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -175,6 +176,13 @@ fun BoothDetailScreen(
             },
         )
 
+        if (uiState.isMenuImageDialogVisible && uiState.selectedMenu != null) {
+            MenuImageDialog(
+                onDismissRequest = { onAction(BoothUiAction.OnMenuImageDialogDismiss)},
+                menu = uiState.selectedMenu,
+            )
+        }
+
         if (uiState.isLoading) {
             LoadingWheel(modifier = Modifier.fillMaxSize())
         }
@@ -238,7 +246,12 @@ fun BoothDetailContent(
             items(
                 items = uiState.boothDetailInfo.menus,
                 key = { it.id },
-            ) { menu -> MenuItem(menu) }
+            ) { menu ->
+                MenuItem(
+                    menu = menu,
+                    onAction = onAction,
+                )
+            }
         }
     }
 }
@@ -394,7 +407,10 @@ fun MenuText() {
 }
 
 @Composable
-fun MenuItem(menu: MenuModel) {
+fun MenuItem(
+    menu: MenuModel,
+    onAction: (BoothUiAction) -> Unit,
+) {
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
@@ -404,7 +420,14 @@ fun MenuItem(menu: MenuModel) {
             placeholder = painterResource(id = R.drawable.ic_item_placeholder),
             modifier = Modifier
                 .size(86.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
+                .clickable(
+                    onClick = {
+                        if (menu.imgUrl.isNotEmpty()) {
+                            onAction(BoothUiAction.OnMenuImageClick(menu))
+                        }
+                    },
+                ),
         )
         Spacer(modifier = Modifier.width(13.dp))
         Column(
