@@ -162,29 +162,4 @@ class HomeViewModel @Inject constructor(
             it.copy(isWeekMode = flag)
         }
     }
-
-//    private fun isInDateRange(selectedDate: LocalDate, beginDate: String, endDate: String): Boolean {
-//        return !selectedDate.isBefore(beginDate.toLocalDate()) && !selectedDate.isAfter(endDate.toLocalDate())
-//    }
-//
-//    fun updateTodayFestivals(selectedDate: LocalDate) {
-//        val todayFestivals = _uiState.value.allFestivals.filter {
-//            isInDateRange(selectedDate, it.beginDate, it.endDate)
-//        }.map {
-//            FestivalTodayModel(
-//                festivalId = it.festivalId,
-//                schoolId = it.schoolId,
-//                thumbnail = it.thumbnail,
-//                schoolName = it.schoolName,
-//                festivalName = it.festivalName,
-//                beginDate = it.beginDate,
-//                endDate = it.endDate,
-//                starInfo = listOf(),
-//            )
-//        }.toImmutableList()
-//
-//        _uiState.update { currentState ->
-//            currentState.copy(todayFestivals = todayFestivals)
-//        }
-//    }
 }
