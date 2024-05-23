@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.DialogProperties
@@ -65,12 +66,14 @@ fun MenuImageDialog(
             Text(
                 text = menu.name,
                 color = Color.White,
+                textAlign = TextAlign.Center,
                 style = Title2,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = menu.price.formatAsCurrency(),
                 color = Color.White,
+                textAlign = TextAlign.Center,
                 style = Content1,
             )
         }
