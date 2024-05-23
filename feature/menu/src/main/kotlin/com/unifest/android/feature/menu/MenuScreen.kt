@@ -87,7 +87,6 @@ import timber.log.Timber
 internal fun MenuRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
-    navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
@@ -114,7 +113,6 @@ internal fun MenuRoute(
     ObserveAsEvents(flow = menuViewModel.uiEvent) { event ->
         when (event) {
             is MenuUiEvent.NavigateBack -> popBackStack()
-            is MenuUiEvent.NavigateToMap -> navigateToMap()
             is MenuUiEvent.NavigateToLikedBooth -> navigateToLikedBooth()
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MenuUiEvent.NavigateToContact -> uriHandler.openUri(BuildConfig.UNIFEST_CONTACT_URL)
@@ -126,6 +124,7 @@ internal fun MenuRoute(
 
     ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
         when (event) {
+            is FestivalUiEvent.NavigateBack -> popBackStack()
             is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
             is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }

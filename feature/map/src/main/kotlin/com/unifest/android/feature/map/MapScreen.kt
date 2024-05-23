@@ -147,6 +147,7 @@ internal fun MapRoute(
 
     ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
         when (event) {
+            is FestivalUiEvent.NavigateBack -> {}
             is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
             is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }

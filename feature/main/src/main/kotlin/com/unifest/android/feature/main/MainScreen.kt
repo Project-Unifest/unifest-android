@@ -130,7 +130,6 @@ internal fun MainScreen(
             menuNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
-                navigateToMap = navigator::popBackStackIfNotMap,
                 navigateToLikedBooth = navigator::navigateToLikedBooth,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,

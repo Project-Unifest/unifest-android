@@ -90,13 +90,13 @@ internal fun HomeRoute(
 
     ObserveAsEvents(flow = homeViewModel.uiEvent) { event ->
         when (event) {
-            is HomeUiEvent.NavigateBack -> popBackStack()
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
 
     ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
         when (event) {
+            is FestivalUiEvent.NavigateBack -> popBackStack()
             is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
             is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }

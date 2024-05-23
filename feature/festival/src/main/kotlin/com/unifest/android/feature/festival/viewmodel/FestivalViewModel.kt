@@ -125,6 +125,7 @@ class FestivalViewModel @Inject constructor(
             if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
                 // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 setFestivalSearchBottomSheetVisible(false)
+                _uiEvent.send(FestivalUiEvent.NavigateBack)
             } else {
                 _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
             }
