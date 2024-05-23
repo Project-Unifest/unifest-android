@@ -76,7 +76,7 @@
 Google Recommend Architecture based on [Now in Android](https://github.com/android/nowinandroid)
 
 ## Module
-<img width="1309" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/c195f537-bc3f-42ba-98ca-d0ffaacb01ae">
+<img width="1189" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/9b9cd9c8-cda1-46ce-b848-210114ff1d7d">
 
 ## Package Structure
 ```
@@ -94,6 +94,7 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 │   └── ui
 ├── feature
 │   ├── booth
+│   ├── festival
 │   ├── home
 │   ├── intro
 │   ├── liked-booth

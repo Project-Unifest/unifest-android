@@ -4,7 +4,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.feature.map.model.BoothMapModel
 
 sealed interface MapUiAction {
-    data object OnTitleClick : MapUiAction
     data object OnTooltipClick : MapUiAction
     data class OnSearchTextUpdated(val searchText: TextFieldValue) : MapUiAction
     data object OnSearchTextCleared : MapUiAction
