@@ -178,7 +178,7 @@ fun BoothDetailScreen(
 
         if (uiState.isMenuImageDialogVisible && uiState.selectedMenu != null) {
             MenuImageDialog(
-                onDismissRequest = { onAction(BoothUiAction.OnMenuImageDialogDismiss)},
+                onDismissRequest = { onAction(BoothUiAction.OnMenuImageDialogDismiss) },
                 menu = uiState.selectedMenu,
             )
         }
