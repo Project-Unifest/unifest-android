@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -324,24 +325,25 @@ fun BoothDescription(
     location: String,
     onAction: (BoothUiAction) -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val maxWidth = remember(configuration) {
+        val screenWidth = configuration.screenWidthDp.dp - 40.dp
+        screenWidth * (2 / 3f)
+    }
+
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        val configuration = LocalConfiguration.current
-        val maxWidth = remember(configuration) {
-            val screenWidth = configuration.screenWidthDp.dp - 40.dp
-            screenWidth * (2 / 3f)
-        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = name,
                 modifier = Modifier
                     .widthIn(max = maxWidth)
-                    .alignByBaseline(),
+                    .alignBy(LastBaseline),
                 style = BoothTitle1,
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
                 text = warning,
-                modifier = Modifier.alignByBaseline(),
+                modifier = Modifier.alignBy(LastBaseline),
                 style = BoothCaution,
                 color = MainColor,
             )
