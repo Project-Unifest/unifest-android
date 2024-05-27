@@ -22,6 +22,13 @@
 
 ## Features
 
+## Article
+- [[Android] Github Action 를 이용하여 CD 를 적용 하는 방법](https://velog.io/@mraz3068/Apply-Android-Github-Action-CD)
+- [[Android] Jetpack Compose 가로 세로 길이가 같은 반응형 다이얼로그 만들기](https://velog.io/@mraz3068/Creating-Responsive-Dialog-with-Equal-Width-and-Height-in-Jetpack-Compose)
+- [[Android] Jetpack Compose 에서 Snackbar Duration 을 Custom 하는 방법](https://velog.io/@mraz3068/Android-Compose-Snackbar-Duration-Custom)
+- [[Android] TextField Keyboard 가 다시 올라오지 않는 문제 해결](https://velog.io/@mraz3068/Android-BasicTextField2-Keyboard-Does-Not-Appear-Issue)
+- [[Android] Compose BasicTextField2 적용해보기](https://velog.io/@mraz3068/Using-Android-Compose-BasicTextField2)
+
 ## Development
 
 ### Required
@@ -74,6 +81,13 @@
 
 ## Architecture
 Google Recommend Architecture based on [Now in Android](https://github.com/android/nowinandroid)
+
+## Developers
+
+|Android|Android|
+|:---:|:---:|
+|[이지훈](https://github.com/easyhooon)|[정상훈](https://github.com/wjdtkdgns777)|
+|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/bd9fbce9-a173-4203-b321-314d8ff8cba1?size=144">|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/1beb01a4-6063-400b-aa67-b9f20d6c3d38">|
 
 ## Module
 <img width="1189" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/9b9cd9c8-cda1-46ce-b848-210114ff1d7d">
