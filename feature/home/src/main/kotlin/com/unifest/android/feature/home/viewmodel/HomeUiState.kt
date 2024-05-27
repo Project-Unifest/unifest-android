@@ -23,5 +23,5 @@ data class HomeUiState(
     val isWeekMode: Boolean = false,
     val isDataReady: Boolean = true,
     val isStarImageDialogVisible: Boolean = false,
-    val selectedStarInfo: StarInfoModel? = null,
+    val selectedStar: StarInfoModel? = null,
 )

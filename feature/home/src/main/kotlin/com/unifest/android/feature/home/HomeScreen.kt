@@ -230,10 +230,10 @@ internal fun HomeScreen(
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
-        if (uiState.isStarImageDialogVisible && uiState.selectedStarInfo != null) {
+        if (homeUiState.isStarImageDialogVisible && homeUiState.selectedStar != null) {
             StarImageDialog(
                 onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
-                starInfo = uiState.selectedStarInfo,
+                star = homeUiState.selectedStar,
             )
         }
     }
