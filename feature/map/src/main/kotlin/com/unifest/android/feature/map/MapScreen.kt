@@ -66,7 +66,6 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
-import com.unifest.android.core.common.FestivalUiAction
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
@@ -89,7 +88,11 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
-import com.unifest.android.core.ui.component.FestivalSearchBottomSheet
+import com.unifest.android.feature.festival.FestivalSearchBottomSheet
+import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
+import com.unifest.android.feature.festival.viewmodel.FestivalUiState
+import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
@@ -104,9 +107,11 @@ internal fun MapRoute(
     padding: PaddingValues,
     navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
-    viewModel: MapViewModel = hiltViewModel(),
+    mapViewModel: MapViewModel = hiltViewModel(),
+    festivalViewModel: FestivalViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val mapUiState by mapViewModel.uiState.collectAsStateWithLifecycle()
+    val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
 
@@ -119,16 +124,16 @@ internal fun MapRoute(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
             val allPermissionsGranted = permissions.all { it.value }
-            viewModel.onPermissionResult(isGranted = allPermissionsGranted)
+            mapViewModel.onPermissionResult(isGranted = allPermissionsGranted)
         },
     )
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getAllBooths()
-        viewModel.getPopularBooths()
+        mapViewModel.getAllBooths()
+        mapViewModel.getPopularBooths()
     }
 
-    ObserveAsEvents(flow = viewModel.uiEvent) { event ->
+    ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
         when (event) {
             is MapUiEvent.RequestLocationPermission -> {
                 locationPermissionResultLauncher.launch(locationPermissions)
@@ -137,15 +142,23 @@ internal fun MapRoute(
             is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
-            is MapUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    ObserveAsEvents(flow = festivalViewModel.uiEvent) { event ->
+        when (event) {
+            is FestivalUiEvent.NavigateBack -> {}
+            is FestivalUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 
     MapScreen(
         padding = padding,
-        uiState = uiState,
-        onMapUiAction = viewModel::onMapUiAction,
-        onFestivalUiAction = viewModel::onFestivalUiAction,
+        mapUiState = mapUiState,
+        festivalUiState = festivalUiState,
+        onMapUiAction = mapViewModel::onMapUiAction,
+        onFestivalUiAction = festivalViewModel::onFestivalUiAction,
     )
 }
 
@@ -153,7 +166,8 @@ internal fun MapRoute(
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
-    uiState: MapUiState,
+    mapUiState: MapUiState,
+    festivalUiState: FestivalUiState,
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
@@ -161,8 +175,8 @@ internal fun MapScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.5430, 127.07673671067072), 14.8)
     }
-    val rotationState by animateFloatAsState(targetValue = if (uiState.isPopularMode) 180f else 0f)
-    val pagerState = rememberPagerState(pageCount = { uiState.selectedBoothList.size })
+    val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
+    val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
 
     Column(
         modifier = Modifier
@@ -172,38 +186,39 @@ internal fun MapScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         MapContent(
-            uiState = uiState,
+            uiState = mapUiState,
             cameraPositionState = cameraPositionState,
             rotationState = rotationState,
             pagerState = pagerState,
             onMapUiAction = onMapUiAction,
+            onFestivalUiAction = onFestivalUiAction,
         )
 
-        if (uiState.isServerErrorDialogVisible) {
+        if (mapUiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
                 onRetryClick = { onMapUiAction(MapUiAction.OnRetryClick(ErrorType.SERVER)) },
             )
         }
 
-        if (uiState.isNetworkErrorDialogVisible) {
+        if (mapUiState.isNetworkErrorDialogVisible) {
             NetworkErrorDialog(
                 onRetryClick = { onMapUiAction(MapUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
 
-        if (uiState.isFestivalSearchBottomSheetVisible) {
+        if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = uiState.festivalSearchText,
+                searchText = festivalUiState.festivalSearchText,
                 searchTextHintRes = R.string.festival_search_text_field_hint,
-                likedFestivals = uiState.likedFestivals,
-                festivalSearchResults = uiState.festivalSearchResults,
-                isSearchMode = uiState.isSearchMode,
-                isLikedFestivalDeleteDialogVisible = uiState.isLikedFestivalDeleteDialogVisible,
+                likedFestivals = festivalUiState.likedFestivals,
+                festivalSearchResults = festivalUiState.festivalSearchResults,
+                isSearchMode = festivalUiState.isSearchMode,
+                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
-                isEditMode = uiState.isEditMode,
+                isEditMode = festivalUiState.isEditMode,
             )
         }
-        if (uiState.isPermissionDialogVisible) {
+        if (mapUiState.isPermissionDialogVisible) {
             PermissionDialog(
                 permissionTextProvider = LocationPermissionTextProvider(),
                 isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -221,6 +236,7 @@ fun MapContent(
     rotationState: Float,
     pagerState: PagerState,
     onMapUiAction: (MapUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     // val context = LocalContext.current
     Box {
@@ -315,6 +331,7 @@ fun MapContent(
             title = uiState.festivalInfo.schoolName,
             boothSearchText = uiState.boothSearchText,
             onMapUiAction = onMapUiAction,
+            onFestivalUiAction = onFestivalUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,
             selectedChips = uiState.selectedBoothTypeChips,
             modifier = Modifier
@@ -390,6 +407,7 @@ fun MapTopAppBar(
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
     onMapUiAction: (MapUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
     selectedChips: ImmutableList<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -406,7 +424,7 @@ fun MapTopAppBar(
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
                 title = title,
-                onTitleClick = { onMapUiAction(MapUiAction.OnTitleClick) },
+                onTitleClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
                 isOnboardingCompleted = isOnboardingCompleted,
                 onTooltipClick = { onMapUiAction(MapUiAction.OnTooltipClick) },
             )
@@ -495,6 +513,8 @@ fun BoothItem(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = boothInfo.location,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = Title5,
                         )
                     }
@@ -545,12 +565,13 @@ fun MapScreenPreview() {
     UnifestTheme {
         MapScreen(
             padding = PaddingValues(),
-            uiState = MapUiState(
+            mapUiState = MapUiState(
                 festivalInfo = FestivalModel(
                     schoolName = "건국대학교",
                 ),
                 boothList = boothList,
             ),
+            festivalUiState = FestivalUiState(),
             onMapUiAction = {},
             onFestivalUiAction = {},
         )
@@ -566,6 +587,7 @@ fun MapTopAppBarPreview() {
             boothSearchText = TextFieldValue(),
             isOnboardingCompleted = false,
             onMapUiAction = {},
+            onFestivalUiAction = {},
             selectedChips = persistentListOf("주점", "먹거리"),
         )
     }

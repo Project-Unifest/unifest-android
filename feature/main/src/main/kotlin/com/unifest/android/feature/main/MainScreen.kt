@@ -86,7 +86,9 @@ internal fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toImmutableList(),
                 currentTab = navigator.currentTab,
-                onTabSelected = { navigator.navigate(it) },
+                onTabSelected = {
+                    navigator.navigate(it)
+                },
             )
         },
         snackbarHost = {
@@ -128,7 +130,6 @@ internal fun MainScreen(
             menuNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
-                navigateToMap = navigator::popBackStackIfNotMap,
                 navigateToLikedBooth = navigator::navigateToLikedBooth,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
@@ -169,7 +170,11 @@ private fun MainBottomBar(
                         MainBottomBarItem(
                             tab = tab,
                             selected = tab == currentTab,
-                            onClick = { onTabSelected(tab) },
+                            onClick = {
+                                if (tab != currentTab) {
+                                    onTabSelected(tab)
+                                }
+                            },
                         )
                     }
                 }

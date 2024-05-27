@@ -35,6 +35,7 @@ include(
     ":core:ui",
 
     ":feature:booth",
+    ":feature:festival",
     ":feature:home",
     ":feature:intro",
     ":feature:liked-booth",
@@ -42,6 +43,6 @@ include(
     ":feature:map",
     ":feature:menu",
     ":feature:navigator",
+    ":feature:splash",
     ":feature:waiting",
 )
-include(":feature:splash")

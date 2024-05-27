@@ -17,7 +17,6 @@ fun NavController.navigateToMenu(navOptions: NavOptions) {
 fun NavGraphBuilder.menuNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
-    navigateToMap: () -> Unit,
     navigateToLikedBooth: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
@@ -26,7 +25,6 @@ fun NavGraphBuilder.menuNavGraph(
         MenuRoute(
             padding = padding,
             popBackStack = popBackStack,
-            navigateToMap = navigateToMap,
             navigateToLikedBooth = navigateToLikedBooth,
             navigateToBoothDetail = navigateToBoothDetail,
             onShowSnackBar = onShowSnackBar,

@@ -6,16 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.home"
+    namespace = "com.unifest.android.feature.festival"
 }
 
 dependencies {
     implementations(
         projects.core.data,
-        projects.feature.festival,
 
         libs.kotlinx.collections.immutable,
         libs.timber,
-        libs.calendar.compose,
     )
 }

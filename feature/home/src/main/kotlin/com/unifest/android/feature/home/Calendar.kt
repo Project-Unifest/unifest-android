@@ -4,17 +4,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarState
@@ -113,7 +115,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == DayPosition.MonthDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -130,7 +132,7 @@ fun Calendar(
                     dayContent = { day ->
                         val isSelectable = day.position == WeekDayPosition.RangeDate
                         Day(
-                            day.date,
+                            day = day.date,
                             isSelected = isSelectable && selectedDate == day.date,
                             isSelectable = isSelectable,
                             onClick = { newSelectedDate ->
@@ -187,15 +189,17 @@ private fun CalendarNavigationIcon(
     onClick: () -> Unit,
 ) = Box(
     modifier = Modifier
-        .fillMaxHeight()
-        .aspectRatio(1f)
-        .clip(shape = CircleShape)
-        .clickable(role = Role.Button, onClick = onClick),
+        .size(20.dp)
+        .clip(CircleShape)
+        .clickable(
+            role = Role.Button,
+            onClick = onClick,
+        ),
 ) {
     Icon(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp)
+            .height(15.dp)
+            .width(8.dp)
             .align(Alignment.Center),
         imageVector = icon,
         contentDescription = contentDescription,
@@ -211,12 +215,14 @@ fun MonthAndWeekCalendarTitle(
 ) {
     val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
     val currentMonth = visibleMonth.yearMonth.month
+    val currentYear = visibleMonth.yearMonth.year
 
     val coroutineScope = rememberCoroutineScope()
     if (!isWeekMode) {
         SimpleCalendarTitle(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(start = 18.dp, end = 7.dp, top = 20.dp, bottom = 20.dp),
             currentMonth = currentMonth,
+            currentYear = currentYear,
             goToPrevious = {
                 coroutineScope.launch {
                     if (isWeekMode) {
@@ -247,29 +253,66 @@ fun MonthAndWeekCalendarTitle(
 fun SimpleCalendarTitle(
     // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
     currentMonth: Month,
+    currentYear: Int,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.height(40.dp),
+        modifier = modifier
+            .height(40.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(
+        Row(
             modifier = Modifier.weight(1f),
-            text = currentMonth.displayText(),
-            style = BoothTitle0,
-            textAlign = TextAlign.Start,
-        )
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "${currentYear}년 ${currentMonth.displayText()}",
+                style = BoothTitle0,
+                textAlign = TextAlign.Start,
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            ColorCircleWithText(color = Color(0xFF1FC0BA), text = "1개")
+            Spacer(modifier = Modifier.width(4.dp))
+            ColorCircleWithText(color = Color(0xFFFF8A1F), text = "2개")
+            Spacer(modifier = Modifier.width(4.dp))
+            ColorCircleWithText(color = Color(0xFFFF3939), text = "3개 이상")
+        }
         CalendarNavigationIcon(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_calender_left),
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
+        Spacer(modifier = Modifier.width(10.dp))
         CalendarNavigationIcon(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_chevron_right),
+            icon = ImageVector.vectorResource(id = R.drawable.ic_calender_right),
             contentDescription = "Next",
             onClick = goToNext,
+        )
+    }
+}
+
+@Composable
+fun ColorCircleWithText(color: Color, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 4.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(7.dp)
+                .clip(CircleShape)
+                .background(color),
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = Content6,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -302,23 +345,24 @@ fun Day(
 ) {
     val currentDate = LocalDate.now()
     val isToday = day == currentDate
-    val showFestivalDot = allFestivals.any { festival ->
+    val festivalCount = allFestivals.count { festival ->
         val beginDate = festival.beginDate.toLocalDate()
         val endDate = festival.endDate.toLocalDate()
         !(day.isBefore(beginDate) || day.isAfter(endDate))
     }
 
-    Column(
-        modifier = Modifier.clickable(
-            enabled = isSelectable,
-            showRipple = false,
-            onClick = { onClick(day) },
-        ),
+    Box(
+        modifier = Modifier
+            .clickable(
+                enabled = isSelectable,
+                showRipple = false,
+                onClick = { onClick(day) },
+            ),
     ) {
         Box(
             modifier = Modifier
                 .aspectRatio(1f) // This is important for square-sizing!
-                .padding(10.dp)
+                .padding(16.dp)
                 .clip(CircleShape)
                 .background(color = if (isSelected) MainColor else Color.Transparent)
                 .then(
@@ -340,13 +384,18 @@ fun Day(
                 style = Title5,
             )
         }
-        if (showFestivalDot) {
+        if (festivalCount > 0) {
+            val festivalDotColor = when (festivalCount) {
+                1 -> Color(0xFF1FC0BA)
+                2 -> Color(0xFFFF8A1F)
+                else -> Color(0xFFFF3939)
+            }
             Box(
                 modifier = Modifier
-                    .size(7.dp)
+                    .size(9.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF1FC0BA))
-                    .align(Alignment.CenterHorizontally),
+                    .background(festivalDotColor)
+                    .align(Alignment.BottomCenter),
             )
         }
     }
