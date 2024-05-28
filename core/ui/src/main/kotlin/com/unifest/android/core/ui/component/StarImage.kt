@@ -1,7 +1,8 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,10 +16,12 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StarImage(
     imgUrl: String?,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     isClicked: Boolean,
     label: String,
     modifier: Modifier = Modifier,
@@ -28,7 +31,10 @@ fun StarImage(
 ) {
     Box(
         modifier = modifier
-            .clickable(onClick = onClick),
+            .combinedClickable(
+                onLongClick = onLongClick,
+                onClick = onClick,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         NetworkImage(
@@ -60,6 +66,7 @@ fun StarImagePreview() {
         StarImage(
             imgUrl = "",
             onClick = {},
+            onLongClick = {},
             isClicked = false,
             label = "",
         )
@@ -73,6 +80,7 @@ fun StarImageClickedPreview() {
         StarImage(
             imgUrl = "",
             onClick = {},
+            onLongClick = {},
             isClicked = true,
             label = "키스오브라이프",
         )

@@ -52,6 +52,8 @@ class HomeViewModel @Inject constructor(
             }
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
+            is HomeUiAction.OnStarImageLongClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
+            is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
         }
     }
@@ -154,6 +156,24 @@ class HomeViewModel @Inject constructor(
                 }
             }.toImmutableList()
             currentState.copy(isStarImageClicked = updatedList)
+        }
+    }
+
+    private fun showStarImageDialog(scheduleIndex: Int, starIndex: Int) {
+        _uiState.update {
+            it.copy(
+                isStarImageDialogVisible = true,
+                selectedStar = it.todayFestivals[scheduleIndex].starInfo[starIndex],
+            )
+        }
+    }
+
+    private fun hideStarImageDialog() {
+        _uiState.update {
+            it.copy(
+                isStarImageDialogVisible = false,
+                selectedStar = null,
+            )
         }
     }
 
