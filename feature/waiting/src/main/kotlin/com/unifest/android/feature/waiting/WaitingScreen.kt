@@ -81,7 +81,10 @@ internal fun WaitingScreen(
             .fillMaxSize()
             .padding(padding),
     ) {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(20.dp),
+        ) {
             item { Text("웨이팅", style = BoothTitle2) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
@@ -290,7 +293,7 @@ fun WaitInfoCard(location: String, order: Int, waitingNumber: Int, people: Int) 
 fun WaitingScreenPreview() {
     UnifestTheme {
         WaitingScreen(
-            padding = PaddingValues(16.dp),
+            padding = PaddingValues(),
             waitingUiState = WaitingUiState(),
             onWaitingUiAction = {},
         )
