@@ -169,3 +169,9 @@ val WaitingNumber2 = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 14.sp,
 )
+
+val WaitingNumber3 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 15.sp,
+)
