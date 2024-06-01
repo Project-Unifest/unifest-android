@@ -1,4 +1,5 @@
 package com.unifest.android.feature.waiting.viewmodel
 
-sealed class WaitingUiAction {
+sealed interface WaitingUiAction {
+    data object OnDismiss : WaitingUiAction
 }

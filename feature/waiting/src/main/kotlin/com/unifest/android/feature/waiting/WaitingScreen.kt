@@ -30,7 +30,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+//  import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -44,9 +44,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
-import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
+//  import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
 
 @Composable
@@ -55,7 +54,7 @@ internal fun WaitingRoute(
     popBackStack: () -> Unit,
     viewModel: WaitingViewModel = hiltViewModel(),
 ) {
-    val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
+//    val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
@@ -65,16 +64,16 @@ internal fun WaitingRoute(
 
     WaitingScreen(
         padding = padding,
-        waitingUiState = waitingUiState,
-        onWaitingUiAction = viewModel::onWaitingUiAction,
+//        waitingUiState = waitingUiState,
+//        onWaitingUiAction = viewModel::onWaitingUiAction,
     )
 }
 
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
-    waitingUiState: WaitingUiState,
-    onWaitingUiAction: (WaitingUiAction) -> Unit,
+//    waitingUiState: WaitingUiState,
+//    onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -126,9 +125,7 @@ internal fun WaitingScreen(
                     )
                     Row(
                         modifier = Modifier
-                            .clickable {
-
-                            },
+                            .clickable {},
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_below_waiting),
@@ -175,7 +172,6 @@ internal fun WaitingScreen(
 //    }
     }
 }
-
 
 @Composable
 fun WaitInfoCard(location: String, order: Int, waitingNumber: Int, people: Int) {
@@ -234,7 +230,7 @@ fun WaitInfoCard(location: String, order: Int, waitingNumber: Int, people: Int) 
                         text = "번째",
                         fontSize = 18.sp,
                         color = Color(0xFF545454),
-                        modifier = Modifier.alignByBaseline()
+                        modifier = Modifier.alignByBaseline(),
                     )
                 }
                 Row(
@@ -253,7 +249,7 @@ fun WaitInfoCard(location: String, order: Int, waitingNumber: Int, people: Int) 
                     VerticalDivider(
                         thickness = 1.dp,
                         color = Color(0xFFB6B6B6),
-                        modifier = Modifier.height(13.dp)
+                        modifier = Modifier.height(13.dp),
                     )
                     Spacer(modifier = Modifier.width(13.dp))
                     Text(
@@ -294,8 +290,8 @@ fun WaitingScreenPreview() {
     UnifestTheme {
         WaitingScreen(
             padding = PaddingValues(),
-            waitingUiState = WaitingUiState(),
-            onWaitingUiAction = {},
+//            waitingUiState = WaitingUiState(),
+//            onWaitingUiAction = {},
         )
     }
 }

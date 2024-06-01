@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class WaitingViewModel @Inject constructor(
-
-) : ViewModel(), ErrorHandlerActions {
+class WaitingViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(WaitingUiState())
     val uiState: StateFlow<WaitingUiState> = _uiState.asStateFlow()
     private val _uiEvent = Channel<WaitingUiEvent>()
@@ -23,14 +21,17 @@ class WaitingViewModel @Inject constructor(
 
     fun onWaitingUiAction(action: WaitingUiAction) {
         when (action) {
+            is WaitingUiAction.OnDismiss -> setServerErrorDialogVisible(false)
             else -> {}
         }
     }
+
     override fun setServerErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isServerErrorDialogVisible = flag)
         }
     }
+
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
