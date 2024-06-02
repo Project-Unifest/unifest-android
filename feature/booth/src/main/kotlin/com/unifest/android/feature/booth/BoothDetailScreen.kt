@@ -502,7 +502,10 @@ fun WaitingDialog(
                 color = Color(0xFF545454),
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "$waitingCount 팀", style = WaitingTeam)
+            Text(
+                text = "$waitingCount 팀",
+                style = WaitingTeam,
+            )
             Spacer(modifier = Modifier.height(9.dp))
             HorizontalDivider(
                 thickness = 1.dp,

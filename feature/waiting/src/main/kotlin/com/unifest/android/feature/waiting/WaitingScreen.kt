@@ -88,8 +88,7 @@ internal fun WaitingScreen(
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(29.dp),
                     border = BorderStroke(1.dp, Color(0xFFF5687E)),
                     colors = CardColors(
@@ -124,14 +123,12 @@ internal fun WaitingScreen(
                         color = Color(0xFF545454),
                     )
                     Row(
-                        modifier = Modifier
-                            .clickable {},
+                        modifier = Modifier.clickable {},
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_below_waiting),
                             contentDescription = "filter icon",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically),
+                            modifier = Modifier.align(Alignment.CenterVertically),
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(
@@ -174,7 +171,12 @@ internal fun WaitingScreen(
 }
 
 @Composable
-fun WaitInfoCard(location: String, order: Int, waitingNumber: Int, people: Int) {
+fun WaitInfoCard(
+    location: String,
+    order: Int,
+    waitingNumber: Int,
+    people: Int,
+) {
     Card(
         border = BorderStroke(1.dp, Color(0xFFA4A4A4)),
         colors = CardColors(
