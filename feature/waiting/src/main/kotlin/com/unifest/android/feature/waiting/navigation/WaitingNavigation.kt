@@ -15,8 +15,12 @@ fun NavController.navigateToWaiting(navOptions: NavOptions) {
 
 fun NavGraphBuilder.waitingNavGraph(
     padding: PaddingValues,
+    popBackStack: () -> Unit,
 ) {
     composable(route = WAITING_ROUTE) {
-        WaitingRoute(padding = padding)
+        WaitingRoute(
+            padding = padding,
+            popBackStack = popBackStack,
+        )
     }
 }

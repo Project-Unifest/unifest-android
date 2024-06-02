@@ -16,6 +16,7 @@ import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.MAP_ROUTE
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
+import com.unifest.android.feature.waiting.navigation.navigateToWaiting
 
 internal class MainNavController(
     val navController: NavHostController,
@@ -43,7 +44,7 @@ internal class MainNavController(
         when (tab) {
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.MAP -> navController.navigateToMap(navOptions)
-//            MainTab.WAITING -> navController.navigateToWaiting(navOptions)
+            MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
     }

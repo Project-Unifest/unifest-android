@@ -24,13 +24,13 @@ internal enum class MainTab(
         route = "map_route",
     ),
 
-//    WAITING(
-//        iconResId = R.drawable.ic_waiting,
-//        selectedIconResId = R.drawable.ic_selected_waiting,
-//        contentDescription = "Waiting Icon",
-//        label = "웨이팅",
-//        route = "waiting_route",
-//    ),
+    WAITING(
+        iconResId = R.drawable.ic_waiting,
+        selectedIconResId = R.drawable.ic_selected_waiting,
+        contentDescription = "Waiting Icon",
+        label = "웨이팅",
+        route = "waiting_route",
+    ),
 
     MENU(
         iconResId = R.drawable.ic_menu,
