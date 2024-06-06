@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,8 +42,8 @@ fun UnifestTopAppBar(
     titleStyle: TextStyle = Title1,
     @DrawableRes navigationIconRes: Int = R.drawable.ic_arrow_back_dark_gray,
     navigationIconContentDescription: String? = null,
-    containerColor: Color = Color.White,
-    contentColor: Color = Color.Black,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
     isOnboardingCompleted: Boolean = false,

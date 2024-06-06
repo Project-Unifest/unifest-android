@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -31,11 +31,11 @@ fun BoothFilterChip(
         shape = RoundedCornerShape(34.dp),
         colors = CardColors(
             containerColor = if (isSelected) Color(0xFFFFF0F3) else Color.White,
-            contentColor = if (isSelected) MainColor else Color(0xFF4B4B4B),
+            contentColor = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFF4B4B4B),
             disabledContainerColor = Color.White,
             disabledContentColor = Color(0xFF585858),
         ),
-        border = BorderStroke(1.dp, if (isSelected) MainColor else Color(0xFFD2D2D2)),
+        border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFD2D2D2)),
     ) {
         Box(
             modifier = Modifier.clickable(onClick = { onChipClick(filterName) }),

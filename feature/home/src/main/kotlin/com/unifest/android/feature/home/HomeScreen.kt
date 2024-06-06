@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -200,7 +201,7 @@ internal fun HomeScreen(
                         .fillMaxWidth()
                         .padding(20.dp),
                     contentColor = Color(0xFF585858),
-                    borderColor = Color(0xFFD2D2D2),
+                    borderColor = MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
                         text = stringResource(id = R.string.home_add_interest_festival_button),

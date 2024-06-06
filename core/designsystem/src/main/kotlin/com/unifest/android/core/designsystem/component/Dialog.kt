@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +28,6 @@ import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -56,7 +56,7 @@ fun UnifestDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
-                .background(color = Color.White),
+                .background(color = MaterialTheme.colorScheme.background),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(27.dp))
@@ -76,7 +76,7 @@ fun UnifestDialog(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = descriptionResId),
-                color = Color(0xFF545454),
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center,
                 style = BoothLocation,
             )
@@ -98,7 +98,7 @@ fun UnifestDialog(
                                 Modifier
                             },
                         ),
-                    containerColor = MainColor,
+                    containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = Color.White,
                 ) {
                     Text(
@@ -114,7 +114,7 @@ fun UnifestDialog(
                             .weight(1f)
                             .height(45.dp)
                             .padding(start = 4.dp),
-                        containerColor = Color(0xFFD2D2D2),
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
                         contentColor = Color.Black,
                     ) {
                         Text(

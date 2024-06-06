@@ -2,6 +2,7 @@ package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -64,7 +66,8 @@ import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.DarkBackground
+import com.unifest.android.core.designsystem.theme.LightBackground
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
@@ -97,6 +100,7 @@ internal fun BoothDetailRoute(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }
+    val isDarkTheme = isSystemInDarkTheme()
 
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
@@ -105,8 +109,8 @@ internal fun BoothDetailRoute(
         )
         onDispose {
             systemUiController.setStatusBarColor(
-                color = Color.White,
-                darkIcons = true,
+                color = if (isDarkTheme) DarkBackground else LightBackground,
+                darkIcons = !isDarkTheme,
             )
         }
     }
@@ -263,7 +267,8 @@ fun BottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookMarkColor = if (isBookmarked) MainColor else Color(0xFF4B4B4B)
+    val bookmarkColor = if (isBookmarked) MaterialTheme.colorScheme.primary else Color(0xFF4B4B4B)
+
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -286,14 +291,14 @@ fun BottomBar(
                     Icon(
                         imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                        tint = bookMarkColor,
+                        tint = bookmarkColor,
                         modifier = Modifier.clickableSingle {
                             onAction(BoothUiAction.OnToggleBookmark)
                         },
                     )
                     Text(
                         text = "$bookmarkCount",
-                        color = bookMarkColor,
+                        color = bookmarkColor,
                         style = BoothCaution.copy(fontWeight = FontWeight.Bold),
                     )
                 }
@@ -358,7 +363,7 @@ fun BoothDescription(
                 text = warning,
                 modifier = Modifier.alignBy(LastBaseline),
                 style = BoothCaution,
-                color = MainColor,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
         Spacer(modifier = Modifier.height(15.dp))
@@ -436,7 +441,7 @@ fun MenuItem(
             Text(
                 text = menu.name,
                 style = MenuTitle,
-                color = Color(0xFF545454),
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(

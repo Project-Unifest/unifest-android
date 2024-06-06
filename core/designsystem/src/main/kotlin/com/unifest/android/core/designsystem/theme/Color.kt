@@ -21,3 +21,4 @@ val DarkAccent2 = Color(0xFF36282D)
 val DarkError = Color(0xFFD32F2F)
 
 val MainColor = Color(0xFFF5687E)
+val SubColor = Color(0xFFF5687E)

@@ -15,7 +15,6 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = LightBottomBarIcon,
     surfaceVariant = LightDisabledComponent,
     error = LightError,
-
 )
 
 private val DarkColorScheme = darkColorScheme(

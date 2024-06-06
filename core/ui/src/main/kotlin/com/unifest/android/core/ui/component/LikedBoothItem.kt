@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +28,6 @@ import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.model.LikedBoothModel
@@ -40,7 +40,8 @@ fun LikedBoothItem(
     deleteLikedBooth: (LikedBoothModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookMarkColor = if (booth.isLiked) MainColor else Color(0xFF4B4B4B)
+    val bookMarkColor = if (booth.isLiked) MaterialTheme.colorScheme.primary else Color(0xFF4B4B4B)
+
     Column(
         modifier = modifier.padding(horizontal = 20.dp),
     ) {
@@ -72,7 +73,7 @@ fun LikedBoothItem(
                 Text(
                     text = booth.warning,
                     style = Title5,
-                    color = Color(0xFF545454),
+                    color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -87,7 +88,7 @@ fun LikedBoothItem(
                     Text(
                         text = booth.location,
                         style = Title5,
-                        color = Color(0xFF545454),
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.align(Alignment.CenterVertically),
                     )
                 }

@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -69,7 +70,6 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
@@ -113,7 +113,7 @@ fun IntroScreen(
     onAction: (IntroUiAction) -> Unit,
 ) {
     UnifestScaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         IntroContent(
             uiState = uiState,
@@ -125,7 +125,7 @@ fun IntroScreen(
             LoadingWheel(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White),
+                    .background(MaterialTheme.colorScheme.background),
             )
         }
 
@@ -286,8 +286,8 @@ fun FestivalRowItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, MainColor),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background, contentColor = Color.Black),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .height(130.dp)
             .width(120.dp),
@@ -351,7 +351,7 @@ fun AllFestivalsTabRow(
     Column(modifier) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.background,
             contentColor = Color(0xFFE5E5E5),
             edgePadding = 0.dp,
             indicator = {},
@@ -365,7 +365,7 @@ fun AllFestivalsTabRow(
             tabTitles.forEachIndexed { index, title ->
                 val isSelected = selectedTabIndex == index
                 val tabTitleColor by animateColorAsState(
-                    targetValue = if (isSelected) MainColor else Color.Black,
+                    targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Black,
                 )
                 val tabTitleFontWeight by animateFloatAsState(
                     targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),
@@ -443,7 +443,7 @@ fun AllFestivalsTabRow(
                         modifier = Modifier
                             .fillMaxSize()
                             .align(Alignment.Center)
-                            .background(Color.White)
+                            .background(MaterialTheme.colorScheme.background)
                             .padding(bottom = 92.dp),
                     )
                 }

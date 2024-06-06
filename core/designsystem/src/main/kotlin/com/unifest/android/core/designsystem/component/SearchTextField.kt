@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,11 +39,12 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.SubColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 val unifestTextSelectionColors = TextSelectionColors(
     handleColor = MainColor,
-    backgroundColor = Color(0xFFFAB3BE),
+    backgroundColor = SubColor,
 )
 
 @Composable
@@ -53,7 +55,7 @@ fun SearchTextField(
     onSearch: (TextFieldValue) -> Unit,
     clearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
 ) {

@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -58,7 +59,6 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title5
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -87,7 +87,7 @@ fun Calendar(
         modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
         Column(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
         ) {
             val monthState = rememberCalendarState(
                 startMonth = startMonth,
@@ -364,17 +364,17 @@ fun Day(
                 .aspectRatio(1f) // This is important for square-sizing!
                 .padding(16.dp)
                 .clip(CircleShape)
-                .background(color = if (isSelected) MainColor else Color.Transparent)
+                .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
                 .then(
                     if (day == currentDate) {
-                        Modifier.border(2.dp, MainColor, CircleShape)
+                        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
                     } else Modifier,
                 ),
             contentAlignment = Alignment.Center,
         ) {
             val textColor = when {
-                isSelected -> Color.White
-                isToday -> MainColor
+                isSelected -> MaterialTheme.colorScheme.onBackground
+                isToday -> MaterialTheme.colorScheme.primary
                 isSelectable -> Color.Unspecified
                 else -> colorResource(R.color.inactive_text_color)
             }

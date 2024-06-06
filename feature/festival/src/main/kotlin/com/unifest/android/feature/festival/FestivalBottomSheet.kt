@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -73,7 +74,7 @@ fun FestivalSearchBottomSheet(
         },
         sheetState = bottomSheetState,
         shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
         dragHandle = {
             Column(
                 modifier = Modifier

@@ -32,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +81,6 @@ import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content2
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
@@ -352,7 +352,7 @@ fun MapContent(
                     .background(Color.White)
                     .border(
                         width = 1.dp,
-                        color = MainColor,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
@@ -366,7 +366,7 @@ fun MapContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.map_popular_booth),
-                        color = MainColor,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Title4,
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -419,7 +419,7 @@ fun MapTopAppBar(
         ),
     ) {
         Column(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
         ) {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
@@ -534,7 +534,7 @@ fun RankingBadge(ranking: Int) {
             .size(width = 43.dp, height = 45.dp)
             .padding(start = 7.dp, top = 9.dp)
             .clip(CircleShape)
-            .background(MainColor, CircleShape),
+            .background(MaterialTheme.colorScheme.primary, CircleShape),
         contentAlignment = Alignment.TopStart,
     ) {
         Text(
