@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,7 +91,7 @@ internal fun WaitingScreen(
         ) {
             item {
                 Text(
-                    text = "웨이팅",
+                    text = stringResource(id = R.string.waiting_title),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = BoothTitle2,
                 )
@@ -114,7 +115,7 @@ internal fun WaitingScreen(
                         verticalArrangement = Arrangement.Center,
                     ) {
                         Text(
-                            text = "나의 웨이팅",
+                            text = stringResource(id = R.string.waiting_my_waiting),
                             style = Title4,
                             color = MaterialTheme.colorScheme.primary,
                         )
@@ -128,7 +129,7 @@ internal fun WaitingScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "총 2건",
+                        text = stringResource(id = R.string.waiting_total_cases, 2),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content7,
                     )
@@ -143,7 +144,7 @@ internal fun WaitingScreen(
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(
-                            text = "정렬",
+                            text = stringResource(id = R.string.waiting_sort),
                             style = Content7,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -208,7 +209,7 @@ fun WaitInfoCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = "현재 내 순서",
+                    text = stringResource(id = R.string.waiting_current_order),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Content1,
                 )
@@ -243,7 +244,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "번째",
+                        text = stringResource(id = R.string.waiting_nth),
                         fontSize = 18.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.alignByBaseline(),
@@ -253,7 +254,7 @@ fun WaitInfoCard(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "웨이팅번호",
+                        text = stringResource(id = R.string.waiting_waiting_number),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content1,
                     )
@@ -271,7 +272,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(13.dp))
                     Text(
-                        text = "인원",
+                        text = stringResource(id = R.string.waiting_people),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content1,
                     )
@@ -294,7 +295,7 @@ fun WaitInfoCard(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = "웨이팅 취소",
+                        text = stringResource(id = R.string.waiting_cancel_waiting),
                         color = if (isSystemInDarkTheme()) DarkRed else LightRed,
                         style = Title5,
                     )
