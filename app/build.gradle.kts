@@ -60,6 +60,11 @@ android {
     }
 }
 
+composeCompiler {
+    enableStrongSkippingMode = true
+    stabilityConfigurationFile = project.rootDir.resolve("stability.config.conf")
+}
+
 dependencies {
     implementations(
         projects.core.common,

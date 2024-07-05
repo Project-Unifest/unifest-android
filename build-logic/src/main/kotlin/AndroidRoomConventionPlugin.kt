@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 class AndroidRoomConventionPlugin : BuildLogicConventionPlugin(
     {
-        applyPlugins(Plugins.AndroidxRoom, Plugins.KotlinxSerialization, Plugins.Ksp)
+        applyPlugins(Plugins.ANDROIDX_ROOM, Plugins.KOTLINX_SERIALIZATION, Plugins.KSP)
 
         extensions.configure<RoomExtension> {
             // The schemas directory contains a schema file for each version of the Room database.

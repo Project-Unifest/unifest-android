@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal class AndroidRetrofitConventionPlugin : BuildLogicConventionPlugin(
     {
-        applyPlugins(Plugins.KotlinxSerialization)
+        applyPlugins(Plugins.KOTLINX_SERIALIZATION)
 
         dependencies {
             implementation(libs.retrofit)

@@ -6,16 +6,8 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *>) {
+internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, *>) {
     extension.apply {
-        buildFeatures {
-            compose = true
-        }
-
-        composeOptions {
-            kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-        }
-
         dependencies {
             implementation(libs.androidx.compose.bom)
             androidTestImplementation(libs.androidx.compose.bom)

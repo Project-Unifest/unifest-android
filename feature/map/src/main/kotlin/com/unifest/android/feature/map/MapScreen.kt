@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -162,7 +161,6 @@ internal fun MapRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
@@ -228,7 +226,7 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapContent(
     uiState: MapUiState,
@@ -271,23 +269,33 @@ fun MapContent(
                     },
                 )
             }
+
 //            var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
 //            DisposableMapEffect(uiState.boothList) { map ->
 //                if (clusterManager == null) {
 //                    clusterManager = Clusterer.Builder<BoothMapModel>()
-//                        .clusterMarkerUpdater(object : DefaultClusterMarkerUpdater() {})
-//                        .leafMarkerUpdater(object : DefaultLeafMarkerUpdater() {
-//                            override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
-//                                super.updateLeafMarker(info, marker)
-//                                marker.apply {
-//                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category).getMarkerIcon((info.key as BoothMapModel).isSelected)
-//                                    onClickListener = Overlay.OnClickListener {
-//                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
-//                                        true
+//                        .clusterMarkerUpdater(
+//                            object : DefaultClusterMarkerUpdater() {
+//                                override fun updateClusterMarker(info: ClusterMarkerInfo, marker: Marker) {
+//                                    super.updateClusterMarker(info, marker)
+//                                }
+//                            },
+//                        )
+//                        .leafMarkerUpdater(
+//                            object : DefaultLeafMarkerUpdater() {
+//                                override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
+//                                    super.updateLeafMarker(info, marker)
+//                                    marker.apply {
+//                                        icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
+//                                            .getMarkerIcon((info.key as BoothMapModel).isSelected)
+//                                        onClickListener = Overlay.OnClickListener {
+//                                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
+//                                            true
+//                                        }
 //                                    }
 //                                }
-//                            }
-//                        })
+//                            },
+//                        )
 //                        .build()
 //                        .apply { this.map = map }
 //                }

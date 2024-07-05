@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal class AndroidFirebaseConventionPlugin : BuildLogicConventionPlugin(
     {
-        applyPlugins(Plugins.GoogleServices, Plugins.FirebaseCrashlytics)
+        applyPlugins(Plugins.GOOGLE_SERVICES, Plugins.FIREBASE_CRASHLYTICS)
 
         dependencies {
             implementation(platform(libs.firebase.bom))

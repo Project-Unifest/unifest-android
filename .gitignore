@@ -62,3 +62,5 @@ secrets.properties
 /app/release/*
 
 /app/google-services.json
+
+.kotlin/
