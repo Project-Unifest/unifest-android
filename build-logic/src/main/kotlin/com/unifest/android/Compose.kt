@@ -19,6 +19,7 @@ internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, 
         }
     }
 
+    // TODO ComposeCompilerGradlePluginExtension 을 사용하는 방법으로 migration
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
             freeCompilerArgs.set(
@@ -36,3 +37,4 @@ internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, 
         }
     }
 }
+

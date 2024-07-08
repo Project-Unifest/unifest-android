@@ -63,6 +63,8 @@ android {
 composeCompiler {
     enableStrongSkippingMode = true
     stabilityConfigurationFile = project.rootDir.resolve("stability.config.conf")
+    metricsDestination = file("build/composeMetrics")
+    reportsDestination = file("build/composeReports")
 }
 
 dependencies {
