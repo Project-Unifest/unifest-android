@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.component.BoothFilterChip
@@ -23,7 +22,7 @@ fun BoothFilterChips(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier.background(MaterialTheme.colorScheme.background,),
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
     ) {
         items(
             items = boothFilters,
@@ -59,4 +58,3 @@ fun BoothFilterChipsDarkPreview() {
         )
     }
 }
-

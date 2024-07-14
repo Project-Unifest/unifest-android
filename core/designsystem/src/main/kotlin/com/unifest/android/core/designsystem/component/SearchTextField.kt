@@ -75,7 +75,7 @@ fun SearchTextField(
                     keyboardController?.hide()
                 },
             ),
-            textStyle = TextStyle(color =  textColor),
+            textStyle = TextStyle(color = textColor),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = modifier

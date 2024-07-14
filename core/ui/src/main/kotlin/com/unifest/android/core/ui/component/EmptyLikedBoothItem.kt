@@ -13,15 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
+import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.designsystem.R
 
 @Composable
 fun EmptyLikedBoothItem(
@@ -75,4 +74,3 @@ fun EmptyLikedBoothItemDarkPreview() {
         )
     }
 }
-

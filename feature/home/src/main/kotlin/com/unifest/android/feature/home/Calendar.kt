@@ -170,7 +170,7 @@ fun ModeToggleButton(
             .fillMaxWidth()
             .requiredHeight(40.dp)
             .paint(
-                painter = painterResource (id = R.drawable.calender_bottom),
+                painter = painterResource(id = R.drawable.calender_bottom),
                 contentScale = ContentScale.FillBounds,
             )
             .then(modifier),
@@ -415,7 +415,7 @@ fun Day(
 
 @ComponentPreview
 @Composable
-private fun CalendarPreview() {
+fun CalendarPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),
@@ -429,7 +429,7 @@ private fun CalendarPreview() {
 
 @DarkComponentPreview
 @Composable
-private fun CalendarDarkPreview() {
+fun CalendarDarkPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),

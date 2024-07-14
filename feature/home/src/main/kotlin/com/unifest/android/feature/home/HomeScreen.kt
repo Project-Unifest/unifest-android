@@ -272,7 +272,7 @@ fun FestivalScheduleItem(
                 modifier = Modifier
                     .width(3.dp)
                     .height(72.dp)
-                    .background(if(isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen)
+                    .background(if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen)
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.width(8.dp))
