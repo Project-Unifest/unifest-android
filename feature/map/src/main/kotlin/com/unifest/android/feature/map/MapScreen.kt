@@ -10,6 +10,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -245,15 +246,16 @@ fun MapContent(
         // TODO 클러스터링 마커 커스텀
         NaverMap(
             cameraPositionState = cameraPositionState,
-            locationSource = rememberFusedLocationSource(),
+            properties = MapProperties(
+                locationTrackingMode = LocationTrackingMode.NoFollow,
+                isNightModeEnabled = isSystemInDarkTheme(),
+            ),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
             ),
-            properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.NoFollow,
-            ),
+            locationSource = rememberFusedLocationSource(),
         ) {
             PolygonOverlay(
                 coords = uiState.outerCords,
