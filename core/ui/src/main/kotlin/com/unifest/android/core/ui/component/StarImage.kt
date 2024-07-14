@@ -81,6 +81,7 @@ fun StarImageDarkPreview() {
         StarImage(
             imgUrl = "",
             onClick = {},
+            onLongClick = {},
             isClicked = false,
             label = "",
         )
@@ -108,6 +109,7 @@ fun StarImageClickedDarkPreview() {
         StarImage(
             imgUrl = "",
             onClick = {},
+            onLongClick = {},
             isClicked = true,
             label = "키스오브라이프",
         )
