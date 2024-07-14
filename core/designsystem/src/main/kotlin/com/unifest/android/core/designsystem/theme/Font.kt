@@ -157,3 +157,21 @@ val Content9 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 14.sp,
 )
+
+val WaitingNumber = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 45.sp,
+)
+
+val WaitingNumber2 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 14.sp,
+)
+
+val WaitingNumber3 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 15.sp,
+)
