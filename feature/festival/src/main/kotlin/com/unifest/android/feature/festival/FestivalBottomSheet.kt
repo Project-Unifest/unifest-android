@@ -44,6 +44,7 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+// TODO HorizontalDivider -> UnifestHorizontalDivider 로 전부 변경
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FestivalSearchBottomSheet(
