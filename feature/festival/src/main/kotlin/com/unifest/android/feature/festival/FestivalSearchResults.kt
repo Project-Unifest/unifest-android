@@ -1,5 +1,6 @@
 package com.unifest.android.feature.festival
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +32,7 @@ import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.Content2
@@ -58,7 +61,7 @@ fun FestivalSearchResults(
             ) {
                 Text(
                     text = stringResource(id = R.string.no_result),
-                    color = Color(0xFF7E7E7E),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )
             }
@@ -71,13 +74,13 @@ fun FestivalSearchResults(
                 Row {
                     Text(
                         text = stringResource(id = R.string.search_result),
-                        color = Color(0xFFABABAB),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = Content6,
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = "총 ${searchResults.size}개",
-                        color = Color(0xFF191919),
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = Content6,
                     )
                 }
@@ -95,7 +98,7 @@ fun FestivalSearchResults(
                     if (index != searchResults.size - 1) {
                         HorizontalDivider(
                             thickness = 1.dp,
-                            color = Color(0xFFDFDFDF),
+                            color = MaterialTheme.colorScheme.outline,
                         )
                     }
                 }
@@ -114,6 +117,7 @@ fun FestivalSearchResultItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
             .padding(start = 8.dp, top = 9.dp, bottom = 14.dp, end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -128,17 +132,19 @@ fun FestivalSearchResultItem(
         Column {
             Text(
                 text = festival.schoolName,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = Content2,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = festival.festivalName,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = Content4,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
-                color = Color(0xFF4D4D4D),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = Content3,
             )
         }
@@ -188,6 +194,76 @@ fun FestivalSearchResultItem(
 @ComponentPreview
 @Composable
 fun FestivalSearchResultsPreview() {
+    FestivalSearchResults(
+        searchResults = persistentListOf(
+            FestivalModel(
+                1,
+                1,
+                "https://picsum.photos/36",
+                "서울대학교",
+                "서울",
+                "설대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+            FestivalModel(
+                2,
+                2,
+                "https://picsum.photos/36",
+                "연세대학교",
+                "서울",
+                "연대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+            FestivalModel(
+                3,
+                3,
+                "https://picsum.photos/36",
+                "고려대학교",
+                "서울",
+                "고대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+            FestivalModel(
+                4,
+                4,
+                "https://picsum.photos/36",
+                "성균관대학교",
+                "서울",
+                "성대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+            FestivalModel(
+                5,
+                5,
+                "https://picsum.photos/36",
+                "건국대학교",
+                "서울",
+                "건대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+        ),
+        onFestivalUiAction = {},
+    )
+}
+
+@DarkComponentPreview
+@Composable
+fun FestivalSearchResultsDarkPreview() {
     FestivalSearchResults(
         searchResults = persistentListOf(
             FestivalModel(

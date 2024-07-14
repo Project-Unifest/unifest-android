@@ -36,15 +36,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.MainColor
-import com.unifest.android.core.designsystem.theme.SubColor
+import com.unifest.android.core.designsystem.theme.LightPrimary100
+import com.unifest.android.core.designsystem.theme.LightPrimary500
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 val unifestTextSelectionColors = TextSelectionColors(
-    handleColor = MainColor,
-    backgroundColor = SubColor,
+    handleColor = LightPrimary500,
+    backgroundColor = LightPrimary100,
 )
 
 @Composable
@@ -56,8 +57,9 @@ fun SearchTextField(
     clearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
-    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondaryContainer),
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -73,7 +75,7 @@ fun SearchTextField(
                     keyboardController?.hide()
                 },
             ),
-            textStyle = TextStyle(color = Color.Black),
+            textStyle = TextStyle(color =  textColor),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = modifier
@@ -89,7 +91,7 @@ fun SearchTextField(
                         if (searchText.text.isEmpty()) {
                             Text(
                                 text = stringResource(id = searchTextHintRes),
-                                color = Color(0xFF848484),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 style = BoothLocation,
                             )
                         }
@@ -101,9 +103,6 @@ fun SearchTextField(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                             contentDescription = "Search Icon",
                             tint = Color.Unspecified,
-//                            modifier = Modifier.clickable {
-//                                onSearch(searchText)
-//                            },
                         )
                     } else {
                         Icon(
@@ -133,9 +132,10 @@ fun FestivalSearchTextField(
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
-    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondaryContainer),
 ) {
     LaunchedEffect(key1 = searchText.text) {
         setEnableSearchMode(searchText.text.isNotEmpty())
@@ -147,7 +147,7 @@ fun FestivalSearchTextField(
             onValueChange = updateSearchText,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            textStyle = TextStyle(color = Color.Black),
+            textStyle = TextStyle(color = textColor),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = modifier
@@ -163,7 +163,7 @@ fun FestivalSearchTextField(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
                             contentDescription = "Search Icon",
-                            tint = Color(0xFF767676),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.clickable {
                                 clearSearchText()
                             },
@@ -174,7 +174,7 @@ fun FestivalSearchTextField(
                         if (searchText.text.isEmpty()) {
                             Text(
                                 text = stringResource(id = searchTextHintRes),
-                                color = Color(0xFF848484),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 style = BoothLocation,
                             )
                         }
@@ -224,9 +224,47 @@ fun SearchTextFieldPreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun SearchTextFieldDarkPreview() {
+    UnifestTheme {
+        SearchTextField(
+            searchText = TextFieldValue(),
+            updateSearchText = {},
+            searchTextHintRes = R.string.intro_search_text_hint,
+            onSearch = {},
+            clearSearchText = {},
+            modifier = Modifier
+                .height(46.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun FestivalSearchTextFieldPreview() {
+    UnifestTheme {
+        FestivalSearchTextField(
+            searchText = TextFieldValue("건국대학교"),
+            updateSearchText = {},
+            searchTextHintRes = R.string.intro_search_text_hint,
+            onSearch = {},
+            clearSearchText = {},
+            setEnableSearchMode = {},
+            isSearchMode = true,
+            modifier = Modifier
+                .height(46.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun FestivalSearchTextFieldDarkPreview() {
     UnifestTheme {
         FestivalSearchTextField(
             searchText = TextFieldValue("건국대학교"),

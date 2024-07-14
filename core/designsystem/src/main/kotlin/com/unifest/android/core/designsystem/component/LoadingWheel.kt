@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -25,6 +26,14 @@ fun LoadingWheel(
 @ComponentPreview
 @Composable
 fun LoadingWheelPreview() {
+    UnifestTheme {
+        LoadingWheel()
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun LoadingWheelDarkPreview() {
     UnifestTheme {
         LoadingWheel()
     }

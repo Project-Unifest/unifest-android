@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,9 +28,10 @@ import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.skydoves.balloon.compose.setBackgroundColor
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
-import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.LightPrimary500
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.coroutines.launch
@@ -43,6 +45,8 @@ fun ToolTip(
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     val builder = rememberBalloonBuilder {
         setArrowSize(10)
         setArrowPosition(arrowPosition)
@@ -51,7 +55,7 @@ fun ToolTip(
         setHeight(BalloonSizeSpec.WRAP)
         setPadding(9)
         setCornerRadius(8f)
-        setBackgroundColor(MainColor)
+        setBackgroundColor(context.getColor(R.color.tooltip_color))
         setBalloonAnimation(BalloonAnimation.FADE)
         setDismissWhenClicked(true)
         setDismissWhenTouchOutside(false)
@@ -146,9 +150,31 @@ fun LikedFestivalToolTipPreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun LikedFestivalToolTipDarkPreview() {
+    UnifestTheme {
+        LikedFestivalToolTip(
+            completeOnboarding = {},
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun SchoolSearchTitleWithToolTipPreview() {
+    UnifestTheme {
+        SchoolSearchTitleWithToolTip(
+            title = "건국대학교",
+            onTitleClick = {},
+            completeOnboarding = {},
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun SchoolSearchTitleWithToolTipDarkPreview() {
     UnifestTheme {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",

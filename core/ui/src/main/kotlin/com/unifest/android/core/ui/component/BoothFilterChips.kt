@@ -1,10 +1,14 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.component.BoothFilterChip
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -19,7 +23,7 @@ fun BoothFilterChips(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.background,),
     ) {
         items(
             items = boothFilters,
@@ -44,3 +48,15 @@ fun BoothFilterChipsPreview() {
         )
     }
 }
+
+@DarkComponentPreview
+@Composable
+fun BoothFilterChipsDarkPreview() {
+    UnifestTheme {
+        BoothFilterChips(
+            onChipClick = {},
+            selectedChips = persistentListOf("주점", "먹거리"),
+        )
+    }
+}
+

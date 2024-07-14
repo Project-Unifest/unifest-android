@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,6 +69,7 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.LikedBoothModel
+import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
@@ -154,6 +156,7 @@ fun MenuScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
         Column {
@@ -163,7 +166,7 @@ fun MenuScreen(
                 elevation = 8.dp,
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.background,
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp),
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
@@ -176,10 +179,12 @@ fun MenuScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
                             .padding(top = 10.dp, start = 20.dp),
                     ) {
                         Text(
                             text = stringResource(id = R.string.menu_my_liked_festival),
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = Title3,
                         )
                         TextButton(
@@ -222,13 +227,14 @@ fun MenuScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
                             .padding(start = 20.dp, top = 10.dp),
                     ) {
                         Text(
                             text = stringResource(id = R.string.menu_liked_booth),
-                            style = Title3,
-                            color = Color(0xFF161616),
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Bold,
+                            style = Title3,
                         )
                         TextButton(
                             onClick = { onMenuUiAction(MenuUiAction.OnShowMoreClick) },
@@ -285,7 +291,7 @@ fun MenuScreen(
                 item {
                     HorizontalDivider(
                         thickness = 1.dp,
-                        color = Color(0xFFDFDFDF),
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 }
                 item {
@@ -300,7 +306,7 @@ fun MenuScreen(
                 item {
                     HorizontalDivider(
                         thickness = 1.dp,
-                        color = Color(0xFFDFDFDF),
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 }
                 item {
@@ -313,7 +319,7 @@ fun MenuScreen(
                         Text(
                             text = "UniFest v$appVersion",
                             textAlign = TextAlign.Center,
-                            color = Color(0xFFC5C5C5),
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
                         )
                     }
                 }
@@ -377,20 +383,20 @@ fun FestivalItem(
                 modifier = Modifier
                     .size(60.dp)
                     .clip(CircleShape),
-                placeholder = painterResource(id = R.drawable.ic_item_placeholder),
+                placeholder = painterResource(id = R.drawable.item_placeholder),
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = festival.schoolName,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = Content6,
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = festival.festivalName,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MenuTitle,
             textAlign = TextAlign.Center,
         )
@@ -407,6 +413,7 @@ fun MenuItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .clickable(onClick = onClick)
             .padding(25.dp),
     ) {
@@ -416,13 +423,77 @@ fun MenuItem(
             tint = Color.Unspecified,
         )
         Spacer(modifier = Modifier.width(16.dp))
-        Text(title, style = Content8)
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = Content8,
+        )
     }
 }
 
 @DevicePreview
 @Composable
 fun MenuScreenPreview() {
+    UnifestTheme {
+        MenuScreen(
+            padding = PaddingValues(),
+            menuUiState = MenuUiState(
+                festivals = persistentListOf(
+                    FestivalModel(
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "서울",
+                        "설대축제",
+                        "2024-04-21",
+                        "2024-04-23",
+                        126.957f,
+                        37.460f,
+                    ),
+                    FestivalModel(
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "서울",
+                        "연대축제",
+                        "2024-04-21",
+                        "2024-04-23",
+                        126.957f,
+                        37.460f,
+                    ),
+                ),
+                likedBooths = persistentListOf(
+                    LikedBoothModel(
+                        id = 1,
+                        name = "부스 이름",
+                        category = "부스 카테고리",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 2,
+                        name = "부스 이름",
+                        category = "부스 카테고리",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                ),
+            ),
+            festivalUiState = FestivalUiState(),
+            appVersion = "1.0.0",
+            onMenuUiAction = {},
+            onFestivalUiAction = {},
+        )
+    }
+}
+
+@DarkDevicePreview
+@Composable
+fun MenuScreenDarkPreview() {
     UnifestTheme {
         MenuScreen(
             padding = PaddingValues(),

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
@@ -30,10 +31,10 @@ fun BoothFilterChip(
         modifier = modifier.padding(4.dp),
         shape = RoundedCornerShape(34.dp),
         colors = CardColors(
-            containerColor = if (isSelected) Color(0xFFFFF0F3) else Color.White,
-            contentColor = if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFF4B4B4B),
-            disabledContainerColor = Color.White,
-            disabledContentColor = Color(0xFF585858),
+            containerColor = if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.background,
+            contentColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         ),
         border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else Color(0xFFD2D2D2)),
     ) {
@@ -64,3 +65,41 @@ fun BoothFilterChipPreview() {
         )
     }
 }
+
+@DarkComponentPreview
+@Composable
+fun BoothFilterChipDarkPreview() {
+    UnifestTheme {
+        BoothFilterChip(
+            filterName = "주점",
+            onChipClick = {},
+            isSelected = false,
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun SelectedBoothFilterChipPreview() {
+    UnifestTheme {
+        BoothFilterChip(
+            filterName = "주점",
+            onChipClick = {},
+            isSelected = true,
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun SelectedBoothFilterChipSelectedDarkPreview() {
+    UnifestTheme {
+        BoothFilterChip(
+            filterName = "주점",
+            onChipClick = {},
+            isSelected = true,
+        )
+    }
+}
+
+

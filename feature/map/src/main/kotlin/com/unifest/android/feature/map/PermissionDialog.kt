@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -42,12 +43,13 @@ internal fun PermissionDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(color = MaterialTheme.colorScheme.surface)
                     .padding(24.dp),
             ) {
                 Text(
                     text = stringResource(id = R.string.permission_required),
                     style = Title3,
-                    color = Color(0xFF121212),
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -57,10 +59,10 @@ internal fun PermissionDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
-                    color = Color(0xFF747479),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content2,
                 )
-                HorizontalDivider(color = Color(0xFFE3E5E9))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
                 Text(
                     text = if (isPermanentlyDeclined) {
                         stringResource(id = R.string.go_to_app_setting)
@@ -79,7 +81,7 @@ internal fun PermissionDialog(
                         },
                     textAlign = TextAlign.Center,
                     style = Title3,
-                    color = Color(0xFF121212),
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         },
@@ -106,6 +108,18 @@ class LocationPermissionTextProvider : PermissionTextProvider {
 @ComponentPreview
 @Composable
 fun PermissionDialogPreview() {
+    UnifestTheme {
+        PermissionDialog(
+            permissionTextProvider = LocationPermissionTextProvider(),
+            isPermanentlyDeclined = false,
+            onMapUiAction = {},
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun PermissionDialogDarkPreview() {
     UnifestTheme {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),

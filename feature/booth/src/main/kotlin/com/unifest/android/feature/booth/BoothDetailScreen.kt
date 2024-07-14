@@ -66,8 +66,7 @@ import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.DarkBackground
-import com.unifest.android.core.designsystem.theme.LightBackground
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
@@ -76,6 +75,7 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
@@ -109,7 +109,7 @@ internal fun BoothDetailRoute(
         )
         onDispose {
             systemUiController.setStatusBarColor(
-                color = if (isDarkTheme) DarkBackground else LightBackground,
+                color = if (isDarkTheme) DarkGrey100 else Color.White,
                 darkIcons = !isDarkTheme,
             )
         }
@@ -149,7 +149,11 @@ fun BoothDetailScreen(
     snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+    ) {
         BoothDetailContent(
             uiState = uiState,
             onAction = onAction,
@@ -267,12 +271,12 @@ fun BottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookmarkColor = if (isBookmarked) MaterialTheme.colorScheme.primary else Color(0xFF4B4B4B)
+    val bookmarkColor = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
-        color = Color.White,
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -284,7 +288,7 @@ fun BottomBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(
-                    modifier = Modifier.background(Color.White),
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
@@ -331,7 +335,7 @@ fun BoothImage(
         modifier = Modifier
             .height(260.dp)
             .fillMaxWidth(),
-        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
+        placeholder = painterResource(id = R.drawable.image_placeholder),
     )
 }
 
@@ -356,6 +360,7 @@ fun BoothDescription(
                 modifier = Modifier
                     .widthIn(max = maxWidth)
                     .alignBy(LastBaseline),
+                color = MaterialTheme.colorScheme.onBackground,
                 style = BoothTitle1,
             )
             Spacer(modifier = Modifier.width(5.dp))
@@ -370,6 +375,7 @@ fun BoothDescription(
         Text(
             text = description,
             modifier = Modifier.padding(top = 8.dp),
+            color = MaterialTheme.colorScheme.onSecondary,
             style = Content2.copy(lineHeight = 18.sp),
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -385,7 +391,7 @@ fun BoothDescription(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = location,
-                color = Color(0xFF393939),
+                color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
         }
@@ -407,6 +413,7 @@ fun MenuText() {
     Text(
         text = stringResource(id = R.string.booth_menu),
         modifier = Modifier.padding(start = 20.dp),
+        color = MaterialTheme.colorScheme.onBackground,
         style = Title2,
     )
 }
@@ -422,7 +429,7 @@ fun MenuItem(
         NetworkImage(
             imgUrl = menu.imgUrl,
             contentDescription = menu.name,
-            placeholder = painterResource(id = R.drawable.ic_item_placeholder),
+            placeholder = painterResource(id = R.drawable.item_placeholder),
             modifier = Modifier
                 .size(86.dp)
                 .clip(RoundedCornerShape(16.dp))
@@ -440,12 +447,13 @@ fun MenuItem(
         ) {
             Text(
                 text = menu.name,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MenuTitle,
-                color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = menu.price.formatAsCurrency(),
+                color = MaterialTheme.colorScheme.onBackground,
                 style = MenuPrice,
             )
         }
@@ -455,6 +463,36 @@ fun MenuItem(
 @DevicePreview
 @Composable
 fun BoothScreenPreview() {
+    UnifestTheme {
+        BoothDetailScreen(
+            padding = PaddingValues(),
+            uiState = BoothUiState(
+                boothDetailInfo = BoothDetailModel(
+                    id = 0L,
+                    name = "컴공 주점",
+                    category = "컴퓨터공학부 전용 부스",
+                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
+                    warning = "",
+                    location = "청심대 앞",
+                    latitude = 37.54224856023523f,
+                    longitude = 127.07605430700158f,
+                    menus = listOf(
+                        MenuModel(1L, "모둠 사시미", 45000, ""),
+                        MenuModel(2L, "모둠 사시미", 45000, ""),
+                        MenuModel(3L, "모둠 사시미", 45000, ""),
+                        MenuModel(4L, "모둠 사시미", 45000, ""),
+                    ),
+                ),
+            ),
+            snackBarState = SnackbarHostState(),
+            onAction = {},
+        )
+    }
+}
+
+@DarkDevicePreview
+@Composable
+fun BoothScreenDarkPreview() {
     UnifestTheme {
         BoothDetailScreen(
             padding = PaddingValues(),

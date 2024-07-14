@@ -219,13 +219,13 @@ fun InformationText() {
         Text(
             text = stringResource(id = R.string.intro_info_title),
             style = Title2,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
             text = stringResource(id = R.string.intro_info_description),
             style = BoothLocation,
             fontSize = 12.sp,
-            color = Color(0xFF848484),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -246,6 +246,7 @@ fun LikedFestivalsRow(
             if (selectedFestivals.isNotEmpty()) {
                 Text(
                     text = stringResource(id = R.string.intro_liked_festivals_title),
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Title3,
                 )
                 TextButton(
@@ -253,7 +254,7 @@ fun LikedFestivalsRow(
                 ) {
                     Text(
                         text = stringResource(id = R.string.intro_clear_item_button_text),
-                        color = Color(0xFF848484),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textDecoration = TextDecoration.Underline,
                         style = Content6,
                     )
@@ -286,7 +287,7 @@ fun FestivalRowItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background, contentColor = Color.Black),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .height(130.dp)
@@ -314,19 +315,19 @@ fun FestivalRowItem(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = festival.schoolName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = festival.festivalName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
-                    color = Color(0xFF979797),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )
             }
@@ -352,12 +353,11 @@ fun AllFestivalsTabRow(
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = MaterialTheme.colorScheme.background,
-            contentColor = Color(0xFFE5E5E5),
             edgePadding = 0.dp,
             indicator = {},
             divider = {
                 HorizontalDivider(
-                    color = Color(0xFFE5E5E5),
+                    color = MaterialTheme.colorScheme.outline,
                     thickness = 1.75.dp,
                 )
             },
@@ -365,7 +365,7 @@ fun AllFestivalsTabRow(
             tabTitles.forEachIndexed { index, title ->
                 val isSelected = selectedTabIndex == index
                 val tabTitleColor by animateColorAsState(
-                    targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Black,
+                    targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
                 )
                 val tabTitleFontWeight by animateFloatAsState(
                     targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),
@@ -394,7 +394,7 @@ fun AllFestivalsTabRow(
             modifier = Modifier
                 .padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
                 .align(Alignment.Start),
-            color = Color(0xFF4C4C4C),
+            color = MaterialTheme.colorScheme.onBackground,
             style = Content6,
         )
         HorizontalPager(
@@ -410,7 +410,7 @@ fun AllFestivalsTabRow(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(bottom = 92.dp),
-                        color = Color(0xFF7E7E7E),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = Content3,
                     )
                 } else {

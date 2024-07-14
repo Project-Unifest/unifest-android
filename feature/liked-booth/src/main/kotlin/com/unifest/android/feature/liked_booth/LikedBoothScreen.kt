@@ -30,6 +30,7 @@ import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.LikedBoothModel
+import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
@@ -75,6 +76,7 @@ internal fun LikedBoothScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
         Column {
@@ -85,7 +87,7 @@ internal fun LikedBoothScreen(
                 elevation = 8.dp,
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.background,
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp),
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
@@ -134,6 +136,69 @@ internal fun LikedBoothScreen(
 @DevicePreview
 @Composable
 fun LikedBoothScreenPreview() {
+    UnifestTheme {
+        LikedBoothScreen(
+            padding = PaddingValues(),
+            uiState = LikedBoothUiState(
+                likedBooths = persistentListOf(
+                    LikedBoothModel(
+                        id = 1,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 2,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 3,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 4,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 5,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                    LikedBoothModel(
+                        id = 6,
+                        name = "부스 이름",
+                        category = "음식",
+                        description = "부스 설명",
+                        location = "부스 위치",
+                        warning = "학과 전용 부스",
+                    ),
+                ),
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@DarkDevicePreview
+@Composable
+fun LikedBoothScreenDarkPreview() {
     UnifestTheme {
         LikedBoothScreen(
             padding = PaddingValues(),

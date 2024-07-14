@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
-import com.unifest.android.core.designsystem.theme.DarkBackground
-import com.unifest.android.core.designsystem.theme.LightBackground
+import androidx.compose.ui.graphics.Color
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.feature.navigator.IntroNavigator
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
             DisposableEffect(systemUiController) {
                 systemUiController.setSystemBarsColor(
-                    color = if (isDarkTheme) DarkBackground else LightBackground,
+                    color = if (isDarkTheme) DarkGrey100 else Color.White,
                     darkIcons = !isDarkTheme,
                     isNavigationBarContrastEnforced = false,
                 )
