@@ -18,7 +18,7 @@ kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
 kotlin-ktlint-source = "0.50.0"
 
-kotlinx-coroutines = "1.9.0"
+kotlinx-coroutines = "1.9.0-RC"
 kotlinx-datetime = "0.6.0"
 kotlinx-serialization = "1.6.3"
 kotlinx-serialization-converter = "1.0.0"
