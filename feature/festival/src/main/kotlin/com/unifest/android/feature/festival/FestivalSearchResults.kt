@@ -153,8 +153,8 @@ fun FestivalSearchResultItem(
             UnifestOutlinedButton(
                 onClick = {},
                 cornerRadius = 17.dp,
-                borderColor = Color(0xFFDDDDDD),
-                contentColor = Color(0xFF666666),
+                borderColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.primary,
                 contentPadding = PaddingValues(horizontal = 17.dp),
                 enabled = false,
                 modifier = Modifier
@@ -167,15 +167,15 @@ fun FestivalSearchResultItem(
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
                     contentDescription = "Checked",
-                    tint = Color(0xFF666666),
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         } else {
             UnifestOutlinedButton(
                 onClick = { onFestivalUiAction(FestivalUiAction.OnAddClick(festival)) },
                 cornerRadius = 17.dp,
-                borderColor = Color(0xFFDDDDDD),
-                contentColor = Color(0xFF666666),
+                borderColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.primary,
                 contentPadding = PaddingValues(horizontal = 17.dp),
                 modifier = Modifier.defaultMinSize(
                     minWidth = ButtonDefaults.MinWidth,

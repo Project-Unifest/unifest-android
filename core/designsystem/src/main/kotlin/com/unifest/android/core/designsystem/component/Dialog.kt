@@ -115,11 +115,11 @@ fun UnifestDialog(
                             .weight(1f)
                             .height(45.dp)
                             .padding(start = 4.dp),
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     ) {
                         Text(
                             text = stringResource(id = cancelTextResId),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = Title5,
                         )
                     }

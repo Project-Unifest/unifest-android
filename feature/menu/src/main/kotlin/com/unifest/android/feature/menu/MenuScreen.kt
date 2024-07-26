@@ -192,7 +192,7 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_add),
-                                color = MaterialTheme.colorScheme.onBackground,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 style = Content7,
                                 textDecoration = TextDecoration.Underline,
                             )
@@ -241,7 +241,7 @@ fun MenuScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.menu_watch_more),
-                                color = MaterialTheme.colorScheme.onBackground,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
                                 style = Content7,
                                 textDecoration = TextDecoration.Underline,
                             )
@@ -372,7 +372,7 @@ fun FestivalItem(
                     elevation = 6.dp,
                     shape = CircleShape,
                 )
-                .background(Color.White, CircleShape)
+                .background(MaterialTheme.colorScheme.tertiaryContainer, CircleShape)
                 .padding(5.dp),
             contentAlignment = Alignment.Center,
         ) {

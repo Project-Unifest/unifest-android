@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -102,11 +103,15 @@ fun SearchTextField(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                             contentDescription = "Search Icon",
-                            tint = Color.Unspecified,
+                            tint = MaterialTheme.colorScheme.secondaryContainer,
                         )
                     } else {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                            imageVector = if (isSystemInDarkTheme()) {
+                                ImageVector.vectorResource(R.drawable.ic_delete_dark)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_delete_light)
+                            },
                             contentDescription = "Delete Icon",
                             tint = Color.Unspecified,
                             modifier = Modifier
