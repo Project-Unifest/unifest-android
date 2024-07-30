@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.feature.navigator.IntroNavigator
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,11 +25,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navigator: MainNavController = rememberMainNavController()
             val systemUiController = rememberExSystemUiController()
+            val isDarkTheme = isSystemInDarkTheme()
 
             DisposableEffect(systemUiController) {
                 systemUiController.setSystemBarsColor(
-                    color = Color.White,
-                    darkIcons = true,
+                    color = if (isDarkTheme) DarkGrey100 else Color.White,
+                    darkIcons = !isDarkTheme,
                     isNavigationBarContrastEnforced = false,
                 )
 

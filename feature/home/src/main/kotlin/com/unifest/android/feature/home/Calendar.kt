@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,13 +34,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
@@ -54,11 +54,18 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
+import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.DarkBlueGreen
+import com.unifest.android.core.designsystem.theme.DarkOrange
+import com.unifest.android.core.designsystem.theme.DarkRed
+import com.unifest.android.core.designsystem.theme.LightBlueGreen
+import com.unifest.android.core.designsystem.theme.LightOrange
+import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title5
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.collections.immutable.ImmutableList
@@ -87,7 +94,7 @@ fun Calendar(
         modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
         Column(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         ) {
             val monthState = rememberCalendarState(
                 startMonth = startMonth,
@@ -173,10 +180,13 @@ fun ModeToggleButton(
             onClick = { onModeChange(!isWeekMode) },
         ) {
             Icon(
-                imageVector = if (isWeekMode) ImageVector.vectorResource(id = R.drawable.ic_calender_down)
-                else ImageVector.vectorResource(id = R.drawable.ic_calender_up),
+                imageVector = if (isWeekMode) {
+                    ImageVector.vectorResource(id = R.drawable.ic_calender_down)
+                } else {
+                    ImageVector.vectorResource(id = R.drawable.ic_calender_up)
+                },
                 contentDescription = if (isWeekMode) "Month" else "Week",
-                tint = Color(0xFFD9D9D9),
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
             )
         }
     }
@@ -203,7 +213,7 @@ private fun CalendarNavigationIcon(
             .align(Alignment.Center),
         imageVector = icon,
         contentDescription = contentDescription,
-        tint = Color.Gray,
+        tint = MaterialTheme.colorScheme.onSecondary,
     )
 }
 
@@ -249,9 +259,9 @@ fun MonthAndWeekCalendarTitle(
     }
 }
 
+// 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
 @Composable
 fun SimpleCalendarTitle(
-    // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
     currentMonth: Month,
     currentYear: Int,
     goToPrevious: () -> Unit,
@@ -271,8 +281,9 @@ fun SimpleCalendarTitle(
         ) {
             Text(
                 text = "${currentYear}년 ${currentMonth.displayText()}",
-                style = BoothTitle0,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start,
+                style = BoothTitle0,
             )
             Spacer(modifier = Modifier.width(6.dp))
             ColorCircleWithText(color = Color(0xFF1FC0BA), text = "1개")
@@ -310,9 +321,10 @@ fun ColorCircleWithText(color: Color, text: String) {
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = text,
-            style = Content6,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            style = Content6,
         )
     }
 }
@@ -325,11 +337,11 @@ fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
     ) {
         for (dayOfWeek in daysOfWeek) {
             Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
                 text = dayOfWeek.displayText(),
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
                 style = Content6,
-                color = Color.Gray,
             )
         }
     }
@@ -361,22 +373,22 @@ fun Day(
     ) {
         Box(
             modifier = Modifier
-                .aspectRatio(1f) // This is important for square-sizing!
+                .aspectRatio(1f)
                 .padding(16.dp)
                 .clip(CircleShape)
-                .background(color = if (isSelected) MainColor else Color.Transparent)
+                .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
                 .then(
                     if (day == currentDate) {
-                        Modifier.border(2.dp, MainColor, CircleShape)
+                        Modifier.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
                     } else Modifier,
                 ),
             contentAlignment = Alignment.Center,
         ) {
             val textColor = when {
                 isSelected -> Color.White
-                isToday -> MainColor
-                isSelectable -> Color.Unspecified
-                else -> colorResource(R.color.inactive_text_color)
+                isToday -> MaterialTheme.colorScheme.primary
+                isSelectable -> MaterialTheme.colorScheme.onBackground
+                else -> MaterialTheme.colorScheme.onSecondaryContainer
             }
             Text(
                 text = day.dayOfMonth.toString(),
@@ -386,9 +398,9 @@ fun Day(
         }
         if (festivalCount > 0) {
             val festivalDotColor = when (festivalCount) {
-                1 -> Color(0xFF1FC0BA)
-                2 -> Color(0xFFFF8A1F)
-                else -> Color(0xFFFF3939)
+                1 -> if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen
+                2 -> if (isSystemInDarkTheme()) DarkOrange else LightOrange
+                else -> if (isSystemInDarkTheme()) DarkRed else LightRed
             }
             Box(
                 modifier = Modifier
@@ -401,9 +413,23 @@ fun Day(
     }
 }
 
-@Preview
+@ComponentPreview
 @Composable
-private fun CalendarPreview() {
+fun CalendarPreview() {
+    UnifestTheme {
+        Calendar(
+            selectedDate = LocalDate.now(),
+            onDateSelected = {},
+            allFestivals = persistentListOf(),
+            isWeekMode = false,
+            ocClickWeekMode = {},
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun CalendarDarkPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),

@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -42,7 +43,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -69,7 +69,6 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
@@ -113,7 +112,7 @@ fun IntroScreen(
     onAction: (IntroUiAction) -> Unit,
 ) {
     UnifestScaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         IntroContent(
             uiState = uiState,
@@ -125,7 +124,7 @@ fun IntroScreen(
             LoadingWheel(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White),
+                    .background(MaterialTheme.colorScheme.background),
             )
         }
 
@@ -219,13 +218,13 @@ fun InformationText() {
         Text(
             text = stringResource(id = R.string.intro_info_title),
             style = Title2,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
             text = stringResource(id = R.string.intro_info_description),
             style = BoothLocation,
             fontSize = 12.sp,
-            color = Color(0xFF848484),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -246,6 +245,7 @@ fun LikedFestivalsRow(
             if (selectedFestivals.isNotEmpty()) {
                 Text(
                     text = stringResource(id = R.string.intro_liked_festivals_title),
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Title3,
                 )
                 TextButton(
@@ -253,7 +253,7 @@ fun LikedFestivalsRow(
                 ) {
                     Text(
                         text = stringResource(id = R.string.intro_clear_item_button_text),
-                        color = Color(0xFF848484),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textDecoration = TextDecoration.Underline,
                         style = Content6,
                     )
@@ -286,8 +286,8 @@ fun FestivalRowItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, MainColor),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .height(130.dp)
             .width(120.dp),
@@ -314,19 +314,19 @@ fun FestivalRowItem(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = festival.schoolName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = festival.festivalName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
-                    color = Color(0xFF979797),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )
             }
@@ -351,13 +351,12 @@ fun AllFestivalsTabRow(
     Column(modifier) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = Color.White,
-            contentColor = Color(0xFFE5E5E5),
+            containerColor = MaterialTheme.colorScheme.background,
             edgePadding = 0.dp,
             indicator = {},
             divider = {
                 HorizontalDivider(
-                    color = Color(0xFFE5E5E5),
+                    color = MaterialTheme.colorScheme.outline,
                     thickness = 1.75.dp,
                 )
             },
@@ -365,7 +364,7 @@ fun AllFestivalsTabRow(
             tabTitles.forEachIndexed { index, title ->
                 val isSelected = selectedTabIndex == index
                 val tabTitleColor by animateColorAsState(
-                    targetValue = if (isSelected) MainColor else Color.Black,
+                    targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
                 )
                 val tabTitleFontWeight by animateFloatAsState(
                     targetValue = (if (isSelected) FontWeight.Bold.weight else FontWeight.Normal.weight).toFloat(),
@@ -394,7 +393,7 @@ fun AllFestivalsTabRow(
             modifier = Modifier
                 .padding(start = 20.dp, top = 15.dp, bottom = 15.dp)
                 .align(Alignment.Start),
-            color = Color(0xFF4C4C4C),
+            color = MaterialTheme.colorScheme.onBackground,
             style = Content6,
         )
         HorizontalPager(
@@ -410,7 +409,7 @@ fun AllFestivalsTabRow(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(bottom = 92.dp),
-                        color = Color(0xFF7E7E7E),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = Content3,
                     )
                 } else {
@@ -443,7 +442,7 @@ fun AllFestivalsTabRow(
                         modifier = Modifier
                             .fillMaxSize()
                             .align(Alignment.Center)
-                            .background(Color.White)
+                            .background(MaterialTheme.colorScheme.background)
                             .padding(bottom = 92.dp),
                     )
                 }

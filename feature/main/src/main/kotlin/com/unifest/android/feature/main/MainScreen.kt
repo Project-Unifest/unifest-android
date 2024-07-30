@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -157,9 +158,9 @@ private fun MainBottomBar(
         enter = fadeIn() + slideIn { IntOffset(0, it.height) },
         exit = fadeOut() + slideOut { IntOffset(0, it.height) },
     ) {
-        Box(modifier = Modifier.background(White)) {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
             Column {
-                HorizontalDivider(color = Color(0xFFEBEBEB))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
                 Row(
                     modifier = Modifier
                         .navigationBarsPadding()
@@ -215,7 +216,7 @@ private fun RowScope.MainBottomBarItem(
             Spacer(modifier = Modifier.height(5.dp))
             Text(
                 text = tab.label,
-                color = if (selected) Color(0xFFFD067D) else Color(0xFF555555),
+                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary,
                 fontWeight = if (selected) FontWeight.SemiBold
                 else FontWeight.Normal,
                 style = BottomMenuBar,

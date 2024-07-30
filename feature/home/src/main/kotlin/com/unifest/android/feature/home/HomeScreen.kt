@@ -2,8 +2,8 @@ package com.unifest.android.feature.home
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,11 +54,14 @@ import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.DarkBlueGreen
+import com.unifest.android.core.designsystem.theme.LightBlueGreen
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.StarImage
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
@@ -122,6 +126,7 @@ internal fun HomeScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
         LazyColumn {
@@ -146,23 +151,25 @@ internal fun HomeScreen(
                             .padding(64.dp),
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Image(
+                            Icon(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_schedule),
                                 contentDescription = "축제 없음",
                                 modifier = Modifier.size(23.dp),
+                                tint = MaterialTheme.colorScheme.onBackground,
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
                                 text = stringResource(id = R.string.home_empty_festival_text),
-                                style = Title2,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.Center,
+                                style = Title2,
                             )
                             Spacer(modifier = Modifier.height(9.dp))
                             Text(
                                 text = stringResource(id = R.string.home_empty_festival_schedule_description_text),
-                                style = Content6,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = TextAlign.Center,
-                                color = Color(0xFF848484),
+                                style = Content6,
                             )
                         }
                     }
@@ -187,8 +194,8 @@ internal fun HomeScreen(
                     if (scheduleIndex < homeUiState.todayFestivals.size - 1) {
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
-                            color = Color(0xFFDFDFDF),
                             modifier = Modifier.padding(horizontal = 20.dp),
+                            color = MaterialTheme.colorScheme.outline,
                         )
                     }
                 }
@@ -199,8 +206,8 @@ internal fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
-                    contentColor = Color(0xFF585858),
-                    borderColor = Color(0xFFD2D2D2),
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    borderColor = MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
                         text = stringResource(id = R.string.home_add_interest_festival_button),
@@ -244,8 +251,9 @@ fun FestivalScheduleText(selectedDate: LocalDate) {
     val formattedDate = DateTimeFormatter.ofPattern("M월 d일").format(selectedDate)
     Text(
         text = formattedDate + stringResource(id = R.string.home_festival_schedule_text),
-        style = Title3,
         modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+        color = MaterialTheme.colorScheme.onBackground,
+        style = Title3,
     )
 }
 
@@ -270,7 +278,7 @@ fun FestivalScheduleItem(
                 modifier = Modifier
                     .width(3.dp)
                     .height(72.dp)
-                    .background(Color(0xFF1FC0BA))
+                    .background(if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen)
                     .align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -279,13 +287,14 @@ fun FestivalScheduleItem(
             ) {
                 Text(
                     text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content4,
-                    color = Color(0xFFC0C0C0),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Row {
                     Text(
                         text = festival.festivalName + " Day ",
+                        color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = Title2,
@@ -293,6 +302,7 @@ fun FestivalScheduleItem(
                     if (isDataReady) {
                         Text(
                             text = (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1).toString(),
+                            color = MaterialTheme.colorScheme.onBackground,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = Title2,
@@ -302,7 +312,7 @@ fun FestivalScheduleItem(
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_gray),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
@@ -313,7 +323,7 @@ fun FestivalScheduleItem(
                     Text(
                         text = festival.schoolName,
                         style = Content5,
-                        color = Color(0xFF848484),
+                        color = MaterialTheme.colorScheme.onSecondary,
                     )
                 }
             }
@@ -367,6 +377,7 @@ fun IncomingFestivalText() {
     Text(
         text = stringResource(id = R.string.home_incoming_festival_text),
         modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+        color = MaterialTheme.colorScheme.onBackground,
         style = Title3,
     )
 }
@@ -378,8 +389,8 @@ fun IncomingFestivalCard(festival: FestivalModel) {
             .padding(horizontal = 20.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, Color(0xFFDEDEDE)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
     ) {
         Row(
             modifier = Modifier
@@ -400,18 +411,19 @@ fun IncomingFestivalCard(festival: FestivalModel) {
             ) {
                 Text(
                     text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content6,
-                    color = Color(0xFF848484),
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = festival.festivalName,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_gray),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
@@ -422,7 +434,7 @@ fun IncomingFestivalCard(festival: FestivalModel) {
                     Text(
                         text = festival.schoolName,
                         style = Content6,
-                        color = Color(0xFF848484),
+                        color = MaterialTheme.colorScheme.onSecondary,
                     )
                 }
             }
@@ -433,6 +445,80 @@ fun IncomingFestivalCard(festival: FestivalModel) {
 @DevicePreview
 @Composable
 fun HomeScreenPreview() {
+    UnifestTheme {
+        HomeScreen(
+            padding = PaddingValues(),
+            homeUiState = HomeUiState(
+                todayFestivals = persistentListOf(
+                    FestivalTodayModel(
+                        festivalId = 1,
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 1,
+                    ),
+
+                    FestivalTodayModel(
+                        festivalId = 2,
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 2,
+                    ),
+                    FestivalTodayModel(
+                        festivalId = 3,
+                        beginDate = "2024-04-05",
+                        endDate = "2024-04-07",
+                        festivalName = "녹색지대 DAY 1",
+                        schoolName = "건국대학교 서울캠퍼스",
+                        starInfo = listOf(),
+                        thumbnail = "https://picsum.photos/36",
+                        schoolId = 3,
+                    ),
+                ),
+                incomingFestivals = persistentListOf(
+                    FestivalModel(
+                        1,
+                        1,
+                        "https://picsum.photos/36",
+                        "서울대학교",
+                        "서울",
+                        "설대축제",
+                        "2024-04-21",
+                        "2024-04-23",
+                        126.957f,
+                        37.460f,
+                    ),
+                    FestivalModel(
+                        2,
+                        2,
+                        "https://picsum.photos/36",
+                        "연세대학교",
+                        "서울",
+                        "연대축제",
+                        "2024-04-21",
+                        "2024-04-23",
+                        126.957f,
+                        37.460f,
+                    ),
+                ),
+            ),
+            festivalUiState = FestivalUiState(),
+            onHomeUiAction = {},
+            onFestivalUiAction = {},
+        )
+    }
+}
+
+@DarkDevicePreview
+@Composable
+fun HomeScreenDarkPreview() {
     UnifestTheme {
         HomeScreen(
             padding = PaddingValues(),

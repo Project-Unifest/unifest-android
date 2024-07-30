@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -41,8 +43,8 @@ fun UnifestTopAppBar(
     titleStyle: TextStyle = Title1,
     @DrawableRes navigationIconRes: Int = R.drawable.ic_arrow_back_dark_gray,
     navigationIconContentDescription: String? = null,
-    containerColor: Color = Color.White,
-    contentColor: Color = Color.Black,
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
     onNavigationClick: () -> Unit = {},
     onTitleClick: (Boolean) -> Unit = {},
     isOnboardingCompleted: Boolean = false,
@@ -59,7 +61,7 @@ fun UnifestTopAppBar(
                     Icon(
                         imageVector = imageVector,
                         contentDescription = navigationIconContentDescription,
-                        tint = Color.Unspecified,
+                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }
@@ -145,6 +147,17 @@ fun UnifestTopAppBarPreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun UnifestTopAppBarDarkPreview() {
+    UnifestTheme {
+        UnifestTopAppBar(
+            navigationType = TopAppBarNavigationType.None,
+            title = "UniFest",
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun SchoolSearchTitlePreview() {
@@ -156,9 +169,31 @@ fun SchoolSearchTitlePreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun SchoolSearchTitleDarkPreview() {
+    UnifestTheme {
+        SchoolSearchTitle(
+            title = "건국대학교",
+            onTitleClick = {},
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun UnifestTopAppBarWithBackButtonPreview() {
+    UnifestTheme {
+        UnifestTopAppBar(
+            navigationType = TopAppBarNavigationType.Back,
+            navigationIconContentDescription = "Navigation back icon",
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun UnifestTopAppBarWithBackButtonDarkPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,

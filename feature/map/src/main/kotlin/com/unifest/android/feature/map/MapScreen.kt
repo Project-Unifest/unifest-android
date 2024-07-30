@@ -9,6 +9,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -70,6 +72,7 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.goToAppSettings
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -79,7 +82,6 @@ import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content2
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
@@ -242,15 +244,16 @@ fun MapContent(
         // TODO 클러스터링 마커 커스텀
         NaverMap(
             cameraPositionState = cameraPositionState,
-            locationSource = rememberFusedLocationSource(),
+            properties = MapProperties(
+                locationTrackingMode = LocationTrackingMode.NoFollow,
+                isNightModeEnabled = isSystemInDarkTheme(),
+            ),
             uiSettings = MapUiSettings(
                 isZoomControlEnabled = false,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
             ),
-            properties = MapProperties(
-                locationTrackingMode = LocationTrackingMode.NoFollow,
-            ),
+            locationSource = rememberFusedLocationSource(),
         ) {
             PolygonOverlay(
                 coords = uiState.outerCords,
@@ -357,10 +360,10 @@ fun MapContent(
                     .width(116.dp)
                     .height(36.dp)
                     .clip(RoundedCornerShape(39.dp))
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .border(
                         width = 1.dp,
-                        color = MainColor,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(39.dp),
                     )
                     .clickable {
@@ -374,7 +377,7 @@ fun MapContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.map_popular_booth),
-                        color = MainColor,
+                        color = MaterialTheme.colorScheme.primary,
                         style = Title4,
                     )
                     Spacer(modifier = Modifier.width(6.dp))
@@ -427,7 +430,7 @@ fun MapTopAppBar(
         ),
     ) {
         Column(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
         ) {
             UnifestTopAppBar(
                 navigationType = TopAppBarNavigationType.Search,
@@ -478,7 +481,7 @@ fun BoothItem(
         modifier = modifier.clickable {
             onAction(MapUiAction.OnBoothItemClick(boothInfo.id))
         },
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
@@ -492,22 +495,24 @@ fun BoothItem(
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),
-                    placeholder = painterResource(id = R.drawable.ic_item_placeholder),
+                    placeholder = painterResource(id = R.drawable.item_placeholder),
                 )
                 Column(
                     modifier = Modifier.padding(start = 15.dp),
                 ) {
                     Text(
                         text = boothInfo.name,
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = Title2,
                     )
                     Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = boothInfo.description,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.heightIn(min = textHeight),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = Content2,
-                        modifier = Modifier.heightIn(min = textHeight),
                     )
                     Spacer(modifier = Modifier.height(3.dp))
                     Row(
@@ -521,6 +526,7 @@ fun BoothItem(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = boothInfo.location,
+                            color = MaterialTheme.colorScheme.onSecondary,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = Title5,
@@ -542,12 +548,12 @@ fun RankingBadge(ranking: Int) {
             .size(width = 43.dp, height = 45.dp)
             .padding(start = 7.dp, top = 9.dp)
             .clip(CircleShape)
-            .background(MainColor, CircleShape),
+            .background(MaterialTheme.colorScheme.primary, CircleShape),
         contentAlignment = Alignment.TopStart,
     ) {
         Text(
             text = stringResource(id = R.string.map_ranking, ranking),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onTertiaryContainer,
             style = Title5,
             modifier = Modifier.align(Alignment.Center),
         )
@@ -601,6 +607,21 @@ fun MapTopAppBarPreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun MapTopAppBarDarkPreview() {
+    UnifestTheme {
+        MapTopAppBar(
+            title = "건국대학교",
+            boothSearchText = TextFieldValue(),
+            isOnboardingCompleted = false,
+            onMapUiAction = {},
+            onFestivalUiAction = {},
+            selectedChips = persistentListOf("주점", "먹거리"),
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun BoothItemPreview() {
@@ -620,9 +641,36 @@ fun BoothItemPreview() {
     }
 }
 
+@DarkComponentPreview
+@Composable
+fun BoothItemDarkPreview() {
+    UnifestTheme {
+        BoothItem(
+            boothInfo = BoothMapModel(
+                id = 1L,
+                name = "컴공 주점",
+                category = "",
+                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
+                location = "청심대 앞",
+            ),
+            isPopularMode = true,
+            ranking = 1,
+            onAction = {},
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun RankingBadgePreview() {
+    UnifestTheme {
+        RankingBadge(ranking = 1)
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun RankingBadgeDarkPreview() {
     UnifestTheme {
         RankingBadge(ranking = 1)
     }

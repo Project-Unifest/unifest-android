@@ -13,6 +13,7 @@ import com.skydoves.landscapist.coil.CoilImage
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
@@ -26,7 +27,7 @@ fun NetworkImage(
 ) {
     if (LocalInspectionMode.current) {
         Image(
-            painter = painterResource(id = R.drawable.ic_item_placeholder),
+            painter = painterResource(id = R.drawable.item_placeholder),
             contentDescription = "Example Image Icon",
             modifier = modifier,
         )
@@ -50,6 +51,17 @@ fun NetworkImage(
 @ComponentPreview
 @Composable
 fun NetworkImagePreview() {
+    UnifestTheme {
+        NetworkImage(
+            imgUrl = "",
+            contentDescription = "",
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun NetworkImageDarkPreview() {
     UnifestTheme {
         NetworkImage(
             imgUrl = "",

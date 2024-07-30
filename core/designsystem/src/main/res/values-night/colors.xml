@@ -8,6 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="main_color">#FFFF748A</color>
-    <color name="tooltip_color">#FFFF748A</color>
+    <color name="main_color">#FFF55770</color>
+    <color name="tooltip_color">#FFF55770</color>
 </resources>
