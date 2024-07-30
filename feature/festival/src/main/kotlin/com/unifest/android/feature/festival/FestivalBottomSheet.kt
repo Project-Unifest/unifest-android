@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -99,69 +100,72 @@ fun FestivalSearchBottomSheet(
             .background(MaterialTheme.colorScheme.surface)
             .padding(top = 18.dp),
     ) {
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .navigationBarsPadding(),
-        ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            FestivalSearchTextField(
-                searchText = searchText,
-                updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
-                searchTextHintRes = searchTextHintRes,
-                onSearch = {},
-                clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },
-                setEnableSearchMode = { flag -> onFestivalUiAction(FestivalUiAction.OnEnableSearchMode(flag)) },
-                isSearchMode = isSearchMode,
+        UnifestTheme {
+            Column(
                 modifier = Modifier
-                    .height(46.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-            )
-            if (!isSearchMode) {
-                Spacer(modifier = Modifier.height(39.dp))
-                UnifestHorizontalDivider(color = MaterialTheme.colorScheme.scrim)
-                Spacer(modifier = Modifier.height(21.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .navigationBarsPadding(),
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+                FestivalSearchTextField(
+                    searchText = searchText,
+                    updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
+                    searchTextHintRes = searchTextHintRes,
+                    onSearch = {},
+                    clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },
+                    setEnableSearchMode = { flag -> onFestivalUiAction(FestivalUiAction.OnEnableSearchMode(flag)) },
+                    isSearchMode = isSearchMode,
                     modifier = Modifier
+                        .height(46.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.intro_liked_festivals_title),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = Title3,
-                    )
-                    TextButton(
-                        onClick = {
-                            onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
-                        },
+                )
+                if (!isSearchMode) {
+                    Spacer(modifier = Modifier.height(39.dp))
+                    UnifestHorizontalDivider(color = MaterialTheme.colorScheme.scrim)
+                    Spacer(modifier = Modifier.height(21.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
                     ) {
                         Text(
-                            text = stringResource(id = R.string.edit),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = Content3,
+                            text = stringResource(id = R.string.intro_liked_festivals_title),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = Title3,
                         )
+                        TextButton(
+                            onClick = {
+                                onFestivalUiAction(FestivalUiAction.OnEnableEditMode)
+                            },
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.edit),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = Content3,
+                            )
+                        }
                     }
+                    LikedFestivalsGrid(
+                        selectedFestivals = likedFestivals,
+                        onFestivalSelected = { festival ->
+                            onFestivalUiAction(FestivalUiAction.OnLikedFestivalSelected(festival))
+                        },
+                        isEditMode = isEditMode,
+                        onDeleteLikedFestivalClick = { festival ->
+                            onFestivalUiAction(FestivalUiAction.OnDeleteIconClick(festival))
+                        },
+                    )
+                } else {
+                    FestivalSearchResults(
+                        searchResults = festivalSearchResults,
+                        onFestivalUiAction = onFestivalUiAction,
+                        likedFestivals = likedFestivals,
+                    )
                 }
-                LikedFestivalsGrid(
-                    selectedFestivals = likedFestivals,
-                    onFestivalSelected = { festival ->
-                        onFestivalUiAction(FestivalUiAction.OnLikedFestivalSelected(festival))
-                    },
-                    isEditMode = isEditMode,
-                    onDeleteLikedFestivalClick = { festival ->
-                        onFestivalUiAction(FestivalUiAction.OnDeleteIconClick(festival))
-                    },
-                )
-            } else {
-                FestivalSearchResults(
-                    searchResults = festivalSearchResults,
-                    onFestivalUiAction = onFestivalUiAction,
-                    likedFestivals = likedFestivals,
-                )
             }
         }
         if (isLikedFestivalDeleteDialogVisible) {
