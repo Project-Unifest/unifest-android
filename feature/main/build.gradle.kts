@@ -2,7 +2,6 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
-    alias(libs.plugins.unifest.android.retrofit)
     // alias(libs.plugins.compose.investigator)
 }
 

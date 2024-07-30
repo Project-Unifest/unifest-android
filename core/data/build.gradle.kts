@@ -3,7 +3,6 @@
 plugins {
     alias(libs.plugins.unifest.android.library)
     alias(libs.plugins.unifest.android.hilt)
-    alias(libs.plugins.unifest.android.firebase)
     id("kotlinx-serialization")
 }
 
@@ -28,6 +27,8 @@ dependencies {
         projects.core.model,
         projects.core.network,
 
+        platform(libs.firebase.bom),
+        libs.firebase.config,
         libs.timber,
     )
 }

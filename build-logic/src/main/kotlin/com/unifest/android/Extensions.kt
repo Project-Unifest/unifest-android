@@ -22,14 +22,14 @@ internal fun Project.applyPlugins(vararg plugins: String) {
 }
 
 internal val Project.isAndroidProject: Boolean
-    get() = pluginManager.hasPlugin(Plugins.AndroidApplication) ||
-        pluginManager.hasPlugin(Plugins.AndroidLibrary)
+    get() = pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION) ||
+        pluginManager.hasPlugin(Plugins.ANDROID_LIBRARY)
 
-internal val Project.androidExtensions: CommonExtension<*, *, *, *, *>
+internal val Project.androidExtensions: CommonExtension<*, *, *, *, *, *>
     get() {
-        return if (pluginManager.hasPlugin(Plugins.AndroidApplication)) {
+        return if (pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION)) {
             extensions.getByType<BaseAppModuleExtension>()
-        } else if (pluginManager.hasPlugin(Plugins.AndroidLibrary)) {
+        } else if (pluginManager.hasPlugin(Plugins.ANDROID_LIBRARY)) {
             extensions.getByType<LibraryExtension>()
         } else {
             throw GradleException("The provided project does not have the Android plugin applied. ($name)")

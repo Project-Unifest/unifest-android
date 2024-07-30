@@ -7,19 +7,19 @@ versionCode = "17"
 versionName = "1.0.7"
 packageName = "com.unifest.android"
 
-android-gradle-plugin = "8.2.2"
-kotlin-core = "1.9.23"
+android-gradle-plugin = "8.5.1"
+kotlin-core = "2.0.0"
 gradle-dependency-handler-extensions = "1.1.0"
 
 google-secrets = "2.0.1"
-google-service = "4.4.1"
+google-service = "4.4.2"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
 kotlin-ktlint-source = "0.50.0"
 
-kotlinx-coroutines = "1.8.0"
-kotlinx-datetime = "0.5.0"
+kotlinx-coroutines = "1.9.0-RC"
+kotlinx-datetime = "0.6.0"
 kotlinx-serialization = "1.6.3"
 kotlinx-serialization-converter = "1.0.0"
 kotlinx-collections-immutable = "0.3.7"
@@ -27,17 +27,15 @@ kotlinx-collections-immutable = "0.3.7"
 android-play-services-location = "21.0.1"
 
 androidx-core = "1.13.1"
-androidx-lifecycle = "2.8.0-alpha02"
+androidx-lifecycle = "2.8.4"
 androidx-splash = "1.0.1"
 androidx-startup = "1.1.1"
-androidx-navigation = "2.7.7"
+androidx-navigation = "2.8.0-beta06"
 androidx-datastore = "1.1.1"
 androidx-room = "2.6.1"
-androidx-activity-compose = "1.9.0"
-androidx-compose-compiler = "1.5.11"
-androidx-compose-bom = "2024.05.00"
+androidx-activity-compose = "1.9.1"
+androidx-compose = "1.6.8"
 androidx-compose-material3 = "1.2.1"
-androidx-compose-animation = "1.7.0-alpha08"
 androidx-hilt-navigation-compose = "1.2.0"
 
 desugar-jdk-libs = "2.0.4"
@@ -47,32 +45,28 @@ retrofit = "2.11.0"
 okhttp = "5.0.0-alpha.14"
 coil-compose = "2.6.0"
 timber = "5.0.1"
-firebase-bom = "32.8.1"
-firebase-crashlytics = "2.9.9"
+firebase-bom = "33.1.2"
+firebase-crashlytics = "3.0.2"
 firebase-config = "21.6.3"
-ksp = "1.9.23-1.0.20"
+ksp = "2.0.0-1.0.22"
 compose-extensions = "1.6.5"
 compose-stable-marker = "1.0.4"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.3"
 balloon = "1.6.4"
-calendar-compose = "2.5.0"
+calendar-compose = "2.6.0-beta03"
 flexible-bottomsheet = "0.1.2"
 
-naver-map-compose = "1.5.7"
+naver-map-compose = "1.7.1"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.12.0"
 
 [libraries]
 
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-core" }
 gradle-androidx-room = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
+compose-compiler-extension = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin-core" }
 
 kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -93,15 +87,13 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
-androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidx-compose" }
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidx-compose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
-androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
-androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidx-compose" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidx-compose" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidx-compose" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
@@ -135,11 +127,6 @@ flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottoms
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 
@@ -157,6 +144,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-core" }
 
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin-core" }
 
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 
@@ -178,6 +166,16 @@ unifest-android-room = { id = "unifest.android.room", version = "unspecified" }
 unifest-jvm-kotlin = { id = "unifest.jvm.kotlin", version = "unspecified" }
 
 [bundles]
+
+androidx-compose = [
+    "androidx-compose-foundation",
+    "androidx-compose-material-iconsExtended",
+    "androidx-compose-material3",
+    "androidx-compose-runtime",
+    "androidx-compose-ui",
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-tooling-preview",
+]
 
 androidx-lifecycle = [
     "androidx-lifecycle-runtime-compose",
