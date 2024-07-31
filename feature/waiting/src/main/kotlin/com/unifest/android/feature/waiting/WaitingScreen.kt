@@ -25,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -41,6 +43,8 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.DarkRed
+import com.unifest.android.core.designsystem.theme.LightGrey100
+import com.unifest.android.core.designsystem.theme.LightGrey700
 import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
@@ -49,7 +53,9 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
+import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
 
 @Composable
@@ -58,7 +64,7 @@ internal fun WaitingRoute(
     popBackStack: () -> Unit,
     viewModel: WaitingViewModel = hiltViewModel(),
 ) {
-//    val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
@@ -68,16 +74,16 @@ internal fun WaitingRoute(
 
     WaitingScreen(
         padding = padding,
-//        waitingUiState = waitingUiState,
-//        onWaitingUiAction = viewModel::onWaitingUiAction,
+        waitingUiState = waitingUiState,
+        onWaitingUiAction = viewModel::onWaitingUiAction,
     )
 }
 
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
-//    waitingUiState: WaitingUiState,
-//    onWaitingUiAction: (WaitingUiAction) -> Unit,
+    waitingUiState: WaitingUiState,
+    onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -134,7 +140,9 @@ internal fun WaitingScreen(
                         style = Content7,
                     )
                     Row(
-                        modifier = Modifier.clickable {},
+                        modifier = Modifier.clickable {
+                            //todo: 정렬 다이얼로그
+                        },
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_below_waiting),
@@ -158,7 +166,6 @@ internal fun WaitingScreen(
                 WaitInfoCard(location = "학생회 부스", order = 13, waitingNumber = 134, people = 3)
             }
         }
-
 //        if (waitingUiState.waitingLists.isEmpty()) {
 //        Column(
 //            modifier = Modifier
@@ -228,6 +235,7 @@ fun WaitInfoCard(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(2.dp))
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -291,12 +299,26 @@ fun WaitInfoCard(
             ) {
                 UnifestOutlinedButton(
                     onClick = { },
-                    contentColor = MaterialTheme.colorScheme.background,
+                    containerColor = LightGrey100,
+                    borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = stringResource(id = R.string.waiting_cancel_waiting),
                         color = if (isSystemInDarkTheme()) DarkRed else LightRed,
+                        style = Title5,
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                UnifestOutlinedButton(
+                    onClick = { },
+                    containerColor = LightGrey100,
+                    borderColor = LightGrey100,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.waiting_booth_check),
+                        color = LightGrey700,
                         style = Title5,
                     )
                 }
@@ -311,8 +333,8 @@ fun WaitingScreenPreview() {
     UnifestTheme {
         WaitingScreen(
             padding = PaddingValues(),
-//            waitingUiState = WaitingUiState(),
-//            onWaitingUiAction = {},
+            waitingUiState = WaitingUiState(),
+            onWaitingUiAction = {},
         )
     }
 }

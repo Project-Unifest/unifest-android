@@ -62,6 +62,7 @@
     <string name="waiting_waiting_number">웨이팅번호</string>
     <string name="waiting_people">인원</string>
     <string name="waiting_cancel_waiting">웨이팅 취소</string>
+    <string name="waiting_booth_check">부스 확인하기</string>
     <string name="waiting_nth">번째</string>
 
     <!--    Menu    -->

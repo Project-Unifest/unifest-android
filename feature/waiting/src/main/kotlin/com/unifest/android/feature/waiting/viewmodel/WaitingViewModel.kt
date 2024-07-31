@@ -21,8 +21,9 @@ class WaitingViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions 
 
     fun onWaitingUiAction(action: WaitingUiAction) {
         when (action) {
-            is WaitingUiAction.OnDismiss -> setServerErrorDialogVisible(false)
-            else -> {}
+            is WaitingUiAction.OnCancelWaitingClick -> setServerErrorDialogVisible(false)
+            is WaitingUiAction.OnCheckBoothClick -> setNetworkErrorDialogVisible(true)
+            is WaitingUiAction.OnPullToRefresh -> setNetworkErrorDialogVisible(false)
         }
     }
 
