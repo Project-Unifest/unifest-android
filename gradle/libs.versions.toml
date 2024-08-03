@@ -54,7 +54,7 @@ compose-stable-marker = "1.0.5"
 compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.6"
 balloon = "1.6.6"
-calendar-compose = "2.6.0-beta03"
+calendar-compose = "2.6.0-beta04"
 flexible-bottomsheet = "0.1.3"
 
 naver-map-compose = "1.7.1"
