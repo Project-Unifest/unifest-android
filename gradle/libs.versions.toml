@@ -55,7 +55,7 @@ compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.3.6"
 balloon = "1.6.6"
 calendar-compose = "2.6.0-beta04"
-flexible-bottomsheet = "0.1.3"
+flexible-bottomsheet = "0.1.4"
 
 naver-map-compose = "1.7.1"
 naver-map-location = "21.0.1"
