@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -53,7 +55,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,6 +69,7 @@ import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.CircularOutlineButton
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -78,8 +83,10 @@ import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
+import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
+import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
@@ -91,6 +98,7 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber3
 import com.unifest.android.core.designsystem.theme.WaitingTeam
+import com.unifest.android.core.designsystem.theme.pretendardFamily
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
@@ -326,10 +334,11 @@ fun BottomBar(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
-                    onClick = { /* showWaitingDialog = true */ },
+                    onClick = {  },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
-                    enabled = false,
+                    enabled = true,
+                    //todo: 처리해주기
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
@@ -480,6 +489,110 @@ fun MenuItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun WaitingPinDialog(
+    boothName: String,
+    waitingCount: Int,
+    pinNumber: String,
+    onDismissRequest: () -> Unit,
+    onWaitingConfirm: (Int, String) -> Unit,
+) {
+    var pinNumber by remember { mutableStateOf(pinNumber) }
+
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(14.dp))
+            Row {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                    contentDescription = "location icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = boothName,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+            Text(
+                text = "부스 PIN 입력",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = WaitingTeam,
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Column {
+                BasicTextField(
+                    value = pinNumber,
+                    onValueChange = {
+                        pinNumber = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.onSecondaryContainer, RoundedCornerShape(5.dp))
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .padding(horizontal = 10.dp, vertical = 19.dp),
+                    decorationBox = { innerTextField ->
+                        if (pinNumber.isEmpty()) {
+                            Text(
+                                text = "4자리 PIN을 입력해주세요",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                style = BoothTitle2,
+                            )
+                        }
+                        innerTextField()
+                    },
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_booth_info),
+                        contentDescription = "booth info icon",
+                        tint = Color.Unspecified,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "웨이팅 PIN은 부스 운영자에게 문의해주세요!",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Content6,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(35.dp))
+            UnifestButton(
+                onClick = { onWaitingConfirm(waitingCount, pinNumber) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                Text(
+                    text = "PIN 입력",
+                    style = Title4,
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun WaitingDialog(
     boothName: String,
     waitingCount: Int,
@@ -543,16 +656,11 @@ fun WaitingDialog(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconButton(
+                    CircularOutlineButton(
+                        icon = Icons.Default.Remove,
+                        contentDescription = "Minus Button",
                         onClick = { },
-                        modifier = Modifier.size(27.dp),
-                    ) {
-                        Icon(
-                            Icons.Default.Remove,
-                            contentDescription = "Decrease",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
+                    )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
                         text = "$waitingCount",
@@ -560,16 +668,11 @@ fun WaitingDialog(
                         style = WaitingNumber3,
                     )
                     Spacer(modifier = Modifier.width(20.dp))
-                    IconButton(
+                    CircularOutlineButton(
+                        icon = Icons.Default.Add,
+                        contentDescription = "Plus Button",
                         onClick = { },
-                        modifier = Modifier.size(27.dp),
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "Increase",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(14.dp))
@@ -601,18 +704,73 @@ fun WaitingDialog(
                 },
                 visualTransformation = PhoneNumberVisualTransformation(),
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkbox),
+                        contentDescription = "check box icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.clickableSingle {
+                        },
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    ClickableText(
+                        text = "개인정보 처리방침",
+                        style = Content6,
+                        onClick = { /* 링크 처리 */ },
+                    )
+                    Text(
+                        text = " 및 ",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = Content6,
+                    )
+                    ClickableText(
+                        text = "제 3자 제공방침",
+                        style = Content6,
+                        onClick = { /* 링크 처리 */ },
+                    )
+                    Text(
+                        text = "에 동의합니다",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = Content6,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(11.dp))
             UnifestButton(
                 onClick = { onWaitingConfirm(waitingCount, phoneNumber) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             ) {
-                Text("웨이팅 신청")
+                Text(
+                    text = "웨이팅 신청",
+                    style = Title4,
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+}
+
+@Composable
+fun ClickableText(
+    text: String,
+    style: TextStyle = TextStyle.Default,
+    onClick: () -> Unit,
+) {
+    Text(
+        text = text,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = style.copy(
+            textDecoration = TextDecoration.Underline,
+        ),
+        modifier = Modifier.clickable(onClick = onClick),
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -807,6 +965,34 @@ fun BoothScreenDarkPreview() {
             ),
             snackBarState = SnackbarHostState(),
             onAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun WaitingPinDialogPreview() {
+    UnifestTheme {
+        WaitingPinDialog(
+            boothName = "컴공 주점",
+            waitingCount = 3,
+            pinNumber = "",
+            onDismissRequest = {},
+            onWaitingConfirm = { _, _ -> },
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun WaitingPinDialogDarkPreview() {
+    UnifestTheme {
+        WaitingPinDialog(
+            boothName = "컴공 주점",
+            waitingCount = 3,
+            pinNumber = "",
+            onDismissRequest = {},
+            onWaitingConfirm = { _, _ -> },
         )
     }
 }

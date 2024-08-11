@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothTitle2
@@ -139,24 +140,6 @@ internal fun WaitingScreen(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content7,
                     )
-                    Row(
-                        modifier = Modifier.clickable {
-                            //todo: 정렬 다이얼로그
-                        },
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_below_waiting),
-                            contentDescription = "filter icon",
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
-                        Text(
-                            text = stringResource(id = R.string.waiting_sort),
-                            style = Content7,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
                 }
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }
@@ -335,6 +318,19 @@ fun WaitingScreenPreview() {
             padding = PaddingValues(),
             waitingUiState = WaitingUiState(),
             onWaitingUiAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun WaitingScreenComponentPreview() {
+    UnifestTheme {
+        WaitInfoCard(
+            location = "컴공 주점",
+            order = 35,
+            waitingNumber = 112,
+            people = 3,
         )
     }
 }
