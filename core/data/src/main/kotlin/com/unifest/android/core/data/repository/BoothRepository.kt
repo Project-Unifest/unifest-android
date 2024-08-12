@@ -9,4 +9,7 @@ interface BoothRepository {
     suspend fun getBoothDetail(boothId: Long): Result<BoothDetailModel>
     suspend fun likeBooth(boothId: Long): Result<Unit>
     suspend fun getBoothLikes(boothId: Long): Result<Int>
+    suspend fun checkPinValidation(boothId: Long, pinNumber: String): Result<Long>
+    suspend fun requestBoothWaiting(boothId: Long,tel: String, partySize:Long, pinNumber: String): Result<Unit>
+    //todo: add more methods
 }

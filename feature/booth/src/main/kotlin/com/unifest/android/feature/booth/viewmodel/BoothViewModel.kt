@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,6 +51,16 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnRetryClick -> refresh(action.error)
             is BoothUiAction.OnMenuImageClick -> showMenuImageDialog(action.menu)
             is BoothUiAction.OnMenuImageDialogDismiss -> hideMenuImageDialog()
+            is BoothUiAction.OnPinNumberUpdated -> updatePinNumberText(action.pinNumber)
+            is BoothUiAction.OnWaitingTelUpdated -> updateWaitingTelText(action.tel)
+            is BoothUiAction.OnWaitingButtonClick -> setPinCheckDialogVisible(true)
+            is BoothUiAction.OnDialogPinButtonClick -> checkPinValidation()
+            is BoothUiAction.OnDialogWaitingButtonClick -> requestBoothWaiting()
+            is BoothUiAction.OnWaitingDialogDismiss -> setWaitingDialogVisible(false)
+            is BoothUiAction.OnPinDialogDismiss -> setPinCheckDialogVisible(false)
+            is BoothUiAction.OnConfirmDialogDismiss -> setConfirmDialogVisible(false)
+            is BoothUiAction.OnWaitingMinusClick -> minusWaitingPartySize()
+            is BoothUiAction.OnWaitingPlusClick -> plusWaitingPartySize()
         }
     }
 
@@ -166,6 +177,91 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    private fun requestBoothWaiting() {
+        val tel = _uiState.value.waitingTel
+        val partySize = _uiState.value.waitingPartySize
+
+        if (isTelValid(tel) && isPartySizeValid(partySize)) {
+            viewModelScope.launch {
+                boothRepository.requestBoothWaiting(
+                    _uiState.value.boothDetailInfo.id,
+                    tel,
+                    partySize,
+                    _uiState.value.boothPinNumber
+                ).onSuccess {
+                    setWaitingDialogVisible(false)
+                    setConfirmDialogVisible(true)
+                }.onFailure {
+                    setWaitingDialogVisible(false)
+                    setConfirmDialogVisible(true)
+                }
+            }
+        } else {
+            // 유효하지 않은 입력에 대한 처리
+        }
+    }
+
+    private fun isTelValid(tel: String): Boolean {
+        return tel.matches(Regex("^010\\d{8}$"))
+    }
+
+    private fun isPartySizeValid(partySize: Long): Boolean {
+        return partySize >= 1
+    }
+
+    private fun updatePinNumberText(pinNumber: String) {
+        _uiState.update {
+            it.copy(
+                boothPinNumber = pinNumber,
+            )
+        }
+    }
+
+    private fun updateWaitingTelText(tel: String) {
+        _uiState.update {
+            it.copy(
+                waitingTel = tel,
+            )
+        }
+    }
+
+    private fun checkPinValidation() {
+        viewModelScope.launch {
+            boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber)
+                .onSuccess { waitingTeamNumber->
+                    if (waitingTeamNumber > -1) {
+                        _uiState.update {
+                            it.copy(waitingTeamNumber = waitingTeamNumber)
+                        }
+                        setPinCheckDialogVisible(false)
+                        setWaitingDialogVisible(true)
+                    } else {
+                        setPinCheckDialogVisible(false)
+                        //todo: 처리
+                    }
+                }
+                .onFailure {
+                }
+        }
+    }
+
+    private fun minusWaitingPartySize() {
+        _uiState.update { currentState ->
+            val newPartySize = if (currentState.waitingPartySize > 1) {
+                currentState.waitingPartySize - 1
+            } else {
+                currentState.waitingPartySize
+            }
+            currentState.copy(waitingPartySize = newPartySize)
+        }
+    }
+
+    private fun plusWaitingPartySize() {
+        _uiState.update {
+            it.copy(waitingPartySize = it.waitingPartySize + 1)
+        }
+    }
+
     private fun showMenuImageDialog(menu: MenuModel) {
         _uiState.update {
             it.copy(
@@ -181,6 +277,24 @@ class BoothViewModel @Inject constructor(
                 isMenuImageDialogVisible = false,
                 selectedMenu = null,
             )
+        }
+    }
+
+    private fun setPinCheckDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isPinCheckDialogVisible = flag)
+        }
+    }
+
+    private fun setWaitingDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isWaitingDialogVisible = flag)
+        }
+    }
+
+    private fun setConfirmDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isConfirmDialogVisible = flag)
         }
     }
 

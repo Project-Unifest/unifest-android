@@ -9,6 +9,16 @@ sealed interface BoothUiAction {
     data class OnRetryClick(val error: ErrorType) : BoothUiAction
     data class OnMenuImageClick(val menu: MenuModel) : BoothUiAction
     data object OnMenuImageDialogDismiss : BoothUiAction
+    data object OnWaitingButtonClick : BoothUiAction
+    data object OnDialogPinButtonClick : BoothUiAction
+    data object OnDialogWaitingButtonClick : BoothUiAction
+    data class OnPinNumberUpdated(val pinNumber: String) : BoothUiAction
+    data class OnWaitingTelUpdated(val tel: String) : BoothUiAction
+    data object OnWaitingDialogDismiss : BoothUiAction
+    data object OnConfirmDialogDismiss : BoothUiAction
+    data object OnPinDialogDismiss : BoothUiAction
+    data object OnWaitingMinusClick : BoothUiAction
+    data object OnWaitingPlusClick : BoothUiAction
 }
 
 enum class ErrorType {

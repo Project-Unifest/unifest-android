@@ -1,6 +1,5 @@
 package com.unifest.android.feature.booth
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,9 +28,7 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -98,7 +95,6 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber3
 import com.unifest.android.core.designsystem.theme.WaitingTeam
-import com.unifest.android.core.designsystem.theme.pretendardFamily
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
@@ -232,6 +228,39 @@ fun BoothDetailScreen(
                 onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
+
+        if (uiState.isPinCheckDialogVisible) {
+            WaitingPinDialog(
+                boothName = uiState.boothDetailInfo.name,
+                pinNumber = uiState.boothPinNumber,
+                onDismissRequest = { onAction(BoothUiAction.OnPinDialogDismiss) },
+                //todo: 처리해주기
+                onAction = onAction,
+                uiState = uiState,
+            )
+        }
+
+        if (uiState.isWaitingDialogVisible) {
+            WaitingDialog(
+                boothName = uiState.boothDetailInfo.name,
+                waitingCount = uiState.waitingTeamNumber,
+                phoneNumber = uiState.waitingTel,
+                partySize = uiState.waitingPartySize,
+                onDismissRequest = { onAction(BoothUiAction.OnWaitingDialogDismiss) },
+                onAction = onAction,
+            )
+        }
+
+        if (uiState.isConfirmDialogVisible) {
+            WaitingConfirmDialog(
+                boothName = uiState.boothDetailInfo.name,
+                onDismissRequest = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
+                onAction = onAction,
+                waitingId = uiState.waitingId,
+                waitingPartySize = uiState.waitingPartySize,
+                waitingTeamNumber = uiState.waitingTeamNumber,
+            )
+        }
     }
 }
 
@@ -334,7 +363,7 @@ fun BottomBar(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
-                    onClick = {  },
+                    onClick = { onAction(BoothUiAction.OnWaitingButtonClick) },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
                     enabled = true,
@@ -487,16 +516,16 @@ fun MenuItem(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitingPinDialog(
     boothName: String,
-    waitingCount: Int,
     pinNumber: String,
     onDismissRequest: () -> Unit,
-    onWaitingConfirm: (Int, String) -> Unit,
+    onAction: (BoothUiAction) -> Unit,
+    uiState: BoothUiState,
 ) {
-    var pinNumber by remember { mutableStateOf(pinNumber) }
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
@@ -531,10 +560,9 @@ fun WaitingPinDialog(
             Spacer(modifier = Modifier.height(30.dp))
             Column {
                 BasicTextField(
-                    value = pinNumber,
-                    onValueChange = {
-                        pinNumber = it
-                    },
+                    value = uiState.boothPinNumber,
+                    onValueChange = { newPin -> onAction(BoothUiAction.OnPinNumberUpdated(newPin)) },
+                    //todo: String과 textfield
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -575,7 +603,7 @@ fun WaitingPinDialog(
             }
             Spacer(modifier = Modifier.height(35.dp))
             UnifestButton(
-                onClick = { onWaitingConfirm(waitingCount, pinNumber) },
+                onClick = { onAction(BoothUiAction.OnDialogPinButtonClick) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -595,12 +623,12 @@ fun WaitingPinDialog(
 @Composable
 fun WaitingDialog(
     boothName: String,
-    waitingCount: Int,
+    waitingCount: Long,
     phoneNumber: String,
+    partySize: Long,
     onDismissRequest: () -> Unit,
-    onWaitingConfirm: (Int, String) -> Unit,
+    onAction: (BoothUiAction) -> Unit,
 ) {
-    var currentPhoneNumber by remember { mutableStateOf(phoneNumber) }
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
@@ -635,6 +663,7 @@ fun WaitingDialog(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "$waitingCount 팀",
+                //todo: 구현
                 color = MaterialTheme.colorScheme.onBackground,
                 style = WaitingTeam,
             )
@@ -659,11 +688,11 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = Icons.Default.Remove,
                         contentDescription = "Minus Button",
-                        onClick = { },
+                        onClick = { onAction(BoothUiAction.OnWaitingMinusClick) },
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
-                        text = "$waitingCount",
+                        text = partySize.toString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber3,
                     )
@@ -671,16 +700,16 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = Icons.Default.Add,
                         contentDescription = "Plus Button",
-                        onClick = { },
+                        onClick = { onAction(BoothUiAction.OnWaitingPlusClick) },
                     )
                 }
             }
             Spacer(modifier = Modifier.height(14.dp))
             BasicTextField(
-                value = currentPhoneNumber,
+                value = phoneNumber,
                 onValueChange = {
                     if (it.length <= 11) {
-                        currentPhoneNumber = it
+                        onAction(BoothUiAction.OnWaitingTelUpdated(it))
                     }
                 },
                 modifier = Modifier
@@ -693,7 +722,7 @@ fun WaitingDialog(
                     )
                     .padding(11.dp),
                 decorationBox = { innerTextField ->
-                    if (currentPhoneNumber.isEmpty()) {
+                    if (phoneNumber.isEmpty()) {
                         Text(
                             text = "전화번호를 입력해주세요",
                             color = MaterialTheme.colorScheme.onSecondary,
@@ -704,6 +733,7 @@ fun WaitingDialog(
                 },
                 visualTransformation = PhoneNumberVisualTransformation(),
             )
+            //TODO: 전화번호 입력 시,
             Spacer(modifier = Modifier.height(12.dp))
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -742,7 +772,7 @@ fun WaitingDialog(
             }
             Spacer(modifier = Modifier.height(11.dp))
             UnifestButton(
-                onClick = { onWaitingConfirm(waitingCount, phoneNumber) },
+                onClick = { onAction(BoothUiAction.OnDialogWaitingButtonClick) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -757,28 +787,15 @@ fun WaitingDialog(
     }
 }
 
-@Composable
-fun ClickableText(
-    text: String,
-    style: TextStyle = TextStyle.Default,
-    onClick: () -> Unit,
-) {
-    Text(
-        text = text,
-        color = MaterialTheme.colorScheme.onBackground,
-        style = style.copy(
-            textDecoration = TextDecoration.Underline,
-        ),
-        modifier = Modifier.clickable(onClick = onClick),
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitingConfirmDialog(
     boothName: String,
     onDismissRequest: () -> Unit,
-    // onWaitingConfirm: (Int, String) -> Unit,
+    waitingId: Long,
+    waitingPartySize: Long,
+    waitingTeamNumber: Long,
+    onAction: (BoothUiAction) -> Unit,
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
@@ -827,7 +844,7 @@ fun WaitingConfirmDialog(
                         style = Title5,
                     )
                     Text(
-                        text = "112번",
+                        text = "$waitingId 번",
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingTeam,
                     )
@@ -849,7 +866,7 @@ fun WaitingConfirmDialog(
                         style = Title5,
                     )
                     Text(
-                        text = "3명",
+                        text = "$waitingPartySize 명",
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingTeam,
                     )
@@ -871,7 +888,7 @@ fun WaitingConfirmDialog(
                         style = Title5,
                     )
                     Text(
-                        text = "35팀",
+                        text = "$waitingTeamNumber 팀",
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingTeam,
                     )
@@ -879,27 +896,13 @@ fun WaitingConfirmDialog(
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(modifier = Modifier.padding(horizontal = 16.dp)) {
-                UnifestOutlinedButton(
-                    onClick = { /*TODO*/ },
-                    borderColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    contentColor = Color.Black,
-                    contentPadding = PaddingValues(vertical = 16.dp),
-                    modifier = Modifier.weight(1f),
-                ) {
-                    Text(
-                        text = "웨이팅 취소",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = Title5,
-                    )
-                }
-                Spacer(modifier = Modifier.width(6.dp))
                 UnifestButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
                     contentPadding = PaddingValues(vertical = 16.dp),
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = "순서 확인하기",
+                        text = "완료",
                         style = Title5,
                     )
                 }
@@ -908,6 +911,23 @@ fun WaitingConfirmDialog(
         }
     }
 }
+
+@Composable
+fun ClickableText(
+    text: String,
+    style: TextStyle = TextStyle.Default,
+    onClick: () -> Unit,
+) {
+    Text(
+        text = text,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = style.copy(
+            textDecoration = TextDecoration.Underline,
+        ),
+        modifier = Modifier.clickable(onClick = onClick),
+    )
+}
+
 
 @DevicePreview
 @Composable
@@ -975,11 +995,12 @@ fun WaitingPinDialogPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
-            waitingCount = 3,
             pinNumber = "",
             onDismissRequest = {},
-            onWaitingConfirm = { _, _ -> },
-        )
+            onAction = { },
+            uiState = BoothUiState(),
+
+            )
     }
 }
 
@@ -989,13 +1010,15 @@ fun WaitingPinDialogDarkPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
-            waitingCount = 3,
             pinNumber = "",
             onDismissRequest = {},
-            onWaitingConfirm = { _, _ -> },
+            onAction = { },
+            uiState = BoothUiState(),
         )
     }
 }
+
+
 
 @ComponentPreview
 @Composable
@@ -1004,9 +1027,10 @@ fun WaitingDialogPreview() {
         WaitingDialog(
             boothName = "컴공 주점",
             onDismissRequest = {},
-            onWaitingConfirm = { _, _ -> },
             phoneNumber = "",
             waitingCount = 3,
+            onAction = { },
+            partySize = 3,
         )
     }
 }
@@ -1018,9 +1042,10 @@ fun WaitingDialogDarkPreview() {
         WaitingDialog(
             boothName = "컴공 주점",
             onDismissRequest = {},
-            onWaitingConfirm = { _, _ -> },
             phoneNumber = "",
             waitingCount = 3,
+            onAction = { },
+            partySize = 3,
         )
     }
 }
@@ -1032,7 +1057,10 @@ fun WaitingConfirmDialogPreview() {
         WaitingConfirmDialog(
             boothName = "컴공 주점",
             onDismissRequest = {},
-//            onWaitingConfirm = { _, _ -> },
+            onAction = { },
+            waitingId = 1,
+            waitingPartySize = 3,
+            waitingTeamNumber = 3,
         )
     }
 }
@@ -1044,7 +1072,10 @@ fun WaitingConfirmDialogDarkPreview() {
         WaitingConfirmDialog(
             boothName = "컴공 주점",
             onDismissRequest = {},
-//            onWaitingConfirm = { _, _ -> },
+            onAction = { },
+            waitingId = 1,
+            waitingPartySize = 3,
+            waitingTeamNumber = 3,
         )
     }
 }
