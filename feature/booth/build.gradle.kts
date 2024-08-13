@@ -7,6 +7,23 @@ plugins {
 
 android {
     namespace = "com.unifest.android.feature.booth"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField(
+            "String",
+            "UNIFEST_PRIVATE_POLICY_URL",
+            properties["UNIFEST_PRIVATE_POLICY_URL"] as String,
+        )
+        buildConfigField(
+            "String",
+            "UNIFEST_THIRD_PARTY_POLICY_URL",
+            properties["UNIFEST_THIRD_PARTY_POLICY_URL"] as String,
+        )
+    }
 }
 
 dependencies {

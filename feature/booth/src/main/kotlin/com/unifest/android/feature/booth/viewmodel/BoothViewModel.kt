@@ -1,6 +1,5 @@
 package com.unifest.android.feature.booth.viewmodel
 
-import android.widget.Toast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -61,6 +60,9 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnConfirmDialogDismiss -> setConfirmDialogVisible(false)
             is BoothUiAction.OnWaitingMinusClick -> minusWaitingPartySize()
             is BoothUiAction.OnWaitingPlusClick -> plusWaitingPartySize()
+            is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
+            is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
+            is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
         }
     }
 
@@ -248,6 +250,12 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    private fun privacyConsentClick() {
+        _uiState.update {
+            it.copy(privacyConsentChecked = !it.privacyConsentChecked)
+        }
+    }
+
     private fun minusWaitingPartySize() {
         _uiState.update { currentState ->
             val newPartySize = if (currentState.waitingPartySize > 1) {
@@ -280,6 +288,18 @@ class BoothViewModel @Inject constructor(
                 isMenuImageDialogVisible = false,
                 selectedMenu = null,
             )
+        }
+    }
+
+    private fun navigateToPrivatePolicy() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToPrivatePolicy)
+        }
+    }
+
+    private fun navigateToThirdPartyPolicy() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToThirdPartyPolicy)
         }
     }
 

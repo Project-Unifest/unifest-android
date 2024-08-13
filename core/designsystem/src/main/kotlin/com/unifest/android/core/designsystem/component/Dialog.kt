@@ -39,13 +39,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle2
+import com.unifest.android.core.designsystem.theme.BoothTitle3
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title1
@@ -174,8 +174,6 @@ fun ServerErrorDialog(
 }
 
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitingPinDialog(
@@ -285,11 +283,15 @@ fun WaitingDialog(
     waitingCount: Long,
     phoneNumber: String,
     partySize: Long,
+    isPrivacyClicked: Boolean,
     onDismissRequest: () -> Unit,
     onWaitingMinusClick: () -> Unit,
     onWaitingPlusClick: () -> Unit,
     onWaitingTelUpdated: (String) -> Unit,
     onDialogWaitingButtonClick: () -> Unit,
+    onPolicyCheckBoxClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onThirdPartyPolicyClick: () -> Unit,
 ) {
 
     BasicAlertDialog(
@@ -401,13 +403,19 @@ fun WaitingDialog(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkbox),
+                        imageVector = ImageVector.vectorResource(
+                            id = if (isPrivacyClicked) R.drawable.ic_checkbox else R.drawable.ic_checkbox_unchecked
+                        ),
                         contentDescription = "check box icon",
                         tint = Color.Unspecified,
-                        modifier = Modifier.clickableSingle {
-                        },
+                        modifier = Modifier.clickable {
+                            onPolicyCheckBoxClick()
+                        }
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
@@ -417,7 +425,7 @@ fun WaitingDialog(
                             textDecoration = TextDecoration.Underline,
                         ),
                         modifier = Modifier.clickable {
-                            // 링크 처리
+                            onPrivacyPolicyClick()
                         },
                     )
                     Text(
@@ -432,7 +440,7 @@ fun WaitingDialog(
                             textDecoration = TextDecoration.Underline,
                         ),
                         modifier = Modifier.clickable {
-                            // 링크 처리
+                            onThirdPartyPolicyClick()
                         },
                     )
                     Text(
@@ -515,10 +523,11 @@ fun WaitingConfirmDialog(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "$waitingId 번",
                         color = MaterialTheme.colorScheme.onBackground,
-                        style = WaitingTeam,
+                        style = BoothTitle3,
                     )
                 }
                 Spacer(modifier = Modifier.width(25.dp))
@@ -537,10 +546,11 @@ fun WaitingConfirmDialog(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "$waitingPartySize 명",
                         color = MaterialTheme.colorScheme.onBackground,
-                        style = WaitingTeam,
+                        style = BoothTitle3,
                     )
                 }
                 Spacer(modifier = Modifier.width(25.dp))
@@ -559,10 +569,11 @@ fun WaitingConfirmDialog(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "$waitingTeamNumber 팀",
                         color = MaterialTheme.colorScheme.onBackground,
-                        style = WaitingTeam,
+                        style = BoothTitle3,
                     )
                 }
             }
@@ -737,6 +748,110 @@ fun AppUpdateDialogDarkPreview() {
         AppUpdateDialog(
             onDismissRequest = {},
             onUpdateClick = {},
+        )
+    }
+}
+
+
+@ComponentPreview
+@Composable
+fun WaitingPinDialogPreview() {
+    UnifestTheme {
+        WaitingPinDialog(
+            boothName = "컴공 주점",
+            pinNumber = "",
+            onDismissRequest = {},
+            onDialogPinButtonClick = { },
+            onPinNumberUpdated = { },
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun WaitingPinDialogDarkPreview() {
+    UnifestTheme {
+        WaitingPinDialog(
+            boothName = "컴공 주점",
+            pinNumber = "",
+            onDismissRequest = {},
+            onDialogPinButtonClick = { },
+            onPinNumberUpdated = { },
+        )
+    }
+}
+
+
+@ComponentPreview
+@Composable
+fun WaitingDialogPreview() {
+    UnifestTheme {
+        WaitingDialog(
+            boothName = "컴공 주점",
+            onDismissRequest = {},
+            phoneNumber = "",
+            waitingCount = 3,
+            partySize = 3,
+            onDialogWaitingButtonClick = { },
+            onWaitingMinusClick = { },
+            onWaitingPlusClick = { },
+            onWaitingTelUpdated = { },
+            isPrivacyClicked = false,
+            onPolicyCheckBoxClick = { },
+            onPrivacyPolicyClick = { },
+            onThirdPartyPolicyClick = { },
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun WaitingDialogDarkPreview() {
+    UnifestTheme {
+        WaitingDialog(
+            boothName = "컴공 주점",
+            onDismissRequest = {},
+            phoneNumber = "",
+            waitingCount = 3,
+            partySize = 3,
+            onDialogWaitingButtonClick = { },
+            onWaitingMinusClick = { },
+            onWaitingPlusClick = { },
+            onWaitingTelUpdated = { },
+            isPrivacyClicked = false,
+            onPolicyCheckBoxClick = { },
+            onPrivacyPolicyClick = { },
+            onThirdPartyPolicyClick = { },
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun WaitingConfirmDialogPreview() {
+    UnifestTheme {
+        WaitingConfirmDialog(
+            boothName = "컴공 주점",
+            onDismissRequest = {},
+            waitingId = 1,
+            waitingPartySize = 3,
+            waitingTeamNumber = 3,
+            onConfirmClick = { },
+        )
+    }
+}
+
+@DarkComponentPreview
+@Composable
+fun WaitingConfirmDialogDarkPreview() {
+    UnifestTheme {
+        WaitingConfirmDialog(
+            boothName = "컴공 주점",
+            onDismissRequest = {},
+            waitingId = 1,
+            waitingPartySize = 3,
+            waitingTeamNumber = 3,
+            onConfirmClick = { },
         )
     }
 }

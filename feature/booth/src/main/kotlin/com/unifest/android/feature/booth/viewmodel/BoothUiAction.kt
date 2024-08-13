@@ -19,6 +19,9 @@ sealed interface BoothUiAction {
     data object OnPinDialogDismiss : BoothUiAction
     data object OnWaitingMinusClick : BoothUiAction
     data object OnWaitingPlusClick : BoothUiAction
+    data object OnPolicyCheckBoxClick : BoothUiAction
+    data object OnPrivatePolicyClick : BoothUiAction
+    data object OnThirdPartyPolicyClick : BoothUiAction
 }
 
 enum class ErrorType {

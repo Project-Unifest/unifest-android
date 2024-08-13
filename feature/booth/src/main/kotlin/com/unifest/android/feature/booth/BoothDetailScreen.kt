@@ -1,7 +1,6 @@
 package com.unifest.android.feature.booth
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -19,14 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -37,10 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,24 +39,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.clickableSingle
-import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
 import com.unifest.android.core.common.utils.formatAsCurrency
-import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
+
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.CircularOutlineButton
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -83,21 +69,15 @@ import com.unifest.android.core.designsystem.component.WaitingPinDialog
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle1
-import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
-import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.Title2
-import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.designsystem.theme.WaitingNumber3
-import com.unifest.android.core.designsystem.theme.WaitingTeam
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
@@ -126,6 +106,7 @@ internal fun BoothDetailRoute(
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }
     val isDarkTheme = isSystemInDarkTheme()
+    val uriHandler = LocalUriHandler.current
 
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
@@ -144,6 +125,8 @@ internal fun BoothDetailRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
+            is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
+            is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
             is BoothUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {
@@ -249,11 +232,15 @@ fun BoothDetailScreen(
                 waitingCount = uiState.waitingTeamNumber,
                 phoneNumber = uiState.waitingTel,
                 partySize = uiState.waitingPartySize,
+                isPrivacyClicked = uiState.privacyConsentChecked,
                 onDismissRequest = { onAction(BoothUiAction.OnWaitingDialogDismiss) },
                 onWaitingMinusClick = { onAction(BoothUiAction.OnWaitingMinusClick) },
                 onWaitingPlusClick = { onAction(BoothUiAction.OnWaitingPlusClick) },
                 onDialogWaitingButtonClick = { onAction(BoothUiAction.OnDialogWaitingButtonClick) },
                 onWaitingTelUpdated = { onAction(BoothUiAction.OnWaitingTelUpdated(it)) },
+                onPolicyCheckBoxClick = { onAction(BoothUiAction.OnPolicyCheckBoxClick) },
+                onPrivacyPolicyClick = { onAction(BoothUiAction.OnPrivatePolicyClick) },
+                onThirdPartyPolicyClick = { onAction(BoothUiAction.OnThirdPartyPolicyClick) },
             )
         }
 
@@ -579,102 +566,6 @@ fun BoothScreenDarkPreview() {
             ),
             snackBarState = SnackbarHostState(),
             onAction = {},
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun WaitingPinDialogPreview() {
-    UnifestTheme {
-        WaitingPinDialog(
-            boothName = "컴공 주점",
-            pinNumber = "",
-            onDismissRequest = {},
-            onDialogPinButtonClick = { },
-            onPinNumberUpdated = { },
-            )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingPinDialogDarkPreview() {
-    UnifestTheme {
-        WaitingPinDialog(
-            boothName = "컴공 주점",
-            pinNumber = "",
-            onDismissRequest = {},
-            onDialogPinButtonClick = { },
-            onPinNumberUpdated = { },
-        )
-    }
-}
-
-
-
-@ComponentPreview
-@Composable
-fun WaitingDialogPreview() {
-    UnifestTheme {
-        WaitingDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            phoneNumber = "",
-            waitingCount = 3,
-            partySize = 3,
-            onDialogWaitingButtonClick = { },
-            onWaitingMinusClick = { },
-            onWaitingPlusClick = { },
-            onWaitingTelUpdated = { },
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingDialogDarkPreview() {
-    UnifestTheme {
-        WaitingDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            phoneNumber = "",
-            waitingCount = 3,
-            partySize = 3,
-            onDialogWaitingButtonClick = { },
-            onWaitingMinusClick = { },
-            onWaitingPlusClick = { },
-            onWaitingTelUpdated = { },
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun WaitingConfirmDialogPreview() {
-    UnifestTheme {
-        WaitingConfirmDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            waitingId = 1,
-            waitingPartySize = 3,
-            waitingTeamNumber = 3,
-            onConfirmClick = { },
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingConfirmDialogDarkPreview() {
-    UnifestTheme {
-        WaitingConfirmDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            waitingId = 1,
-            waitingPartySize = 3,
-            waitingTeamNumber = 3,
-            onConfirmClick = { },
         )
     }
 }
