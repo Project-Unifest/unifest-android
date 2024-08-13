@@ -2,13 +2,25 @@ package com.unifest.android.core.designsystem.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,16 +34,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.unifest.android.core.common.extension.clickableSingle
+import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.BoothTitle2
+import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.Title3
+import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.designsystem.theme.WaitingNumber3
+import com.unifest.android.core.designsystem.theme.WaitingTeam
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -148,6 +172,434 @@ fun ServerErrorDialog(
         )
     }
 }
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WaitingPinDialog(
+    boothName: String,
+    pinNumber: String,
+    onDismissRequest: () -> Unit,
+    onPinNumberUpdated: (String) -> Unit,
+    onDialogPinButtonClick: () -> Unit,
+) {
+
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(14.dp))
+            Row {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                    contentDescription = "location icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = boothName,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            Spacer(modifier = Modifier.height(18.dp))
+            Text(
+                text = "부스 PIN 입력",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = WaitingTeam,
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Column {
+                BasicTextField(
+                    value = pinNumber,
+                    onValueChange = { newPin -> onPinNumberUpdated(newPin) },
+                    //todo: String과 textfield
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.onSecondaryContainer, RoundedCornerShape(5.dp))
+                        .background(
+                            color = MaterialTheme.colorScheme.surface,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .padding(horizontal = 10.dp, vertical = 19.dp),
+                    decorationBox = { innerTextField ->
+                        if (pinNumber.isEmpty()) {
+                            Text(
+                                text = "4자리 PIN을 입력해주세요",
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                style = BoothTitle2,
+                            )
+                        }
+                        innerTextField()
+                    },
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_booth_info),
+                        contentDescription = "booth info icon",
+                        tint = Color.Unspecified,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "웨이팅 PIN은 부스 운영자에게 문의해주세요!",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Content6,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(35.dp))
+            UnifestButton(
+                onClick = onDialogPinButtonClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                Text(
+                    text = "PIN 입력",
+                    style = Title4,
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WaitingDialog(
+    boothName: String,
+    waitingCount: Long,
+    phoneNumber: String,
+    partySize: Long,
+    onDismissRequest: () -> Unit,
+    onWaitingMinusClick: () -> Unit,
+    onWaitingPlusClick: () -> Unit,
+    onWaitingTelUpdated: (String) -> Unit,
+    onDialogWaitingButtonClick: () -> Unit,
+) {
+
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(14.dp))
+            Row {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                    contentDescription = "location icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = boothName,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                text = "현재 내 앞 웨이팅",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = BoothLocation,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "$waitingCount 팀",
+                //todo: 구현
+                color = MaterialTheme.colorScheme.onBackground,
+                style = WaitingTeam,
+            )
+            Spacer(modifier = Modifier.height(9.dp))
+            UnifestHorizontalDivider(thickness = 1.dp)
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                Text(
+                    text = "인원 수",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title5,
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularOutlineButton(
+                        icon = Icons.Default.Remove,
+                        contentDescription = "Minus Button",
+                        onClick = onWaitingMinusClick,
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Text(
+                        text = partySize.toString(),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = WaitingNumber3,
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    CircularOutlineButton(
+                        icon = Icons.Default.Add,
+                        contentDescription = "Plus Button",
+                        onClick = onWaitingPlusClick,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(14.dp))
+            BasicTextField(
+                value = phoneNumber,
+                onValueChange = {
+                    if (it.length <= 11) {
+                        onWaitingTelUpdated(it)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .border(1.dp, MaterialTheme.colorScheme.onSecondaryContainer, RoundedCornerShape(5.dp))
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(5.dp),
+                    )
+                    .padding(11.dp),
+                decorationBox = { innerTextField ->
+                    if (phoneNumber.isEmpty()) {
+                        Text(
+                            text = "전화번호를 입력해주세요",
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            style = BoothLocation,
+                        )
+                    }
+                    innerTextField()
+                },
+                visualTransformation = PhoneNumberVisualTransformation(),
+            )
+            //TODO: 전화번호 입력 시,
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkbox),
+                        contentDescription = "check box icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.clickableSingle {
+                        },
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "개인정보 처리방침",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Content6.copy(
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                        modifier = Modifier.clickable {
+                            // 링크 처리
+                        },
+                    )
+                    Text(
+                        text = " 및 ",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = Content6,
+                    )
+                    Text(
+                        text = "제 3자 제공방침",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Content6.copy(
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                        modifier = Modifier.clickable {
+                            // 링크 처리
+                        },
+                    )
+                    Text(
+                        text = "에 동의합니다",
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = Content6,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(11.dp))
+            UnifestButton(
+                onClick = onDialogWaitingButtonClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                Text(
+                    text = "웨이팅 신청",
+                    style = Title4,
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WaitingConfirmDialog(
+    boothName: String,
+    onDismissRequest: () -> Unit,
+    waitingId: Long,
+    waitingPartySize: Long,
+    waitingTeamNumber: Long,
+    onConfirmClick: () -> Unit,
+) {
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = MaterialTheme.colorScheme.surface),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(28.dp))
+            Row {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                    contentDescription = "location icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = boothName,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "웨이팅 등록 완료!",
+                color = MaterialTheme.colorScheme.onBackground,
+                style = Title1,
+            )
+            Spacer(modifier = Modifier.height(3.dp))
+            Text(
+                text = "입장 순서가 되면 안내 해드릴게요.",
+                style = Content2,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            UnifestHorizontalDivider(thickness = 1.dp)
+            Spacer(modifier = Modifier.height(22.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "웨이팅 번호",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Title5,
+                    )
+                    Text(
+                        text = "$waitingId 번",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = WaitingTeam,
+                    )
+                }
+                Spacer(modifier = Modifier.width(25.dp))
+                Box(
+                    modifier = Modifier
+                        .size(3.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = CircleShape,
+                        ),
+                )
+                Spacer(modifier = Modifier.width(25.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "인원수",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Title5,
+                    )
+                    Text(
+                        text = "$waitingPartySize 명",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = WaitingTeam,
+                    )
+                }
+                Spacer(modifier = Modifier.width(25.dp))
+                Box(
+                    modifier = Modifier
+                        .size(3.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = CircleShape,
+                        ),
+                )
+                Spacer(modifier = Modifier.width(25.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "내 앞 웨이팅",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Title5,
+                    )
+                    Text(
+                        text = "$waitingTeamNumber 팀",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = WaitingTeam,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(modifier = Modifier.padding(horizontal = 16.dp)) {
+                UnifestButton(
+                    onClick = onConfirmClick,
+                    contentPadding = PaddingValues(vertical = 16.dp),
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        text = "완료",
+                        style = Title5,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun ClickableText(
+    text: String,
+    style: TextStyle = TextStyle.Default,
+    onClick: () -> Unit,
+) {
+    Text(
+        text = text,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = style.copy(
+            textDecoration = TextDecoration.Underline,
+        ),
+        modifier = Modifier.clickable(onClick = onClick),
+    )
+}
+
 
 @Composable
 fun NetworkErrorDialog(
