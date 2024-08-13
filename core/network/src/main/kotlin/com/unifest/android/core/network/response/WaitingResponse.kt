@@ -42,7 +42,7 @@ data class Waiting(
     @SerialName("status")
     val status: String,
     @SerialName("waitingOrder")
-    val waitingOrder: Long,
+    val waitingOrder: Long? = null,
     @SerialName("boothName")
     val boothName: String
 )

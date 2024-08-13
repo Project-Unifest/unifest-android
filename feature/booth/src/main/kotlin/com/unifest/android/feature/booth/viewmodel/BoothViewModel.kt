@@ -188,12 +188,15 @@ class BoothViewModel @Inject constructor(
                     tel,
                     partySize,
                     _uiState.value.boothPinNumber
-                ).onSuccess {
+                ).onSuccess { waiting ->
+                    _uiState.update {
+                        it.copy(
+                            waitingId = waiting.waitingId,
+                        )
+                    }
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
                 }.onFailure {
-                    setWaitingDialogVisible(false)
-                    setConfirmDialogVisible(true)
                 }
             }
         } else {
