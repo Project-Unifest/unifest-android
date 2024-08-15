@@ -225,7 +225,7 @@ fun BoothDetailScreen(
                 onPinNumberUpdated = { onAction(BoothUiAction.OnPinNumberUpdated(it)) },
                 onDialogPinButtonClick = { onAction(BoothUiAction.OnDialogPinButtonClick) },
                 onDismissRequest = { onAction(BoothUiAction.OnPinDialogDismiss) },
-                //todo: 처리해주기
+                isWrongPinInserted = uiState.isWrongPinInserted,
             )
         }
 

@@ -179,6 +179,7 @@ fun ServerErrorDialog(
 fun WaitingPinDialog(
     boothName: String,
     pinNumber: String,
+    isWrongPinInserted: Boolean,
     onDismissRequest: () -> Unit,
     onPinNumberUpdated: (String) -> Unit,
     onDialogPinButtonClick: () -> Unit,
@@ -246,14 +247,20 @@ fun WaitingPinDialog(
                 ) {
                     Spacer(modifier = Modifier.width(14.dp))
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_booth_info),
-                        contentDescription = "booth info icon",
+                        imageVector = ImageVector.vectorResource(
+                            id = if (isWrongPinInserted) R.drawable.ic_warning else R.drawable.ic_booth_info
+                        ),
+                        contentDescription = if (isWrongPinInserted) "warning icon" else "booth info icon",
                         tint = Color.Unspecified,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "웨이팅 PIN은 부스 운영자에게 문의해주세요!",
-                        color = MaterialTheme.colorScheme.onBackground,
+                        text = if (isWrongPinInserted) {
+                            "올바르지 않은 PIN입니다. 부스 운영자에 문의바랍니다."
+                        } else {
+                            "웨이팅 PIN은 부스 운영자에게 문의해주세요!"
+                        },
+                        color = if (isWrongPinInserted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
                         style = Content6,
                     )
                 }
@@ -453,6 +460,8 @@ fun WaitingDialog(
             Spacer(modifier = Modifier.height(11.dp))
             UnifestButton(
                 onClick = onDialogWaitingButtonClick,
+                containerColor = if (isPrivacyClicked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                enabled = isPrivacyClicked,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -763,6 +772,7 @@ fun WaitingPinDialogPreview() {
             onDismissRequest = {},
             onDialogPinButtonClick = { },
             onPinNumberUpdated = { },
+            isWrongPinInserted = true,
         )
     }
 }
@@ -777,6 +787,7 @@ fun WaitingPinDialogDarkPreview() {
             onDismissRequest = {},
             onDialogPinButtonClick = { },
             onPinNumberUpdated = { },
+            isWrongPinInserted = true,
         )
     }
 }
