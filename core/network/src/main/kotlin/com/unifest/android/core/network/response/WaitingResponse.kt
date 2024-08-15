@@ -44,5 +44,5 @@ data class Waiting(
     @SerialName("waitingOrder")
     val waitingOrder: Long? = null,
     @SerialName("boothName")
-    val boothName: String
+    val boothName: String,
 )

@@ -38,4 +38,3 @@ class PhoneNumberVisualTransformation : VisualTransformation {
         return TransformedText(AnnotatedString(out.toString()), phoneNumberOffsetTranslator)
     }
 }
-

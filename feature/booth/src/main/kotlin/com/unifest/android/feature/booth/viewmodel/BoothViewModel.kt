@@ -190,7 +190,7 @@ class BoothViewModel @Inject constructor(
                     _uiState.value.boothDetailInfo.id,
                     tel,
                     partySize,
-                    _uiState.value.boothPinNumber
+                    _uiState.value.boothPinNumber,
                 ).onSuccess { waiting ->
                     _uiState.update {
                         it.copy(
@@ -236,7 +236,7 @@ class BoothViewModel @Inject constructor(
     private fun checkPinValidation() {
         viewModelScope.launch {
             boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber)
-                .onSuccess { waitingTeamNumber->
+                .onSuccess { waitingTeamNumber ->
                     if (waitingTeamNumber > -1) {
                         _uiState.update {
                             it.copy(waitingTeamNumber = waitingTeamNumber)

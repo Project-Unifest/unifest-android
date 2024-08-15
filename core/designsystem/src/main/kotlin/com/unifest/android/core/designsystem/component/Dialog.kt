@@ -174,7 +174,6 @@ fun ServerErrorDialog(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitingPinDialog(
@@ -185,7 +184,6 @@ fun WaitingPinDialog(
     onPinNumberUpdated: (String) -> Unit,
     onDialogPinButtonClick: () -> Unit,
 ) {
-
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -231,7 +229,7 @@ fun WaitingPinDialog(
                         )
                         .padding(horizontal = 10.dp, vertical = 19.dp),
                     textStyle = BoothTitle2.copy(
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.onBackground,
                     ),
                     cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                     decorationBox = { innerTextField ->
@@ -252,7 +250,7 @@ fun WaitingPinDialog(
                     Spacer(modifier = Modifier.width(14.dp))
                     Icon(
                         imageVector = ImageVector.vectorResource(
-                            id = if (isWrongPinInserted) R.drawable.ic_warning else R.drawable.ic_booth_info
+                            id = if (isWrongPinInserted) R.drawable.ic_warning else R.drawable.ic_booth_info,
                         ),
                         contentDescription = if (isWrongPinInserted) "warning icon" else "booth info icon",
                         tint = Color.Unspecified,
@@ -286,7 +284,6 @@ fun WaitingPinDialog(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WaitingDialog(
@@ -304,7 +301,6 @@ fun WaitingDialog(
     onPrivacyPolicyClick: () -> Unit,
     onThirdPartyPolicyClick: () -> Unit,
 ) {
-
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -396,7 +392,7 @@ fun WaitingDialog(
                     )
                     .padding(11.dp),
                 textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = MaterialTheme.colorScheme.onBackground,
                 ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 decorationBox = { innerTextField ->
@@ -419,16 +415,16 @@ fun WaitingDialog(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
-                    ) {
+                ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(
-                            id = if (isPrivacyClicked) R.drawable.ic_checkbox else R.drawable.ic_checkbox_unchecked
+                            id = if (isPrivacyClicked) R.drawable.ic_checkbox else R.drawable.ic_checkbox_unchecked,
                         ),
                         contentDescription = "check box icon",
                         tint = Color.Unspecified,
                         modifier = Modifier.clickable {
                             onPolicyCheckBoxClick()
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
@@ -610,7 +606,6 @@ fun WaitingConfirmDialog(
     }
 }
 
-
 @Composable
 fun NetworkErrorDialog(
     onRetryClick: () -> Unit,
@@ -751,7 +746,6 @@ fun AppUpdateDialogDarkPreview() {
     }
 }
 
-
 @ComponentPreview
 @Composable
 fun WaitingPinDialogPreview() {
@@ -781,7 +775,6 @@ fun WaitingPinDialogDarkPreview() {
         )
     }
 }
-
 
 @ComponentPreview
 @Composable

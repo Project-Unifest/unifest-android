@@ -49,7 +49,7 @@ class BoothRepositoryImpl @Inject constructor(
         ).data
     }
 
-    override suspend fun requestBoothWaiting(boothId: Long, tel: String, partySize: Long, pinNumber:String) = runSuspendCatching {
+    override suspend fun requestBoothWaiting(boothId: Long, tel: String, partySize: Long, pinNumber: String) = runSuspendCatching {
         service.requestBoothWaiting(
             BoothWaitingRequest(
                 boothId = boothId,
@@ -57,7 +57,7 @@ class BoothRepositoryImpl @Inject constructor(
                 deviceId = getDeviceId(context),
                 partySize = partySize,
                 pinNumber = pinNumber,
-            )
+            ),
         ).data.toModel()
     }
 }

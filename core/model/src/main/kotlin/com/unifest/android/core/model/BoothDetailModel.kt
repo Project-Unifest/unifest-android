@@ -38,5 +38,5 @@ data class WaitingModel(
     val updatedAt: String = "",
     val status: String = "",
     val waitingOrder: Long = 0L,
-    val boothName: String = ""
+    val boothName: String = "",
 )

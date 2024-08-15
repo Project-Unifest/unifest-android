@@ -140,6 +140,7 @@ internal fun BoothDetailRoute(
                     job.cancel()
                 }
             }
+
             is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
@@ -323,7 +324,6 @@ fun BottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -366,7 +366,11 @@ fun BottomBar(
                     containerColor = if (isWaitingEnable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
-                        text = if (isWaitingEnable) stringResource(id = R.string.booth_waiting_button) else stringResource(id = R.string.booth_waiting_button_invalid),
+                        text = if (isWaitingEnable) stringResource(
+                            id = R.string.booth_waiting_button,
+                        ) else stringResource(
+                            id = R.string.booth_waiting_button_invalid,
+                        ),
                         style = Title4,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -511,7 +515,6 @@ fun MenuItem(
         }
     }
 }
-
 
 @DevicePreview
 @Composable

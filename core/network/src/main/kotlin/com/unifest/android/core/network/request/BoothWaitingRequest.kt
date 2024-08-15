@@ -14,5 +14,5 @@ data class BoothWaitingRequest(
     @SerialName("partySize")
     val partySize: Long,
     @SerialName("pinNumber")
-    val pinNumber: String
+    val pinNumber: String,
 )

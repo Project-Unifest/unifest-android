@@ -21,7 +21,7 @@ fun CircularOutlineButton(
     contentDescription: String?,
     onClick: () -> Unit,
     borderColor: Color = Color(0xFFD2D2D2),
-    iconTintColor: Color = MaterialTheme.colorScheme.onBackground
+    iconTintColor: Color = MaterialTheme.colorScheme.onBackground,
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -36,7 +36,7 @@ fun CircularOutlineButton(
                 imageVector = icon,
                 contentDescription = contentDescription,
                 tint = iconTintColor,
-                modifier = Modifier.size(13.dp)
+                modifier = Modifier.size(13.dp),
             )
         }
     }
