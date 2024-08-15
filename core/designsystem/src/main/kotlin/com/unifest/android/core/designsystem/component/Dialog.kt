@@ -212,7 +212,7 @@ fun WaitingPinDialog(
             }
             Spacer(modifier = Modifier.height(18.dp))
             Text(
-                text = "부스 PIN 입력",
+                text = stringResource(id = R.string.waiting_dialog_enter_booth_pin),
                 color = MaterialTheme.colorScheme.onBackground,
                 style = WaitingTeam,
             )
@@ -237,7 +237,7 @@ fun WaitingPinDialog(
                     decorationBox = { innerTextField ->
                         if (pinNumber.isEmpty()) {
                             Text(
-                                text = "4자리 PIN을 입력해주세요",
+                                text = stringResource(id = R.string.waiting_dialog_enter_booth_pin_hint),
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 style = BoothTitle2,
                             )
@@ -260,9 +260,9 @@ fun WaitingPinDialog(
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = if (isWrongPinInserted) {
-                            "올바르지 않은 PIN입니다. 부스 운영자에 문의바랍니다."
+                            stringResource(id = R.string.waiting_dialog_enter_booth_pin_description_error)
                         } else {
-                            "웨이팅 PIN은 부스 운영자에게 문의해주세요!"
+                            stringResource(id = R.string.waiting_dialog_enter_booth_pin_description)
                         },
                         color = if (isWrongPinInserted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
                         style = Content6,
@@ -277,7 +277,7 @@ fun WaitingPinDialog(
                     .padding(horizontal = 16.dp),
             ) {
                 Text(
-                    text = "PIN 입력",
+                    text = stringResource(id = R.string.waiting_dialog_enter_booth_pin_button),
                     style = Title4,
                 )
             }
@@ -331,13 +331,13 @@ fun WaitingDialog(
             }
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = "현재 내 앞 웨이팅",
+                text = stringResource(id = R.string.waiting_dialog_telephone_waiting_number),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = BoothLocation,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "$waitingCount 팀",
+                text = stringResource(id = R.string.waiting_dialog_telephone_waiting_team, waitingCount),
                 color = MaterialTheme.colorScheme.onBackground,
                 style = WaitingTeam,
             )
@@ -352,7 +352,7 @@ fun WaitingDialog(
                     .padding(horizontal = 16.dp),
             ) {
                 Text(
-                    text = "인원 수",
+                    text = stringResource(id = R.string.waiting_dialog_telephone_people),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Title5,
                 )
@@ -402,7 +402,7 @@ fun WaitingDialog(
                 decorationBox = { innerTextField ->
                     if (phoneNumber.isEmpty()) {
                         Text(
-                            text = "전화번호를 입력해주세요",
+                            text = stringResource(id = R.string.waiting_dialog_telephone_waiting_number_hint),
                             color = MaterialTheme.colorScheme.onSecondary,
                             style = BoothLocation,
                         )
@@ -432,7 +432,7 @@ fun WaitingDialog(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "개인정보 처리방침",
+                        text = stringResource(id = R.string.waiting_dialog_telephone_privacy),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content6.copy(
                             textDecoration = TextDecoration.Underline,
@@ -442,12 +442,12 @@ fun WaitingDialog(
                         },
                     )
                     Text(
-                        text = " 및 ",
+                        text = " " + stringResource(id = R.string.waiting_dialog_telephone_and) + " ",
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         style = Content6,
                     )
                     Text(
-                        text = "제 3자 제공방침",
+                        text = stringResource(id = R.string.waiting_dialog_telephone_third),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content6.copy(
                             textDecoration = TextDecoration.Underline,
@@ -457,7 +457,7 @@ fun WaitingDialog(
                         },
                     )
                     Text(
-                        text = "에 동의합니다",
+                        text = stringResource(id = R.string.waiting_dialog_telephone_agree),
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         style = Content6,
                     )
@@ -473,7 +473,7 @@ fun WaitingDialog(
                     .padding(horizontal = 16.dp),
             ) {
                 Text(
-                    text = "웨이팅 신청",
+                    text = stringResource(id = R.string.waiting_dialog_telephone_button),
                     style = Title4,
                 )
             }
@@ -518,13 +518,13 @@ fun WaitingConfirmDialog(
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "웨이팅 등록 완료!",
+                text = stringResource(id = R.string.waiting_dialog_waiting_confirm_complete),
                 color = MaterialTheme.colorScheme.onBackground,
                 style = Title1,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = "입장 순서가 되면 안내 해드릴게요.",
+                text = stringResource(id = R.string.waiting_dialog_waiting_confirm_description),
                 style = Content2,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -534,13 +534,13 @@ fun WaitingConfirmDialog(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "웨이팅 번호",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_waiting_number),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "$waitingId 번",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_id, waitingId),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = BoothTitle3,
                     )
@@ -557,13 +557,13 @@ fun WaitingConfirmDialog(
                 Spacer(modifier = Modifier.width(25.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "인원수",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_people),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "$waitingPartySize 명",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_people_number, waitingPartySize),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = BoothTitle3,
                     )
@@ -580,13 +580,13 @@ fun WaitingConfirmDialog(
                 Spacer(modifier = Modifier.width(25.dp))
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "내 앞 웨이팅",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_previous_waiting),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title5,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "$waitingTeamNumber 팀",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_previous_waiting_number, waitingTeamNumber),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = BoothTitle3,
                     )
@@ -600,7 +600,7 @@ fun WaitingConfirmDialog(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = "완료",
+                        text = stringResource(id = R.string.waiting_dialog_waiting_confirm_button),
                         style = Title5,
                     )
                 }
@@ -608,22 +608,6 @@ fun WaitingConfirmDialog(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
-}
-
-@Composable
-fun ClickableText(
-    text: String,
-    style: TextStyle = TextStyle.Default,
-    onClick: () -> Unit,
-) {
-    Text(
-        text = text,
-        color = MaterialTheme.colorScheme.onBackground,
-        style = style.copy(
-            textDecoration = TextDecoration.Underline,
-        ),
-        modifier = Modifier.clickable(onClick = onClick),
-    )
 }
 
 

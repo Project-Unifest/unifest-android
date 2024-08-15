@@ -105,6 +105,33 @@
     <string name="app_update_description">원활한 서비스 이용을 위해\n최신 버전으로 업데이트가 필요합니다</string>
     <string name="app_update_confirm">업데이트 하기</string>
 
+    <!--    Waiting Dialog-->
+    <string name="waiting_dialog_enter_booth_pin">부스 PIN 입력</string>
+    <string name="waiting_dialog_enter_booth_pin_hint">4자리 PIN을 입력해주세요</string>
+    <string name="waiting_dialog_enter_booth_pin_description">웨이팅 PIN은 부스 운영자에게 문의해주세요!</string>
+    <string name="waiting_dialog_enter_booth_pin_description_error">올바르지 않은 PIN입니다. 부스 운영자에 문의바랍니다.</string>
+    <string name="waiting_dialog_enter_booth_pin_button">PIN 입력</string>
+    <string name="waiting_dialog_telephone_waiting_number">현재 내 앞 웨이팅</string>
+    <string name="waiting_dialog_telephone_waiting_number_hint">전화번호를 입력해주세요</string>
+    <string name="waiting_dialog_telephone_privacy">개인정보 처리방침</string>
+    <string name="waiting_dialog_telephone_and"> 및 </string>
+    <string name="waiting_dialog_telephone_third">제 3자 제공방침</string>
+    <string name="waiting_dialog_telephone_agree">에 동의합니다</string>
+    <string name="waiting_dialog_telephone_button">웨이팅 신청</string>
+    <string name="waiting_dialog_telephone_people">인원수</string>
+    <string name="waiting_dialog_telephone_waiting_team">%d 팀</string>
+    <string name="waiting_dialog_waiting_confirm_complete">웨이팅 등록 완료!</string>
+    <string name="waiting_dialog_waiting_confirm_description">입장 순서가 되면 안내해드릴게요.</string>
+    <string name="waiting_dialog_waiting_confirm_waiting_number">웨이팅 번호</string>
+    <string name="waiting_dialog_waiting_confirm_id">%d번</string>
+    <string name="waiting_dialog_waiting_confirm_people">인원수</string>
+    <string name="waiting_dialog_waiting_confirm_people_number">%d명</string>
+    <string name="waiting_dialog_waiting_confirm_previous_waiting">내 앞 웨이팅</string>
+    <string name="waiting_dialog_waiting_confirm_previous_waiting_number">%d팀</string>
+    <string name="waiting_dialog_waiting_confirm_button">완료</string>
+
+
+
     <!--   Contact-->
     <string name="contact_title">이용문의</string>
 
