@@ -195,11 +195,15 @@ class BoothViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             waitingId = waiting.waitingId,
+                            waitingTel = "",
+                            waitingPartySize = 1,
+                            boothPinNumber = "",
                         )
                     }
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
-                }.onFailure {
+                }.onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
                 }
             }
         } else {
@@ -245,7 +249,10 @@ class BoothViewModel @Inject constructor(
                         setWaitingDialogVisible(true)
                     } else {
                         _uiState.update {
-                            it.copy(isWrongPinInserted = true)
+                            it.copy(
+                                isWrongPinInserted = true,
+                                boothPinNumber = "",
+                            )
                         }
                         delay(2000L)
                         _uiState.update {
@@ -253,7 +260,8 @@ class BoothViewModel @Inject constructor(
                         }
                     }
                 }
-                .onFailure {
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
                 }
         }
     }
@@ -266,18 +274,15 @@ class BoothViewModel @Inject constructor(
 
     private fun minusWaitingPartySize() {
         _uiState.update { currentState ->
-            val newPartySize = if (currentState.waitingPartySize > 1) {
-                currentState.waitingPartySize - 1
-            } else {
-                currentState.waitingPartySize
-            }
-            currentState.copy(waitingPartySize = newPartySize)
+            if (currentState.waitingPartySize <= 1) return@update currentState
+            currentState.copy(waitingPartySize = currentState.waitingPartySize - 1)
         }
     }
 
     private fun plusWaitingPartySize() {
-        _uiState.update {
-            it.copy(waitingPartySize = it.waitingPartySize + 1)
+        _uiState.update { currentState ->
+            if (currentState.waitingPartySize >= 15) return@update currentState
+            currentState.copy(waitingPartySize = currentState.waitingPartySize + 1)
         }
     }
 

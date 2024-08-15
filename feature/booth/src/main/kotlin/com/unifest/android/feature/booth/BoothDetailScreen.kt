@@ -251,7 +251,6 @@ fun BoothDetailScreen(
         if (uiState.isConfirmDialogVisible) {
             WaitingConfirmDialog(
                 boothName = uiState.boothDetailInfo.name,
-                onDismissRequest = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
                 waitingId = uiState.waitingId,
                 waitingPartySize = uiState.waitingPartySize,
                 waitingTeamNumber = uiState.waitingTeamNumber,

@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -218,7 +217,11 @@ fun WaitingPinDialog(
             Column {
                 BasicTextField(
                     value = pinNumber,
-                    onValueChange = { newPin -> onPinNumberUpdated(newPin) },
+                    onValueChange = {
+                        if (it.length <= 4) {
+                            onPinNumberUpdated(it)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -391,7 +394,7 @@ fun WaitingDialog(
                         shape = RoundedCornerShape(5.dp),
                     )
                     .padding(11.dp),
-                textStyle = TextStyle(
+                textStyle = Title4.copy(
                     color = MaterialTheme.colorScheme.onBackground,
                 ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
@@ -482,14 +485,13 @@ fun WaitingDialog(
 @Composable
 fun WaitingConfirmDialog(
     boothName: String,
-    onDismissRequest: () -> Unit,
     waitingId: Long,
     waitingPartySize: Long,
     waitingTeamNumber: Long,
     onConfirmClick: () -> Unit,
 ) {
     BasicAlertDialog(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = {},
     ) {
         Column(
             modifier = Modifier
@@ -826,7 +828,6 @@ fun WaitingConfirmDialogPreview() {
     UnifestTheme {
         WaitingConfirmDialog(
             boothName = "컴공 주점",
-            onDismissRequest = {},
             waitingId = 1,
             waitingPartySize = 3,
             waitingTeamNumber = 3,
@@ -841,7 +842,6 @@ fun WaitingConfirmDialogDarkPreview() {
     UnifestTheme {
         WaitingConfirmDialog(
             boothName = "컴공 주점",
-            onDismissRequest = {},
             waitingId = 1,
             waitingPartySize = 3,
             waitingTeamNumber = 3,
