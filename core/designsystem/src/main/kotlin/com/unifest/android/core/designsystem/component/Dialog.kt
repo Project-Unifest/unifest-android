@@ -1,6 +1,7 @@
 package com.unifest.android.core.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -247,27 +248,30 @@ fun WaitingPinDialog(
                     },
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(modifier = Modifier.width(14.dp))
-                    Icon(
-                        imageVector = ImageVector.vectorResource(
-                            id = if (isWrongPinInserted) R.drawable.ic_warning else R.drawable.ic_booth_info,
-                        ),
-                        contentDescription = if (isWrongPinInserted) "warning icon" else "booth info icon",
-                        tint = Color.Unspecified,
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = if (isWrongPinInserted) {
-                            stringResource(id = R.string.waiting_dialog_enter_booth_pin_description_error)
-                        } else {
-                            stringResource(id = R.string.waiting_dialog_enter_booth_pin_description)
-                        },
-                        color = if (isWrongPinInserted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
-                        style = Content6,
-                    )
+                AnimatedContent(targetState = isWrongPinInserted) { isWrongPinInserted ->
+                    Row(
+                        modifier = Modifier.height(24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Spacer(modifier = Modifier.width(14.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(
+                                id = if (isWrongPinInserted) R.drawable.ic_warning else R.drawable.ic_booth_info,
+                            ),
+                            contentDescription = if (isWrongPinInserted) "warning icon" else "booth info icon",
+                            tint = if (isWrongPinInserted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (isWrongPinInserted) {
+                                stringResource(id = R.string.waiting_dialog_enter_booth_pin_description_error)
+                            } else {
+                                stringResource(id = R.string.waiting_dialog_enter_booth_pin_description)
+                            },
+                            color = if (isWrongPinInserted) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
+                            style = Content6,
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(35.dp))
