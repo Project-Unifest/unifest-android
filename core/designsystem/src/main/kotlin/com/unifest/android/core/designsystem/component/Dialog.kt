@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -220,7 +221,6 @@ fun WaitingPinDialog(
                 BasicTextField(
                     value = pinNumber,
                     onValueChange = { newPin -> onPinNumberUpdated(newPin) },
-                    //todo: String과 textfield
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -230,6 +230,10 @@ fun WaitingPinDialog(
                             shape = RoundedCornerShape(5.dp),
                         )
                         .padding(horizontal = 10.dp, vertical = 19.dp),
+                    textStyle = BoothTitle2.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                     decorationBox = { innerTextField ->
                         if (pinNumber.isEmpty()) {
                             Text(
@@ -334,7 +338,6 @@ fun WaitingDialog(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "$waitingCount 팀",
-                //todo: 구현
                 color = MaterialTheme.colorScheme.onBackground,
                 style = WaitingTeam,
             )
@@ -392,6 +395,10 @@ fun WaitingDialog(
                         shape = RoundedCornerShape(5.dp),
                     )
                     .padding(11.dp),
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 decorationBox = { innerTextField ->
                     if (phoneNumber.isEmpty()) {
                         Text(
@@ -404,7 +411,6 @@ fun WaitingDialog(
                 },
                 visualTransformation = PhoneNumberVisualTransformation(),
             )
-            //TODO: 전화번호 입력 시,
             Spacer(modifier = Modifier.height(12.dp))
             Column(
                 horizontalAlignment = Alignment.Start,
