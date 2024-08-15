@@ -202,7 +202,9 @@ class BoothViewModel @Inject constructor(
                 }
             }
         } else {
-            // 유효하지 않은 입력에 대한 처리
+            viewModelScope.launch {
+                _uiEvent.send(BoothUiEvent.ShowToast(UiText.StringResource(R.string.booth_empty_waiting)))
+            }
         }
     }
 

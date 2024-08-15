@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -139,6 +140,7 @@ internal fun BoothDetailRoute(
                     job.cancel()
                 }
             }
+            is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -367,7 +369,7 @@ fun BottomBar(
                         text = if (isWaitingEnable) stringResource(id = R.string.booth_waiting_button) else stringResource(id = R.string.booth_waiting_button_invalid),
                         style = Title4,
                         fontSize = 14.sp,
-                        color = if (isWaitingEnable) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             }
