@@ -179,6 +179,7 @@ fun BoothDetailScreen(
         BottomBar(
             isBookmarked = uiState.isLiked,
             bookmarkCount = uiState.boothDetailInfo.likes,
+            isWaitingEnable = uiState.boothDetailInfo.waitingEnabled,
             onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
@@ -316,10 +317,10 @@ fun BoothDetailContent(
 fun BottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
+    isWaitingEnable: Boolean,
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bookmarkColor = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
 
     Surface(
         modifier = modifier.height(116.dp),
@@ -343,14 +344,14 @@ fun BottomBar(
                     Icon(
                         imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                        tint = bookmarkColor,
+                        tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.clickableSingle {
                             onAction(BoothUiAction.OnToggleBookmark)
                         },
                     )
                     Text(
                         text = "$bookmarkCount",
-                        color = bookmarkColor,
+                        color = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         style = BoothCaution.copy(fontWeight = FontWeight.Bold),
                     )
                 }
@@ -359,14 +360,14 @@ fun BottomBar(
                     onClick = { onAction(BoothUiAction.OnWaitingButtonClick) },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
-                    enabled = true,
-                    //todo: 처리해주기
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    enabled = isWaitingEnable,
+                    containerColor = if (isWaitingEnable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
-                        text = stringResource(id = R.string.booth_waiting_button_invalid),
+                        text = if (isWaitingEnable) stringResource(id = R.string.booth_waiting_button) else stringResource(id = R.string.booth_waiting_button_invalid),
                         style = Title4,
                         fontSize = 14.sp,
+                        color = if (isWaitingEnable) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }

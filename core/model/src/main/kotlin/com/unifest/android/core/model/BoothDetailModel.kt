@@ -16,6 +16,7 @@ data class BoothDetailModel(
     val menus: List<MenuModel> = emptyList(),
     val likes: Int = 0,
     val isLiked: Boolean = false,
+    val waitingEnabled: Boolean = false,
 )
 
 @Stable

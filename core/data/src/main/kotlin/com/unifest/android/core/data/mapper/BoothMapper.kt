@@ -23,6 +23,7 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         latitude = latitude,
         longitude = longitude,
         menus = menus.map { it.toModel() },
+        waitingEnabled = waitingEnabled,
     )
 }
 
