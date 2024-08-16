@@ -281,7 +281,7 @@ class BoothViewModel @Inject constructor(
     }
 
     private fun plusWaitingPartySize() {
-        if (_uiState.value.waitingPartySize >= 15) return
+        if (_uiState.value.waitingPartySize >= 100) return
 
         _uiState.update { currentState ->
             currentState.copy(waitingPartySize = currentState.waitingPartySize + 1)
