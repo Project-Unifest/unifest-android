@@ -218,9 +218,9 @@ fun WaitingPinDialog(
             Column {
                 BasicTextField(
                     value = pinNumber,
-                    onValueChange = {
-                        if (it.length <= 4) {
-                            onPinNumberUpdated(it)
+                    onValueChange = { input ->
+                        if (input.matches(Regex("^\\d{0,4}\$"))) {
+                            onPinNumberUpdated(input)
                         }
                     },
                     modifier = Modifier
@@ -384,9 +384,9 @@ fun WaitingDialog(
             Spacer(modifier = Modifier.height(14.dp))
             BasicTextField(
                 value = phoneNumber,
-                onValueChange = {
-                    if (it.length <= 11) {
-                        onWaitingTelUpdated(it)
+                onValueChange = { input ->
+                    if (input.matches(Regex("^\\d{0,11}\$"))) {
+                        onWaitingTelUpdated(input)
                     }
                 },
                 modifier = Modifier
