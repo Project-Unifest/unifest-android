@@ -1,31 +1,26 @@
 package com.unifest.android.feature.booth
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -34,55 +29,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.clickableSingle
-import com.unifest.android.core.common.utils.formatAsCurrency
-
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
-import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.component.WaitingConfirmDialog
 import com.unifest.android.core.designsystem.component.WaitingDialog
 import com.unifest.android.core.designsystem.component.WaitingPinDialog
-import com.unifest.android.core.designsystem.theme.BoothCaution
-import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.BoothTitle1
-import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.DarkGrey100
-import com.unifest.android.core.designsystem.theme.MenuPrice
-import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.Title2
-import com.unifest.android.core.designsystem.theme.Title4
-import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.feature.booth.component.BoothBottomBar
+import com.unifest.android.feature.booth.component.BoothDescription
+import com.unifest.android.feature.booth.component.MenuItem
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
@@ -91,6 +73,7 @@ import com.unifest.android.feature.booth.viewmodel.ErrorType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import timber.log.Timber
 
 private const val SnackBarDuration = 1000L
 
@@ -108,6 +91,16 @@ internal fun BoothDetailRoute(
     val snackBarState = remember { SnackbarHostState() }
     val isDarkTheme = isSystemInDarkTheme()
     val uriHandler = LocalUriHandler.current
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // FCM SDK (and your app) can post notifications.
+        } else {
+            // TODO: Inform user that that your app will not show notifications.
+        }
+    }
 
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
@@ -179,7 +172,7 @@ fun BoothDetailScreen(
                 .align(Alignment.TopCenter)
                 .padding(padding),
         )
-        BottomBar(
+        BoothBottomBar(
             isBookmarked = uiState.isLiked,
             bookmarkCount = uiState.boothDetailInfo.likes,
             isWaitingEnable = uiState.boothDetailInfo.waitingEnabled,
@@ -270,7 +263,14 @@ fun BoothDetailContent(
         modifier = modifier.fillMaxSize(),
     ) {
         item {
-            BoothImage(uiState.boothDetailInfo.thumbnail)
+            NetworkImage(
+                imgUrl = uiState.boothDetailInfo.thumbnail,
+                contentDescription = "Booth Image",
+                modifier = Modifier
+                    .height(260.dp)
+                    .fillMaxWidth(),
+                placeholder = painterResource(id = R.drawable.image_placeholder),
+            )
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
@@ -285,7 +285,14 @@ fun BoothDetailContent(
         item { Spacer(modifier = Modifier.height(32.dp)) }
         item { UnifestHorizontalDivider() }
         item { Spacer(modifier = Modifier.height(22.dp)) }
-        item { MenuText() }
+        item {
+            Text(
+                text = stringResource(id = R.string.booth_menu),
+                modifier = Modifier.padding(start = 20.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = Title2,
+            )
+        }
         item { Spacer(modifier = Modifier.height(16.dp)) }
         if (uiState.boothDetailInfo.menus.isEmpty()) {
             item {
@@ -311,206 +318,6 @@ fun BoothDetailContent(
                     onAction = onAction,
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun BottomBar(
-    bookmarkCount: Int,
-    isBookmarked: Boolean,
-    isWaitingEnable: Boolean,
-    onAction: (BoothUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        modifier = modifier.height(116.dp),
-        shadowElevation = 32.dp,
-        color = MaterialTheme.colorScheme.surface,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 27.dp, top = 15.dp, end = 15.dp, bottom = 15.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surface),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                        contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                        tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.clickableSingle {
-                            onAction(BoothUiAction.OnToggleBookmark)
-                        },
-                    )
-                    Text(
-                        text = "$bookmarkCount",
-                        color = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = BoothCaution.copy(fontWeight = FontWeight.Bold),
-                    )
-                }
-                Spacer(modifier = Modifier.width(18.dp))
-                UnifestButton(
-                    onClick = { onAction(BoothUiAction.OnWaitingButtonClick) },
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(vertical = 15.dp),
-                    enabled = isWaitingEnable,
-                    containerColor = if (isWaitingEnable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                ) {
-                    Text(
-                        text = if (isWaitingEnable) stringResource(
-                            id = R.string.booth_waiting_button,
-                        ) else stringResource(
-                            id = R.string.booth_waiting_button_invalid,
-                        ),
-                        style = Title4,
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun BoothImage(
-    imgUrl: String,
-) {
-    NetworkImage(
-        imgUrl = imgUrl,
-        contentDescription = "Booth Image",
-        modifier = Modifier
-            .height(260.dp)
-            .fillMaxWidth(),
-        placeholder = painterResource(id = R.drawable.image_placeholder),
-    )
-}
-
-@Composable
-fun BoothDescription(
-    name: String,
-    warning: String,
-    description: String,
-    location: String,
-    onAction: (BoothUiAction) -> Unit,
-) {
-    val configuration = LocalConfiguration.current
-    val maxWidth = remember(configuration) {
-        val screenWidth = configuration.screenWidthDp.dp - 40.dp
-        screenWidth * (2 / 3f)
-    }
-
-    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = name,
-                modifier = Modifier
-                    .widthIn(max = maxWidth)
-                    .alignBy(LastBaseline),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = BoothTitle1,
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = warning,
-                modifier = Modifier.alignBy(LastBaseline),
-                style = BoothCaution,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Text(
-            text = description,
-            modifier = Modifier.padding(top = 8.dp),
-            color = MaterialTheme.colorScheme.onSecondary,
-            style = Content2.copy(lineHeight = 18.sp),
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp),
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
-                contentDescription = "location icon",
-                tint = Color.Unspecified,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = location,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = BoothLocation,
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        UnifestOutlinedButton(
-            onClick = { onAction(BoothUiAction.OnCheckLocationClick) },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = stringResource(id = R.string.booth_check_locaiton),
-                style = Title5,
-            )
-        }
-    }
-}
-
-@Composable
-fun MenuText() {
-    Text(
-        text = stringResource(id = R.string.booth_menu),
-        modifier = Modifier.padding(start = 20.dp),
-        color = MaterialTheme.colorScheme.onBackground,
-        style = Title2,
-    )
-}
-
-@Composable
-fun MenuItem(
-    menu: MenuModel,
-    onAction: (BoothUiAction) -> Unit,
-) {
-    Row(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-    ) {
-        NetworkImage(
-            imgUrl = menu.imgUrl,
-            contentDescription = menu.name,
-            placeholder = painterResource(id = R.drawable.item_placeholder),
-            modifier = Modifier
-                .size(86.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable(
-                    onClick = {
-                        if (menu.imgUrl.isNotEmpty()) {
-                            onAction(BoothUiAction.OnMenuImageClick(menu))
-                        }
-                    },
-                ),
-        )
-        Spacer(modifier = Modifier.width(13.dp))
-        Column(
-            modifier = Modifier.align(Alignment.CenterVertically),
-        ) {
-            Text(
-                text = menu.name,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MenuTitle,
-            )
-            Spacer(modifier = Modifier.height(3.dp))
-            Text(
-                text = menu.price.formatAsCurrency(),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MenuPrice,
-            )
         }
     }
 }
@@ -574,3 +381,35 @@ fun BoothScreenDarkPreview() {
         )
     }
 }
+
+//private fun askNotificationPermission() {
+//    // This is only necessary for API level >= 33 (TIRAMISU)
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+//            PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // FCM SDK (and your app) can post notifications.
+//        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+//            // TODO: display an educational UI explaining to the user the features that will be enabled
+//            //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+//            //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+//            //       If the user selects "No thanks," allow the user to continue without notifications.
+//        } else {
+//            // Directly ask for the permission
+//            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+//        }
+//    }
+//
+//    FirebaseMessaging.getInstance().token.addOnCompleteListener(
+//        OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Timber.w("Fetching FCM registration token failed", task.exception)
+//                return@OnCompleteListener
+//            }
+//
+//            // Get new FCM registration token
+//            val token = task.result
+//            Timber.d(token)
+//        },
+//    )
+//}
