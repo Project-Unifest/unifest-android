@@ -65,6 +65,8 @@
     <string name="waiting_cancel_waiting">웨이팅 취소</string>
     <string name="waiting_booth_check">부스 확인하기</string>
     <string name="waiting_nth">번째</string>
+    <string name="waiting_cancel_dialog_title">웨이팅을 취소합니다</string>
+    <string name="waiting_cancel_dialog_description">정말 취소 하시겠습니까?</string>
 
     <!--    Menu    -->
     <string name="menu_title">메뉴</string>
