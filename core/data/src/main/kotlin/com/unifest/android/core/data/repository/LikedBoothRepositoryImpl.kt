@@ -7,6 +7,8 @@ import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.database.LikedBoothDao
 import com.unifest.android.core.model.BoothDetailModel
+import com.unifest.android.core.network.request.LikedBoothRegisterRequest
+import com.unifest.android.core.network.request.LikedBoothUnregisterRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -44,5 +46,13 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
 
     override suspend fun isLikedBooth(booth: BoothDetailModel): Boolean {
         return likedBoothDao.isLikedBooth(booth.id)
+    }
+
+    override suspend fun registerLikedBooth(festivalId: Long, likedBoothRegisterRequest: LikedBoothRegisterRequest) = runSuspendCatching {
+        service.registerLikedBooth(festivalId, likedBoothRegisterRequest)
+    }
+
+    override suspend fun unregisterLikedBooth(festivalId: Long, likedBoothUnregisterRequest: LikedBoothUnregisterRequest) = runSuspendCatching {
+        service.unregisterLikedBooth(festivalId, likedBoothUnregisterRequest)
     }
 }

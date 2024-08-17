@@ -3,6 +3,8 @@ package com.unifest.android.core.network.service
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
+import com.unifest.android.core.network.request.LikedBoothUnregisterRequest
+import com.unifest.android.core.network.request.LikedBoothRegisterRequest
 import com.unifest.android.core.network.response.AllBoothsResponse
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.CheckPinValidationResponse
@@ -13,6 +15,7 @@ import com.unifest.android.core.network.response.LikedBoothsResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
 import com.unifest.android.core.network.response.WaitingResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -79,4 +82,16 @@ interface UnifestService {
     suspend fun requestBoothWaiting(
         @Body boothWaitingRequest: BoothWaitingRequest,
     ): WaitingResponse
+
+    @POST("booths/{festival-id}/interest")
+    suspend fun registerLikedBooth(
+        @Path("festival-id") festivalId: Long,
+        @Body likedBoothRegisterRequest: LikedBoothRegisterRequest,
+    )
+
+    @DELETE("booths/{festival-id}/interest")
+    suspend fun unregisterLikedBooth(
+        @Path("festival-id") festivalId: Long,
+        @Body likedBoothDeleteRequest: LikedBoothUnregisterRequest,
+    )
 }
