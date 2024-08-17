@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,8 +41,10 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.WaitingCancelDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
+import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey100
@@ -52,6 +56,8 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
+import com.unifest.android.core.designsystem.theme.WaitingNumber4
+import com.unifest.android.core.model.MyWaitingModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
@@ -79,7 +85,6 @@ internal fun WaitingRoute(
     )
 }
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
@@ -143,41 +148,63 @@ internal fun WaitingScreen(
                 }
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }
-            item {
-                WaitInfoCard(location = "컴공 주점", order = 35, waitingNumber = 112, people = 3)
-                Spacer(modifier = Modifier.height(8.dp))
-                WaitInfoCard(location = "학생회 부스", order = 13, waitingNumber = 134, people = 3)
+
+                itemsIndexed(
+                    items = waitingUiState.myWaitingList,
+                    key = { _, waitingItem -> waitingItem.waitingId },
+                ) { _, waitingItem ->
+                    Column {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        WaitingInfoItem(
+                            myWaitingModel = waitingItem,
+                            onWaitingCancelClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick) },
+                            onCheckBoothDetailClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick) },
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
-//        if (waitingUiState.waitingLists.isEmpty()) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(bottom = 50.dp),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//        ) {
-//            Text(
-//                text = "신청한 웨이팅이 없어요",
-//                style = Title4.copy(fontSize = 16.sp),
-//            )
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Text(
-//                text = "주점/부스 구경하러 가기>",
-//                style = Title4.copy(fontSize = 14.sp),
-//                color = Color.Gray,
-//            )
-//        }
-//    }
+    if (waitingUiState.myWaitingList.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "신청한 웨이팅이 없어요",
+                    style = WaitingNumber4,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "주점/부스 구경하러 가기>",
+                    style = Content2.copy(
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+
+    if (waitingUiState.isWaitingCancelDialogVisible) {
+        WaitingCancelDialog(
+            onCancelClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogCancelClick) },
+            onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogConfirmClick) },
+        )
     }
 }
 
+
 @Composable
-fun WaitInfoCard(
-    location: String,
-    order: Int,
-    waitingNumber: Int,
-    people: Int,
+fun WaitingInfoItem(
+    myWaitingModel: MyWaitingModel,
+    onWaitingCancelClick: () -> Unit,
+    onCheckBoothDetailClick: () -> Unit,
 ) {
     Card(
         colors = CardColors(
@@ -212,7 +239,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = location,
+                        text = myWaitingModel.boothName,
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title3,
                     )
@@ -228,7 +255,7 @@ fun WaitInfoCard(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = order.toString(),
+                        text = myWaitingModel.waitingOrder.toString(),
                         style = WaitingNumber,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
@@ -251,7 +278,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = "$waitingNumber",
+                        text = myWaitingModel.waitingId.toString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber2,
                     )
@@ -269,7 +296,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "$people",
+                        text = myWaitingModel.partySize.toString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber2,
                     )
@@ -281,7 +308,7 @@ fun WaitInfoCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 UnifestOutlinedButton(
-                    onClick = { },
+                    onClick = { onWaitingCancelClick() },
                     containerColor = LightGrey100,
                     borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
@@ -294,7 +321,7 @@ fun WaitInfoCard(
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 UnifestOutlinedButton(
-                    onClick = { },
+                    onClick = { onCheckBoothDetailClick() },
                     containerColor = LightGrey100,
                     borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
@@ -326,11 +353,21 @@ fun WaitingScreenPreview() {
 @Composable
 fun WaitingScreenComponentPreview() {
     UnifestTheme {
-        WaitInfoCard(
-            location = "컴공 주점",
-            order = 35,
-            waitingNumber = 112,
-            people = 3,
+        WaitingInfoItem(
+            myWaitingModel = MyWaitingModel(
+                boothId = 1L,
+                waitingId = 1L,
+                partySize = 2L,
+                tel = "010-1234-5678",
+                deviceId = "1234567890",
+                createdAt = "2021-09-01T00:00:00",
+                updatedAt = "2021-09-01T00:00:00",
+                status = "waiting",
+                waitingOrder = 1L,
+                boothName = "Booth Name",
+            ),
+            onWaitingCancelClick = {},
+            onCheckBoothDetailClick = {},
         )
     }
 }

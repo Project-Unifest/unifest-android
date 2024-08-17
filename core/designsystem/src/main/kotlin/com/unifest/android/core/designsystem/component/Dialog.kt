@@ -676,6 +676,26 @@ fun AppUpdateDialog(
     }
 }
 
+@Composable
+fun WaitingCancelDialog(
+    onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit,
+) {
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.waiting_cancel_dialog_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.waiting_cancel_dialog_description,
+            confirmTextResId = R.string.confirm,
+            cancelTextResId = R.string.cancel,
+            onCancelClick = onCancelClick,
+            onConfirmClick = onConfirmClick,
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 fun ServerErrorDialogPreview() {

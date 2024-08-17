@@ -10,6 +10,7 @@ import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
 import com.unifest.android.core.network.response.LikeBoothResponse
 import com.unifest.android.core.network.response.LikedBoothsResponse
+import com.unifest.android.core.network.response.MyWaitingResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
 import com.unifest.android.core.network.response.WaitingResponse
 import retrofit2.http.Body
@@ -79,4 +80,11 @@ interface UnifestService {
     suspend fun requestBoothWaiting(
         @Body boothWaitingRequest: BoothWaitingRequest,
     ): WaitingResponse
+
+    @GET("waiting/me/{deviceId}")
+    suspend fun getMyWaitingList(
+        @Path("deviceId") deviceId: String,
+    ): MyWaitingResponse
+
+
 }

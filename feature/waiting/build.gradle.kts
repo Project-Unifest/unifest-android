@@ -11,6 +11,8 @@ android {
 
 dependencies {
     implementations(
+        projects.core.data,
+
         libs.kotlinx.collections.immutable,
         libs.timber,
     )
