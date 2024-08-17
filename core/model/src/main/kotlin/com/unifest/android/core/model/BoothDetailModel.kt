@@ -16,6 +16,7 @@ data class BoothDetailModel(
     val menus: List<MenuModel> = emptyList(),
     val likes: Int = 0,
     val isLiked: Boolean = false,
+    val waitingEnabled: Boolean = false,
 )
 
 @Stable
@@ -24,4 +25,18 @@ data class MenuModel(
     val name: String,
     val price: Int,
     val imgUrl: String,
+)
+
+@Stable
+data class WaitingModel(
+    val boothId: Long = 0L,
+    val waitingId: Long = 0L,
+    val partySize: Long = 0L,
+    val tel: String = "",
+    val deviceId: String = "",
+    val createdAt: String = "",
+    val updatedAt: String = "",
+    val status: String = "",
+    val waitingOrder: Long = 0L,
+    val boothName: String = "",
 )

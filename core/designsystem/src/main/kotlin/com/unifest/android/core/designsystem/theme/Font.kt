@@ -68,6 +68,12 @@ val BoothTitle2 = TextStyle(
     fontSize = 20.sp,
 )
 
+val BoothTitle3 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 20.sp,
+)
+
 val BoothCaution = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,

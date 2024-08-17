@@ -8,9 +8,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.MultipleEventsCutter
+import com.unifest.android.core.common.get
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -27,8 +30,9 @@ fun UnifestButton(
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
     Button(
-        onClick = onClick,
+        onClick = { multipleEventsCutter.processEvent { onClick() } },
         modifier = modifier,
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),

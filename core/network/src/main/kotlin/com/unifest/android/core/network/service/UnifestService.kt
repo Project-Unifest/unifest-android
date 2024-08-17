@@ -1,13 +1,17 @@
 package com.unifest.android.core.network.service
 
+import com.unifest.android.core.network.request.BoothWaitingRequest
+import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.response.AllBoothsResponse
 import com.unifest.android.core.network.response.BoothDetailResponse
+import com.unifest.android.core.network.response.CheckPinValidationResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
 import com.unifest.android.core.network.response.LikeBoothResponse
 import com.unifest.android.core.network.response.LikedBoothsResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
+import com.unifest.android.core.network.response.WaitingResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -65,4 +69,14 @@ interface UnifestService {
     suspend fun getBoothLikes(
         @Path("booth-id") boothId: Long,
     ): LikeBoothResponse
+
+    @POST("waiting/pin/check")
+    suspend fun checkPinValidation(
+        @Body checkPinValidationRequest: CheckPinValidationRequest,
+    ): CheckPinValidationResponse
+
+    @POST("waiting")
+    suspend fun requestBoothWaiting(
+        @Body boothWaitingRequest: BoothWaitingRequest,
+    ): WaitingResponse
 }
