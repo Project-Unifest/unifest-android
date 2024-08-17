@@ -99,9 +99,9 @@ class MapViewModel @Inject constructor(
                 }
             }
 
-            PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
+            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
                 viewModelScope.launch {
-                    _uiEvent.send(MapUiEvent.GoToAppSettings)
+                    _uiEvent.send(MapUiEvent.NavigateToAppSetting)
                 }
             }
 

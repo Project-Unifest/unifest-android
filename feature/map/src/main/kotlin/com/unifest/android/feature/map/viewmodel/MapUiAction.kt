@@ -1,6 +1,7 @@
 package com.unifest.android.feature.map.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.feature.map.model.BoothMapModel
 
 sealed interface MapUiAction {
@@ -21,10 +22,4 @@ sealed interface MapUiAction {
 enum class ErrorType {
     NETWORK,
     SERVER,
-}
-
-enum class PermissionDialogButtonType {
-    DISMISS,
-    CONFIRM,
-    GO_TO_APP_SETTINGS,
 }

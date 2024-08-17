@@ -68,9 +68,10 @@ import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.common.extension.goToAppSettings
+import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.MarkerCategory
@@ -89,6 +90,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.BoothFilterChips
+import com.unifest.android.core.ui.component.LocationPermissionTextProvider
+import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
@@ -140,7 +143,7 @@ internal fun MapRoute(
                 locationPermissionResultLauncher.launch(locationPermissions)
             }
 
-            is MapUiEvent.GoToAppSettings -> activity.goToAppSettings()
+            is MapUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
@@ -222,7 +225,9 @@ internal fun MapScreen(
             PermissionDialog(
                 permissionTextProvider = LocationPermissionTextProvider(),
                 isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
-                onMapUiAction = onMapUiAction,
+                onDismiss = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
+                navigateToAppSetting = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
+                onConfirm = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
             )
         }
     }
