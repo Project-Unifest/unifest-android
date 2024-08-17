@@ -6,6 +6,8 @@ import com.unifest.android.core.data.mapper.toEntity
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.database.LikedBoothDao
+import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
+import com.unifest.android.core.datastore.TokenDataSource
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.network.request.LikedBoothRegisterRequest
 import com.unifest.android.core.network.request.LikedBoothUnregisterRequest
@@ -19,6 +21,8 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val likedBoothDao: LikedBoothDao,
+    private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
+    private val tokenDataSource: TokenDataSource,
 ) : LikedBoothRepository {
     override suspend fun getLikedBooths() = runSuspendCatching {
         service.getLikedBooths(getDeviceId(context)).data.map { it.toModel() }
@@ -48,11 +52,15 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
         return likedBoothDao.isLikedBooth(booth.id)
     }
 
-    override suspend fun registerLikedBooth(festivalId: Long, likedBoothRegisterRequest: LikedBoothRegisterRequest) = runSuspendCatching {
-        service.registerLikedBooth(festivalId, likedBoothRegisterRequest)
+    override suspend fun registerLikedBooth(boothId: Long) = runSuspendCatching {
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
+        val fcmToken = tokenDataSource.getFCMToken() ?: ""
+        service.registerLikedBooth(festivalId.toLong(), LikedBoothRegisterRequest(fcmToken))
     }
 
-    override suspend fun unregisterLikedBooth(festivalId: Long, likedBoothUnregisterRequest: LikedBoothUnregisterRequest) = runSuspendCatching {
-        service.unregisterLikedBooth(festivalId, likedBoothUnregisterRequest)
+    override suspend fun unregisterLikedBooth(boothId: Long) = runSuspendCatching {
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
+        val fcmToken = tokenDataSource.getFCMToken() ?: ""
+        service.unregisterLikedBooth(festivalId.toLong(), LikedBoothUnregisterRequest(fcmToken))
     }
 }

@@ -156,6 +156,12 @@ class BoothViewModel @Inject constructor(
         val currentBookmarkFlag = _uiState.value.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
+            if (currentBookmarkFlag) {
+                unregisterLikedBooth()
+            } else {
+                registerLikedBooth()
+            }
+
             boothRepository.likeBooth(boothId)
                 .onSuccess {
                     _uiState.update {
@@ -183,6 +189,27 @@ class BoothViewModel @Inject constructor(
                 }
         }
     }
+
+    private fun registerLikedBooth() {
+        viewModelScope.launch {
+            likedBoothRepository.registerLikedBooth(boothId)
+                .onSuccess {}
+                .onFailure {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                }
+        }
+    }
+
+    private fun unregisterLikedBooth() {
+        viewModelScope.launch {
+            likedBoothRepository.unregisterLikedBooth(boothId)
+                .onSuccess {}
+                .onFailure {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                }
+        }
+    }
+
 
     private fun refresh(error: ErrorType) {
         getBoothDetail()
@@ -401,7 +428,6 @@ class BoothViewModel @Inject constructor(
                 val token = messagingRepository.refreshFCMToken()
                 token?.let {
                     messagingRepository.setFCMToken(it)
-                    Timber.d("FCM token saved to DataStore")
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error getting or saving FCM token")
