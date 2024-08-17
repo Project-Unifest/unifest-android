@@ -187,10 +187,10 @@ class BoothViewModel @Inject constructor(
         if (isTelValid(tel) && isPartySizeValid(partySize)) {
             viewModelScope.launch {
                 boothRepository.requestBoothWaiting(
-                    _uiState.value.boothDetailInfo.id,
-                    tel,
-                    partySize,
-                    _uiState.value.boothPinNumber,
+                    boothId = _uiState.value.boothDetailInfo.id,
+                    tel = tel,
+                    partySize = partySize,
+                    pinNumber = _uiState.value.boothPinNumber,
                 ).onSuccess { waiting ->
                     _uiState.update {
                         it.copy(
@@ -238,6 +238,10 @@ class BoothViewModel @Inject constructor(
     }
 
     private fun checkPinValidation() {
+        if (_uiState.value.isWrongPinInserted) {
+            return
+        }
+
         viewModelScope.launch {
             boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber)
                 .onSuccess { waitingTeamNumber ->
