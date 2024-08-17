@@ -27,14 +27,4 @@ class RemoteConfigDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getString(key: String): String? = getValue(key)?.asString()
-    override suspend fun getString(key: String, defaultValue: String): String = getValue(key)?.asString() ?: defaultValue
-
-    override suspend fun getLong(key: String): Long? = getValue(key)?.asLong()
-    override suspend fun getLong(key: String, defaultValue: Long): Long = getValue(key)?.asLong() ?: defaultValue
-
-    override suspend fun getBoolean(key: String): Boolean? = getValue(key)?.asBoolean()
-    override suspend fun getBoolean(key: String, defaultValue: Boolean): Boolean = getValue(key)?.asBoolean() ?: defaultValue
-
-    override suspend fun getDouble(key: String): Double? = getValue(key)?.asDouble()
-    override suspend fun getDouble(key: String, defaultValue: Double): Double = getValue(key)?.asDouble() ?: defaultValue
 }

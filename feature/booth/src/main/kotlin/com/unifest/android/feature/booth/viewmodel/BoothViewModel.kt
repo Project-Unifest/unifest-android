@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.navigation.BOOTH_ID
@@ -22,12 +24,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
+    private val messagingRepository: MessagingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
@@ -39,6 +43,7 @@ class BoothViewModel @Inject constructor(
     val uiEvent: Flow<BoothUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
+        requestNotificationPermission()
         getBoothDetail()
         getLikedBooths()
     }
@@ -64,6 +69,13 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
+            is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.RequestNotificationPermission)
         }
     }
 
@@ -349,6 +361,51 @@ class BoothViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+        when (buttonType) {
+            PermissionDialogButtonType.CONFIRM -> {
+                viewModelScope.launch {
+                    _uiState.update {
+                        it.copy(isPermissionDialogVisible = false)
+                    }
+                    _uiEvent.send(BoothUiEvent.RequestNotificationPermission)
+                }
+            }
+
+            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
+                viewModelScope.launch {
+                    _uiEvent.send(BoothUiEvent.NavigateToAppSetting)
+                }
+            }
+
+            PermissionDialogButtonType.DISMISS -> {
+                _uiState.update {
+                    it.copy(isPermissionDialogVisible = false)
+                }
+            }
+        }
+    }
+
+    fun onPermissionResult(isGranted: Boolean) {
+        if (!isGranted) {
+            _uiState.update { it.copy(isPermissionDialogVisible = true) }
+        }
+    }
+
+    fun refreshFCMToken() {
+        viewModelScope.launch {
+            try {
+                val token = messagingRepository.refreshFCMToken()
+                token?.let {
+                    messagingRepository.setFCMToken(it)
+                    Timber.d("FCM token saved to DataStore")
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Error getting or saving FCM token")
+            }
         }
     }
 }

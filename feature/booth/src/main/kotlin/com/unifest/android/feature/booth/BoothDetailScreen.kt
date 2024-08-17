@@ -35,13 +35,13 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -62,6 +62,8 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.LocationPermissionTextProvider
+import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.booth.component.BoothBottomBar
 import com.unifest.android.feature.booth.component.BoothDescription
 import com.unifest.android.feature.booth.component.MenuItem
@@ -73,7 +75,6 @@ import com.unifest.android.feature.booth.viewmodel.ErrorType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
-import timber.log.Timber
 
 private const val SnackBarDuration = 1000L
 
@@ -91,14 +92,15 @@ internal fun BoothDetailRoute(
     val snackBarState = remember { SnackbarHostState() }
     val isDarkTheme = isSystemInDarkTheme()
     val uriHandler = LocalUriHandler.current
+    val activity = context.findActivity()
 
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
+    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
+            viewModel.refreshFCMToken()
         } else {
-            // TODO: Inform user that that your app will not show notifications.
+            viewModel.onPermissionResult(isGranted = isGranted)
         }
     }
 
@@ -117,6 +119,19 @@ internal fun BoothDetailRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
+            is BoothUiEvent.RequestNotificationPermission -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        viewModel.refreshFCMToken()
+                    } else if (activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                        viewModel.onPermissionResult(isGranted = false)
+                    } else {
+                        notificationPermissionResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+            }
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
@@ -135,6 +150,7 @@ internal fun BoothDetailRoute(
             }
 
             is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+            is BoothUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
         }
     }
 
@@ -153,6 +169,8 @@ fun BoothDetailScreen(
     snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
 ) {
+    val activity = LocalContext.current.findActivity()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -248,6 +266,16 @@ fun BoothDetailScreen(
                 waitingPartySize = uiState.waitingPartySize,
                 waitingTeamNumber = uiState.waitingTeamNumber,
                 onConfirmClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
+            )
+        }
+
+        if (uiState.isPermissionDialogVisible) {
+            PermissionDialog(
+                permissionTextProvider = LocationPermissionTextProvider(),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
+                onDismiss = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
+                navigateToAppSetting = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
+                onConfirm = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
             )
         }
     }
@@ -381,35 +409,3 @@ fun BoothScreenDarkPreview() {
         )
     }
 }
-
-//private fun askNotificationPermission() {
-//    // This is only necessary for API level >= 33 (TIRAMISU)
-//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-//            PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // FCM SDK (and your app) can post notifications.
-//        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//            // TODO: display an educational UI explaining to the user the features that will be enabled
-//            //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-//            //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-//            //       If the user selects "No thanks," allow the user to continue without notifications.
-//        } else {
-//            // Directly ask for the permission
-//            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-//        }
-//    }
-//
-//    FirebaseMessaging.getInstance().token.addOnCompleteListener(
-//        OnCompleteListener { task ->
-//            if (!task.isSuccessful) {
-//                Timber.w("Fetching FCM registration token failed", task.exception)
-//                return@OnCompleteListener
-//            }
-//
-//            // Get new FCM registration token
-//            val token = task.result
-//            Timber.d(token)
-//        },
-//    )
-//}

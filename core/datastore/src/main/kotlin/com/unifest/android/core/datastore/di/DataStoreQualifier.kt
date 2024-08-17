@@ -9,3 +9,7 @@ annotation class OnboardingDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class RecentLikedFestivalDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class TokenDataStore
