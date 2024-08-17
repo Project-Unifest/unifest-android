@@ -17,17 +17,21 @@ class PhoneNumberVisualTransformation : VisualTransformation {
 
         val phoneNumberOffsetTranslator = object : OffsetMapping {
             override fun originalToTransformed(offset: Int): Int {
-                if (offset <= 2) return offset
-                if (offset <= 6) return offset + 1
-                if (offset <= 10) return offset + 2
-                return 13
+                return when {
+                    offset <= 2 -> offset
+                    offset <= 6 -> offset + 1
+                    offset <= 10 -> offset + 2
+                    else -> out.length
+                }
             }
 
             override fun transformedToOriginal(offset: Int): Int {
-                if (offset <= 2) return offset
-                if (offset <= 6) return offset - 1
-                if (offset <= 10) return offset - 2
-                return 11
+                return when {
+                    offset <= 3 -> offset
+                    offset <= 8 -> offset - 1
+                    offset <= out.length -> offset - 2
+                    else -> trimmed.length
+                }
             }
         }
 

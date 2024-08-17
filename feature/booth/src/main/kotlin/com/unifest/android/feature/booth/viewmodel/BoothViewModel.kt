@@ -14,6 +14,7 @@ import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,6 +51,19 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnRetryClick -> refresh(action.error)
             is BoothUiAction.OnMenuImageClick -> showMenuImageDialog(action.menu)
             is BoothUiAction.OnMenuImageDialogDismiss -> hideMenuImageDialog()
+            is BoothUiAction.OnPinNumberUpdated -> updatePinNumberText(action.pinNumber)
+            is BoothUiAction.OnWaitingTelUpdated -> updateWaitingTelText(action.tel)
+            is BoothUiAction.OnWaitingButtonClick -> setPinCheckDialogVisible(true)
+            is BoothUiAction.OnDialogPinButtonClick -> checkPinValidation()
+            is BoothUiAction.OnDialogWaitingButtonClick -> requestBoothWaiting()
+            is BoothUiAction.OnWaitingDialogDismiss -> setWaitingDialogVisible(false)
+            is BoothUiAction.OnPinDialogDismiss -> setPinCheckDialogVisible(false)
+            is BoothUiAction.OnConfirmDialogDismiss -> setConfirmDialogVisible(false)
+            is BoothUiAction.OnWaitingMinusClick -> minusWaitingPartySize()
+            is BoothUiAction.OnWaitingPlusClick -> plusWaitingPartySize()
+            is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
+            is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
+            is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
         }
     }
 
@@ -166,6 +180,118 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    private fun requestBoothWaiting() {
+        val tel = _uiState.value.waitingTel
+        val partySize = _uiState.value.waitingPartySize
+
+        if (isTelValid(tel) && isPartySizeValid(partySize)) {
+            viewModelScope.launch {
+                boothRepository.requestBoothWaiting(
+                    boothId = _uiState.value.boothDetailInfo.id,
+                    tel = tel,
+                    partySize = partySize,
+                    pinNumber = _uiState.value.boothPinNumber,
+                ).onSuccess { waiting ->
+                    _uiState.update {
+                        it.copy(
+                            waitingId = waiting.waitingId,
+                            waitingTel = "",
+                            waitingPartySize = 1,
+                            boothPinNumber = "",
+                        )
+                    }
+                    setWaitingDialogVisible(false)
+                    setConfirmDialogVisible(true)
+                }.onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                _uiEvent.send(BoothUiEvent.ShowToast(UiText.StringResource(R.string.booth_empty_waiting)))
+            }
+        }
+    }
+
+    private fun isTelValid(tel: String): Boolean {
+        return tel.matches(Regex("^010\\d{8}$"))
+    }
+
+    private fun isPartySizeValid(partySize: Long): Boolean {
+        return partySize >= 1
+    }
+
+    private fun updatePinNumberText(pinNumber: String) {
+        _uiState.update {
+            it.copy(
+                boothPinNumber = pinNumber,
+            )
+        }
+    }
+
+    private fun updateWaitingTelText(tel: String) {
+        _uiState.update {
+            it.copy(
+                waitingTel = tel,
+            )
+        }
+    }
+
+    private fun checkPinValidation() {
+        if (_uiState.value.isWrongPinInserted) {
+            return
+        }
+
+        viewModelScope.launch {
+            boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber)
+                .onSuccess { waitingTeamNumber ->
+                    if (waitingTeamNumber > -1) {
+                        _uiState.update {
+                            it.copy(waitingTeamNumber = waitingTeamNumber)
+                        }
+                        setPinCheckDialogVisible(false)
+                        setWaitingDialogVisible(true)
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                isWrongPinInserted = true,
+                                boothPinNumber = "",
+                            )
+                        }
+                        delay(2000L)
+                        _uiState.update {
+                            it.copy(isWrongPinInserted = false)
+                        }
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
+        }
+    }
+
+    private fun privacyConsentClick() {
+        _uiState.update {
+            it.copy(privacyConsentChecked = !it.privacyConsentChecked)
+        }
+    }
+
+    private fun minusWaitingPartySize() {
+        if (_uiState.value.waitingPartySize <= 1) return
+
+        _uiState.update { currentState ->
+            currentState.copy(waitingPartySize = currentState.waitingPartySize - 1)
+        }
+    }
+
+    private fun plusWaitingPartySize() {
+        if (_uiState.value.waitingPartySize >= 100) return
+
+        _uiState.update { currentState ->
+            currentState.copy(waitingPartySize = currentState.waitingPartySize + 1)
+        }
+    }
+
     private fun showMenuImageDialog(menu: MenuModel) {
         _uiState.update {
             it.copy(
@@ -181,6 +307,36 @@ class BoothViewModel @Inject constructor(
                 isMenuImageDialogVisible = false,
                 selectedMenu = null,
             )
+        }
+    }
+
+    private fun navigateToPrivatePolicy() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToPrivatePolicy)
+        }
+    }
+
+    private fun navigateToThirdPartyPolicy() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToThirdPartyPolicy)
+        }
+    }
+
+    private fun setPinCheckDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isPinCheckDialogVisible = flag)
+        }
+    }
+
+    private fun setWaitingDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isWaitingDialogVisible = flag)
+        }
+    }
+
+    private fun setConfirmDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isConfirmDialogVisible = flag)
         }
     }
 

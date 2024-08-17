@@ -65,6 +65,8 @@ data class BoothDetail(
     val longitude: Float,
     @SerialName("menus")
     val menus: List<Menu>,
+    @SerialName("waitingEnabled")
+    val waitingEnabled: Boolean,
 )
 
 @Serializable

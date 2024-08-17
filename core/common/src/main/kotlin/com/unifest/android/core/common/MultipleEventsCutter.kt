@@ -1,12 +1,12 @@
 package com.unifest.android.core.common
 
-internal interface MultipleEventsCutter {
+interface MultipleEventsCutter {
     fun processEvent(event: () -> Unit)
 
     companion object
 }
 
-internal fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
+fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
     MultipleEventsCutterImpl()
 
 private class MultipleEventsCutterImpl : MultipleEventsCutter {

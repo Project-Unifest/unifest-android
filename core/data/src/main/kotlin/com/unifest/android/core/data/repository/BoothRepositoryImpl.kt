@@ -4,6 +4,8 @@ import android.content.Context
 import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
+import com.unifest.android.core.network.request.BoothWaitingRequest
+import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,5 +38,26 @@ class BoothRepositoryImpl @Inject constructor(
 
     override suspend fun getBoothLikes(boothId: Long) = runSuspendCatching {
         service.getBoothLikes(boothId).data
+    }
+
+    override suspend fun checkPinValidation(boothId: Long, pinNumber: String): Result<Long> = runSuspendCatching {
+        service.checkPinValidation(
+            CheckPinValidationRequest(
+                boothId = boothId,
+                pinNumber = pinNumber,
+            ),
+        ).data
+    }
+
+    override suspend fun requestBoothWaiting(boothId: Long, tel: String, partySize: Long, pinNumber: String) = runSuspendCatching {
+        service.requestBoothWaiting(
+            BoothWaitingRequest(
+                boothId = boothId,
+                tel = tel,
+                deviceId = getDeviceId(context),
+                partySize = partySize,
+                pinNumber = pinNumber,
+            ),
+        ).data.toModel()
     }
 }
