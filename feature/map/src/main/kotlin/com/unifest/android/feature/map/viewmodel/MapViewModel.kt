@@ -4,6 +4,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository

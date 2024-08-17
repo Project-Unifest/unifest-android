@@ -19,25 +19,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,12 +39,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -72,24 +62,14 @@ import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.navigateToAppSetting
-import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
-import com.unifest.android.core.designsystem.component.NetworkImage
-import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
-import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.theme.Content2
-import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title4
-import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
@@ -97,13 +77,14 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
+import com.unifest.android.feature.map.component.BoothItem
+import com.unifest.android.feature.map.component.MapTopAppBar
 import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -417,154 +398,6 @@ fun MapContent(
     }
 }
 
-@Composable
-fun MapTopAppBar(
-    title: String,
-    boothSearchText: TextFieldValue,
-    isOnboardingCompleted: Boolean,
-    onMapUiAction: (MapUiAction) -> Unit,
-    onFestivalUiAction: (FestivalUiAction) -> Unit,
-    selectedChips: ImmutableList<String>,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(
-            bottomStart = 32.dp,
-            bottomEnd = 32.dp,
-        ),
-    ) {
-        Column(
-            modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        ) {
-            UnifestTopAppBar(
-                navigationType = TopAppBarNavigationType.Search,
-                title = title,
-                onTitleClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
-                isOnboardingCompleted = isOnboardingCompleted,
-                onTooltipClick = { onMapUiAction(MapUiAction.OnTooltipClick) },
-            )
-            SearchTextField(
-                searchText = boothSearchText,
-                updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
-                searchTextHintRes = R.string.map_booth_search_text_field_hint,
-                onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchText)) },
-                clearSearchText = { onMapUiAction(MapUiAction.OnSearchTextCleared) },
-                modifier = Modifier
-                    .height(46.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            BoothFilterChips(
-                onChipClick = { chip -> onMapUiAction(MapUiAction.OnBoothTypeChipClick(chip)) },
-                selectedChips = selectedChips,
-                modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-    }
-}
-
-@Composable
-fun BoothItem(
-    boothInfo: BoothMapModel,
-    isPopularMode: Boolean,
-    ranking: Int,
-    onAction: (MapUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val density = LocalDensity.current
-    val textStyle = Content2
-    val textHeight = remember(textStyle) {
-        with(density) { Content2.fontSize.toDp() * 2 }
-    }
-
-    Card(
-        modifier = modifier.clickable {
-            onAction(MapUiAction.OnBoothItemClick(boothInfo.id))
-        },
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
-        Box {
-            Row(
-                modifier = Modifier.padding(15.dp),
-            ) {
-                NetworkImage(
-                    imgUrl = boothInfo.thumbnail,
-                    contentDescription = "Booth Thumbnail",
-                    modifier = Modifier
-                        .size(86.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    placeholder = painterResource(id = R.drawable.item_placeholder),
-                )
-                Column(
-                    modifier = Modifier.padding(start = 15.dp),
-                ) {
-                    Text(
-                        text = boothInfo.name,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = Title2,
-                    )
-                    Spacer(modifier = Modifier.height(3.dp))
-                    Text(
-                        text = boothInfo.description,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.heightIn(min = textHeight),
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = Content2,
-                    )
-                    Spacer(modifier = Modifier.height(3.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_green),
-                            contentDescription = "Location Icon",
-                            tint = Color.Unspecified,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = boothInfo.location,
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = Title5,
-                        )
-                    }
-                }
-            }
-            if (isPopularMode) {
-                RankingBadge(ranking = ranking)
-            }
-        }
-    }
-}
-
-@Composable
-fun RankingBadge(ranking: Int) {
-    Box(
-        modifier = Modifier
-            .size(width = 43.dp, height = 45.dp)
-            .padding(start = 7.dp, top = 9.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary, CircleShape),
-        contentAlignment = Alignment.TopStart,
-    ) {
-        Text(
-            text = stringResource(id = R.string.map_ranking, ranking),
-            color = MaterialTheme.colorScheme.onTertiaryContainer,
-            style = Title5,
-            modifier = Modifier.align(Alignment.Center),
-        )
-    }
-}
-
 @DevicePreview
 @Composable
 fun MapScreenPreview() {
@@ -594,89 +427,5 @@ fun MapScreenPreview() {
             onMapUiAction = {},
             onFestivalUiAction = {},
         )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun MapTopAppBarPreview() {
-    UnifestTheme {
-        MapTopAppBar(
-            title = "건국대학교",
-            boothSearchText = TextFieldValue(),
-            isOnboardingCompleted = false,
-            onMapUiAction = {},
-            onFestivalUiAction = {},
-            selectedChips = persistentListOf("주점", "먹거리"),
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun MapTopAppBarDarkPreview() {
-    UnifestTheme {
-        MapTopAppBar(
-            title = "건국대학교",
-            boothSearchText = TextFieldValue(),
-            isOnboardingCompleted = false,
-            onMapUiAction = {},
-            onFestivalUiAction = {},
-            selectedChips = persistentListOf("주점", "먹거리"),
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun BoothItemPreview() {
-    UnifestTheme {
-        BoothItem(
-            boothInfo = BoothMapModel(
-                id = 1L,
-                name = "컴공 주점",
-                category = "",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                location = "청심대 앞",
-            ),
-            isPopularMode = true,
-            ranking = 1,
-            onAction = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun BoothItemDarkPreview() {
-    UnifestTheme {
-        BoothItem(
-            boothInfo = BoothMapModel(
-                id = 1L,
-                name = "컴공 주점",
-                category = "",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                location = "청심대 앞",
-            ),
-            isPopularMode = true,
-            ranking = 1,
-            onAction = {},
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun RankingBadgePreview() {
-    UnifestTheme {
-        RankingBadge(ranking = 1)
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun RankingBadgeDarkPreview() {
-    UnifestTheme {
-        RankingBadge(ranking = 1)
     }
 }
