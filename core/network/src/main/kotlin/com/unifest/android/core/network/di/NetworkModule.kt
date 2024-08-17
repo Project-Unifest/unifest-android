@@ -2,7 +2,6 @@ package com.unifest.android.core.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.unifest.android.core.network.BuildConfig
-import com.unifest.android.core.network.FileApi
 import com.unifest.android.core.network.UnifestApi
 import com.unifest.android.core.network.UnifestClient
 import dagger.Module
@@ -28,7 +27,6 @@ private val jsonRule = Json {
 }
 
 private val jsonConverterFactory = jsonRule.asConverterFactory("application/json".toMediaType())
-private val fileConverterFactory = jsonRule.asConverterFactory("multipart/form-data".toMediaType())
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -72,19 +70,6 @@ internal object NetworkModule {
             .baseUrl(BuildConfig.SERVER_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(jsonConverterFactory)
-            .build()
-    }
-
-    @FileApi
-    @Singleton
-    @Provides
-    internal fun provideFileApiRetrofit(
-        @UnifestClient okHttpClient: OkHttpClient,
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.SERVER_BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(fileConverterFactory)
             .build()
     }
 }
