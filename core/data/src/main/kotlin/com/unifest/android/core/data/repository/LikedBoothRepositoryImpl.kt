@@ -9,8 +9,7 @@ import com.unifest.android.core.database.LikedBoothDao
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
 import com.unifest.android.core.datastore.TokenDataSource
 import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.network.request.LikedBoothRegisterRequest
-import com.unifest.android.core.network.request.LikedBoothUnregisterRequest
+import com.unifest.android.core.network.request.LikedFestivalRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +20,6 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val likedBoothDao: LikedBoothDao,
-    private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
-    private val tokenDataSource: TokenDataSource,
 ) : LikedBoothRepository {
     override suspend fun getLikedBooths() = runSuspendCatching {
         service.getLikedBooths(getDeviceId(context)).data.map { it.toModel() }
@@ -50,17 +47,5 @@ internal class LikedBoothRepositoryImpl @Inject constructor(
 
     override suspend fun isLikedBooth(booth: BoothDetailModel): Boolean {
         return likedBoothDao.isLikedBooth(booth.id)
-    }
-
-    override suspend fun registerLikedBooth(boothId: Long) = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
-        val fcmToken = tokenDataSource.getFCMToken() ?: ""
-        service.registerLikedBooth(festivalId.toLong(), LikedBoothRegisterRequest(fcmToken))
-    }
-
-    override suspend fun unregisterLikedBooth(boothId: Long) = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
-        val fcmToken = tokenDataSource.getFCMToken() ?: ""
-        service.unregisterLikedBooth(festivalId.toLong(), LikedBoothUnregisterRequest(fcmToken))
     }
 }

@@ -3,8 +3,7 @@ package com.unifest.android.core.network.service
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
-import com.unifest.android.core.network.request.LikedBoothUnregisterRequest
-import com.unifest.android.core.network.request.LikedBoothRegisterRequest
+import com.unifest.android.core.network.request.LikedFestivalRequest
 import com.unifest.android.core.network.response.AllBoothsResponse
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.CheckPinValidationResponse
@@ -84,14 +83,14 @@ interface UnifestService {
     ): WaitingResponse
 
     @POST("booths/{festival-id}/interest")
-    suspend fun registerLikedBooth(
+    suspend fun registerLikedFestival(
         @Path("festival-id") festivalId: Long,
-        @Body likedBoothRegisterRequest: LikedBoothRegisterRequest,
+        @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
     @DELETE("booths/{festival-id}/interest")
-    suspend fun unregisterLikedBooth(
+    suspend fun unregisterLikedFestival(
         @Path("festival-id") festivalId: Long,
-        @Body likedBoothDeleteRequest: LikedBoothUnregisterRequest,
+        @Body likedFestivalRequest: LikedFestivalRequest,
     )
 }
