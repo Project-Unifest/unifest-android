@@ -63,6 +63,7 @@ import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
+import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.booth.component.BoothBottomBar
 import com.unifest.android.feature.booth.component.BoothDescription
@@ -271,7 +272,7 @@ fun BoothDetailScreen(
 
         if (uiState.isPermissionDialogVisible) {
             PermissionDialog(
-                permissionTextProvider = LocationPermissionTextProvider(),
+                permissionTextProvider = NotificationPermissionTextProvider(),
                 isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
                 onDismiss = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
                 navigateToAppSetting = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
