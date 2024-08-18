@@ -89,12 +89,6 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun onPermissionResult(isGranted: Boolean) {
-        if (!isGranted) {
-            _uiState.update { it.copy(isPermissionDialogVisible = true) }
-        }
-    }
-
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
             is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)

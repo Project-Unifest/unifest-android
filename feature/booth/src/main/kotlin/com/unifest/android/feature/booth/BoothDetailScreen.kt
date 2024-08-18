@@ -1,11 +1,6 @@
 package com.unifest.android.feature.booth
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -35,11 +30,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.R
@@ -62,9 +55,6 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.core.ui.component.LocationPermissionTextProvider
-import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
-import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.booth.component.BoothBottomBar
 import com.unifest.android.feature.booth.component.BoothDescription
 import com.unifest.android.feature.booth.component.MenuItem

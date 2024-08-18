@@ -1,6 +1,5 @@
 package com.unifest.android.feature.booth.viewmodel
 
-import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.model.MenuModel
 
 sealed interface BoothUiAction {
