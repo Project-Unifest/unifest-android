@@ -46,10 +46,6 @@ class MapViewModel @Inject constructor(
 
     val permissionDialogQueue = mutableStateListOf<String>()
 
-    fun dismissDialog() {
-        permissionDialogQueue.removeFirst()
-    }
-
     fun onPermissionResult(
         permission: String,
         isGranted: Boolean,
@@ -85,7 +81,7 @@ class MapViewModel @Inject constructor(
 
     private fun requestLocationPermission() {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestPermission)
+            _uiEvent.send(MapUiEvent.RequestPermissions)
         }
     }
 
@@ -101,7 +97,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
-            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
+            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
     }
 
@@ -119,15 +115,10 @@ class MapViewModel @Inject constructor(
         filterBoothsByType(_uiState.value.selectedBoothTypeChips)
     }
 
-    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String?) {
         when (buttonType) {
-            PermissionDialogButtonType.CONFIRM -> {
-                viewModelScope.launch {
-                    _uiState.update {
-                        it.copy(isPermissionDialogVisible = false)
-                    }
-                    _uiEvent.send(MapUiEvent.RequestPermission)
-                }
+            PermissionDialogButtonType.DISMISS -> {
+                dismissDialog()
             }
 
             PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
@@ -136,12 +127,17 @@ class MapViewModel @Inject constructor(
                 }
             }
 
-            PermissionDialogButtonType.DISMISS -> {
-                _uiState.update {
-                    it.copy(isPermissionDialogVisible = false)
+            PermissionDialogButtonType.CONFIRM -> {
+                dismissDialog()
+                viewModelScope.launch {
+                    _uiEvent.send(MapUiEvent.RequestPermission(permission!!))
                 }
             }
         }
+    }
+
+    private fun dismissDialog() {
+        permissionDialogQueue.removeFirst()
     }
 
     private fun filterBoothsByType(chipList: List<String>) {

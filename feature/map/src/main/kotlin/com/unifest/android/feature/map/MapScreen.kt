@@ -59,6 +59,7 @@ import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.navigateToAppSetting
@@ -134,8 +135,12 @@ internal fun MapRoute(
 
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
         when (event) {
-            is MapUiEvent.RequestPermission -> {
+            is MapUiEvent.RequestPermissions -> {
                 permissionResultLauncher.launch(permissionsToRequest)
+            }
+
+            is MapUiEvent.RequestPermission -> {
+                permissionResultLauncher.launch(arrayOf(event.permission))
             }
 
             is MapUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
@@ -170,12 +175,19 @@ internal fun MapRoute(
                 isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(
                     permission,
                 ),
-                onDismiss = mapViewModel::dismissDialog,
-                navigateToAppSetting = activity::navigateToAppSetting,
+                onDismiss = {
+                    mapViewModel.onMapUiAction(
+                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS),
+                    )
+                },
+                navigateToAppSetting = {
+                    mapViewModel.onMapUiAction(
+                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING),
+                    )
+                },
                 onConfirm = {
-                    mapViewModel.dismissDialog()
-                    permissionResultLauncher.launch(
-                        arrayOf(permission),
+                    mapViewModel.onMapUiAction(
+                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM, permission),
                     )
                 },
             )
