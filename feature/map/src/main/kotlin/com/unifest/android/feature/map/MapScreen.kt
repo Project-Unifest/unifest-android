@@ -120,10 +120,12 @@ internal fun MapRoute(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { perms ->
             permissionsToRequest.forEach { permission ->
-                mapViewModel.onPermissionResult(
-                    permission = permission,
-                    isGranted = perms[permission] == true,
-                )
+                if (perms.contains(permission)) {
+                    mapViewModel.onPermissionResult(
+                        permission = permission,
+                        isGranted = perms[permission] == true,
+                    )
+                }
             }
         },
     )

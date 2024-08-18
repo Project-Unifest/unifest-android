@@ -134,7 +134,15 @@ class FestivalViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                    // TODO Toast 추가 하는게 좋을수도?
+                }
+                .onFailure { exception ->
+                    // TODO Toast 를 띄우는게 더 나은 방법일수도
+                    handleException(exception, this@FestivalViewModel)
+                }
         }
     }
 
@@ -181,7 +189,14 @@ class FestivalViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.unregisterLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.deleteLikedFestival(festival)
+                }
+                .onFailure { exception ->
+                    // TODO Toast 를 띄우는게 더 나은 방법일수도
+                    handleException(exception, this@FestivalViewModel)
+                }
         }
     }
 
