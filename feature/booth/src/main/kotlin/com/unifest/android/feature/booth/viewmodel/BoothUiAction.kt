@@ -23,7 +23,6 @@ sealed interface BoothUiAction {
     data object OnPolicyCheckBoxClick : BoothUiAction
     data object OnPrivatePolicyClick : BoothUiAction
     data object OnThirdPartyPolicyClick : BoothUiAction
-    data class OnPermissionDialogButtonClick(val buttonType: PermissionDialogButtonType) : BoothUiAction
 }
 
 enum class ErrorType {

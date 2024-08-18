@@ -1,6 +1,7 @@
 package com.unifest.android.feature.map
 
 import android.Manifest
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -71,6 +72,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
+import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
@@ -87,6 +89,19 @@ import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
 
+val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.POST_NOTIFICATIONS,
+    )
+} else {
+    arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+    )
+}
+
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
@@ -99,17 +114,17 @@ internal fun MapRoute(
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
+    val dialogQueue = mapViewModel.permissionDialogQueue
 
-    val locationPermissions = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-    )
-
-    val locationPermissionResultLauncher = rememberLauncherForActivityResult(
+    val permissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { permissions ->
-            val allPermissionsGranted = permissions.all { it.value }
-            mapViewModel.onPermissionResult(isGranted = allPermissionsGranted)
+        onResult = { perms ->
+            permissionsToRequest.forEach { permission ->
+                mapViewModel.onPermissionResult(
+                    permission = permission,
+                    isGranted = perms[permission] == true,
+                )
+            }
         },
     )
 
@@ -120,8 +135,8 @@ internal fun MapRoute(
 
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
         when (event) {
-            is MapUiEvent.RequestLocationPermission -> {
-                locationPermissionResultLauncher.launch(locationPermissions)
+            is MapUiEvent.RequestPermission -> {
+                permissionResultLauncher.launch(permissionsToRequest)
             }
 
             is MapUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
@@ -137,6 +152,35 @@ internal fun MapRoute(
             is FestivalUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
     }
+
+    dialogQueue
+        .reversed()
+        .forEach { permission ->
+            PermissionDialog(
+                permissionTextProvider = when (permission) {
+                    Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
+                        LocationPermissionTextProvider()
+                    }
+
+                    Manifest.permission.POST_NOTIFICATIONS -> {
+                        NotificationPermissionTextProvider()
+                    }
+
+                    else -> return@forEach
+                },
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(
+                    permission,
+                ),
+                onDismiss = mapViewModel::dismissDialog,
+                navigateToAppSetting = activity::navigateToAppSetting,
+                onConfirm = {
+                    mapViewModel.dismissDialog()
+                    permissionResultLauncher.launch(
+                        arrayOf(permission),
+                    )
+                },
+            )
+        }
 
     MapScreen(
         padding = padding,
@@ -155,7 +199,6 @@ internal fun MapScreen(
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
-    val activity = LocalContext.current.findActivity()
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.5430, 127.07673671067072), 14.8)
     }
@@ -200,15 +243,6 @@ internal fun MapScreen(
                 isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
                 onFestivalUiAction = onFestivalUiAction,
                 isEditMode = festivalUiState.isEditMode,
-            )
-        }
-        if (mapUiState.isPermissionDialogVisible) {
-            PermissionDialog(
-                permissionTextProvider = LocationPermissionTextProvider(),
-                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
-                onDismiss = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
-                navigateToAppSetting = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
-                onConfirm = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
             )
         }
     }

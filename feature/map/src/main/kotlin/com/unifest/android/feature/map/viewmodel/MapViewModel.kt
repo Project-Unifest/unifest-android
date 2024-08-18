@@ -1,5 +1,6 @@
 package com.unifest.android.feature.map.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.feature.map.mapper.toMapModel
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,12 +36,45 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
+    private val messagingRepository: MessagingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<MapUiEvent>()
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
+
+    val permissionDialogQueue = mutableStateListOf<String>()
+
+    fun dismissDialog() {
+        permissionDialogQueue.removeFirst()
+    }
+
+    fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean,
+    ) {
+        if (isGranted && permissionDialogQueue.isEmpty()) {
+            refreshFCMToken()
+        }
+
+        if (!isGranted && !permissionDialogQueue.contains(permission)) {
+            permissionDialogQueue.add(permission)
+        }
+    }
+
+    private fun refreshFCMToken() {
+        viewModelScope.launch {
+            try {
+                val token = messagingRepository.refreshFCMToken()
+                token?.let {
+                    messagingRepository.setFCMToken(it)
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Error getting or saving FCM token")
+            }
+        }
+    }
 
     init {
         requestLocationPermission()
@@ -49,7 +85,7 @@ class MapViewModel @Inject constructor(
 
     private fun requestLocationPermission() {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestLocationPermission)
+            _uiEvent.send(MapUiEvent.RequestPermission)
         }
     }
 
@@ -96,7 +132,7 @@ class MapViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(isPermissionDialogVisible = false)
                     }
-                    _uiEvent.send(MapUiEvent.RequestLocationPermission)
+                    _uiEvent.send(MapUiEvent.RequestPermission)
                 }
             }
 

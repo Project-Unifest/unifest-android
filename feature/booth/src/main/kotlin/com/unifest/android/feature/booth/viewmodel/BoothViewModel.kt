@@ -33,7 +33,6 @@ class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
-    private val messagingRepository: MessagingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
@@ -45,7 +44,6 @@ class BoothViewModel @Inject constructor(
     val uiEvent: Flow<BoothUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        requestNotificationPermission()
         getBoothDetail()
         getLikedBooths()
     }
@@ -71,13 +69,6 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
-            is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
-        }
-    }
-
-    private fun requestNotificationPermission() {
-        viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.RequestNotificationPermission)
         }
     }
 
@@ -389,50 +380,6 @@ class BoothViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
-        }
-    }
-
-    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
-        when (buttonType) {
-            PermissionDialogButtonType.CONFIRM -> {
-                viewModelScope.launch {
-                    _uiState.update {
-                        it.copy(isPermissionDialogVisible = false)
-                    }
-                    _uiEvent.send(BoothUiEvent.RequestNotificationPermission)
-                }
-            }
-
-            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
-                viewModelScope.launch {
-                    _uiEvent.send(BoothUiEvent.NavigateToAppSetting)
-                }
-            }
-
-            PermissionDialogButtonType.DISMISS -> {
-                _uiState.update {
-                    it.copy(isPermissionDialogVisible = false)
-                }
-            }
-        }
-    }
-
-    fun onPermissionResult(isGranted: Boolean) {
-        if (!isGranted) {
-            _uiState.update { it.copy(isPermissionDialogVisible = true) }
-        }
-    }
-
-    fun refreshFCMToken() {
-        viewModelScope.launch {
-            try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    messagingRepository.setFCMToken(it)
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error getting or saving FCM token")
-            }
         }
     }
 }

@@ -95,16 +95,6 @@ internal fun BoothDetailRoute(
     val uriHandler = LocalUriHandler.current
     val activity = context.findActivity()
 
-    val notificationPermissionResultLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            viewModel.refreshFCMToken()
-        } else {
-            viewModel.onPermissionResult(isGranted = isGranted)
-        }
-    }
-
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
             color = Color.Transparent,
@@ -120,19 +110,6 @@ internal fun BoothDetailRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is BoothUiEvent.RequestNotificationPermission -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
-                        PackageManager.PERMISSION_GRANTED
-                    ) {
-                        viewModel.refreshFCMToken()
-                    } else if (activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                        viewModel.onPermissionResult(isGranted = false)
-                    } else {
-                        notificationPermissionResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    }
-                }
-            }
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
@@ -267,16 +244,6 @@ fun BoothDetailScreen(
                 waitingPartySize = uiState.waitingPartySize,
                 waitingTeamNumber = uiState.waitingTeamNumber,
                 onConfirmClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
-            )
-        }
-
-        if (uiState.isPermissionDialogVisible) {
-            PermissionDialog(
-                permissionTextProvider = NotificationPermissionTextProvider(),
-                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
-                onDismiss = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
-                navigateToAppSetting = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
-                onConfirm = { onAction(BoothUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
             )
         }
     }

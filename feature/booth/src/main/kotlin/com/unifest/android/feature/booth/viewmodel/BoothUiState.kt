@@ -18,7 +18,6 @@ data class BoothUiState(
     val isWaitingDialogVisible: Boolean = false,
     val isConfirmDialogVisible: Boolean = false,
     val isMenuImageDialogVisible: Boolean = false,
-    val isPermissionDialogVisible: Boolean = false,
     val isWrongPinInserted: Boolean = false,
     val selectedMenu: MenuModel? = null,
     val boothPinNumber: String = "",
