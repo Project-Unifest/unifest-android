@@ -97,7 +97,6 @@ private const val SnackBarDuration = 1000L
 @Composable
 internal fun BoothDetailRoute(
     padding: PaddingValues,
-    // boothId: Long,
     onBackClick: () -> Unit,
     navigateToBoothLocation: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
