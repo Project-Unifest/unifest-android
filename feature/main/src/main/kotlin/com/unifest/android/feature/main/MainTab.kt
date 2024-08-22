@@ -41,7 +41,8 @@ internal enum class MainTab(
         contentDescription = "Menu Icon",
         label = "메뉴",
         route = MainTabRoute.Menu,
-    );
+    ),
+    ;
 
     companion object {
         @Composable
@@ -51,7 +52,7 @@ internal enum class MainTab(
 
         @Composable
         fun contains(predicate: @Composable (Route) -> Boolean): Boolean {
-            return entries.map {it.route}.any { predicate(it) }
+            return entries.map { it.route }.any { predicate(it) }
         }
     }
 }
