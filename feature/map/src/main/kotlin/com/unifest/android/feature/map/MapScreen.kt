@@ -102,6 +102,7 @@ val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRA
     )
 }
 
+// TODO 권한 관련 문제 (A 허용, B 거부 시 B 다시 허용 할 경우, A 가 거부되었다고 뜨는 문제)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
