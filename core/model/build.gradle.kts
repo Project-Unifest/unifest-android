@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.unifest.jvm.kotlin)
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
