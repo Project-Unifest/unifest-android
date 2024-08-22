@@ -4,28 +4,22 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import androidx.navigation.navArgument
 import com.unifest.android.core.common.extension.sharedViewModel
-import com.unifest.android.feature.booth.BoothLocationRoute
+import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.booth.BoothDetailRoute
+import com.unifest.android.feature.booth.BoothLocationRoute
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-
-const val BOOTH_ID = "booth_id"
-const val BOOTH_ROUTE = "booth_route/{$BOOTH_ID}"
-const val BOOTH_DETAIL_ROUTE = "booth_detail_route"
-const val BOOTH_LOCATION_ROUTE = "booth_location_route"
 
 fun NavController.navigateToBoothDetail(
     boothId: Long,
 ) {
-    navigate("booth_route/$boothId")
+    navigate(Route.Booth.BoothDetail(boothId))
 }
 
 fun NavController.navigateToBoothLocation() {
-    navigate(BOOTH_LOCATION_ROUTE)
+    navigate(Route.Booth.BoothLocation)
 }
 
 fun NavGraphBuilder.boothNavGraph(
@@ -34,17 +28,11 @@ fun NavGraphBuilder.boothNavGraph(
     popBackStack: () -> Unit,
     navigateToBoothLocation: () -> Unit,
 ) {
-    navigation(
-        startDestination = BOOTH_DETAIL_ROUTE,
-        route = BOOTH_ROUTE,
-        arguments = listOf(
-            navArgument(BOOTH_ID) {
-                type = NavType.LongType
-            },
-        ),
+    navigation<Route.Booth>(
+        startDestination = Route.Booth.BoothDetail::class,
     ) {
-        composable(route = BOOTH_DETAIL_ROUTE) { entry ->
-            val viewModel = entry.sharedViewModel<BoothViewModel>(navController)
+        composable<Route.Booth.BoothDetail> { navBackStackEntry ->
+            val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(
                 padding = padding,
                 onBackClick = popBackStack,
@@ -52,8 +40,8 @@ fun NavGraphBuilder.boothNavGraph(
                 viewModel = viewModel,
             )
         }
-        composable(route = BOOTH_LOCATION_ROUTE) { entry ->
-            val viewModel = entry.sharedViewModel<BoothViewModel>(navController)
+        composable<Route.Booth.BoothLocation> { navBackStackEntry ->
+            val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothLocationRoute(
                 onBackClick = popBackStack,
                 viewModel = viewModel,
