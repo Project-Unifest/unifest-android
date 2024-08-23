@@ -18,6 +18,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -93,15 +98,21 @@ internal fun WaitingRoute(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
     waitingUiState: WaitingUiState,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = waitingUiState.isLoading,
+        onRefresh = { onWaitingUiAction(WaitingUiAction.OnRefresh) }
+    )
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .pullRefresh(pullRefreshState)
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
@@ -172,6 +183,12 @@ internal fun WaitingScreen(
                 }
             }
         }
+    PullRefreshIndicator(
+        refreshing = waitingUiState.isLoading,
+        state = pullRefreshState,
+        contentColor = MaterialTheme.colorScheme.primary,
+        scale = true
+    )
     if (waitingUiState.myWaitingList.isEmpty()) {
         Box(
             modifier = Modifier
@@ -208,7 +225,6 @@ internal fun WaitingScreen(
         )
     }
 }
-
 
 @Composable
 fun WaitingInfoItem(

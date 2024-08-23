@@ -38,6 +38,7 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
+            is WaitingUiAction.OnRefresh -> getMyWaitingList()
         }
     }
 
