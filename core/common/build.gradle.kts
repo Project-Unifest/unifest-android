@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.unifest.android.library.compose)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.unifest.android.retrofit)
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

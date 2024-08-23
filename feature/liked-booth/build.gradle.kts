@@ -2,6 +2,7 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
+    alias(libs.plugins.kotlin.serialization)
     // alias(libs.plugins.compose.investigator)
 }
 
