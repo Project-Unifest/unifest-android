@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,11 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.BoothTitle3
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.DarkGrey300
+import com.unifest.android.core.designsystem.theme.DarkGrey400
+import com.unifest.android.core.designsystem.theme.DarkRed
+import com.unifest.android.core.designsystem.theme.LightGrey200
+import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -140,7 +146,7 @@ fun UnifestDialog(
                             .weight(1f)
                             .height(45.dp)
                             .padding(start = 4.dp),
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = if (isSystemInDarkTheme()) DarkGrey400 else LightGrey200,
                     ) {
                         Text(
                             text = stringResource(id = cancelTextResId),
