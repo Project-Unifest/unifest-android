@@ -37,6 +37,7 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnPullToRefresh -> setNetworkErrorDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
+            is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
         }
     }
 
@@ -78,7 +79,13 @@ class WaitingViewModel @Inject constructor(
 
     private fun navigateToBoothDetail(boothId: Long) {
         viewModelScope.launch {
-//            _uiEvent.send(WaitingUiEvent.NavigateToBoothDetail(boothId))
+            _uiEvent.send(WaitingUiEvent.NavigateToBoothDetail(boothId))
+        }
+    }
+
+    private fun navigateToMap() {
+        viewModelScope.launch {
+            _uiEvent.send(WaitingUiEvent.NavigateToMap)
         }
     }
 

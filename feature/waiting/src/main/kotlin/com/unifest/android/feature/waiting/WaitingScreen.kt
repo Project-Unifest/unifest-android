@@ -2,6 +2,7 @@ package com.unifest.android.feature.waiting
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,6 +70,7 @@ import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
 internal fun WaitingRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     viewModel: WaitingViewModel = hiltViewModel(),
 ) {
     val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,6 +78,8 @@ internal fun WaitingRoute(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is WaitingUiEvent.NavigateBack -> popBackStack()
+            is WaitingUiEvent.NavigateToMap -> popBackStack()
+            is WaitingUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }
     LaunchedEffect(key1 = Unit) {
@@ -189,6 +193,9 @@ internal fun WaitingScreen(
                         textDecoration = TextDecoration.Underline
                     ),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.clickable {
+                        onWaitingUiAction(WaitingUiAction.OnLookForBoothClick)
+                    }
                 )
             }
         }
