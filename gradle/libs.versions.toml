@@ -16,7 +16,7 @@ google-service = "4.4.2"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
-kotlin-ktlint-source = "0.50.0"
+kotlin-ktlint-source = "0.51.0-FINAL"
 
 kotlinx-coroutines = "1.9.0-RC"
 kotlinx-datetime = "0.6.0"
