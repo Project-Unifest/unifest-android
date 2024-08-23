@@ -8,7 +8,6 @@ import com.unifest.android.core.data.repository.WaitingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,11 +32,11 @@ class WaitingViewModel @Inject constructor(
 
     fun onWaitingUiAction(action: WaitingUiAction) {
         when (action) {
-            is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogVisible(true)
-            is WaitingUiAction.OnCheckBoothDetailClick -> setNetworkErrorDialogVisible(true)
+            is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
+            is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
             is WaitingUiAction.OnPullToRefresh -> setNetworkErrorDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
-            is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> setWaitingCancelDialogVisible(false)
+            is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
         }
     }
 
@@ -52,6 +51,34 @@ class WaitingViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@WaitingViewModel)
                 }
+        }
+    }
+    //todo:404 일때, pull to refresh
+
+    private fun setWaitingCancelDialogWaitingId(waitingId: Long) {
+        setWaitingCancelDialogVisible(true)
+        _uiState.update {
+            it.copy(waitingCancelDialogWaitingId = waitingId)
+        }
+    }
+
+    private fun cancelBoothWaiting() {
+        viewModelScope.launch {
+            waitingRepository.cancelBoothWaiting(_uiState.value.waitingCancelDialogWaitingId)
+                .onSuccess {
+                    getMyWaitingList()
+                    setWaitingCancelDialogVisible(false)
+                }
+                .onFailure { exception ->
+                    setWaitingCancelDialogVisible(false)
+                    handleException(exception, this@WaitingViewModel)
+                }
+        }
+    }
+
+    private fun navigateToBoothDetail(boothId: Long) {
+        viewModelScope.launch {
+//            _uiEvent.send(WaitingUiEvent.NavigateToBoothDetail(boothId))
         }
     }
 

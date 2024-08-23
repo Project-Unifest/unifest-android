@@ -157,8 +157,7 @@ internal fun WaitingScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         WaitingInfoItem(
                             myWaitingModel = waitingItem,
-                            onWaitingCancelClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick) },
-                            onCheckBoothDetailClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick) },
+                            onWaitingUiAction = onWaitingUiAction,
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -203,8 +202,7 @@ internal fun WaitingScreen(
 @Composable
 fun WaitingInfoItem(
     myWaitingModel: MyWaitingModel,
-    onWaitingCancelClick: () -> Unit,
-    onCheckBoothDetailClick: () -> Unit,
+    onWaitingUiAction: (WaitingUiAction) -> Unit
 ) {
     Card(
         colors = CardColors(
@@ -308,7 +306,7 @@ fun WaitingInfoItem(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 UnifestOutlinedButton(
-                    onClick = { onWaitingCancelClick() },
+                    onClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId)) },
                     containerColor = LightGrey100,
                     borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
@@ -321,7 +319,7 @@ fun WaitingInfoItem(
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 UnifestOutlinedButton(
-                    onClick = { onCheckBoothDetailClick() },
+                    onClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick(myWaitingModel.boothId)) },
                     containerColor = LightGrey100,
                     borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
@@ -366,8 +364,7 @@ fun WaitingScreenComponentPreview() {
                 waitingOrder = 1L,
                 boothName = "Booth Name",
             ),
-            onWaitingCancelClick = {},
-            onCheckBoothDetailClick = {},
+            onWaitingUiAction = {},
         )
     }
 }

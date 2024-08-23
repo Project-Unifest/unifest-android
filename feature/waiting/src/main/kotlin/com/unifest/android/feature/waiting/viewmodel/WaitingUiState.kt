@@ -11,4 +11,5 @@ data class WaitingUiState(
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
     val isWaitingCancelDialogVisible: Boolean = false,
+    val waitingCancelDialogWaitingId: Long = 0,
 )
