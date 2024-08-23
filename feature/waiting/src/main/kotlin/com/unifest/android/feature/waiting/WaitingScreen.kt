@@ -149,7 +149,7 @@ internal fun WaitingScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.waiting_total_cases, 2),
+                        text = stringResource(id = R.string.waiting_total_cases, waitingUiState.myWaitingList.size),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content7,
                     )
@@ -183,12 +183,12 @@ internal fun WaitingScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "신청한 웨이팅이 없어요",
+                    text = stringResource(id = R.string.waiting_no_waiting),
                     style = WaitingNumber4,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "주점/부스 구경하러 가기>",
+                    text = stringResource(id = R.string.waiting_no_waiting_description),
                     style = Content2.copy(
                         textDecoration = TextDecoration.Underline
                     ),
