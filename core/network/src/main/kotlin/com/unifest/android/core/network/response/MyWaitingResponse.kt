@@ -10,7 +10,7 @@ data class MyWaitingResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<MyWaiting>,
+    val data: List<MyWaiting>?=null,
 )
 
 @Serializable

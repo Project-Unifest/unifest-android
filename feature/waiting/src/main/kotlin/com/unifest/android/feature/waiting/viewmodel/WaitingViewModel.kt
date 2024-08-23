@@ -40,7 +40,7 @@ class WaitingViewModel @Inject constructor(
         }
     }
 
-    private fun getMyWaitingList() {
+    fun getMyWaitingList() {
         viewModelScope.launch {
             waitingRepository.getMyWaitingList()
                 .onSuccess { waitingLists ->
@@ -53,7 +53,7 @@ class WaitingViewModel @Inject constructor(
                 }
         }
     }
-    //todo:404 일때, pull to refresh
+    //pull to refresh
 
     private fun setWaitingCancelDialogWaitingId(waitingId: Long) {
         setWaitingCancelDialogVisible(true)

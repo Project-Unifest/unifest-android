@@ -17,7 +17,7 @@ class WaitingRepositoryImpl @Inject constructor(
     override suspend fun getMyWaitingList() = runSuspendCatching {
         service.getMyWaitingList(
             deviceId = getDeviceId(context),
-        ).data.map { it.toModel() }
+        ).data?.map { it.toModel() } ?: emptyList()
     }
 
     override suspend fun cancelBoothWaiting(waitingId:Long): Result<Unit> = runSuspendCatching {
