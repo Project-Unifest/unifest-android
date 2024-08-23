@@ -90,7 +90,6 @@ interface UnifestService {
 
     @PUT("waiting")
     suspend fun cancelBoothWaiting(
-        @Body request: WaitingRequest
+        @Body request: WaitingRequest,
     ): WaitingResponse
-
 }

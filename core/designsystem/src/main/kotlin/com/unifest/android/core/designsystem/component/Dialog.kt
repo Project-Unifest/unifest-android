@@ -52,11 +52,8 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.BoothTitle3
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.DarkGrey300
 import com.unifest.android.core.designsystem.theme.DarkGrey400
-import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey200
-import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -245,7 +242,7 @@ fun WaitingPinDialog(
                     ),
                     cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
+                        keyboardType = KeyboardType.Number,
                     ),
                     decorationBox = { innerTextField ->
                         if (pinNumber.isEmpty()) {
@@ -414,7 +411,7 @@ fun WaitingDialog(
                 ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
                 ),
                 decorationBox = { innerTextField ->
                     if (phoneNumber.isEmpty()) {

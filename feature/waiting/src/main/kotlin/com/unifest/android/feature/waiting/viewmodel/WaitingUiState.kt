@@ -1,6 +1,5 @@
 package com.unifest.android.feature.waiting.viewmodel
 
-import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MyWaitingModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

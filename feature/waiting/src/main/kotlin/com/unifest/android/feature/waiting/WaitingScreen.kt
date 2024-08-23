@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -107,7 +106,7 @@ internal fun WaitingScreen(
 ) {
     val pullRefreshState = rememberPullRefreshState(
         refreshing = waitingUiState.isLoading,
-        onRefresh = { onWaitingUiAction(WaitingUiAction.OnRefresh) }
+        onRefresh = { onWaitingUiAction(WaitingUiAction.OnRefresh) },
     )
     Box(
         modifier = Modifier
@@ -167,33 +166,32 @@ internal fun WaitingScreen(
                 }
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }
-
-                itemsIndexed(
-                    items = waitingUiState.myWaitingList,
-                    key = { _, waitingItem -> waitingItem.waitingId },
-                ) { _, waitingItem ->
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        WaitingInfoItem(
-                            myWaitingModel = waitingItem,
-                            onWaitingUiAction = onWaitingUiAction,
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
+            itemsIndexed(
+                items = waitingUiState.myWaitingList,
+                key = { _, waitingItem -> waitingItem.waitingId },
+            ) { _, waitingItem ->
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    WaitingInfoItem(
+                        myWaitingModel = waitingItem,
+                        onWaitingUiAction = onWaitingUiAction,
+                    )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
+    }
     PullRefreshIndicator(
         refreshing = waitingUiState.isLoading,
         state = pullRefreshState,
         contentColor = MaterialTheme.colorScheme.primary,
-        scale = true
+        scale = true,
     )
     if (waitingUiState.myWaitingList.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -207,12 +205,12 @@ internal fun WaitingScreen(
                 Text(
                     text = stringResource(id = R.string.waiting_no_waiting_description),
                     style = Content2.copy(
-                        textDecoration = TextDecoration.Underline
+                        textDecoration = TextDecoration.Underline,
                     ),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.clickable {
                         onWaitingUiAction(WaitingUiAction.OnLookForBoothClick)
-                    }
+                    },
                 )
             }
         }
@@ -229,7 +227,7 @@ internal fun WaitingScreen(
 @Composable
 fun WaitingInfoItem(
     myWaitingModel: MyWaitingModel,
-    onWaitingUiAction: (WaitingUiAction) -> Unit
+    onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
     Card(
         colors = CardColors(

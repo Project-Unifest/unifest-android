@@ -55,7 +55,6 @@ class WaitingViewModel @Inject constructor(
                 }
         }
     }
-    //pull to refresh
 
     private fun setWaitingCancelDialogWaitingId(waitingId: Long) {
         setWaitingCancelDialogVisible(true)
@@ -95,7 +94,6 @@ class WaitingViewModel @Inject constructor(
             it.copy(isWaitingCancelDialogVisible = flag)
         }
     }
-
 
     override fun setServerErrorDialogVisible(flag: Boolean) {
         _uiState.update {

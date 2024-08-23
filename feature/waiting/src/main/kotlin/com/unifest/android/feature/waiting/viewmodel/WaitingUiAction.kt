@@ -7,5 +7,5 @@ sealed interface WaitingUiAction {
     data object OnWaitingCancelDialogCancelClick : WaitingUiAction
     data object OnWaitingCancelDialogConfirmClick : WaitingUiAction
     data object OnLookForBoothClick : WaitingUiAction
-    data object OnRefresh: WaitingUiAction
+    data object OnRefresh : WaitingUiAction
 }

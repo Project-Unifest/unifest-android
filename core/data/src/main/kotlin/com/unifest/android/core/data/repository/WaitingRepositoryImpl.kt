@@ -4,7 +4,6 @@ import android.content.Context
 import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
-import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,14 +19,12 @@ class WaitingRepositoryImpl @Inject constructor(
         ).data?.map { it.toModel() } ?: emptyList()
     }
 
-    override suspend fun cancelBoothWaiting(waitingId:Long): Result<Unit> = runSuspendCatching {
+    override suspend fun cancelBoothWaiting(waitingId: Long): Result<Unit> = runSuspendCatching {
         service.cancelBoothWaiting(
             WaitingRequest(
                 waitingId = waitingId,
                 deviceId = getDeviceId(context),
             ),
         ).data.toModel()
-
-
     }
 }
