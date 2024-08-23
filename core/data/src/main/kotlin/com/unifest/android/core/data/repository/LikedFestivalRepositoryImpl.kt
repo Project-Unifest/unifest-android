@@ -41,22 +41,30 @@ internal class LikedFestivalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecentLikedFestival(): String {
-        return recentLikedFestivalDataSource.getRecentLikedFestival()
+        return recentLikedFestivalDataSource.getRecentLikedFestivalName()
     }
 
-    override suspend fun setRecentLikedFestival(schoolName: String) {
-        recentLikedFestivalDataSource.setRecentLikedFestival(schoolName)
+    override suspend fun setRecentLikedFestival(festivalName: String) {
+        recentLikedFestivalDataSource.setRecentLikedFestivalName(festivalName)
+    }
+
+    override suspend fun getRecentLikedFestivalId(): Long {
+        return recentLikedFestivalDataSource.getRecentLikedFestivalId()
+    }
+
+    override suspend fun setRecentLikedFestivalId(festivalId: Long) {
+        recentLikedFestivalDataSource.setRecentLikedFestivalId(festivalId)
     }
 
     override suspend fun registerLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
         val fcmToken = tokenDataSource.getFCMToken() ?: ""
-        service.registerLikedFestival(festivalId.toLong(), LikedFestivalRequest(fcmToken))
+        service.registerLikedFestival(festivalId, LikedFestivalRequest(fcmToken))
     }
 
     override suspend fun unregisterLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival()
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
         val fcmToken = tokenDataSource.getFCMToken() ?: ""
-        service.unregisterLikedFestival(festivalId.toLong(), LikedFestivalRequest(fcmToken))
+        service.unregisterLikedFestival(festivalId, LikedFestivalRequest(fcmToken))
     }
 }
