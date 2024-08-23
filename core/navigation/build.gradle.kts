@@ -1,11 +1,12 @@
 plugins {
-    alias(libs.plugins.unifest.jvm.kotlin)
+    alias(libs.plugins.unifest.android.library)
     alias(libs.plugins.kotlin.serialization)
 }
 
+android {
+    namespace = "com.unifest.android.core.navigation"
+}
+
 dependencies {
-    compileOnly(
-        libs.compose.stable.marker,
-    )
     implementation(libs.kotlinx.serialization.json)
 }

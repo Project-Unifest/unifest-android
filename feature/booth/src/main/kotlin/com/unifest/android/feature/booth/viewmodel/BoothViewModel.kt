@@ -10,7 +10,6 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.MenuModel
-import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -30,6 +29,10 @@ class BoothViewModel @Inject constructor(
     private val likedBoothRepository: LikedBoothRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
+    companion object {
+        private const val BOOTH_ID = "boothId"
+    }
+
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 
     private val _uiState = MutableStateFlow(BoothUiState())

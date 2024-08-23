@@ -1,5 +1,5 @@
 # unifest-android
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.23-blue.svg)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-8.7-green.svg)](https://gradle.org/)
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-2023.2.1%20%28Iguana%29-green)](https://developer.android.com/studio)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
@@ -35,7 +35,7 @@
 
 - IDE : Android Studio Iguana
 - JDK : Java 17을 실행할 수 있는 JDK
-- Kotlin Language : 1.9.23
+- Kotlin Language : 2.0.0
 
 ### Language
 

@@ -16,7 +16,7 @@ google-service = "4.4.2"
 
 kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
-kotlin-ktlint-source = "0.50.0"
+kotlin-ktlint-source = "0.51.0-FINAL"
 
 kotlinx-coroutines = "1.9.0-RC"
 kotlinx-datetime = "0.6.0"
@@ -30,7 +30,7 @@ androidx-core = "1.13.1"
 androidx-lifecycle = "2.8.4"
 androidx-splash = "1.0.1"
 androidx-startup = "1.1.1"
-androidx-navigation = "2.8.0-beta06"
+androidx-navigation = "2.8.0-rc01"
 androidx-datastore = "1.1.1"
 androidx-room = "2.6.1"
 androidx-activity-compose = "1.9.1"
@@ -60,6 +60,11 @@ flexible-bottomsheet = "0.1.4"
 naver-map-compose = "1.7.1"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 [libraries]
 
@@ -127,6 +132,11 @@ flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottoms
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 
