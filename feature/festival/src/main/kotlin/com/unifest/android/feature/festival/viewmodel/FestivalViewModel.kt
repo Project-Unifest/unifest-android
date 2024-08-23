@@ -137,11 +137,10 @@ class FestivalViewModel @Inject constructor(
             likedFestivalRepository.registerLikedFestival()
                 .onSuccess {
                     likedFestivalRepository.insertLikedFestivalAtSearch(festival)
-                    // TODO Toast 추가 하는게 좋을수도?
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_message)))
                 }
                 .onFailure { exception ->
-                    // TODO Toast 를 띄우는게 더 나은 방법일수도
-                    handleException(exception, this@FestivalViewModel)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
                 }
         }
     }
@@ -192,10 +191,10 @@ class FestivalViewModel @Inject constructor(
             likedFestivalRepository.unregisterLikedFestival()
                 .onSuccess {
                     likedFestivalRepository.deleteLikedFestival(festival)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))
                 }
                 .onFailure { exception ->
-                    // TODO Toast 를 띄우는게 더 나은 방법일수도
-                    handleException(exception, this@FestivalViewModel)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_failed_message)))
                 }
         }
     }

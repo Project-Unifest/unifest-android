@@ -90,6 +90,10 @@
     <string name="search_result">검색결과</string>
     <string name="no_result">검색 결과가 없어요</string>
     <string name="festival_search_onboarding_title">여기를 터치하여 해당 학교로 이동해보세요.</string>
+    <string name="liked_festival_saved_message">관심 축제로 저장했습니다.</string>
+    <string name="liked_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
+    <string name="liked_festival_removed_message">관심 축제에서 삭제했습니다.</string>
+    <string name="liked_festival_removed_failed_message">관심 축제에서 삭제를 실패했습니다.</string>
 
     <!--    Dialog-->
     <string name="server_error_title">서버 문제 발생</string>
