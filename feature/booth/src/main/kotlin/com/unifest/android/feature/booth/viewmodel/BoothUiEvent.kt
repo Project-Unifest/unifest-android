@@ -9,5 +9,5 @@ sealed interface BoothUiEvent {
     data object NavigateToPrivatePolicy : BoothUiEvent
     data object NavigateToThirdPartyPolicy : BoothUiEvent
     data class ShowToast(val message: UiText) : BoothUiEvent
-    data object NavigateToAppSetting: BoothUiEvent
+    data object NavigateToAppSetting : BoothUiEvent
 }

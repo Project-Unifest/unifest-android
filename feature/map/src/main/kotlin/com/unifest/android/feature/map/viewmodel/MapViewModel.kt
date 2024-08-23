@@ -59,6 +59,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun refreshFCMToken() {
         viewModelScope.launch {
             try {

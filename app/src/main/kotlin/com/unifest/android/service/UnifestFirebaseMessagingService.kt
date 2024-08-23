@@ -13,7 +13,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.feature.main.MainActivity
 import timber.log.Timber
 
-class UnifestFirebaseMessagingService: FirebaseMessagingService() {
+class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         if (remoteMessage.notification != null) {
