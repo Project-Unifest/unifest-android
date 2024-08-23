@@ -2,8 +2,9 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
     // alias(libs.plugins.compose.investigator)
-    id("kotlin-parcelize")
 }
 
 android {
