@@ -63,11 +63,10 @@ class HomeViewModel @Inject constructor(
             likedFestivalRepository.registerLikedFestival()
                 .onSuccess {
                     likedFestivalRepository.insertLikedFestivalAtHome(festival)
-                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_message)))
                 }
                 .onFailure { exception ->
-                    // TODO snack bar 를 띄우는게 더 나은 방법일수도
-                    handleException(exception, this@HomeViewModel)
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_failed_message)))
                 }
         }
     }
