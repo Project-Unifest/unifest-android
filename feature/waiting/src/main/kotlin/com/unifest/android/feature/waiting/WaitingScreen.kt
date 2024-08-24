@@ -52,6 +52,7 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.LightGrey700
@@ -63,6 +64,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.designsystem.theme.WaitingNumber4
+import com.unifest.android.core.designsystem.theme.WaitingNumber5
 import com.unifest.android.core.model.MyWaitingModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
@@ -200,6 +202,7 @@ internal fun WaitingScreen(
                 Text(
                     text = stringResource(id = R.string.waiting_no_waiting),
                     style = WaitingNumber4,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -278,18 +281,20 @@ fun WaitingInfoItem(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = myWaitingModel.waitingOrder.toString(),
-                        style = WaitingNumber,
+                        text = if (myWaitingModel.waitingOrder.toInt() == 1) stringResource(id = R.string.waiting_my_turn) else myWaitingModel.waitingOrder.toString(),
+                        style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(id = R.string.waiting_nth),
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.alignByBaseline(),
-                    )
+                    if (myWaitingModel.waitingOrder.toInt() != 1) {
+                        Text(
+                            text = stringResource(id = R.string.waiting_nth),
+                            fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.alignByBaseline(),
+                        )
+                    }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -332,8 +337,8 @@ fun WaitingInfoItem(
             ) {
                 UnifestOutlinedButton(
                     onClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId)) },
-                    containerColor = LightGrey100,
-                    borderColor = LightGrey100,
+                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
+                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
