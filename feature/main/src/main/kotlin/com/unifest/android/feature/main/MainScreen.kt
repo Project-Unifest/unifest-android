@@ -128,6 +128,7 @@ internal fun MainScreen(
             waitingNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
             menuNavGraph(
                 padding = innerPadding,
