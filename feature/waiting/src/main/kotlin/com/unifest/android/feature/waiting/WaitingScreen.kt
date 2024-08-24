@@ -18,17 +18,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -71,6 +71,7 @@ import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun WaitingRoute(
@@ -99,21 +100,27 @@ internal fun WaitingRoute(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
     waitingUiState: WaitingUiState,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = waitingUiState.isLoading,
-        onRefresh = { onWaitingUiAction(WaitingUiAction.OnRefresh) },
-    )
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
+        if (pullToRefreshState.isRefreshing) {
+            delay(1000)
+            onWaitingUiAction(WaitingUiAction.OnRefresh)
+            pullToRefreshState.endRefresh()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pullRefresh(pullRefreshState)
+            .nestedScroll(pullToRefreshState.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
@@ -182,13 +189,13 @@ internal fun WaitingScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
+        if (pullToRefreshState.isRefreshing) {
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = pullToRefreshState,
+            )
+        }
     }
-    PullRefreshIndicator(
-        refreshing = waitingUiState.isLoading,
-        state = pullRefreshState,
-        contentColor = MaterialTheme.colorScheme.primary,
-        scale = true,
-    )
     if (waitingUiState.myWaitingList.isEmpty()) {
         Box(
             modifier = Modifier
