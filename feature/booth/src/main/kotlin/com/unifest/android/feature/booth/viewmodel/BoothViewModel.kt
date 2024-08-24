@@ -199,7 +199,6 @@ class BoothViewModel @Inject constructor(
                         it.copy(
                             waitingId = waiting.waitingId,
                             waitingTel = "",
-                            waitingPartySize = 1,
                             boothPinNumber = "",
                         )
                     }

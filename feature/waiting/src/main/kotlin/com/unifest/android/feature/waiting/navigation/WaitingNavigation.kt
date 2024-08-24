@@ -15,11 +15,13 @@ fun NavController.navigateToWaiting(navOptions: NavOptions) {
 fun NavGraphBuilder.waitingNavGraph(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
 ) {
     composable<MainTabRoute.Waiting> {
         WaitingRoute(
             padding = padding,
             popBackStack = popBackStack,
+            navigateToBoothDetail = navigateToBoothDetail,
         )
     }
 }

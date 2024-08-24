@@ -2,6 +2,7 @@ package com.unifest.android.feature.waiting
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,22 +16,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,9 +47,12 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.WaitingCancelDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
+import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.LightGrey700
@@ -52,16 +63,21 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
+import com.unifest.android.core.designsystem.theme.WaitingNumber4
+import com.unifest.android.core.designsystem.theme.WaitingNumber5
+import com.unifest.android.core.model.MyWaitingModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun WaitingRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     viewModel: WaitingViewModel = hiltViewModel(),
 ) {
     val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,7 +85,12 @@ internal fun WaitingRoute(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is WaitingUiEvent.NavigateBack -> popBackStack()
+            is WaitingUiEvent.NavigateToMap -> popBackStack()
+            is WaitingUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
+    }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getMyWaitingList()
     }
 
     WaitingScreen(
@@ -79,16 +100,27 @@ internal fun WaitingRoute(
     )
 }
 
-@Suppress("UNUSED_PARAMETER")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
     waitingUiState: WaitingUiState,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
+        if (pullToRefreshState.isRefreshing) {
+            delay(1000)
+            onWaitingUiAction(WaitingUiAction.OnRefresh)
+            pullToRefreshState.endRefresh()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .nestedScroll(pullToRefreshState.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
@@ -136,48 +168,76 @@ internal fun WaitingScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.waiting_total_cases, 2),
+                        text = stringResource(id = R.string.waiting_total_cases, waitingUiState.myWaitingList.size),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content7,
                     )
                 }
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }
-            item {
-                WaitInfoCard(location = "컴공 주점", order = 35, waitingNumber = 112, people = 3)
+            itemsIndexed(
+                items = waitingUiState.myWaitingList,
+                key = { _, waitingItem -> waitingItem.waitingId },
+            ) { _, waitingItem ->
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    WaitingInfoItem(
+                        myWaitingModel = waitingItem,
+                        onWaitingUiAction = onWaitingUiAction,
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
-                WaitInfoCard(location = "학생회 부스", order = 13, waitingNumber = 134, people = 3)
             }
         }
-//        if (waitingUiState.waitingLists.isEmpty()) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(bottom = 50.dp),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//        ) {
-//            Text(
-//                text = "신청한 웨이팅이 없어요",
-//                style = Title4.copy(fontSize = 16.sp),
-//            )
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Text(
-//                text = "주점/부스 구경하러 가기>",
-//                style = Title4.copy(fontSize = 14.sp),
-//                color = Color.Gray,
-//            )
-//        }
-//    }
+        if (pullToRefreshState.isRefreshing) {
+            PullToRefreshContainer(
+                modifier = Modifier.align(Alignment.TopCenter),
+                state = pullToRefreshState,
+            )
+        }
+    }
+    if (waitingUiState.myWaitingList.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.waiting_no_waiting),
+                    style = WaitingNumber4,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(id = R.string.waiting_no_waiting_description),
+                    style = Content2.copy(
+                        textDecoration = TextDecoration.Underline,
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.clickable {
+                        onWaitingUiAction(WaitingUiAction.OnLookForBoothClick)
+                    },
+                )
+            }
+        }
+    }
+
+    if (waitingUiState.isWaitingCancelDialogVisible) {
+        WaitingCancelDialog(
+            onCancelClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogCancelClick) },
+            onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogConfirmClick) },
+        )
     }
 }
 
 @Composable
-fun WaitInfoCard(
-    location: String,
-    order: Int,
-    waitingNumber: Int,
-    people: Int,
+fun WaitingInfoItem(
+    myWaitingModel: MyWaitingModel,
+    onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
     Card(
         colors = CardColors(
@@ -212,7 +272,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = location,
+                        text = myWaitingModel.boothName,
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title3,
                     )
@@ -228,18 +288,24 @@ fun WaitInfoCard(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = order.toString(),
-                        style = WaitingNumber,
+                        text = if (myWaitingModel.waitingOrder.toInt() == 1) {
+                            stringResource(id = R.string.waiting_my_turn)
+                        } else {
+                            myWaitingModel.waitingOrder.toString()
+                        },
+                        style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(id = R.string.waiting_nth),
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.alignByBaseline(),
-                    )
+                    if (myWaitingModel.waitingOrder.toInt() != 1) {
+                        Text(
+                            text = stringResource(id = R.string.waiting_nth),
+                            fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.alignByBaseline(),
+                        )
+                    }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -251,7 +317,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = "$waitingNumber",
+                        text = myWaitingModel.waitingId.toString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber2,
                     )
@@ -269,7 +335,7 @@ fun WaitInfoCard(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "$people",
+                        text = myWaitingModel.partySize.toString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber2,
                     )
@@ -281,9 +347,9 @@ fun WaitInfoCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 UnifestOutlinedButton(
-                    onClick = { },
-                    containerColor = LightGrey100,
-                    borderColor = LightGrey100,
+                    onClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId)) },
+                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
+                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
@@ -294,7 +360,7 @@ fun WaitInfoCard(
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 UnifestOutlinedButton(
-                    onClick = { },
+                    onClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick(myWaitingModel.boothId)) },
                     containerColor = LightGrey100,
                     borderColor = LightGrey100,
                     modifier = Modifier.weight(1f),
@@ -326,11 +392,20 @@ fun WaitingScreenPreview() {
 @Composable
 fun WaitingScreenComponentPreview() {
     UnifestTheme {
-        WaitInfoCard(
-            location = "컴공 주점",
-            order = 35,
-            waitingNumber = 112,
-            people = 3,
+        WaitingInfoItem(
+            myWaitingModel = MyWaitingModel(
+                boothId = 1L,
+                waitingId = 1L,
+                partySize = 2L,
+                tel = "010-1234-5678",
+                deviceId = "1234567890",
+                createdAt = "2021-09-01T00:00:00",
+                updatedAt = "2021-09-01T00:00:00",
+                status = "waiting",
+                waitingOrder = 1L,
+                boothName = "Booth Name",
+            ),
+            onWaitingUiAction = {},
         )
     }
 }

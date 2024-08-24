@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -36,6 +38,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -49,6 +52,8 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.BoothTitle3
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content6
+import com.unifest.android.core.designsystem.theme.DarkGrey400
+import com.unifest.android.core.designsystem.theme.LightGrey200
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -140,7 +145,7 @@ fun UnifestDialog(
                             .weight(1f)
                             .height(45.dp)
                             .padding(start = 4.dp),
-                        containerColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        containerColor = if (isSystemInDarkTheme()) DarkGrey400 else LightGrey200,
                     ) {
                         Text(
                             text = stringResource(id = cancelTextResId),
@@ -236,6 +241,9 @@ fun WaitingPinDialog(
                         color = MaterialTheme.colorScheme.onBackground,
                     ),
                     cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                    ),
                     decorationBox = { innerTextField ->
                         if (pinNumber.isEmpty()) {
                             Text(
@@ -402,6 +410,9 @@ fun WaitingDialog(
                     color = MaterialTheme.colorScheme.onBackground,
                 ),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                ),
                 decorationBox = { innerTextField ->
                     if (phoneNumber.isEmpty()) {
                         Text(
@@ -672,6 +683,26 @@ fun AppUpdateDialog(
             onCancelClick = {},
             onConfirmClick = onUpdateClick,
             properties = properties,
+        )
+    }
+}
+
+@Composable
+fun WaitingCancelDialog(
+    onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit,
+) {
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.waiting_cancel_dialog_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.waiting_cancel_dialog_description,
+            confirmTextResId = R.string.confirm,
+            cancelTextResId = R.string.cancel,
+            onCancelClick = onCancelClick,
+            onConfirmClick = onConfirmClick,
         )
     }
 }
