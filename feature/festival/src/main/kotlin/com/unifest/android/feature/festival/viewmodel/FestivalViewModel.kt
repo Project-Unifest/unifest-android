@@ -134,7 +134,14 @@ class FestivalViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
+                }
         }
     }
 
@@ -181,7 +188,14 @@ class FestivalViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.unregisterLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.deleteLikedFestival(festival)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_failed_message)))
+                }
         }
     }
 

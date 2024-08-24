@@ -1,4 +1,4 @@
-package com.unifest.android.feature.map
+package com.unifest.android.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,19 +25,19 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.map.viewmodel.MapUiAction
-import com.unifest.android.feature.map.viewmodel.PermissionDialogButtonType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PermissionDialog(
+fun PermissionDialog(
     permissionTextProvider: PermissionTextProvider,
     isPermanentlyDeclined: Boolean,
-    onMapUiAction: (MapUiAction) -> Unit,
+    onDismiss: () -> Unit,
+    navigateToAppSetting: () -> Unit,
+    onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BasicAlertDialog(
-        onDismissRequest = { onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
+        onDismissRequest = onDismiss,
         content = {
             Column(
                 modifier = Modifier
@@ -73,9 +73,9 @@ internal fun PermissionDialog(
                         .padding(top = 16.dp)
                         .noRippleClickable {
                             if (isPermanentlyDeclined) {
-                                onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.GO_TO_APP_SETTINGS))
+                                navigateToAppSetting()
                             } else {
-                                onMapUiAction(MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM))
+                                onConfirm()
                             }
                         },
                     textAlign = TextAlign.Center,
@@ -104,6 +104,16 @@ class LocationPermissionTextProvider : PermissionTextProvider {
     }
 }
 
+class NotificationPermissionTextProvider : PermissionTextProvider {
+    override fun getDescription(isPermanentlyDeclined: Boolean): String {
+        return if (isPermanentlyDeclined) {
+            "알림 권한 요청을 거부하였습니다.\n앱 설정으로 이동하여 권한을 부여할 수 있습니다."
+        } else {
+            "관심 축제의 부스 정보를 알림을 통해 제공받으려면 알림 권한이 필요합니다."
+        }
+    }
+}
+
 @ComponentPreview
 @Composable
 fun PermissionDialogPreview() {
@@ -111,7 +121,9 @@ fun PermissionDialogPreview() {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = false,
-            onMapUiAction = {},
+            onDismiss = {},
+            navigateToAppSetting = {},
+            onConfirm = {},
         )
     }
 }
@@ -123,7 +135,9 @@ fun PermissionDialogDarkPreview() {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = false,
-            onMapUiAction = {},
+            onDismiss = {},
+            navigateToAppSetting = {},
+            onConfirm = {},
         )
     }
 }

@@ -1,28 +1,19 @@
 package com.unifest.android.feature.home
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,31 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.common.utils.formatWithDayOfWeek
-import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.Content4
-import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Content6
-import com.unifest.android.core.designsystem.theme.DarkBlueGreen
-import com.unifest.android.core.designsystem.theme.LightBlueGreen
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -63,22 +44,21 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.core.ui.component.StarImage
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
+import com.unifest.android.feature.home.component.FestivalScheduleItem
+import com.unifest.android.feature.home.component.IncomingFestivalCard
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
+// TODO 이미 관심 축제로 추가된 축제는 관심 축제로 추가하기 버튼이 보이면 안됨
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
@@ -140,7 +120,12 @@ internal fun HomeScreen(
                 )
             }
             item {
-                FestivalScheduleText(selectedDate = homeUiState.selectedDate)
+                Text(
+                    text = DateTimeFormatter.ofPattern("M월 d일").format(homeUiState.selectedDate) + stringResource(id = R.string.home_festival_schedule_text),
+                    modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
             }
             if (homeUiState.todayFestivals.isEmpty()) {
                 item {
@@ -217,10 +202,17 @@ internal fun HomeScreen(
             }
             item { UnifestHorizontalDivider() }
             item { Spacer(modifier = Modifier.height(20.dp)) }
-            item { IncomingFestivalText() }
+            item {
+                Text(
+                    text = stringResource(id = R.string.home_incoming_festival_text),
+                    modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
             if (homeUiState.incomingFestivals.isNotEmpty()) {
                 items(homeUiState.incomingFestivals) { festival ->
-                    IncomingFestivalCard(festival)
+                    IncomingFestivalCard(festival = festival)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -242,202 +234,6 @@ internal fun HomeScreen(
                 onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
                 star = homeUiState.selectedStar,
             )
-        }
-    }
-}
-
-@Composable
-fun FestivalScheduleText(selectedDate: LocalDate) {
-    val formattedDate = DateTimeFormatter.ofPattern("M월 d일").format(selectedDate)
-    Text(
-        text = formattedDate + stringResource(id = R.string.home_festival_schedule_text),
-        modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-        color = MaterialTheme.colorScheme.onBackground,
-        style = Title3,
-    )
-}
-
-@Composable
-fun FestivalScheduleItem(
-    festival: FestivalTodayModel,
-    scheduleIndex: Int,
-    likedFestivals: ImmutableList<FestivalModel>,
-    selectedDate: LocalDate,
-    isStarImageClicked: ImmutableList<Boolean>,
-    isDataReady: Boolean,
-    onHomeUiAction: (HomeUiAction) -> Unit,
-) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(3.dp)
-                    .height(72.dp)
-                    .background(if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen)
-                    .align(Alignment.CenterVertically),
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.width(172.dp),
-            ) {
-                Text(
-                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = Content4,
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Row {
-                    Text(
-                        text = festival.festivalName + " Day ",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = Title2,
-                    )
-                    if (isDataReady) {
-                        Text(
-                            text = (ChronoUnit.DAYS.between(festival.beginDate.toLocalDate(), selectedDate) + 1).toString(),
-                            color = MaterialTheme.colorScheme.onBackground,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = Title2,
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(7.dp))
-                Row {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
-                        contentDescription = "Location Icon",
-                        modifier = Modifier
-                            .size(10.dp)
-                            .align(Alignment.CenterVertically),
-                        tint = Color.Unspecified,
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = festival.schoolName,
-                        style = Content5,
-                        color = MaterialTheme.colorScheme.onSecondary,
-                    )
-                }
-            }
-            if (festival.starInfo.isNotEmpty()) {
-                LazyRow {
-                    itemsIndexed(
-                        items = festival.starInfo,
-                        key = { _, starInfo -> starInfo.starId },
-                    ) { starIndex, starInfo ->
-                        StarImage(
-                            imgUrl = starInfo.imgUrl,
-                            onClick = {
-                                onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
-                            },
-                            onLongClick = {
-                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
-                            },
-                            isClicked = isStarImageClicked[starIndex],
-                            label = starInfo.name,
-                            modifier = Modifier
-                                .size(72.dp)
-                                .clip(CircleShape),
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                }
-            }
-        }
-        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
-            UnifestOutlinedButton(
-                onClick = {
-                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-                contentPadding = PaddingValues(6.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                    style = BoothLocation,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun IncomingFestivalText() {
-    Text(
-        text = stringResource(id = R.string.home_incoming_festival_text),
-        modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
-        color = MaterialTheme.colorScheme.onBackground,
-        style = Title3,
-    )
-}
-
-@Composable
-fun IncomingFestivalCard(festival: FestivalModel) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            NetworkImage(
-                imgUrl = festival.thumbnail,
-                contentDescription = "Festival Thumbnail",
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape),
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = "${festival.beginDate.toLocalDate().formatWithDayOfWeek()} - ${festival.endDate.toLocalDate().formatWithDayOfWeek()}",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = Content6,
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = festival.festivalName,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = Content4,
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Row {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
-                        contentDescription = "Location Icon",
-                        modifier = Modifier
-                            .size(10.dp)
-                            .align(Alignment.CenterVertically),
-                        tint = Color.Unspecified,
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = festival.schoolName,
-                        style = Content6,
-                        color = MaterialTheme.colorScheme.onSecondary,
-                    )
-                }
-            }
         }
     }
 }

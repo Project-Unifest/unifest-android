@@ -27,7 +27,8 @@
     <string name="home_incoming_festival_text">다가오는 축제 일정</string>
     <string name="home_add_interest_festival_button">관심 축제 추가하기</string>
     <string name="home_add_interest_festival_in_item_button">관심 축제로 추가</string>
-    <string name="home_add_interest_festival_snack_bar">관심 축제로 저장했습니다</string>
+    <string name="home_add_interest_festival_saved_message">관심 축제로 저장했습니다</string>
+    <string name="home_add_interest_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
     <string name='home_empty_festival_text'>축제 일정 없음</string>
     <string name="home_empty_festival_schedule_description_text">오늘은 축제가 열리는 학교가 없어요</string>
 
@@ -95,6 +96,10 @@
     <string name="search_result">검색결과</string>
     <string name="no_result">검색 결과가 없어요</string>
     <string name="festival_search_onboarding_title">여기를 터치하여 해당 학교로 이동해보세요.</string>
+    <string name="liked_festival_saved_message">관심 축제로 저장했습니다.</string>
+    <string name="liked_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
+    <string name="liked_festival_removed_message">관심 축제에서 삭제했습니다.</string>
+    <string name="liked_festival_removed_failed_message">관심 축제에서 삭제를 실패했습니다.</string>
 
     <!--    Dialog-->
     <string name="server_error_title">서버 문제 발생</string>

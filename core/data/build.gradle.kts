@@ -29,6 +29,7 @@ dependencies {
 
         platform(libs.firebase.bom),
         libs.firebase.config,
+        libs.firebase.messaging,
         libs.timber,
     )
 }

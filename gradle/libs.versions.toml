@@ -47,7 +47,6 @@ coil-compose = "2.7.0"
 timber = "5.0.1"
 firebase-bom = "33.1.2"
 firebase-crashlytics = "3.0.2"
-firebase-config = "21.6.3"
 ksp = "2.0.10-1.0.24"
 compose-extensions = "1.6.8"
 compose-stable-marker = "1.0.5"
@@ -120,6 +119,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx"}
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }

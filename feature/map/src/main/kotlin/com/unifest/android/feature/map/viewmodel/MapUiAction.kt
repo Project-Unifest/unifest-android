@@ -1,6 +1,7 @@
 package com.unifest.android.feature.map.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.feature.map.model.BoothMapModel
 
 sealed interface MapUiAction {
@@ -14,17 +15,15 @@ sealed interface MapUiAction {
     data object OnTogglePopularBooth : MapUiAction
     data class OnBoothItemClick(val boothId: Long) : MapUiAction
     data class OnRetryClick(val error: ErrorType) : MapUiAction
-    data class OnPermissionDialogButtonClick(val buttonType: PermissionDialogButtonType) : MapUiAction
+    data class OnPermissionDialogButtonClick(
+        val buttonType: PermissionDialogButtonType,
+        val permission: String? = null,
+    ) : MapUiAction
+
     data class OnBoothTypeChipClick(val chipName: String) : MapUiAction
 }
 
 enum class ErrorType {
     NETWORK,
     SERVER,
-}
-
-enum class PermissionDialogButtonType {
-    DISMISS,
-    CONFIRM,
-    GO_TO_APP_SETTINGS,
 }

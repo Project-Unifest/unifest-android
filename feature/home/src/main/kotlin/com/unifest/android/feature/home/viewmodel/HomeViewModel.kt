@@ -60,8 +60,14 @@ class HomeViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
-            likedFestivalRepository.insertLikedFestivalAtHome(festival)
-            _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtHome(festival)
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_failed_message)))
+                }
         }
     }
 

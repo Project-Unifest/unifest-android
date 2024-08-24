@@ -8,6 +8,7 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.MenuModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     companion object {
@@ -147,6 +149,12 @@ class BoothViewModel @Inject constructor(
         val currentBookmarkFlag = _uiState.value.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
+            if (currentBookmarkFlag) {
+                unregisterLikedFestival()
+            } else {
+                registerLikedFestival()
+            }
+
             boothRepository.likeBooth(boothId)
                 .onSuccess {
                     _uiState.update {
@@ -171,6 +179,26 @@ class BoothViewModel @Inject constructor(
                     } else {
                         _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
                     }
+                }
+        }
+    }
+
+    private fun registerLikedFestival() {
+        viewModelScope.launch {
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {}
+                .onFailure {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                }
+        }
+    }
+
+    private fun unregisterLikedFestival() {
+        viewModelScope.launch {
+            likedFestivalRepository.unregisterLikedFestival()
+                .onSuccess {}
+                .onFailure {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
                 }
         }
     }

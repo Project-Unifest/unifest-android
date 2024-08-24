@@ -24,7 +24,7 @@ inline fun <reified T : Activity> Activity.startActivityWithAnimation(
     if (withFinish) finish()
 }
 
-fun Activity.goToAppSettings() {
+fun Activity.navigateToAppSetting() {
     Intent(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", packageName, null),

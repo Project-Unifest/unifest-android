@@ -178,12 +178,14 @@ class IntroViewModel @Inject constructor(
         }
     }
 
+    // TODO 추후에 건국대로 고정하지 않고, 사용자가 선택한 학교로 변경
     private fun addLikedFestivals() {
         viewModelScope.launch {
             _uiState.value.selectedFestivals.forEach { festival ->
                 likedFestivalRepository.insertLikedFestivalAtSearch(festival)
             }
             likedFestivalRepository.setRecentLikedFestival("건국대")
+            likedFestivalRepository.setRecentLikedFestivalId(1L)
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)
         }
