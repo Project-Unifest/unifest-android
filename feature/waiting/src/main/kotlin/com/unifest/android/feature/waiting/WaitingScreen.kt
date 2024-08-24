@@ -288,7 +288,11 @@ fun WaitingInfoItem(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = if (myWaitingModel.waitingOrder.toInt() == 1) stringResource(id = R.string.waiting_my_turn) else myWaitingModel.waitingOrder.toString(),
+                        text = if (myWaitingModel.waitingOrder.toInt() == 1) {
+                            stringResource(id = R.string.waiting_my_turn)
+                        } else {
+                            myWaitingModel.waitingOrder.toString()
+                        },
                         style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
