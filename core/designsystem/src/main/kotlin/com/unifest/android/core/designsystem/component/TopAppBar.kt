@@ -28,7 +28,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -138,18 +137,7 @@ fun SchoolSearchTitle(
 
 @ComponentPreview
 @Composable
-fun UnifestTopAppBarPreview() {
-    UnifestTheme {
-        UnifestTopAppBar(
-            navigationType = TopAppBarNavigationType.None,
-            title = "UniFest",
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestTopAppBarDarkPreview() {
+private fun UnifestTopAppBarPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.None,
@@ -160,18 +148,7 @@ fun UnifestTopAppBarDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun SchoolSearchTitlePreview() {
-    UnifestTheme {
-        SchoolSearchTitle(
-            title = "건국대학교",
-            onTitleClick = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun SchoolSearchTitleDarkPreview() {
+private fun SchoolSearchTitlePreview() {
     UnifestTheme {
         SchoolSearchTitle(
             title = "건국대학교",
@@ -182,18 +159,7 @@ fun SchoolSearchTitleDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun UnifestTopAppBarWithBackButtonPreview() {
-    UnifestTheme {
-        UnifestTopAppBar(
-            navigationType = TopAppBarNavigationType.Back,
-            navigationIconContentDescription = "Navigation back icon",
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestTopAppBarWithBackButtonDarkPreview() {
+private fun UnifestTopAppBarWithBackButtonPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,

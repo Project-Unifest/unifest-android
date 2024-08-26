@@ -22,8 +22,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.DialogProperties
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StarInfoModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,5 +71,20 @@ fun StarImageDialog(
                 style = Title2,
             )
         }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun StarImageDialogPreview() {
+    UnifestTheme {
+        StarImageDialog(
+            onDismissRequest = {},
+            star = StarInfoModel(
+                starId = 0L,
+                name = "창모",
+                imgUrl = "",
+            ),
+        )
     }
 }

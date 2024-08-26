@@ -1,31 +1,14 @@
 package com.unifest.android.feature.booth
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,16 +22,11 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
-import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.MarkerCategory
-import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.feature.booth.component.BoothLocationAppBar
+import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -111,121 +89,16 @@ fun BoothLocationScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BoothLocationAppBar(
-    onBackClick: () -> Unit,
-    boothName: String,
-    boothLocation: String,
-    modifier: Modifier = Modifier,
-) {
-    TopAppBar(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp),
-            )
-            .padding(vertical = 8.dp, horizontal = 12.dp),
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_gray),
-                    contentDescription = "뒤로 가기",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        },
-        title = {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = boothName,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    textAlign = TextAlign.Center,
-                    style = Title1,
-                )
-                Text(
-                    text = boothLocation,
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    style = BoothLocation,
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.surface),
-        actions = {
-            Spacer(modifier = Modifier.width(48.dp))
-        },
-    )
-}
-
 @DevicePreview
 @Composable
-fun BoothLocationScreenPreview() {
+fun BoothLocationScreenPreview(
+    @PreviewParameter(BoothDetailPreviewParameterProvider::class)
+    boothUiState: BoothUiState,
+) {
     UnifestTheme {
         BoothLocationScreen(
-            uiState = BoothUiState(
-                boothDetailInfo = BoothDetailModel(
-                    id = 0L,
-                    name = "컴공 주점",
-                    category = "컴퓨터공학부 전용 부스",
-                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                    location = "청심대 앞",
-                    latitude = 37.54224856023523f,
-                    longitude = 127.07605430700158f,
-                ),
-            ),
+            uiState = boothUiState,
             onBackClick = {},
-        )
-    }
-}
-
-@DarkDevicePreview
-@Composable
-fun BoothLocationScreenDarkPreview() {
-    UnifestTheme {
-        BoothLocationScreen(
-            uiState = BoothUiState(
-                boothDetailInfo = BoothDetailModel(
-                    id = 0L,
-                    name = "컴공 주점",
-                    category = "컴퓨터공학부 전용 부스",
-                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                    location = "청심대 앞",
-                    latitude = 37.54224856023523f,
-                    longitude = 127.07605430700158f,
-                ),
-            ),
-            onBackClick = {},
-        )
-    }
-}
-
-@ComponentPreview
-@Composable
-fun BoothLocationAppBarPreview() {
-    UnifestTheme {
-        BoothLocationAppBar(
-            onBackClick = {},
-            boothName = "컴공 주점",
-            boothLocation = "청심대 앞",
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun BoothLocationAppBarDarkPreview() {
-    UnifestTheme {
-        BoothLocationAppBar(
-            onBackClick = {},
-            boothName = "컴공 주점",
-            boothLocation = "청심대 앞",
         )
     }
 }

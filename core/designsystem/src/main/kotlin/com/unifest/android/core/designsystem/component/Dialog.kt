@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle2
@@ -709,15 +708,7 @@ fun WaitingCancelDialog(
 
 @ComponentPreview
 @Composable
-fun ServerErrorDialogPreview() {
-    UnifestTheme {
-        ServerErrorDialog(onRetryClick = {})
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun ServerErrorDialogDarkPreview() {
+private fun ServerErrorDialogPreview() {
     UnifestTheme {
         ServerErrorDialog(onRetryClick = {})
     }
@@ -725,15 +716,7 @@ fun ServerErrorDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun NetworkErrorDialogPreview() {
-    UnifestTheme {
-        NetworkErrorDialog(onRetryClick = {})
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun NetworkErrorDialogDarkPreview() {
+private fun NetworkErrorDialogPreview() {
     UnifestTheme {
         NetworkErrorDialog(onRetryClick = {})
     }
@@ -741,18 +724,7 @@ fun NetworkErrorDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalDeleteDialogPreview() {
-    UnifestTheme {
-        LikedFestivalDeleteDialog(
-            onCancelClick = {},
-            onConfirmClick = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedFestivalDeleteDialogDarkPreview() {
+private fun LikedFestivalDeleteDialogPreview() {
     UnifestTheme {
         LikedFestivalDeleteDialog(
             onCancelClick = {},
@@ -763,18 +735,7 @@ fun LikedFestivalDeleteDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun AppUpdateDialogPreview() {
-    UnifestTheme {
-        AppUpdateDialog(
-            onDismissRequest = {},
-            onUpdateClick = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun AppUpdateDialogDarkPreview() {
+private fun AppUpdateDialogPreview() {
     UnifestTheme {
         AppUpdateDialog(
             onDismissRequest = {},
@@ -785,22 +746,7 @@ fun AppUpdateDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingPinDialogPreview() {
-    UnifestTheme {
-        WaitingPinDialog(
-            boothName = "컴공 주점",
-            pinNumber = "",
-            onDismissRequest = {},
-            onDialogPinButtonClick = { },
-            onPinNumberUpdated = { },
-            isWrongPinInserted = true,
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingPinDialogDarkPreview() {
+private fun WaitingPinDialogPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
@@ -815,29 +761,7 @@ fun WaitingPinDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingDialogPreview() {
-    UnifestTheme {
-        WaitingDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            phoneNumber = "",
-            waitingCount = 3,
-            partySize = 3,
-            onDialogWaitingButtonClick = { },
-            onWaitingMinusClick = { },
-            onWaitingPlusClick = { },
-            onWaitingTelUpdated = { },
-            isPrivacyClicked = false,
-            onPolicyCheckBoxClick = { },
-            onPrivacyPolicyClick = { },
-            onThirdPartyPolicyClick = { },
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingDialogDarkPreview() {
+private fun WaitingDialogPreview() {
     UnifestTheme {
         WaitingDialog(
             boothName = "컴공 주점",
@@ -859,21 +783,7 @@ fun WaitingDialogDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingConfirmDialogPreview() {
-    UnifestTheme {
-        WaitingConfirmDialog(
-            boothName = "컴공 주점",
-            waitingId = 1,
-            waitingPartySize = 3,
-            waitingTeamNumber = 3,
-            onConfirmClick = { },
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingConfirmDialogDarkPreview() {
+private fun WaitingConfirmDialogPreview() {
     UnifestTheme {
         WaitingConfirmDialog(
             boothName = "컴공 주점",

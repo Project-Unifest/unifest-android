@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.MultipleEventsCutter
 import com.unifest.android.core.common.get
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -49,19 +48,7 @@ fun UnifestButton(
 
 @ComponentPreview
 @Composable
-fun UnifestButtonPreview() {
-    UnifestTheme {
-        UnifestButton(
-            onClick = {},
-        ) {
-            Text("Button")
-        }
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestButtonDarkPreview() {
+private fun UnifestButtonPreview() {
     UnifestTheme {
         UnifestButton(
             onClick = {},
@@ -73,20 +60,7 @@ fun UnifestButtonDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun UnifestDisabledButtonPreview() {
-    UnifestTheme {
-        UnifestButton(
-            onClick = {},
-            enabled = false,
-        ) {
-            Text("Button")
-        }
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestDisabledDarkPreview() {
+private fun UnifestDisabledButtonPreview() {
     UnifestTheme {
         UnifestButton(
             onClick = {},

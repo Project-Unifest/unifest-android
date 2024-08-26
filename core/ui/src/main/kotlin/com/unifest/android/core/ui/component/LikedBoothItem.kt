@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,7 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
@@ -51,9 +49,7 @@ fun LikedBoothItem(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        Row {
             NetworkImage(
                 imgUrl = booth.thumbnail,
                 contentDescription = "Booth Thumbnail",
@@ -125,27 +121,7 @@ fun LikedBoothItem(
 
 @ComponentPreview
 @Composable
-fun LikedBoothItemPreview() {
-    UnifestTheme {
-        LikedBoothItem(
-            booth = LikedBoothModel(
-                id = 1,
-                name = "부스 이름",
-                category = "부스 카테고리",
-                description = "부스 설명",
-                location = "부스 위치",
-                warning = "학과 전용 부스",
-            ),
-            index = 0,
-            totalCount = 1,
-            deleteLikedBooth = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedBoothItemDarkPreview() {
+private fun LikedBoothItemPreview() {
     UnifestTheme {
         LikedBoothItem(
             booth = LikedBoothModel(

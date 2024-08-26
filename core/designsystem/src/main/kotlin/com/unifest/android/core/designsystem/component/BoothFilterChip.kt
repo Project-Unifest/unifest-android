@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
@@ -56,19 +55,7 @@ fun BoothFilterChip(
 
 @ComponentPreview
 @Composable
-fun BoothFilterChipPreview() {
-    UnifestTheme {
-        BoothFilterChip(
-            filterName = "주점",
-            onChipClick = {},
-            isSelected = false,
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun BoothFilterChipDarkPreview() {
+private fun BoothFilterChipPreview() {
     UnifestTheme {
         BoothFilterChip(
             filterName = "주점",
@@ -80,19 +67,7 @@ fun BoothFilterChipDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun SelectedBoothFilterChipPreview() {
-    UnifestTheme {
-        BoothFilterChip(
-            filterName = "주점",
-            onChipClick = {},
-            isSelected = true,
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun SelectedBoothFilterChipSelectedDarkPreview() {
+private fun SelectedBoothFilterChipPreview() {
     UnifestTheme {
         BoothFilterChip(
             filterName = "주점",

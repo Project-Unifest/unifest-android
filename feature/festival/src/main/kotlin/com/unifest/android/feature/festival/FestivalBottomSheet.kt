@@ -28,9 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
@@ -40,10 +40,11 @@ import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.component.LikedFestivalsGrid
+import com.unifest.android.feature.festival.preview.FestivalPreviewParameterProvider
 import com.unifest.android.feature.festival.viewmodel.ButtonType
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 // TODO HorizontalDivider -> UnifestHorizontalDivider 로 전부 변경
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,9 +67,7 @@ fun FestivalSearchBottomSheet(
 //        isModal = true,
 //        skipSlightlyExpanded = true,
 //    )
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-    )
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -185,274 +184,16 @@ fun FestivalSearchBottomSheet(
 
 @ComponentPreview
 @Composable
-fun SchoolSearchBottomSheetPreview() {
+fun SchoolSearchBottomSheetPreview(
+    @PreviewParameter(FestivalPreviewParameterProvider::class)
+    festivalUiState: FestivalUiState,
+) {
     UnifestTheme {
         FestivalSearchBottomSheet(
             searchTextHintRes = R.string.festival_search_text_field_hint,
             searchText = TextFieldValue(),
-            likedFestivals = persistentListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "서울",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "서울",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "서울",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "서울",
-                    "성대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "서울",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
-            festivalSearchResults = persistentListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "서울",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "서울",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "서울",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "성대축제",
-                    "서울",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "서울",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
-            isSearchMode = false,
-            isEditMode = false,
-            isLikedFestivalDeleteDialogVisible = false,
-            onFestivalUiAction = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun SchoolSearchBottomSheetDarkPreview() {
-    UnifestTheme {
-        FestivalSearchBottomSheet(
-            searchTextHintRes = R.string.festival_search_text_field_hint,
-            searchText = TextFieldValue(),
-            likedFestivals = persistentListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "서울",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "서울",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "서울",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "서울",
-                    "성대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "서울",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
-            festivalSearchResults = persistentListOf(
-                FestivalModel(
-                    1,
-                    1,
-                    "https://picsum.photos/36",
-                    "서울대학교",
-                    "서울",
-                    "설대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    2,
-                    2,
-                    "https://picsum.photos/36",
-                    "연세대학교",
-                    "서울",
-                    "연대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    3,
-                    3,
-                    "https://picsum.photos/36",
-                    "고려대학교",
-                    "서울",
-                    "고대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    4,
-                    4,
-                    "https://picsum.photos/36",
-                    "성균관대학교",
-                    "성대축제",
-                    "서울",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-                FestivalModel(
-                    5,
-                    5,
-                    "https://picsum.photos/36",
-                    "건국대학교",
-                    "서울",
-                    "건대축제",
-                    "2024-04-21",
-                    "2024-04-23",
-                    126.957f,
-                    37.460f,
-                ),
-            ),
+            likedFestivals = festivalUiState.festivals,
+            festivalSearchResults = festivalUiState.likedFestivals,
             isSearchMode = false,
             isEditMode = false,
             isLikedFestivalDeleteDialogVisible = false,

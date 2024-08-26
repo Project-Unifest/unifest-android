@@ -38,7 +38,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.LightPrimary100
@@ -216,25 +215,7 @@ fun FestivalSearchTextField(
 
 @ComponentPreview
 @Composable
-fun SearchTextFieldPreview() {
-    UnifestTheme {
-        SearchTextField(
-            searchText = TextFieldValue(),
-            updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
-            onSearch = {},
-            clearSearchText = {},
-            modifier = Modifier
-                .height(46.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun SearchTextFieldDarkPreview() {
+private fun SearchTextFieldPreview() {
     UnifestTheme {
         SearchTextField(
             searchText = TextFieldValue(),
@@ -252,27 +233,7 @@ fun SearchTextFieldDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun FestivalSearchTextFieldPreview() {
-    UnifestTheme {
-        FestivalSearchTextField(
-            searchText = TextFieldValue("건국대학교"),
-            updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
-            onSearch = {},
-            clearSearchText = {},
-            setEnableSearchMode = {},
-            isSearchMode = true,
-            modifier = Modifier
-                .height(46.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun FestivalSearchTextFieldDarkPreview() {
+private fun FestivalSearchTextFieldPreview() {
     UnifestTheme {
         FestivalSearchTextField(
             searchText = TextFieldValue("건국대학교"),

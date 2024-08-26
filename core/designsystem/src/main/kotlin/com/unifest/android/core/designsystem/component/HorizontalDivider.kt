@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -26,15 +25,7 @@ fun UnifestHorizontalDivider(
 
 @ComponentPreview
 @Composable
-fun UnifestHorizontalDividerPreview() {
-    UnifestTheme {
-        UnifestHorizontalDivider()
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestHorizontalDividerDarkPreview() {
+private fun UnifestHorizontalDividerPreview() {
     UnifestTheme {
         UnifestHorizontalDivider()
     }

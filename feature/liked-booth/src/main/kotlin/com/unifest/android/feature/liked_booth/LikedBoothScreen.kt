@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,17 +30,15 @@ import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.LikedBoothModel
-import com.unifest.android.core.ui.DarkDevicePreview
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.EmptyLikedBoothItem
 import com.unifest.android.core.ui.component.LikedBoothItem
+import com.unifest.android.feature.liked_booth.preview.LikedBoothPreviewParameterProvider
 import com.unifest.android.feature.liked_booth.viewmodel.ErrorType
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiAction
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiEvent
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothUiState
 import com.unifest.android.feature.liked_booth.viewmodel.LikedBoothViewModel
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun LikedBoothRoute(
@@ -135,125 +134,14 @@ internal fun LikedBoothScreen(
 
 @DevicePreview
 @Composable
-fun LikedBoothScreenPreview() {
+fun LikedBoothScreenPreview(
+    @PreviewParameter(LikedBoothPreviewParameterProvider::class)
+    likedBoothUiState: LikedBoothUiState,
+) {
     UnifestTheme {
         LikedBoothScreen(
             padding = PaddingValues(),
-            uiState = LikedBoothUiState(
-                likedBooths = persistentListOf(
-                    LikedBoothModel(
-                        id = 1,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 2,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 3,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 4,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 5,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 6,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                ),
-            ),
-            onAction = {},
-        )
-    }
-}
-
-@DarkDevicePreview
-@Composable
-fun LikedBoothScreenDarkPreview() {
-    UnifestTheme {
-        LikedBoothScreen(
-            padding = PaddingValues(),
-            uiState = LikedBoothUiState(
-                likedBooths = persistentListOf(
-                    LikedBoothModel(
-                        id = 1,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 2,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 3,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 4,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 5,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                    LikedBoothModel(
-                        id = 6,
-                        name = "부스 이름",
-                        category = "음식",
-                        description = "부스 설명",
-                        location = "부스 위치",
-                        warning = "학과 전용 부스",
-                    ),
-                ),
-            ),
+            uiState = likedBoothUiState,
             onAction = {},
         )
     }

@@ -15,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -81,21 +80,6 @@ fun MapTopAppBar(
 @ComponentPreview
 @Composable
 fun MapTopAppBarPreview() {
-    UnifestTheme {
-        MapTopAppBar(
-            title = "건국대학교",
-            boothSearchText = TextFieldValue(),
-            isOnboardingCompleted = false,
-            onMapUiAction = {},
-            onFestivalUiAction = {},
-            selectedChips = persistentListOf("주점", "먹거리"),
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun MapTopAppBarDarkPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",

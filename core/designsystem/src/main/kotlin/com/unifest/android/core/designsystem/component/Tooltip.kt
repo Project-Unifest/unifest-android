@@ -27,7 +27,6 @@ import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title1
@@ -140,17 +139,7 @@ fun SchoolSearchTitleWithToolTip(
 
 @ComponentPreview
 @Composable
-fun LikedFestivalToolTipPreview() {
-    UnifestTheme {
-        LikedFestivalToolTip(
-            completeOnboarding = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedFestivalToolTipDarkPreview() {
+private fun LikedFestivalToolTipPreview() {
     UnifestTheme {
         LikedFestivalToolTip(
             completeOnboarding = {},
@@ -160,19 +149,7 @@ fun LikedFestivalToolTipDarkPreview() {
 
 @ComponentPreview
 @Composable
-fun SchoolSearchTitleWithToolTipPreview() {
-    UnifestTheme {
-        SchoolSearchTitleWithToolTip(
-            title = "건국대학교",
-            onTitleClick = {},
-            completeOnboarding = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun SchoolSearchTitleWithToolTipDarkPreview() {
+private fun SchoolSearchTitleWithToolTipPreview() {
     UnifestTheme {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",

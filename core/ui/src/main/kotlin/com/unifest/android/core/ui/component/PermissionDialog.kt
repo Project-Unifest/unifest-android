@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -117,20 +116,6 @@ class NotificationPermissionTextProvider : PermissionTextProvider {
 @ComponentPreview
 @Composable
 fun PermissionDialogPreview() {
-    UnifestTheme {
-        PermissionDialog(
-            permissionTextProvider = LocationPermissionTextProvider(),
-            isPermanentlyDeclined = false,
-            onDismiss = {},
-            navigateToAppSetting = {},
-            onConfirm = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun PermissionDialogDarkPreview() {
     UnifestTheme {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),

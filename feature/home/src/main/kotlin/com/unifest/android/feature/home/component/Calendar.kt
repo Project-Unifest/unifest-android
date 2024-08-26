@@ -1,4 +1,4 @@
-package com.unifest.android.feature.home
+package com.unifest.android.feature.home.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -55,7 +55,6 @@ import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
@@ -68,6 +67,9 @@ import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.home.clickable
+import com.unifest.android.feature.home.displayText
+import com.unifest.android.feature.home.rememberFirstVisibleMonthAfterScroll
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -416,20 +418,6 @@ fun Day(
 @ComponentPreview
 @Composable
 fun CalendarPreview() {
-    UnifestTheme {
-        Calendar(
-            selectedDate = LocalDate.now(),
-            onDateSelected = {},
-            allFestivals = persistentListOf(),
-            isWeekMode = false,
-            ocClickWeekMode = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun CalendarDarkPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),
