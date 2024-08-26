@@ -56,7 +56,7 @@ style:
   ForbiddenComment:
     active: false
   UnusedPrivateMember:
-    ignoreAnnotated: [ 'Preview' ]
+    ignoreAnnotated: [ 'Preview', 'ComponentPreview', 'DevicePreview' ]
   ThrowsCount:
     active: false
   ReturnCount:
