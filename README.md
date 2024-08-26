@@ -23,6 +23,7 @@
 ## Features
 
 ## Article
+- [[Android] Type-Safe Compose Navigation 적용 - 중첩(Nested) 네비게이션 구조](https://velog.io/@mraz3068/Android-Type-Safe-Compose-Navigation-Applying-in-Nested-Navigation)
 - [[Android] Github Action 를 이용하여 CD 를 적용 하는 방법](https://velog.io/@mraz3068/Apply-Android-Github-Action-CD)
 - [[Android] Jetpack Compose 가로 세로 길이가 같은 반응형 다이얼로그 만들기](https://velog.io/@mraz3068/Creating-Responsive-Dialog-with-Equal-Width-and-Height-in-Jetpack-Compose)
 - [[Android] Jetpack Compose 에서 Snackbar Duration 을 Custom 하는 방법](https://velog.io/@mraz3068/Android-Compose-Snackbar-Duration-Custom)
