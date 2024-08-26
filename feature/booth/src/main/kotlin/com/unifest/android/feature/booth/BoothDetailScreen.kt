@@ -52,12 +52,11 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.booth.component.BoothBottomBar
 import com.unifest.android.feature.booth.component.BoothDescription
 import com.unifest.android.feature.booth.component.MenuItem
-import com.unifest.android.feature.booth.preview.BoothDetailUiStatePreviewParameterProvider
+import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
@@ -309,13 +308,13 @@ fun BoothDetailContent(
 @DevicePreview
 @Composable
 private fun BoothScreenPreview(
-    @PreviewParameter(BoothDetailUiStatePreviewParameterProvider::class)
-    boothDetailInfo: BoothDetailModel,
+    @PreviewParameter(BoothDetailPreviewParameterProvider::class)
+    boothUiState: BoothUiState,
 ) {
     UnifestTheme {
         BoothDetailScreen(
             padding = PaddingValues(),
-            uiState = BoothUiState(boothDetailInfo = boothDetailInfo),
+            uiState = boothUiState,
             snackBarState = SnackbarHostState(),
             onAction = {},
         )

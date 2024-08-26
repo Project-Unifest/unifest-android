@@ -24,7 +24,7 @@ fun LoadingWheel(
 
 @ComponentPreview
 @Composable
-fun LoadingWheelPreview() {
+private fun LoadingWheelPreview() {
     UnifestTheme {
         LoadingWheel()
     }

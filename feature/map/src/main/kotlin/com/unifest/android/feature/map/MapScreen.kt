@@ -448,7 +448,7 @@ fun MapContent(
 
 @DevicePreview
 @Composable
-fun MapScreenPreview() {
+private fun MapScreenPreview() {
     val boothList = persistentListOf<BoothMapModel>()
     repeat(5) { index ->
         boothList.add(

@@ -139,7 +139,7 @@ fun SchoolSearchTitleWithToolTip(
 
 @ComponentPreview
 @Composable
-fun LikedFestivalToolTipPreview() {
+private fun LikedFestivalToolTipPreview() {
     UnifestTheme {
         LikedFestivalToolTip(
             completeOnboarding = {},
@@ -149,7 +149,7 @@ fun LikedFestivalToolTipPreview() {
 
 @ComponentPreview
 @Composable
-fun SchoolSearchTitleWithToolTipPreview() {
+private fun SchoolSearchTitleWithToolTipPreview() {
     UnifestTheme {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",

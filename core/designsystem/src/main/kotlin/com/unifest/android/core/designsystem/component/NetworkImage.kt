@@ -49,7 +49,7 @@ fun NetworkImage(
 
 @ComponentPreview
 @Composable
-fun NetworkImagePreview() {
+private fun NetworkImagePreview() {
     UnifestTheme {
         NetworkImage(
             imgUrl = "",

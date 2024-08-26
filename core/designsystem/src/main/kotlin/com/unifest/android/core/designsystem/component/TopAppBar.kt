@@ -137,7 +137,7 @@ fun SchoolSearchTitle(
 
 @ComponentPreview
 @Composable
-fun UnifestTopAppBarPreview() {
+private fun UnifestTopAppBarPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.None,
@@ -148,7 +148,7 @@ fun UnifestTopAppBarPreview() {
 
 @ComponentPreview
 @Composable
-fun SchoolSearchTitlePreview() {
+private fun SchoolSearchTitlePreview() {
     UnifestTheme {
         SchoolSearchTitle(
             title = "건국대학교",
@@ -159,7 +159,7 @@ fun SchoolSearchTitlePreview() {
 
 @ComponentPreview
 @Composable
-fun UnifestTopAppBarWithBackButtonPreview() {
+private fun UnifestTopAppBarWithBackButtonPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,

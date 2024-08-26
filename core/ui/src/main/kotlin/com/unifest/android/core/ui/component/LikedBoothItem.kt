@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,9 +49,7 @@ fun LikedBoothItem(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        Row {
             NetworkImage(
                 imgUrl = booth.thumbnail,
                 contentDescription = "Booth Thumbnail",
@@ -124,7 +121,7 @@ fun LikedBoothItem(
 
 @ComponentPreview
 @Composable
-fun LikedBoothItemPreview() {
+private fun LikedBoothItemPreview() {
     UnifestTheme {
         LikedBoothItem(
             booth = LikedBoothModel(

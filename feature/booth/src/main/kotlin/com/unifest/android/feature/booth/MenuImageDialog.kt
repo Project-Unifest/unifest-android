@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.common.utils.formatAsCurrency
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Title2
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,5 +79,21 @@ fun MenuImageDialog(
                 style = Content1,
             )
         }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun MenuImageDialogPreview() {
+    UnifestTheme {
+        MenuImageDialog(
+            onDismissRequest = {},
+            menu = MenuModel(
+                id = 0,
+                name = "모둠 사시미",
+                price = 45000,
+                imgUrl = "",
+            ),
+        )
     }
 }

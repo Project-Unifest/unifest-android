@@ -48,7 +48,7 @@ fun UnifestButton(
 
 @ComponentPreview
 @Composable
-fun UnifestButtonPreview() {
+private fun UnifestButtonPreview() {
     UnifestTheme {
         UnifestButton(
             onClick = {},
@@ -60,7 +60,7 @@ fun UnifestButtonPreview() {
 
 @ComponentPreview
 @Composable
-fun UnifestDisabledButtonPreview() {
+private fun UnifestDisabledButtonPreview() {
     UnifestTheme {
         UnifestButton(
             onClick = {},

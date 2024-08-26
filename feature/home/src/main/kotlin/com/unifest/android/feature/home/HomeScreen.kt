@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,21 +41,20 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.feature.festival.FestivalSearchBottomSheet
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
+import com.unifest.android.feature.home.component.Calendar
 import com.unifest.android.feature.home.component.FestivalScheduleItem
 import com.unifest.android.feature.home.component.IncomingFestivalCard
+import com.unifest.android.feature.home.preview.HomePreviewParameterProvider
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
-import kotlinx.collections.immutable.persistentListOf
 import java.time.format.DateTimeFormatter
 
 // TODO 이미 관심 축제로 추가된 축제는 관심 축제로 추가하기 버튼이 보이면 안됨
@@ -120,7 +120,8 @@ internal fun HomeScreen(
             }
             item {
                 Text(
-                    text = DateTimeFormatter.ofPattern("M월 d일").format(homeUiState.selectedDate) + stringResource(id = R.string.home_festival_schedule_text),
+                    text = DateTimeFormatter.ofPattern("M월 d일")
+                        .format(homeUiState.selectedDate) + stringResource(id = R.string.home_festival_schedule_text),
                     modifier = Modifier.padding(start = 20.dp, top = 20.dp),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Title3,
@@ -239,71 +240,14 @@ internal fun HomeScreen(
 
 @DevicePreview
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview(
+    @PreviewParameter(HomePreviewParameterProvider::class)
+    homeUiState: HomeUiState,
+) {
     UnifestTheme {
         HomeScreen(
             padding = PaddingValues(),
-            homeUiState = HomeUiState(
-                todayFestivals = persistentListOf(
-                    FestivalTodayModel(
-                        festivalId = 1,
-                        beginDate = "2024-04-05",
-                        endDate = "2024-04-07",
-                        festivalName = "녹색지대 DAY 1",
-                        schoolName = "건국대학교 서울캠퍼스",
-                        starInfo = listOf(),
-                        thumbnail = "https://picsum.photos/36",
-                        schoolId = 1,
-                    ),
-
-                    FestivalTodayModel(
-                        festivalId = 2,
-                        beginDate = "2024-04-05",
-                        endDate = "2024-04-07",
-                        festivalName = "녹색지대 DAY 1",
-                        schoolName = "건국대학교 서울캠퍼스",
-                        starInfo = listOf(),
-                        thumbnail = "https://picsum.photos/36",
-                        schoolId = 2,
-                    ),
-                    FestivalTodayModel(
-                        festivalId = 3,
-                        beginDate = "2024-04-05",
-                        endDate = "2024-04-07",
-                        festivalName = "녹색지대 DAY 1",
-                        schoolName = "건국대학교 서울캠퍼스",
-                        starInfo = listOf(),
-                        thumbnail = "https://picsum.photos/36",
-                        schoolId = 3,
-                    ),
-                ),
-                incomingFestivals = persistentListOf(
-                    FestivalModel(
-                        1,
-                        1,
-                        "https://picsum.photos/36",
-                        "서울대학교",
-                        "서울",
-                        "설대축제",
-                        "2024-04-21",
-                        "2024-04-23",
-                        126.957f,
-                        37.460f,
-                    ),
-                    FestivalModel(
-                        2,
-                        2,
-                        "https://picsum.photos/36",
-                        "연세대학교",
-                        "서울",
-                        "연대축제",
-                        "2024-04-21",
-                        "2024-04-23",
-                        126.957f,
-                        37.460f,
-                    ),
-                ),
-            ),
+            homeUiState = homeUiState,
             festivalUiState = FestivalUiState(),
             onHomeUiAction = {},
             onFestivalUiAction = {},

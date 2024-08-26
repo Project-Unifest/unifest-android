@@ -46,7 +46,7 @@ fun UnifestOutlinedButton(
 
 @ComponentPreview
 @Composable
-fun UnifestOutlinedButtonPreview() {
+private fun UnifestOutlinedButtonPreview() {
     UnifestTheme {
         UnifestOutlinedButton(
             onClick = {},

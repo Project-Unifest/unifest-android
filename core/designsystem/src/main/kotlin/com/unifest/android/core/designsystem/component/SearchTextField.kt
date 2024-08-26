@@ -215,7 +215,7 @@ fun FestivalSearchTextField(
 
 @ComponentPreview
 @Composable
-fun SearchTextFieldPreview() {
+private fun SearchTextFieldPreview() {
     UnifestTheme {
         SearchTextField(
             searchText = TextFieldValue(),
@@ -233,7 +233,7 @@ fun SearchTextFieldPreview() {
 
 @ComponentPreview
 @Composable
-fun FestivalSearchTextFieldPreview() {
+private fun FestivalSearchTextFieldPreview() {
     UnifestTheme {
         FestivalSearchTextField(
             searchText = TextFieldValue("건국대학교"),

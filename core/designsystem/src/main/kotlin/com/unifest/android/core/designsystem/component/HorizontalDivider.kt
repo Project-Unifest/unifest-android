@@ -25,7 +25,7 @@ fun UnifestHorizontalDivider(
 
 @ComponentPreview
 @Composable
-fun UnifestHorizontalDividerPreview() {
+private fun UnifestHorizontalDividerPreview() {
     UnifestTheme {
         UnifestHorizontalDivider()
     }

@@ -52,7 +52,7 @@ fun EmptyLikedBoothItem(
 
 @ComponentPreview
 @Composable
-fun EmptyLikedBoothItemPreview() {
+private fun EmptyLikedBoothItemPreview() {
     UnifestTheme {
         EmptyLikedBoothItem(
             modifier = Modifier

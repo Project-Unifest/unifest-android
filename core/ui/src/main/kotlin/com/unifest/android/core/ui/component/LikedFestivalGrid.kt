@@ -162,22 +162,21 @@ fun FestivalItem(
 
 @ComponentPreview
 @Composable
-fun FestivalItemPreview() {
-    val festival = FestivalModel(
-        1,
-        1,
-        "https://picsum.photos/36",
-        "서울대학교",
-        "서울",
-        "설대축제",
-        "2024-04-21",
-        "2024-04-23",
-        126.957f,
-        37.460f,
-    )
+private fun FestivalItemPreview() {
     UnifestTheme {
         FestivalItem(
-            festival = festival,
+            festival = FestivalModel(
+                1,
+                1,
+                "https://picsum.photos/36",
+                "서울대학교",
+                "서울",
+                "설대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
             onFestivalSelected = {},
         )
     }
@@ -185,7 +184,7 @@ fun FestivalItemPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalsGridPreview() {
+private fun LikedFestivalsGridPreview() {
     val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
@@ -214,7 +213,7 @@ fun LikedFestivalsGridPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalsGridEditModePreview() {
+private fun LikedFestivalsGridEditModePreview() {
     val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(

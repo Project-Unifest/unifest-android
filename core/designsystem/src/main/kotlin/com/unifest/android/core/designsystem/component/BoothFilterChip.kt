@@ -55,7 +55,7 @@ fun BoothFilterChip(
 
 @ComponentPreview
 @Composable
-fun BoothFilterChipPreview() {
+private fun BoothFilterChipPreview() {
     UnifestTheme {
         BoothFilterChip(
             filterName = "주점",
@@ -67,7 +67,7 @@ fun BoothFilterChipPreview() {
 
 @ComponentPreview
 @Composable
-fun SelectedBoothFilterChipPreview() {
+private fun SelectedBoothFilterChipPreview() {
     UnifestTheme {
         BoothFilterChip(
             filterName = "주점",

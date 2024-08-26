@@ -708,14 +708,15 @@ fun WaitingCancelDialog(
 
 @ComponentPreview
 @Composable
-fun ServerErrorDialogPreview() {
+private fun ServerErrorDialogPreview() {
     UnifestTheme {
         ServerErrorDialog(onRetryClick = {})
     }
 }
+
 @ComponentPreview
 @Composable
-fun NetworkErrorDialogPreview() {
+private fun NetworkErrorDialogPreview() {
     UnifestTheme {
         NetworkErrorDialog(onRetryClick = {})
     }
@@ -723,7 +724,7 @@ fun NetworkErrorDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalDeleteDialogPreview() {
+private fun LikedFestivalDeleteDialogPreview() {
     UnifestTheme {
         LikedFestivalDeleteDialog(
             onCancelClick = {},
@@ -734,7 +735,7 @@ fun LikedFestivalDeleteDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun AppUpdateDialogPreview() {
+private fun AppUpdateDialogPreview() {
     UnifestTheme {
         AppUpdateDialog(
             onDismissRequest = {},
@@ -745,7 +746,7 @@ fun AppUpdateDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingPinDialogPreview() {
+private fun WaitingPinDialogPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
@@ -760,7 +761,7 @@ fun WaitingPinDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingDialogPreview() {
+private fun WaitingDialogPreview() {
     UnifestTheme {
         WaitingDialog(
             boothName = "컴공 주점",
@@ -782,7 +783,7 @@ fun WaitingDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingConfirmDialogPreview() {
+private fun WaitingConfirmDialogPreview() {
     UnifestTheme {
         WaitingConfirmDialog(
             boothName = "컴공 주점",

@@ -38,7 +38,7 @@ fun BoothFilterChips(
 
 @ComponentPreview
 @Composable
-fun BoothFilterChipsPreview() {
+private fun BoothFilterChipsPreview() {
     UnifestTheme {
         BoothFilterChips(
             onChipClick = {},
