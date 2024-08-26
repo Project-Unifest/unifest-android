@@ -32,7 +32,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
@@ -158,36 +157,9 @@ fun BoothItemPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun BoothItemDarkPreview() {
-    UnifestTheme {
-        BoothItem(
-            boothInfo = BoothMapModel(
-                id = 1L,
-                name = "컴공 주점",
-                category = "",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                location = "청심대 앞",
-            ),
-            isPopularMode = true,
-            ranking = 1,
-            onAction = {},
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun RankingBadgePreview() {
-    UnifestTheme {
-        RankingBadge(ranking = 1)
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun RankingBadgeDarkPreview() {
     UnifestTheme {
         RankingBadge(ranking = 1)
     }

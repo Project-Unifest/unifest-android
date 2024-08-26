@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
@@ -48,18 +47,6 @@ fun UnifestOutlinedButton(
 @ComponentPreview
 @Composable
 fun UnifestOutlinedButtonPreview() {
-    UnifestTheme {
-        UnifestOutlinedButton(
-            onClick = {},
-        ) {
-            Text("Outlined Button")
-        }
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestOutlinedButtonDarkPreview() {
     UnifestTheme {
         UnifestOutlinedButton(
             onClick = {},

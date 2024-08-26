@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
@@ -74,37 +73,9 @@ fun StarImagePreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun StarImageDarkPreview() {
-    UnifestTheme {
-        StarImage(
-            imgUrl = "",
-            onClick = {},
-            onLongClick = {},
-            isClicked = false,
-            label = "",
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun StarImageClickedPreview() {
-    UnifestTheme {
-        StarImage(
-            imgUrl = "",
-            onClick = {},
-            onLongClick = {},
-            isClicked = true,
-            label = "키스오브라이프",
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun StarImageClickedDarkPreview() {
     UnifestTheme {
         StarImage(
             imgUrl = "",

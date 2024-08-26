@@ -55,7 +55,6 @@ import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
@@ -416,20 +415,6 @@ fun Day(
 @ComponentPreview
 @Composable
 fun CalendarPreview() {
-    UnifestTheme {
-        Calendar(
-            selectedDate = LocalDate.now(),
-            onDateSelected = {},
-            allFestivals = persistentListOf(),
-            isWeekMode = false,
-            ocClickWeekMode = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun CalendarDarkPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),

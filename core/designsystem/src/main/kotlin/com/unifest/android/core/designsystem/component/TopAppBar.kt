@@ -28,7 +28,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -147,17 +146,6 @@ fun UnifestTopAppBarPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun UnifestTopAppBarDarkPreview() {
-    UnifestTheme {
-        UnifestTopAppBar(
-            navigationType = TopAppBarNavigationType.None,
-            title = "UniFest",
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun SchoolSearchTitlePreview() {
@@ -169,31 +157,9 @@ fun SchoolSearchTitlePreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun SchoolSearchTitleDarkPreview() {
-    UnifestTheme {
-        SchoolSearchTitle(
-            title = "건국대학교",
-            onTitleClick = {},
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun UnifestTopAppBarWithBackButtonPreview() {
-    UnifestTheme {
-        UnifestTopAppBar(
-            navigationType = TopAppBarNavigationType.Back,
-            navigationIconContentDescription = "Navigation back icon",
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun UnifestTopAppBarWithBackButtonDarkPreview() {
     UnifestTheme {
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,

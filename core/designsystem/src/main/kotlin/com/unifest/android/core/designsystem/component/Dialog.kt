@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.BoothTitle2
@@ -714,15 +713,6 @@ fun ServerErrorDialogPreview() {
         ServerErrorDialog(onRetryClick = {})
     }
 }
-
-@DarkComponentPreview
-@Composable
-fun ServerErrorDialogDarkPreview() {
-    UnifestTheme {
-        ServerErrorDialog(onRetryClick = {})
-    }
-}
-
 @ComponentPreview
 @Composable
 fun NetworkErrorDialogPreview() {
@@ -731,28 +721,9 @@ fun NetworkErrorDialogPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun NetworkErrorDialogDarkPreview() {
-    UnifestTheme {
-        NetworkErrorDialog(onRetryClick = {})
-    }
-}
-
 @ComponentPreview
 @Composable
 fun LikedFestivalDeleteDialogPreview() {
-    UnifestTheme {
-        LikedFestivalDeleteDialog(
-            onCancelClick = {},
-            onConfirmClick = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedFestivalDeleteDialogDarkPreview() {
     UnifestTheme {
         LikedFestivalDeleteDialog(
             onCancelClick = {},
@@ -772,35 +743,9 @@ fun AppUpdateDialogPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun AppUpdateDialogDarkPreview() {
-    UnifestTheme {
-        AppUpdateDialog(
-            onDismissRequest = {},
-            onUpdateClick = {},
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun WaitingPinDialogPreview() {
-    UnifestTheme {
-        WaitingPinDialog(
-            boothName = "컴공 주점",
-            pinNumber = "",
-            onDismissRequest = {},
-            onDialogPinButtonClick = { },
-            onPinNumberUpdated = { },
-            isWrongPinInserted = true,
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingPinDialogDarkPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
@@ -835,45 +780,9 @@ fun WaitingDialogPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun WaitingDialogDarkPreview() {
-    UnifestTheme {
-        WaitingDialog(
-            boothName = "컴공 주점",
-            onDismissRequest = {},
-            phoneNumber = "",
-            waitingCount = 3,
-            partySize = 3,
-            onDialogWaitingButtonClick = { },
-            onWaitingMinusClick = { },
-            onWaitingPlusClick = { },
-            onWaitingTelUpdated = { },
-            isPrivacyClicked = false,
-            onPolicyCheckBoxClick = { },
-            onPrivacyPolicyClick = { },
-            onThirdPartyPolicyClick = { },
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun WaitingConfirmDialogPreview() {
-    UnifestTheme {
-        WaitingConfirmDialog(
-            boothName = "컴공 주점",
-            waitingId = 1,
-            waitingPartySize = 3,
-            waitingTeamNumber = 3,
-            onConfirmClick = { },
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun WaitingConfirmDialogDarkPreview() {
     UnifestTheme {
         WaitingConfirmDialog(
             boothName = "컴공 주점",

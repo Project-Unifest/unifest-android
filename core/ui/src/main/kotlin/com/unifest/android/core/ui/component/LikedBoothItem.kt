@@ -27,7 +27,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
@@ -126,26 +125,6 @@ fun LikedBoothItem(
 @ComponentPreview
 @Composable
 fun LikedBoothItemPreview() {
-    UnifestTheme {
-        LikedBoothItem(
-            booth = LikedBoothModel(
-                id = 1,
-                name = "부스 이름",
-                category = "부스 카테고리",
-                description = "부스 설명",
-                location = "부스 위치",
-                warning = "학과 전용 부스",
-            ),
-            index = 0,
-            totalCount = 1,
-            deleteLikedBooth = {},
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedBoothItemDarkPreview() {
     UnifestTheme {
         LikedBoothItem(
             booth = LikedBoothModel(

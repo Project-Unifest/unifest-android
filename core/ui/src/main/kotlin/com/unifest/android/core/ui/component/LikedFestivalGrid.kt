@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
@@ -184,29 +183,6 @@ fun FestivalItemPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun FestivalItemDarkPreview() {
-    val festival = FestivalModel(
-        1,
-        1,
-        "https://picsum.photos/36",
-        "서울대학교",
-        "서울",
-        "설대축제",
-        "2024-04-21",
-        "2024-04-23",
-        126.957f,
-        37.460f,
-    )
-    UnifestTheme {
-        FestivalItem(
-            festival = festival,
-            onFestivalSelected = {},
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridPreview() {
@@ -236,68 +212,9 @@ fun LikedFestivalsGridPreview() {
     }
 }
 
-@DarkComponentPreview
-@Composable
-fun LikedFestivalsGridDarkPreview() {
-    val selectedFestivals = persistentListOf<FestivalModel>()
-    repeat(5) {
-        selectedFestivals.add(
-            FestivalModel(
-                1,
-                1,
-                "https://picsum.photos/36",
-                "서울대학교",
-                "서울",
-                "설대축제",
-                "2024-04-21",
-                "2024-04-23",
-                126.957f,
-                37.460f,
-            ),
-        )
-    }
-    UnifestTheme {
-        LikedFestivalsGrid(
-            selectedFestivals = selectedFestivals,
-            onFestivalSelected = {},
-            onDeleteLikedFestivalClick = {},
-        )
-    }
-}
-
 @ComponentPreview
 @Composable
 fun LikedFestivalsGridEditModePreview() {
-    val selectedFestivals = persistentListOf<FestivalModel>()
-    repeat(5) {
-        selectedFestivals.add(
-            FestivalModel(
-                1,
-                1,
-                "https://picsum.photos/36",
-                "서울대학교",
-                "서울",
-                "설대축제",
-                "2024-04-21",
-                "2024-04-23",
-                126.957f,
-                37.460f,
-            ),
-        )
-    }
-    UnifestTheme {
-        LikedFestivalsGrid(
-            selectedFestivals = selectedFestivals,
-            onFestivalSelected = {},
-            onDeleteLikedFestivalClick = {},
-            isEditMode = true,
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun LikedFestivalsGridEditModeDarkPreview() {
     val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(

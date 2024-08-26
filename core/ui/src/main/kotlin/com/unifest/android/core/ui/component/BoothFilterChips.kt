@@ -7,7 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.DarkComponentPreview
 import com.unifest.android.core.designsystem.component.BoothFilterChip
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -40,17 +39,6 @@ fun BoothFilterChips(
 @ComponentPreview
 @Composable
 fun BoothFilterChipsPreview() {
-    UnifestTheme {
-        BoothFilterChips(
-            onChipClick = {},
-            selectedChips = persistentListOf("주점", "먹거리"),
-        )
-    }
-}
-
-@DarkComponentPreview
-@Composable
-fun BoothFilterChipsDarkPreview() {
     UnifestTheme {
         BoothFilterChips(
             onChipClick = {},
