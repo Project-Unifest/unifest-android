@@ -67,7 +67,11 @@ fun SearchTextField(
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
             value = searchText,
-            onValueChange = updateSearchText,
+            onValueChange = {
+                if (it.text.length <= 20) {
+                    updateSearchText(it)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
@@ -76,6 +80,7 @@ fun SearchTextField(
                     keyboardController?.hide()
                 },
             ),
+            singleLine = true,
             textStyle = TextStyle(color = textColor),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             decorationBox = { innerTextField ->
@@ -150,9 +155,14 @@ fun FestivalSearchTextField(
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
             value = searchText,
-            onValueChange = updateSearchText,
+            onValueChange = {
+                if (it.text.length <= 20) {
+                    updateSearchText(it)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            singleLine = true,
             textStyle = TextStyle(color = textColor),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             decorationBox = { innerTextField ->

@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.ArrowOrientationRules
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
@@ -31,6 +32,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,6 +50,7 @@ fun ToolTip(
         setArrowSize(10)
         setArrowPosition(arrowPosition)
         setArrowOrientation(arrowOrientation)
+        setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
         setWidth(BalloonSizeSpec.WRAP)
         setHeight(BalloonSizeSpec.WRAP)
         setPadding(9)
@@ -78,6 +81,7 @@ fun ToolTip(
         content()
         LaunchedEffect(key1 = Unit) {
             scope.launch {
+                delay(500)
                 balloonWindow.awaitAlignEnd()
             }
         }
