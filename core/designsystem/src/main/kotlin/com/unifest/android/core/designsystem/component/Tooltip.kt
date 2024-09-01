@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.ArrowOrientationRules
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
@@ -48,6 +49,7 @@ fun ToolTip(
         setArrowSize(10)
         setArrowPosition(arrowPosition)
         setArrowOrientation(arrowOrientation)
+        setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
         setWidth(BalloonSizeSpec.WRAP)
         setHeight(BalloonSizeSpec.WRAP)
         setPadding(9)
