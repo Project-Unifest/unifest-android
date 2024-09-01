@@ -32,6 +32,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -80,6 +81,7 @@ fun ToolTip(
         content()
         LaunchedEffect(key1 = Unit) {
             scope.launch {
+                delay(500)
                 balloonWindow.awaitAlignEnd()
             }
         }
