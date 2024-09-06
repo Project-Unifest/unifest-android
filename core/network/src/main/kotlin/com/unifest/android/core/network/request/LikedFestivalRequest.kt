@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LikedFestivalRequest(
+    @SerialName("festivalId")
+    val festivalId: Long,
     @SerialName("fcmToken")
     val fcmToken: String,
 )

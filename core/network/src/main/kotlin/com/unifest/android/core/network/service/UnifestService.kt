@@ -110,16 +110,15 @@ interface UnifestService {
         @Body request: WaitingRequest,
     ): WaitingResponse
 
-    // TODO api endpoint 수정
-    @POST("booths/{festival-id}/interest")
+    // 관심 축제 등록
+    @POST("megaphone/subscribe")
     suspend fun registerLikedFestival(
-        @Path("festival-id") festivalId: Long,
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
-    @DELETE("booths/{festival-id}/interest")
+    // 관심 축제 해제
+    @DELETE("megaphone/subscribe")
     suspend fun unregisterLikedFestival(
-        @Path("festival-id") festivalId: Long,
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
 }
