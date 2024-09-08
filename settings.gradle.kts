@@ -46,4 +46,5 @@ include(
     ":feature:navigator",
     ":feature:splash",
     ":feature:waiting",
+    ":feature:stamp"
 )

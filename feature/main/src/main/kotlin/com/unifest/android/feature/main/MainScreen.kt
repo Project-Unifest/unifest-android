@@ -22,6 +22,7 @@ import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.main.component.MainBottomBar
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
+import com.unifest.android.feature.stamp.navigation.stampNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -105,6 +106,10 @@ internal fun MainScreen(
                 navigateToLikedBooth = navigator::navigateToLikedBooth,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
+            )
+            stampNavGraph(
+                padding = innerPadding,
+                popBackStack = navigator::popBackStackIfNotMap,
             )
             likedBoothNavGraph(
                 padding = innerPadding,
