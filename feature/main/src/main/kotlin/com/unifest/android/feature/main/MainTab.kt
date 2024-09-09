@@ -35,7 +35,7 @@ internal enum class MainTab(
     ),
     STAMP(
         iconResId = R.drawable.ic_stamp,
-        selectedIconResId = R.drawable.ic_stamp,
+        selectedIconResId = R.drawable.ic_selected_stamp,
         contentDescription = "Stamp Icon",
         label = "스탬프",
         route = MainTabRoute.Stamp,
