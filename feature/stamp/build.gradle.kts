@@ -15,6 +15,7 @@ dependencies {
         projects.core.data,
 
         libs.kotlinx.collections.immutable,
+        libs.zxing.android.embedded,
         libs.timber,
     )
 }
