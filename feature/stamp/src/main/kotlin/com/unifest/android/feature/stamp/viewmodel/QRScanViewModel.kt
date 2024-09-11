@@ -2,6 +2,7 @@ package com.unifest.android.feature.stamp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +19,8 @@ class QRScanViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(QRScanUiState())
     val uiState: StateFlow<QRScanUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent = Channel<QRScanEvent>()
-    val uiEvent: Flow<QRScanEvent> = _uiEvent.receiveAsFlow()
+    private val _uiEvent = Channel<QRScanUiEvent>()
+    val uiEvent: Flow<QRScanUiEvent> = _uiEvent.receiveAsFlow()
 
     fun onAction(action: QRScanUiAction) {
         when (action) {
@@ -29,7 +30,7 @@ class QRScanViewModel @Inject constructor() : ViewModel() {
 
     private fun navigateBack() {
         viewModelScope.launch {
-            _uiEvent.send(QRScanEvent.NavigateBack)
+            _uiEvent.send(QRScanUiEvent.NavigateBack)
         }
     }
 
@@ -40,5 +41,8 @@ class QRScanViewModel @Inject constructor() : ViewModel() {
      */
     fun scan(entryCode: String) {
         Timber.tag("QRScanActivity").d("스캔 결과: $entryCode")
+        viewModelScope.launch {
+            _uiEvent.send(QRScanUiEvent.ShowToast(UiText.DirectString(entryCode)))
+        }
     }
 }

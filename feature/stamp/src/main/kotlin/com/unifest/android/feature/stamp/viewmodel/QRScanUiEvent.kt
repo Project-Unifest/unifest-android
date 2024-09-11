@@ -1,9 +1,12 @@
 package com.unifest.android.feature.stamp.viewmodel
 
-sealed interface QRScanEvent {
-    data object NavigateBack : QRScanEvent
-    data object ScanSuccess : QRScanEvent
-    data class ScanError(val errorType: QRErrorType) : QRScanEvent
+import com.unifest.android.core.common.UiText
+
+sealed interface QRScanUiEvent {
+    data object NavigateBack : QRScanUiEvent
+    data object ScanSuccess : QRScanUiEvent
+    data class ScanError(val errorType: QRErrorType) : QRScanUiEvent
+    data class ShowToast(val text: UiText) : QRScanUiEvent
 }
 
 data class QRScanException(

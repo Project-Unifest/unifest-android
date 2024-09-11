@@ -28,14 +28,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
 import com.unifest.android.feature.stamp.viewmodel.QRErrorType
-import com.unifest.android.feature.stamp.viewmodel.QRScanEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
+import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
 
 @Composable
@@ -46,6 +47,7 @@ fun QRScanScreen(
     viewModel: QRScanViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val activity = context.findActivity()
 
     LaunchedEffect(barcodeView) {
         barcodeView.resume()
@@ -53,8 +55,8 @@ fun QRScanScreen(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is QRScanEvent.NavigateBack -> popBackStack()
-            is QRScanEvent.ScanError -> {
+            is QRScanUiEvent.NavigateBack -> popBackStack()
+            is QRScanUiEvent.ScanError -> {
                 when (event.errorType) {
                     QRErrorType.ShowNotToday -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
                     QRErrorType.UsedTicket -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
@@ -62,7 +64,11 @@ fun QRScanScreen(
                 }
             }
 
-            is QRScanEvent.ScanSuccess -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+            is QRScanUiEvent.ScanSuccess -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+            is QRScanUiEvent.ShowToast -> {
+                Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
+                activity.finish()
+            }
         }
     }
 
