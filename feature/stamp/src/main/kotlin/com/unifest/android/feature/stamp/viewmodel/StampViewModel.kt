@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.PermissionDialogButtonType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -27,9 +28,10 @@ class StampViewModel @Inject constructor(
 
     fun onAction(action: StampUiAction) {
         when (action) {
-            is StampUiAction.OnReceiveStampClick -> navigateToQRScan()
+            is StampUiAction.OnReceiveStampClick -> requestLocationPermission()
             is StampUiAction.OnRefreshClick -> refresh()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
+            is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
         }
     }
 
@@ -43,9 +45,50 @@ class StampViewModel @Inject constructor(
         // API 재 호출
     }
 
+    private fun requestLocationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(StampUiEvent.RequestCameraPermission)
+        }
+    }
+
     private fun navigateToQRScan() {
         viewModelScope.launch {
             _uiEvent.send(StampUiEvent.NavigateToQRScan)
+        }
+    }
+
+    fun onPermissionResult(isGranted: Boolean) {
+        if (!isGranted) {
+            _uiState.update { it.copy(isPermissionDialogVisible = true) }
+        } else {
+            navigateToQRScan()
+        }
+    }
+
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+        when (buttonType) {
+            PermissionDialogButtonType.DISMISS -> {
+                setPermissionDialogVisible(false)
+            }
+
+            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
+                viewModelScope.launch {
+                    _uiEvent.send(StampUiEvent.NavigateToAppSetting)
+                }
+            }
+
+            PermissionDialogButtonType.CONFIRM -> {
+                setPermissionDialogVisible(false)
+                viewModelScope.launch {
+                    _uiEvent.send(StampUiEvent.RequestCameraPermission)
+                }
+            }
+        }
+    }
+
+    private fun setPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isPermissionDialogVisible = flag)
         }
     }
 

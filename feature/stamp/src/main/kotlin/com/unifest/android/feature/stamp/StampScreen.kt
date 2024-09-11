@@ -1,6 +1,9 @@
 package com.unifest.android.feature.stamp
 
+import android.Manifest
 import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +48,9 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
@@ -57,6 +63,8 @@ import com.unifest.android.core.designsystem.theme.StampCount
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.CameraPermissionTextProvider
+import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.stamp.component.StampButton
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
 import com.unifest.android.feature.stamp.viewmodel.StampUiAction
@@ -72,13 +80,21 @@ internal fun StampRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val activity = context.findActivity()
+
+    val permissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = {
+            viewModel.onPermissionResult(it)
+        },
+    )
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is StampUiEvent.NavigateBack -> popBackStack()
-            is StampUiEvent.NavigateToQRScan -> {
-                startActivity(context, Intent(context, QRScanActivity::class.java), null)
-            }
+            is StampUiEvent.NavigateToQRScan -> startActivity(context, Intent(context, QRScanActivity::class.java), null)
+            is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
+            is StampUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
         }
     }
 
@@ -95,6 +111,8 @@ internal fun StampScreen(
     uiState: StampUiState,
     onAction: (StampUiAction) -> Unit,
 ) {
+    val activity = LocalContext.current.findActivity()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -247,6 +265,16 @@ internal fun StampScreen(
                     Spacer(modifier = Modifier.height(21.dp))
                 }
             }
+        }
+
+        if (uiState.isPermissionDialogVisible) {
+            PermissionDialog(
+                permissionTextProvider = CameraPermissionTextProvider(),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
+                onDismiss = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
+                navigateToAppSetting = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
+                onConfirm = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
+            )
         }
     }
 }

@@ -113,6 +113,16 @@ class NotificationPermissionTextProvider : PermissionTextProvider {
     }
 }
 
+class CameraPermissionTextProvider : PermissionTextProvider {
+    override fun getDescription(isPermanentlyDeclined: Boolean): String {
+        return if (isPermanentlyDeclined) {
+            "카메라 권한 요청을 거부하였습니다.\n앱 설정으로 이동하여 권한을 부여할 수 있습니다."
+        } else {
+            "QR 스캔을 하기 위해서는 카메라 권한이 필요합니다."
+        }
+    }
+}
+
 @ComponentPreview
 @Composable
 fun PermissionDialogPreview() {
