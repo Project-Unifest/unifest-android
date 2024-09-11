@@ -49,7 +49,6 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.Title3
@@ -205,7 +204,12 @@ fun MenuScreen(
                         }
                     }
                 }
-                item { UnifestHorizontalDivider() }
+                item {
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
+                }
                 item {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -267,7 +271,12 @@ fun MenuScreen(
                         )
                     }
                 }
-                item { UnifestHorizontalDivider() }
+                item {
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
+                }
                 item {
                     MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
