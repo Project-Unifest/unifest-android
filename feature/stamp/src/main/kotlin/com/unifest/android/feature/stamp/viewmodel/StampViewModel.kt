@@ -2,7 +2,6 @@ package com.unifest.android.feature.stamp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import dagger.hilt.android.lifecycle.HiltViewModel

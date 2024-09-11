@@ -1,6 +1,5 @@
 package com.unifest.android.feature.stamp.viewmodel
 
-
 sealed interface QRScanEvent {
     data object NavigateBack : QRScanEvent
     data object ScanSuccess : QRScanEvent

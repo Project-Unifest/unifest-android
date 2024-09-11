@@ -1,6 +1,5 @@
 package com.unifest.android.feature.stamp.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,10 +14,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class QRScanViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-
+class QRScanViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(QRScanUiState())
     val uiState: StateFlow<QRScanUiState> = _uiState.asStateFlow()
 
@@ -28,7 +24,6 @@ class QRScanViewModel @Inject constructor(
     fun onAction(action: QRScanUiAction) {
         when (action) {
             is QRScanUiAction.OnBackClick -> navigateBack()
-            else -> {}
         }
     }
 

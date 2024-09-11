@@ -279,7 +279,6 @@ internal fun StampScreen(
     }
 }
 
-
 @DevicePreview
 @Composable
 fun StampScreenPreview(
