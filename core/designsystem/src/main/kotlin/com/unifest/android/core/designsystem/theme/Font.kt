@@ -13,12 +13,19 @@ val pretendardFamily = FontFamily(
     Font(R.font.pretendard_semi_bold, FontWeight.SemiBold, FontStyle.Normal),
     Font(R.font.pretendard_medium, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.pretendard_light, FontWeight.Light, FontStyle.Normal),
+)
+
+val StampCount = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 24.sp,
 )
 
 val Title0 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 24.sp,
+    fontSize = 22.sp,
 )
 
 val Title1 = TextStyle(
@@ -50,6 +57,7 @@ val Title5 = TextStyle(
     fontWeight = FontWeight.SemiBold,
     fontSize = 13.sp,
 )
+
 val BoothTitle0 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Bold,
@@ -192,4 +200,10 @@ val WaitingNumber5 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 30.sp,
+)
+
+val QRDescription = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Light,
+    fontSize = 13.sp,
 )

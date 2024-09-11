@@ -1,9 +1,7 @@
-package com.unifest.android.feature.waiting.viewmodel
+package com.unifest.android.feature.stamp.viewmodel
 
 sealed interface StampUiAction {
-    data class OnCheckBoothDetailClick(val boothId: Long) : StampUiAction
-    data object OnPullToRefresh : StampUiAction
-    data object OnStampCancelDialogCancelClick : StampUiAction
-    data object OnLookForBoothClick : StampUiAction
-    data object OnRefresh : StampUiAction
+    data object OnReceiveStampClick: StampUiAction
+    data object OnFindStampBoothClick: StampUiAction
+    data object OnRefreshClick : StampUiAction
 }
