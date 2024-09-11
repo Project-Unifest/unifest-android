@@ -175,9 +175,7 @@ internal fun MapRoute(
 
                     else -> return@forEach
                 },
-                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(
-                    permission,
-                ),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(permission),
                 onDismiss = {
                     mapViewModel.onMapUiAction(
                         MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS),

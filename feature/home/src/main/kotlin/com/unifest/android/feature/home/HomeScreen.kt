@@ -34,7 +34,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content6
@@ -200,7 +199,12 @@ internal fun HomeScreen(
                     )
                 }
             }
-            item { UnifestHorizontalDivider() }
+            item {
+                HorizontalDivider(
+                    thickness = 8.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item {
                 Text(

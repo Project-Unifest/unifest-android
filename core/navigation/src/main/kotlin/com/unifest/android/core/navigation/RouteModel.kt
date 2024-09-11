@@ -7,10 +7,13 @@ sealed interface MainTabRoute : Route {
     data object Home : MainTabRoute
 
     @Serializable
+    data object Waiting : MainTabRoute
+
+    @Serializable
     data object Map : MainTabRoute
 
     @Serializable
-    data object Waiting : MainTabRoute
+    data object Stamp : MainTabRoute
 
     @Serializable
     data object Menu : MainTabRoute
