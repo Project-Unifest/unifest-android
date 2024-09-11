@@ -31,6 +31,7 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnRefreshClick -> refresh()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
+            is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
         }
     }
 

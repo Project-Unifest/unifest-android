@@ -65,6 +65,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.CameraPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
+import com.unifest.android.feature.stamp.component.StampBoothBottomSheet
 import com.unifest.android.feature.stamp.component.StampButton
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
 import com.unifest.android.feature.stamp.viewmodel.StampUiAction
@@ -185,7 +186,7 @@ internal fun StampScreen(
                                     append("${uiState.receivedStamp}")
                                 }
                                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
-                                    append(" / ${uiState.stampList.size} 개")
+                                    append(" / ${uiState.stampBoothList.size} 개")
                                 }
                             },
                             style = StampCount,
@@ -216,17 +217,17 @@ internal fun StampScreen(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
                             .padding(horizontal = 24.dp)
-                            .height(if (uiState.stampList.isEmpty()) 0.dp else (((uiState.stampList.size - 1) / 4 + 1) * 84).dp),
+                            .height(if (uiState.stampBoothList.isEmpty()) 0.dp else (((uiState.stampBoothList.size - 1) / 4 + 1) * 84).dp),
                         verticalArrangement = Arrangement.spacedBy(11.dp),
                         horizontalArrangement = Arrangement.spacedBy(9.dp),
                     ) {
                         items(
-                            count = uiState.stampList.size,
-                            key = { index -> uiState.stampList[index].boothId },
+                            count = uiState.stampBoothList.size,
+                            key = { index -> uiState.stampBoothList[index].id },
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (uiState.stampList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
+                                    painter = if (uiState.stampBoothList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
                                     else painterResource(id = R.drawable.ic_unchecked_stamp),
                                     contentDescription = "stamp image",
                                     modifier = Modifier
@@ -274,6 +275,14 @@ internal fun StampScreen(
                 onDismiss = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
                 navigateToAppSetting = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
                 onConfirm = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
+            )
+        }
+
+        if (uiState.isStampBoothDialogVisible) {
+            StampBoothBottomSheet(
+                schoolName = uiState.schoolName,
+                stampBoothList = uiState.stampBoothList,
+                onAction = onAction,
             )
         }
     }
