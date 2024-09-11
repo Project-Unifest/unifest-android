@@ -110,6 +110,7 @@ internal fun MainScreen(
             stampNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
             likedBoothNavGraph(
                 padding = innerPadding,

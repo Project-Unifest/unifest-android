@@ -1,6 +1,5 @@
 package com.unifest.android.feature.stamp.viewmodel
 
-import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.StampBoothModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -16,7 +15,7 @@ data class StampUiState(
             category = "주점",
             description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다.",
             location = "학생회관 옆",
-            isChecked = true
+            isChecked = true,
         ),
         StampBoothModel(
             id = 1,

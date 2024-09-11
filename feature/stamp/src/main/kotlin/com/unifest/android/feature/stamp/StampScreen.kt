@@ -77,6 +77,7 @@ import com.unifest.android.feature.stamp.viewmodel.StampViewModel
 internal fun StampRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
     viewModel: StampViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -96,6 +97,7 @@ internal fun StampRoute(
             is StampUiEvent.NavigateToQRScan -> startActivity(context, Intent(context, QRScanActivity::class.java), null)
             is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
             is StampUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
+            is StampUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }
 

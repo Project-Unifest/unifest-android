@@ -5,4 +5,5 @@ sealed interface StampUiEvent {
     data object NavigateToQRScan : StampUiEvent
     data object RequestCameraPermission : StampUiEvent
     data object NavigateToAppSetting : StampUiEvent
+    data class NavigateToBoothDetail(val boothId: Long) : StampUiEvent
 }

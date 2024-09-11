@@ -32,6 +32,7 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
+            is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
         }
     }
 
@@ -89,6 +90,15 @@ class StampViewModel @Inject constructor(
     private fun setPermissionDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isPermissionDialogVisible = flag)
+        }
+    }
+
+    @Suppress("UnusedParameter")
+    private fun navigateToBoothDetail(boothId: Long) {
+        viewModelScope.launch {
+            // 임시 구현
+            // _uiEvent.send(StampUiEvent.NavigateToBoothDetail(boothId))
+            _uiEvent.send(StampUiEvent.NavigateToBoothDetail(79L))
         }
     }
 

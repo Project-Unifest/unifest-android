@@ -30,7 +30,6 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.StampBoothModel
 
 @Composable
