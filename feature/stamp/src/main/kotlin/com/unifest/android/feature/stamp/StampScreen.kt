@@ -1,5 +1,6 @@
 package com.unifest.android.feature.stamp
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -39,6 +41,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
@@ -67,18 +70,21 @@ internal fun StampRoute(
     popBackStack: () -> Unit,
     viewModel: StampViewModel = hiltViewModel(),
 ) {
-    val waitingUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is StampUiEvent.NavigateBack -> popBackStack()
-            else -> {}
+            is StampUiEvent.NavigateToQRScan -> {
+                startActivity(context, Intent(context, QRScanActivity::class.java), null)
+            }
         }
     }
 
     StampScreen(
         padding = padding,
-        uiState = waitingUiState,
+        uiState = uiState,
         onAction = viewModel::onAction,
     )
 }

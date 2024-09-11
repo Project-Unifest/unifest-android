@@ -55,7 +55,7 @@ data class StampUiState(
             isChecked = true,
         ),
     ),
-    val isWaitingCancelDialogVisible: Boolean = false,
+    val isStampBoothDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
 )
