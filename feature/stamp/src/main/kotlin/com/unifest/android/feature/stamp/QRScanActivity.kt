@@ -23,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-// TODO 카메라 권한 요청 플로우 필요
 @AndroidEntryPoint
 class QRScanActivity : ComponentActivity() {
     private val barcodeView: DecoratedBarcodeView by lazy {
@@ -84,7 +83,7 @@ class QRScanActivity : ComponentActivity() {
     private fun checkCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
         ) == PackageManager.PERMISSION_GRANTED
     }
 }
