@@ -1,10 +1,13 @@
 package com.unifest.android.feature.stamp
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-// TODO 카메라 권한 요청 플로우 필요
 @AndroidEntryPoint
 class QRScanActivity : ComponentActivity() {
     private val barcodeView: DecoratedBarcodeView by lazy {
@@ -62,7 +64,11 @@ class QRScanActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        barcodeView.resume()
+        if (checkCameraPermission()) {
+            barcodeView.resume()
+        } else {
+            finish()
+        }
     }
 
     override fun onPause() {
@@ -72,5 +78,12 @@ class QRScanActivity : ComponentActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event)
+    }
+
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA,
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }
