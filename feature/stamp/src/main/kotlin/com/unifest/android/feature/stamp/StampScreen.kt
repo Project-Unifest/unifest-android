@@ -95,16 +95,22 @@ internal fun StampRoute(
         )
     }
 
-    val permissionResultLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-        isCameraPermissionGranted = isGranted
-        viewModel.onPermissionResult(isGranted)
-    }
+    val permissionResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            isCameraPermissionGranted = isGranted
+            viewModel.onPermissionResult(isGranted)
+        },
+    )
 
-    val settingsLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-        // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-        isCameraPermissionGranted = activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-        viewModel.onPermissionResult(isCameraPermissionGranted)
-    }
+    val settingsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            // 설정에서 돌아왔을 때 권한 상태를 다시 확인
+            isCameraPermissionGranted = activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+            viewModel.onPermissionResult(isCameraPermissionGranted)
+        },
+    )
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
@@ -118,6 +124,7 @@ internal fun StampRoute(
                 )
                 settingsLauncher.launch(intent)
             }
+
             is StampUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }

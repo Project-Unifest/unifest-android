@@ -1,7 +1,12 @@
 package com.unifest.android.feature.map
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,6 +38,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -102,7 +110,6 @@ val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRA
     )
 }
 
-// TODO 권한 관련 문제 (A 허용, B 거부 시 B 다시 허용 할 경우, A 가 거부되었다고 뜨는 문제)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
@@ -117,16 +124,65 @@ internal fun MapRoute(
     val activity = context.findActivity()
     val dialogQueue = mapViewModel.permissionDialogQueue
 
+    var isLocationPermissionGranted by remember {
+        mutableStateOf(checkLocationPermission(activity))
+    }
+
+    var isNotificationPermissionGranted by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
+            },
+        )
+    }
+
     val permissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { perms ->
             permissionsToRequest.forEach { permission ->
-                if (perms.contains(permission)) {
-                    mapViewModel.onPermissionResult(
-                        permission = permission,
-                        isGranted = perms[permission] == true,
-                    )
+                when (permission) {
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                        isLocationPermissionGranted = checkLocationPermission(activity)
+                    }
+
+                    Manifest.permission.POST_NOTIFICATIONS -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            isNotificationPermissionGranted = perms[permission] == true
+                        }
+                    }
                 }
+                mapViewModel.onPermissionResult(
+                    permission = permission,
+                    isGranted = perms[permission] == true,
+                )
+            }
+        },
+    )
+
+    val settingsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            // 설정에서 돌아왔을 때 권한 상태를 다시 확인
+            isLocationPermissionGranted = checkLocationPermission(activity)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                isNotificationPermissionGranted =
+                    activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            }
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = isLocationPermissionGranted,
+            )
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+                isGranted = isLocationPermissionGranted,
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                mapViewModel.onPermissionResult(
+                    permission = Manifest.permission.POST_NOTIFICATIONS,
+                    isGranted = isNotificationPermissionGranted,
+                )
             }
         },
     )
@@ -146,7 +202,13 @@ internal fun MapRoute(
                 permissionResultLauncher.launch(arrayOf(event.permission))
             }
 
-            is MapUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
+            is MapUiEvent.NavigateToAppSetting -> {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", activity.packageName, null)
+                }
+                settingsLauncher.launch(intent)
+            }
+
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
@@ -163,35 +225,55 @@ internal fun MapRoute(
     dialogQueue
         .reversed()
         .forEach { permission ->
-            PermissionDialog(
-                permissionTextProvider = when (permission) {
-                    Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
-                        LocationPermissionTextProvider()
+            when (permission) {
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
+                    if (!isLocationPermissionGranted) {
+                        PermissionDialog(
+                            permissionTextProvider = LocationPermissionTextProvider(),
+                            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(permission),
+                            onDismiss = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS),
+                                )
+                            },
+                            navigateToAppSetting = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING),
+                                )
+                            },
+                            onConfirm = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM, permission),
+                                )
+                            },
+                        )
                     }
+                }
 
-                    Manifest.permission.POST_NOTIFICATIONS -> {
-                        NotificationPermissionTextProvider()
+                Manifest.permission.POST_NOTIFICATIONS -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
+                        PermissionDialog(
+                            permissionTextProvider = NotificationPermissionTextProvider(),
+                            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(permission),
+                            onDismiss = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS),
+                                )
+                            },
+                            navigateToAppSetting = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING),
+                                )
+                            },
+                            onConfirm = {
+                                mapViewModel.onMapUiAction(
+                                    MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM, permission),
+                                )
+                            },
+                        )
                     }
-
-                    else -> return@forEach
-                },
-                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(permission),
-                onDismiss = {
-                    mapViewModel.onMapUiAction(
-                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS),
-                    )
-                },
-                navigateToAppSetting = {
-                    mapViewModel.onMapUiAction(
-                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING),
-                    )
-                },
-                onConfirm = {
-                    mapViewModel.onMapUiAction(
-                        MapUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM, permission),
-                    )
-                },
-            )
+                }
+            }
         }
 
     MapScreen(
@@ -201,6 +283,11 @@ internal fun MapRoute(
         onMapUiAction = mapViewModel::onMapUiAction,
         onFestivalUiAction = festivalViewModel::onFestivalUiAction,
     )
+}
+
+private fun checkLocationPermission(activity: Activity): Boolean {
+    return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+        activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
 @Composable
