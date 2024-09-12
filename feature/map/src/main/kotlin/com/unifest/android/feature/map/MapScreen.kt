@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,14 +71,12 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
@@ -89,7 +88,7 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.map.component.BoothItem
 import com.unifest.android.feature.map.component.MapTopAppBar
-import com.unifest.android.feature.map.model.BoothMapModel
+import com.unifest.android.feature.map.preview.MapPreviewParameterProvider
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
@@ -533,29 +532,14 @@ fun MapContent(
 
 @DevicePreview
 @Composable
-private fun MapScreenPreview() {
-    val boothList = persistentListOf<BoothMapModel>()
-    repeat(5) { index ->
-        boothList.add(
-            BoothMapModel(
-                id = index.toLong(),
-                name = "컴공 주점",
-                category = "",
-                description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                location = "청심대 앞",
-            ),
-        )
-    }
-
+private fun MapScreenPreview(
+    @PreviewParameter(MapPreviewParameterProvider::class)
+    mapUiState: MapUiState,
+) {
     UnifestTheme {
         MapScreen(
             padding = PaddingValues(),
-            mapUiState = MapUiState(
-                festivalInfo = FestivalModel(
-                    schoolName = "건국대학교",
-                ),
-                boothList = boothList,
-            ),
+            mapUiState = mapUiState,
             festivalUiState = FestivalUiState(),
             onMapUiAction = {},
             onFestivalUiAction = {},
