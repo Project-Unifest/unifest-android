@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -42,7 +43,6 @@ import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.component.WaitingConfirmDialog
@@ -266,7 +266,12 @@ fun BoothDetailContent(
             )
         }
         item { Spacer(modifier = Modifier.height(32.dp)) }
-        item { UnifestHorizontalDivider() }
+        item {
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
         item { Spacer(modifier = Modifier.height(22.dp)) }
         item {
             Text(

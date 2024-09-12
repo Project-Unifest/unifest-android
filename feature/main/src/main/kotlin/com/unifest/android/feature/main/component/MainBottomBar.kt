@@ -124,7 +124,7 @@ private fun MainBottomBarPreview() {
         MainBottomBar(
             visible = true,
             tabs = MainTab.entries.toImmutableList(),
-            currentTab = MainTab.HOME,
+            currentTab = MainTab.MAP,
             onTabSelected = {},
         )
     }

@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -34,7 +35,6 @@ import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -46,7 +46,6 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import kotlinx.collections.immutable.ImmutableList
 
-// TODO HorizontalDivider -> UnifestHorizontalDivider 로 전부 변경
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FestivalSearchBottomSheet(
@@ -67,7 +66,10 @@ fun FestivalSearchBottomSheet(
 //        isModal = true,
 //        skipSlightlyExpanded = true,
 //    )
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { it != SheetValue.Hidden },
+    )
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -121,7 +123,10 @@ fun FestivalSearchBottomSheet(
             )
             if (!isSearchMode) {
                 Spacer(modifier = Modifier.height(39.dp))
-                UnifestHorizontalDivider(color = MaterialTheme.colorScheme.scrim)
+                HorizontalDivider(
+                    thickness = 8.dp,
+                    color = MaterialTheme.colorScheme.scrim,
+                )
                 Spacer(modifier = Modifier.height(21.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

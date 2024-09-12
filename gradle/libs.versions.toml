@@ -55,15 +55,10 @@ landscapist = "2.3.6"
 balloon = "1.6.7"
 calendar-compose = "2.6.0-beta04"
 flexible-bottomsheet = "0.1.5"
-
 naver-map-compose = "1.7.1"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-appcompat = "1.7.0"
-material = "1.12.0"
+zxing = "4.3.0"
 
 [libraries]
 
@@ -128,15 +123,10 @@ landscapist-placeholder = { group = "com.github.skydoves", name = "landscapist-p
 ballon-compose = { group = "com.github.skydoves", name = "balloon-compose", version.ref = "balloon" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose" }
 flexible-bottomsheet = { group = "com.github.skydoves", name = "flexible-bottomsheet-material3", version.ref = "flexible-bottomsheet" }
-
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naver-map-location" }
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 
 [plugins]
 
