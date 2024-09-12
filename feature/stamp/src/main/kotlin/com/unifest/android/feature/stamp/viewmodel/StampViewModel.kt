@@ -59,10 +59,11 @@ class StampViewModel @Inject constructor(
     }
 
     fun onPermissionResult(isGranted: Boolean) {
-        if (!isGranted) {
-            _uiState.update { it.copy(isPermissionDialogVisible = true) }
-        } else {
+        if (isGranted) {
+            setPermissionDialogVisible(false)
             navigateToQRScan()
+        } else {
+            setPermissionDialogVisible(true)
         }
     }
 

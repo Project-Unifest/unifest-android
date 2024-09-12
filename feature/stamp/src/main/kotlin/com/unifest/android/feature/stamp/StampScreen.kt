@@ -2,6 +2,9 @@ package com.unifest.android.feature.stamp
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -30,6 +33,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,7 +56,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.common.extension.navigateToAppSetting
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
@@ -84,19 +89,35 @@ internal fun StampRoute(
     val context = LocalContext.current
     val activity = context.findActivity()
 
-    val permissionResultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = {
-            viewModel.onPermissionResult(it)
-        },
-    )
+    var isCameraPermissionGranted by remember {
+        mutableStateOf(
+            activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED,
+        )
+    }
+
+    val permissionResultLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
+        isCameraPermissionGranted = isGranted
+        viewModel.onPermissionResult(isGranted)
+    }
+
+    val settingsLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+        // 설정에서 돌아왔을 때 권한 상태를 다시 확인
+        isCameraPermissionGranted = activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        viewModel.onPermissionResult(isCameraPermissionGranted)
+    }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is StampUiEvent.NavigateBack -> popBackStack()
             is StampUiEvent.NavigateToQRScan -> startActivity(context, Intent(context, QRScanActivity::class.java), null)
             is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
-            is StampUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
+            is StampUiEvent.NavigateToAppSetting -> {
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", activity.packageName, null),
+                )
+                settingsLauncher.launch(intent)
+            }
             is StampUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
     }
