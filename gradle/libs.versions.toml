@@ -27,7 +27,7 @@ kotlinx-collections-immutable = "0.3.8"
 android-play-services-location = "21.3.0"
 
 androidx-core = "1.13.1"
-androidx-lifecycle = "2.8.4"
+androidx-lifecycle = "2.8.5"
 androidx-splash = "1.0.1"
 androidx-startup = "1.1.1"
 androidx-navigation = "2.8.0-rc01"
