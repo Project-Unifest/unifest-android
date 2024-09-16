@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -73,7 +74,33 @@ fun BoothDescription(
             color = MaterialTheme.colorScheme.onSecondary,
             style = Content2.copy(lineHeight = 18.sp),
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(22.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .clickable { onAction(BoothUiAction.OnCheckLocationClick) },
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
+                contentDescription = "location icon",
+                tint = Color.Unspecified,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = stringResource(id = R.string.booth_isRunning),
+                //todo : 체크해야함
+                color = MaterialTheme.colorScheme.onBackground,
+                style = BoothLocation,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
+                contentDescription = "Search School",
+                tint = Color.Unspecified,
+            )
+        }
+        Spacer(modifier = Modifier.height(11.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 8.dp),
