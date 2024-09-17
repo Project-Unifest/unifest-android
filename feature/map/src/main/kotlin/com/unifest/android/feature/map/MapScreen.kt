@@ -298,7 +298,7 @@ internal fun MapScreen(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.5430, 127.07673671067072), 14.8)
+        position = CameraPosition(LatLng(37.0122749, 127.2635972), 15.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
