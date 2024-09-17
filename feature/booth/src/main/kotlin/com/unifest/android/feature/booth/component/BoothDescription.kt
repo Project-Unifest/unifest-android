@@ -36,6 +36,8 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun BoothDescription(
@@ -52,6 +54,21 @@ fun BoothDescription(
     val maxWidth = remember(configuration) {
         val screenWidth = configuration.screenWidthDp.dp - 40.dp
         screenWidth * (2 / 3f)
+    }
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+
+    // 현재 시간을 가져오는 코드
+    val currentTime = remember { LocalTime.now() }
+
+    // openTime과 closeTime을 LocalTime으로 변환 및 "HH:mm" 형식으로 포맷
+    val openLocalTime = remember(openTime) { LocalTime.parse(openTime) }
+    val closeLocalTime = remember(closeTime) { LocalTime.parse(closeTime) }
+
+    val openTimeFormatted = remember(openLocalTime) { openLocalTime.format(formatter) }
+    val closeTimeFormatted = remember(closeLocalTime) { closeLocalTime.format(formatter) }
+
+    val isBoothRunning = remember(currentTime, openLocalTime, closeLocalTime) {
+        currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
     }
 
     Column(
@@ -97,8 +114,11 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(id = R.string.booth_isRunning),
-                //todo : 운영중인지 체크해야함(아직 서버 리턴값 방식 확정되지 않음)
+                text = if (isBoothRunning) {
+                    stringResource(id = R.string.booth_isRunning)
+                } else {
+                    stringResource(id = R.string.booth_isClosed)
+                },
                 color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
@@ -113,13 +133,13 @@ fun BoothDescription(
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Open Time: $openTime",
+                    text = "Open Time: $openTimeFormatted",
                     color = MaterialTheme.colorScheme.onBackground,
                     style = BoothLocation,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Close Time: $closeTime",
+                    text = "Close Time: $closeTimeFormatted",
                     color = MaterialTheme.colorScheme.onBackground,
                     style = BoothLocation,
                 )
