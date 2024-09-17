@@ -38,6 +38,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 @Composable
 fun BoothDescription(
@@ -55,21 +56,34 @@ fun BoothDescription(
         val screenWidth = configuration.screenWidthDp.dp - 40.dp
         screenWidth * (2 / 3f)
     }
+    // 포매터 정의
     val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    val parser = DateTimeFormatter.ofPattern("HH:mm:ss")
 
-    // 현재 시간을 가져오는 코드
-    val currentTime = remember { LocalTime.now() }
-
-    // openTime과 closeTime을 LocalTime으로 변환 및 "HH:mm" 형식으로 포맷
-    val openLocalTime = remember(openTime) { LocalTime.parse(openTime) }
-    val closeLocalTime = remember(closeTime) { LocalTime.parse(closeTime) }
-
-    val openTimeFormatted = remember(openLocalTime) { openLocalTime.format(formatter) }
-    val closeTimeFormatted = remember(closeLocalTime) { closeLocalTime.format(formatter) }
-
-    val isBoothRunning = remember(currentTime, openLocalTime, closeLocalTime) {
-        currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
+    // 시간 파싱 및 형식화 함수
+    fun parseAndFormatTime(time: String?): Pair<String, LocalTime?> {
+        return if (time.isNullOrBlank() || time == "등록된 정보가 없습니다") {
+            "등록된 정보가 없습니다" to null
+        } else {
+            try {
+                val localTime = LocalTime.parse(time, parser)
+                localTime.format(formatter) to localTime
+            } catch (e: DateTimeParseException) {
+                "등록된 정보가 없습니다" to null
+            }
+        }
     }
+
+    val (openTimeFormatted, openLocalTime) = parseAndFormatTime(openTime)
+    val (closeTimeFormatted, closeLocalTime) = parseAndFormatTime(closeTime)
+
+    // 현재 시간 가져오기
+    val currentTime = LocalTime.now()
+
+    // 부스 운영 여부 확인
+    val isBoothRunning = openLocalTime != null && closeLocalTime != null &&
+        currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
+
 
     Column(
         modifier = Modifier

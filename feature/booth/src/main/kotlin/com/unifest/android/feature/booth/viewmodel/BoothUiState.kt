@@ -4,6 +4,7 @@ import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MyWaitingModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -28,6 +29,7 @@ data class BoothUiState(
     val waitingId: Long = 0,
     val privacyConsentChecked: Boolean = false,
     val isRunning: Boolean = false,
+    val myWaitingList: ImmutableList<MyWaitingModel> = persistentListOf(),
     val outerCords: ImmutableList<LatLng> = persistentListOf(
         LatLng(50.0, 150.0),
         LatLng(50.0, 100.0),

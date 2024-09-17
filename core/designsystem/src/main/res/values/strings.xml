@@ -45,6 +45,8 @@
     <string name="booth_empty_waiting">올바른 전화번호를 입력해 주세요!</string>
     <string name="booth_isRunning">운영중</string>
     <string name="booth_isClosed">운영종료</string>
+    <string name="booth_waiting_full">웨이팅은 최대 3부스까지 가능해요!</string>
+    <string name="booth_waiting_already_exists">이미 웨이팅 한 부스에요!</string>
 
     <!--    Map    -->
     <string name="map_booth_search_text_field_hint">부스 / 주점을 검색해보세요.</string>
