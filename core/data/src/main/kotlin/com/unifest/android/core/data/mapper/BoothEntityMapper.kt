@@ -26,6 +26,7 @@ internal fun MenuEntity.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl,
+        status = status,
     )
 }
 

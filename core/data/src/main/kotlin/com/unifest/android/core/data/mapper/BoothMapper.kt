@@ -24,8 +24,8 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         longitude = longitude,
         menus = menus.map { it.toModel() },
         waitingEnabled = waitingEnabled,
-        openTime = openTime?:"등록된 정보가 없습니다",
-        closeTime = closeTime?:"등록된 정보가 없습니다",
+        openTime = openTime ?: "등록된 정보가 없습니다",
+        closeTime = closeTime ?: "등록된 정보가 없습니다",
     )
 }
 
@@ -35,6 +35,7 @@ internal fun Menu.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl ?: "",
+        status = status ?: "등록된 정보가 없습니다",
     )
 }
 

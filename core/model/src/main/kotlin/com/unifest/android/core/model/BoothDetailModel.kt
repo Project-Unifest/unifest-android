@@ -27,6 +27,7 @@ data class MenuModel(
     val name: String,
     val price: Int,
     val imgUrl: String,
+    val status: String,
 )
 
 @Stable

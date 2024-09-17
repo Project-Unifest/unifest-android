@@ -1,6 +1,8 @@
 package com.unifest.android.feature.booth.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkImage
+import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -35,10 +39,7 @@ fun MenuItem(
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
-        NetworkImage(
-            imgUrl = menu.imgUrl,
-            contentDescription = menu.name,
-            placeholder = painterResource(id = R.drawable.item_placeholder),
+        Box(
             modifier = Modifier
                 .size(86.dp)
                 .clip(RoundedCornerShape(16.dp))
@@ -49,7 +50,31 @@ fun MenuItem(
                         }
                     },
                 ),
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            NetworkImage(
+                imgUrl = menu.imgUrl,
+                contentDescription = menu.name,
+                placeholder = painterResource(id = R.drawable.item_placeholder),
+                modifier = Modifier.matchParentSize(),
+            )
+
+            // 품절일 경우 반투명 검은색 배경과 "품절" 텍스트 추가
+            if (menu.status == "품절") {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(Color.Black.copy(alpha = 0.6f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "품절",
+                        color = Color.White,
+                        style = Content9
+                    )
+                }
+            }
+        }
         Spacer(modifier = Modifier.width(13.dp))
         Column(
             modifier = Modifier.align(Alignment.CenterVertically),
@@ -65,6 +90,8 @@ fun MenuItem(
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MenuPrice,
             )
+            Spacer(modifier = Modifier.height(14.dp))
+            Tag(menuStatus = menu.status)
         }
     }
 }
@@ -79,6 +106,7 @@ fun MenuItemPreview() {
                 name = "닭강정",
                 price = 6000,
                 imgUrl = "",
+                status = "10개 미만 남음",
             ),
             onAction = {},
         )
