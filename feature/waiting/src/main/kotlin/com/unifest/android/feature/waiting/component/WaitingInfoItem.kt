@@ -34,7 +34,6 @@ import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.DarkGrey200
 import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey100
-import com.unifest.android.core.designsystem.theme.LightGrey700
 import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title5
@@ -180,7 +179,7 @@ fun WaitingInfoItem(
                     containerColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
                     borderColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
                     contentColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
-                    //todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
+                    // todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(

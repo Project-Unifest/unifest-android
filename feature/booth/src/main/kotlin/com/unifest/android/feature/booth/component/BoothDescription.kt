@@ -84,7 +84,6 @@ fun BoothDescription(
     val isBoothRunning = openLocalTime != null && closeLocalTime != null &&
         currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
 
-
     Column(
         modifier = Modifier
             .padding(horizontal = 20.dp)
