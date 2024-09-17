@@ -31,6 +31,7 @@ import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.DarkGrey100
+import com.unifest.android.core.designsystem.theme.DarkGrey200
 import com.unifest.android.core.designsystem.theme.DarkRed
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.LightGrey700
@@ -61,7 +62,15 @@ fun WaitingInfoItem(
     ) {
         Column(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
+                .then(
+                    if (myWaitingModel.status != "NOSHOW") {
+                        Modifier.background(
+                            if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100,
+                        )
+                    } else {
+                        Modifier
+                    },
+                )
                 .padding(16.dp),
         ) {
             Row(
@@ -98,17 +107,21 @@ fun WaitingInfoItem(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = if (myWaitingModel.waitingOrder.toInt() == 1) {
-                            stringResource(id = R.string.waiting_my_turn)
+                        text = if (myWaitingModel.status == "NOSHOW") {
+                            stringResource(id = R.string.waiting_no_show)
                         } else {
-                            myWaitingModel.waitingOrder.toString()
+                            if (myWaitingModel.waitingOrder.toInt() == 1) {
+                                stringResource(id = R.string.waiting_my_turn)
+                            } else {
+                                myWaitingModel.waitingOrder.toString()
+                            }
                         },
                         style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    if (myWaitingModel.waitingOrder.toInt() != 1) {
+                    if (myWaitingModel.waitingOrder.toInt() != 1 && myWaitingModel.status != "NOSHOW") {
                         Text(
                             text = stringResource(id = R.string.waiting_nth),
                             fontSize = 18.sp,
@@ -131,13 +144,13 @@ fun WaitingInfoItem(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = WaitingNumber2,
                     )
-                    Spacer(modifier = Modifier.width(13.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     VerticalDivider(
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier.height(13.dp),
                     )
-                    Spacer(modifier = Modifier.width(13.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(id = R.string.waiting_people),
                         color = MaterialTheme.colorScheme.onBackground,
@@ -157,13 +170,25 @@ fun WaitingInfoItem(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 UnifestOutlinedButton(
-                    onClick = { onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId)) },
-                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
-                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else LightGrey100,
+                    onClick = {
+                        if (myWaitingModel.status == "NOSHOW") {
+                            onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
+                        } else {
+                            onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
+                        }
+                    },
+                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
+                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
+                    contentColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
+                    //todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.waiting_cancel_waiting),
+                        text = if (myWaitingModel.status == "NOSHOW") {
+                            stringResource(id = R.string.waiting_no_show_description)
+                        } else {
+                            stringResource(id = R.string.waiting_cancel_waiting)
+                        },
                         color = if (isSystemInDarkTheme()) DarkRed else LightRed,
                         style = Title5,
                     )
@@ -171,13 +196,13 @@ fun WaitingInfoItem(
                 Spacer(modifier = Modifier.width(10.dp))
                 UnifestOutlinedButton(
                     onClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick(myWaitingModel.boothId)) },
-                    containerColor = LightGrey100,
-                    borderColor = LightGrey100,
+                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
+                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = stringResource(id = R.string.waiting_booth_check),
-                        color = LightGrey700,
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = Title5,
                     )
                 }
@@ -200,6 +225,28 @@ fun WaitingInfoItemPreview() {
                 createdAt = "2024-05-23",
                 updatedAt = "2024-05-23",
                 status = "waiting",
+                waitingOrder = 1L,
+                boothName = "부스 이름",
+            ),
+            onWaitingUiAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun WaitingInfoItemPreviewNOSHOW() {
+    UnifestTheme {
+        WaitingInfoItem(
+            myWaitingModel = MyWaitingModel(
+                boothId = 1L,
+                waitingId = 1L,
+                partySize = 2L,
+                tel = "010-1234-5678",
+                deviceId = "1234567890",
+                createdAt = "2024-05-23",
+                updatedAt = "2024-05-23",
+                status = "NOSHOW",
                 waitingOrder = 1L,
                 boothName = "부스 이름",
             ),

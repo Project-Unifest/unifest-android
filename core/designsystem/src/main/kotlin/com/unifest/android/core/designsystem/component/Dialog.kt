@@ -713,6 +713,26 @@ fun WaitingCancelDialog(
     }
 }
 
+@Composable
+fun NoShowWaitingCancelDialog(
+    onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit,
+) {
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.waiting_no_show_dialog_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.waiting_no_show_dialog_description,
+            confirmTextResId = R.string.confirm,
+            cancelTextResId = R.string.cancel,
+            onCancelClick = onCancelClick,
+            onConfirmClick = onConfirmClick,
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 private fun ServerErrorDialogPreview() {

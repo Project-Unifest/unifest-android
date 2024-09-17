@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.component.NoShowWaitingCancelDialog
 import com.unifest.android.core.designsystem.component.WaitingCancelDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
@@ -210,6 +211,13 @@ internal fun WaitingScreen(
         WaitingCancelDialog(
             onCancelClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogCancelClick) },
             onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnWaitingCancelDialogConfirmClick) },
+        )
+    }
+
+    if (waitingUiState.isNoShowWaitingCancelDialogVisible) {
+        NoShowWaitingCancelDialog(
+            onCancelClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick) },
+            onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick) },
         )
     }
 }

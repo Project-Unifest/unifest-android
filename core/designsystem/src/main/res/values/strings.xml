@@ -73,6 +73,10 @@
     <string name="waiting_no_waiting">신청한 웨이팅이 없어요</string>
     <string name="waiting_no_waiting_description">주점/부스 구경하러 가기></string>
     <string name="waiting_my_turn">입장해주세요</string>
+    <string name="waiting_no_show">부재 처리</string>
+    <string name="waiting_no_show_description">부재 웨이팅 지우기</string>
+    <string name="waiting_no_show_dialog_title">부재 웨이팅을 지웁니다</string>
+    <string name="waiting_no_show_dialog_description">문제가 있는 경우 해당 부스 운영자에 문의바랍니다</string>
 
     <!--    Menu    -->
     <string name="menu_title">메뉴</string>

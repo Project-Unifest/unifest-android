@@ -33,10 +33,13 @@ class WaitingViewModel @Inject constructor(
     fun onWaitingUiAction(action: WaitingUiAction) {
         when (action) {
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
+            is WaitingUiAction.OnCancelNoShowWaitingClick -> setNoShowWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
             is WaitingUiAction.OnPullToRefresh -> setNetworkErrorDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
+            is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
+            is WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
             is WaitingUiAction.OnRefresh -> getMyWaitingList()
         }
@@ -58,6 +61,13 @@ class WaitingViewModel @Inject constructor(
 
     private fun setWaitingCancelDialogWaitingId(waitingId: Long) {
         setWaitingCancelDialogVisible(true)
+        _uiState.update {
+            it.copy(waitingCancelDialogWaitingId = waitingId)
+        }
+    }
+
+    private fun setNoShowWaitingCancelDialogWaitingId(waitingId: Long) {
+        setNoShowWaitingCancelDialogVisible(true)
         _uiState.update {
             it.copy(waitingCancelDialogWaitingId = waitingId)
         }
@@ -92,6 +102,12 @@ class WaitingViewModel @Inject constructor(
     private fun setWaitingCancelDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isWaitingCancelDialogVisible = flag)
+        }
+    }
+
+    private fun setNoShowWaitingCancelDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNoShowWaitingCancelDialogVisible = flag)
         }
     }
 
