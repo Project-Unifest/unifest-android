@@ -67,6 +67,10 @@ data class BoothDetail(
     val menus: List<Menu>,
     @SerialName("waitingEnabled")
     val waitingEnabled: Boolean,
+    @SerialName("openTime")
+    val openTime: String? = null,
+    @SerialName("closeTime")
+    val closeTime: String? = null,
 )
 
 @Serializable

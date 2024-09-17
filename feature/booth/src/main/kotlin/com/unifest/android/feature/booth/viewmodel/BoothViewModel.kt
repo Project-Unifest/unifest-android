@@ -69,6 +69,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
+            is BoothUiAction.OnRunningClick -> expandRunningTime()
         }
     }
 
@@ -142,6 +143,12 @@ class BoothViewModel @Inject constructor(
     private fun navigateToBoothLocation() {
         viewModelScope.launch {
             _uiEvent.send(BoothUiEvent.NavigateToBoothLocation)
+        }
+    }
+
+    private fun expandRunningTime() {
+        _uiState.update {
+            it.copy(isRunning = !it.isRunning)
         }
     }
 

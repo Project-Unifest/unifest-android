@@ -17,6 +17,8 @@ data class BoothDetailModel(
     val likes: Int = 0,
     val isLiked: Boolean = false,
     val waitingEnabled: Boolean = false,
+    val openTime: String = "",
+    val closeTime: String = "",
 )
 
 @Stable

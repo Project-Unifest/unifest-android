@@ -1,5 +1,7 @@
 package com.unifest.android.feature.booth.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +43,9 @@ fun BoothDescription(
     warning: String,
     description: String,
     location: String,
+    isRunning: Boolean,
+    openTime: String,
+    closeTime: String,
     onAction: (BoothUiAction) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -49,7 +54,11 @@ fun BoothDescription(
         screenWidth * (2 / 3f)
     }
 
-    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .animateContentSize(),
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = name,
@@ -79,7 +88,7 @@ fun BoothDescription(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(top = 8.dp)
-                .clickable { onAction(BoothUiAction.OnCheckLocationClick) },
+                .clickable { onAction(BoothUiAction.OnRunningClick) },
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
@@ -89,16 +98,32 @@ fun BoothDescription(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = stringResource(id = R.string.booth_isRunning),
-                //todo : 체크해야함
+                //todo : 운영중인지 체크해야함(아직 서버 리턴값 방식 확정되지 않음)
                 color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
-                contentDescription = "Search School",
+                contentDescription = "arrow below",
                 tint = Color.Unspecified,
             )
+        }
+        AnimatedVisibility(visible = isRunning) {
+            Column {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Open Time: $openTime",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = BoothLocation,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Close Time: $closeTime",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = BoothLocation,
+                )
+            }
         }
         Spacer(modifier = Modifier.height(11.dp))
         Row(
@@ -139,6 +164,9 @@ fun BoothDescriptionPreview() {
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
             location = "공학관",
+            isRunning = true,
+            openTime = "10:00",
+            closeTime = "22:00",
             onAction = {},
         )
     }

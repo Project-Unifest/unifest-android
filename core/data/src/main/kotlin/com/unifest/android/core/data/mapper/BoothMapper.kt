@@ -24,6 +24,8 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         longitude = longitude,
         menus = menus.map { it.toModel() },
         waitingEnabled = waitingEnabled,
+        openTime = openTime?:"등록된 정보가 없습니다",
+        closeTime = closeTime?:"등록된 정보가 없습니다",
     )
 }
 

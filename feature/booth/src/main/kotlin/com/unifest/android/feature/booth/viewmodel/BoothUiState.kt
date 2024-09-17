@@ -27,6 +27,7 @@ data class BoothUiState(
     val waitingTeamNumber: Long = 0,
     val waitingId: Long = 0,
     val privacyConsentChecked: Boolean = false,
+    val isRunning: Boolean = false,
     val outerCords: ImmutableList<LatLng> = persistentListOf(
         LatLng(50.0, 150.0),
         LatLng(50.0, 100.0),

@@ -262,6 +262,9 @@ fun BoothDetailContent(
                 warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
+                isRunning = uiState.isRunning,
+                openTime = uiState.boothDetailInfo.openTime,
+                closeTime = uiState.boothDetailInfo.closeTime,
                 onAction = onAction,
             )
         }
