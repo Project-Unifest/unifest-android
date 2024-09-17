@@ -50,7 +50,7 @@ fun MenuItem(
                         }
                     },
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             NetworkImage(
                 imgUrl = menu.imgUrl,
@@ -59,18 +59,17 @@ fun MenuItem(
                 modifier = Modifier.matchParentSize(),
             )
 
-            // 품절일 경우 반투명 검은색 배경과 "품절" 텍스트 추가
-            if (menu.status == "품절") {
+            if (menu.status == "SOLD_OUT") {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
                         .background(Color.Black.copy(alpha = 0.6f)),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = "품절",
                         color = Color.White,
-                        style = Content9
+                        style = Content9,
                     )
                 }
             }
@@ -81,13 +80,21 @@ fun MenuItem(
         ) {
             Text(
                 text = menu.name,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (menu.status == "SOLD_OUT") {
+                    MaterialTheme.colorScheme.secondaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
                 style = MenuTitle,
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = menu.price.formatAsCurrency(),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = if (menu.status == "SOLD_OUT") {
+                    MaterialTheme.colorScheme.surfaceVariant
+                } else {
+                    MaterialTheme.colorScheme.onBackground
+                },
                 style = MenuPrice,
             )
             Spacer(modifier = Modifier.height(14.dp))
@@ -106,7 +113,24 @@ fun MenuItemPreview() {
                 name = "닭강정",
                 price = 6000,
                 imgUrl = "",
-                status = "10개 미만 남음",
+                status = "ENOUGH",
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+fun MenuItemSoldOutPreview() {
+    UnifestTheme {
+        MenuItem(
+            menu = MenuModel(
+                id = 1L,
+                name = "닭강정",
+                price = 6000,
+                imgUrl = "",
+                status = "SOLD_OUT",
             ),
             onAction = {},
         )

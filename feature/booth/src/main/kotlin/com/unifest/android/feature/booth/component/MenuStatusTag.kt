@@ -28,24 +28,46 @@ fun Tag(
             .background(MaterialTheme.colorScheme.outline)
             .padding(horizontal = 12.dp, vertical = 4.dp),
     ) {
-        when {
-            menuStatus == "품절" -> {
+        when (menuStatus) {
+            "SOLD_OUT" -> {
                 Text(
-                    text = menuStatus,
+                    text = "품절 임박 5개 미만 남음",
                     style = Content7,
                     color = MaterialTheme.colorScheme.error,
                 )
             }
 
-            menuStatus.contains("남음") -> {
-                val parts = menuStatus.split("남음")
+            "UNDER_10" -> {
+                val parts = "10개 미만 남음".split("남음")
                 Text(
                     buildAnnotatedString {
-                        append(parts[0])
+                        append(parts[0]) // "10개 미만"
                         withStyle(style = SpanStyle(fontSize = BottomMenuBar.fontSize, fontWeight = BottomMenuBar.fontWeight)) {
-                            append("남음")
+                            append("남음") // "남음" 부분 스타일 적용
                         }
                     },
+                    style = Content7,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            }
+
+            "UNDER_50" -> {
+                val parts = "50개 미만 남음".split("남음")
+                Text(
+                    buildAnnotatedString {
+                        append(parts[0]) // "50개 미만"
+                        withStyle(style = SpanStyle(fontSize = BottomMenuBar.fontSize, fontWeight = BottomMenuBar.fontWeight)) {
+                            append("남음") // "남음" 부분 스타일 적용
+                        }
+                    },
+                    style = Content7,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            }
+
+            "ENOUGH" -> {
+                Text(
+                    text = "여유 재고",
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
