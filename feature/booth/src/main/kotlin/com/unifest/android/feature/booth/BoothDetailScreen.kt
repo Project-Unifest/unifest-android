@@ -37,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.common.extension.navigateToAppSetting
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -45,14 +45,14 @@ import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.component.WaitingConfirmDialog
-import com.unifest.android.core.designsystem.component.WaitingDialog
-import com.unifest.android.core.designsystem.component.WaitingPinDialog
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.WaitingConfirmDialog
+import com.unifest.android.core.ui.component.WaitingDialog
+import com.unifest.android.core.ui.component.WaitingPinDialog
 import com.unifest.android.feature.booth.component.BoothBottomBar
 import com.unifest.android.feature.booth.component.BoothDescription
 import com.unifest.android.feature.booth.component.MenuItem
@@ -148,7 +148,7 @@ fun BoothDetailScreen(
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
-            navigationIconRes = R.drawable.ic_arrow_back_gray,
+            navigationIconRes = designR.drawable.ic_arrow_back_gray,
             containerColor = Color.Transparent,
             onNavigationClick = { onAction(BoothUiAction.OnBackClick) },
             modifier = Modifier
@@ -252,7 +252,7 @@ fun BoothDetailContent(
                 modifier = Modifier
                     .height(260.dp)
                     .fillMaxWidth(),
-                placeholder = painterResource(id = R.drawable.image_placeholder),
+                placeholder = painterResource(id = designR.drawable.image_placeholder),
             )
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }

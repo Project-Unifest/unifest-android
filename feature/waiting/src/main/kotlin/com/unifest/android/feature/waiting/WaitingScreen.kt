@@ -36,9 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.designsystem.R
-import com.unifest.android.core.designsystem.component.NoShowWaitingCancelDialog
-import com.unifest.android.core.designsystem.component.WaitingCancelDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -46,6 +43,8 @@ import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.WaitingNumber4
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.NoShowWaitingCancelDialog
+import com.unifest.android.core.ui.component.WaitingCancelDialog
 import com.unifest.android.feature.waiting.component.WaitingInfoItem
 import com.unifest.android.feature.waiting.preview.WaitingPreviewParameterProvider
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction

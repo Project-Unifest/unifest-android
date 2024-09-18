@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
 import com.unifest.android.core.designsystem.theme.Content3
@@ -45,6 +44,7 @@ import com.unifest.android.feature.festival.viewmodel.ButtonType
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import kotlinx.collections.immutable.ImmutableList
+import com.unifest.android.core.designsystem.R as designR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,7 +136,7 @@ fun FestivalSearchBottomSheet(
                         .padding(horizontal = 20.dp),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.intro_liked_festivals_title),
+                        text = stringResource(id = designR.string.liked_festivals_title),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Title3,
                     )
@@ -195,7 +195,7 @@ fun SchoolSearchBottomSheetPreview(
 ) {
     UnifestTheme {
         FestivalSearchBottomSheet(
-            searchTextHintRes = R.string.festival_search_text_field_hint,
+            searchTextHintRes = designR.string.festival_search_text_field_hint,
             searchText = TextFieldValue(),
             likedFestivals = festivalUiState.festivals,
             festivalSearchResults = festivalUiState.likedFestivals,

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
@@ -123,7 +123,7 @@ fun FestivalItem(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
-                    placeholder = painterResource(id = R.drawable.item_placeholder),
+                    placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -148,7 +148,7 @@ fun FestivalItem(
             }
             if (isEditMode) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete_red),
+                    imageVector = ImageVector.vectorResource(id = designR.drawable.ic_delete_red),
                     contentDescription = "Delete Icon",
                     tint = Color.Unspecified,
                     modifier = Modifier

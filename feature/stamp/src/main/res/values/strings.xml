@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stamp_title">스탬프</string>
+    <string name="receive_stamp">스탬프 받기</string>
+    <string name="stamp_collection_status">지금까지 모은 스탬프</string>
+    <string name="refresh">새로고침</string>
+    <string name="find_stamp_booth">스탬프 부스 찾아보기</string>
+    <string name="stamp_qr_scan_title">스탬프 QR 스캔</string>
+    <string name="stamp_qr_scan_description1">카메라를 조준선에 맞춰주세요!</string>
+    <string name="stamp_qr_scan_description2">※ 하나의 부스에서는 하나의 스탬프만 받을 수 있습니다.</string>
+    <string name="stamp_booth">스탬프 가능 부스</string>
+
+</resources>

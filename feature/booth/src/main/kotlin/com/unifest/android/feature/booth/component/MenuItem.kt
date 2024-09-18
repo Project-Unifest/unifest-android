@@ -19,16 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatAsCurrency
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 
 @Composable
@@ -55,7 +57,7 @@ fun MenuItem(
             NetworkImage(
                 imgUrl = menu.imgUrl,
                 contentDescription = menu.name,
-                placeholder = painterResource(id = R.drawable.item_placeholder),
+                placeholder = painterResource(id = designR.drawable.item_placeholder),
                 modifier = Modifier.matchParentSize(),
             )
 
@@ -67,7 +69,7 @@ fun MenuItem(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "품절",
+                        text = stringResource(R.string.sold_out),
                         color = Color.White,
                         style = Content9,
                     )

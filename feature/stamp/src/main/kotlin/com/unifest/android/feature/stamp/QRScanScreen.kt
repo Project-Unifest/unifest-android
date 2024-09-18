@@ -29,7 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
@@ -38,6 +37,7 @@ import com.unifest.android.feature.stamp.viewmodel.QRErrorType
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun QRScanScreen(
@@ -104,7 +104,7 @@ private fun QRTopBar(
         ) {
             Spacer(modifier = Modifier.width(21.dp))
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
+                imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_dark_gray),
                 contentDescription = "Arrow Back Icon",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.clickable { onAction(QRScanUiAction.OnBackClick) },

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_required">권한 필요</string>
+    <string name="go_to_app_setting">앱 설정으로 이동</string>
+
+    <string name="menu_liked_booth_empty">관심 부스 없음</string>
+    <string name="menu_insert_liked_booth">지도에서 관심있는 부스를 추가해주세요</string>
+
+    <string name="waiting_dialog_enter_booth_pin">부스 PIN 입력</string>
+    <string name="waiting_dialog_enter_booth_pin_hint">4자리 PIN을 입력해주세요</string>
+    <string name="waiting_dialog_enter_booth_pin_description">웨이팅 PIN은 부스 운영자에게 문의해주세요!</string>
+    <string name="waiting_dialog_enter_booth_pin_description_error">올바르지 않은 PIN입니다. 부스 운영자에 문의바랍니다.</string>
+    <string name="waiting_dialog_enter_booth_pin_button">PIN 입력</string>
+    <string name="waiting_dialog_telephone_waiting_number">현재 내 앞 웨이팅</string>
+    <string name="waiting_dialog_telephone_waiting_number_hint">전화번호를 입력해주세요</string>
+    <string name="waiting_dialog_telephone_privacy">개인정보 처리방침</string>
+    <string name="waiting_dialog_telephone_and"> 및 </string>
+    <string name="waiting_dialog_telephone_third">제 3자 제공방침</string>
+    <string name="waiting_dialog_telephone_agree">에 동의합니다</string>
+    <string name="waiting_dialog_telephone_button">웨이팅 신청</string>
+    <string name="waiting_dialog_telephone_people">인원수</string>
+    <string name="waiting_dialog_telephone_waiting_team">%d 팀</string>
+    <string name="waiting_dialog_waiting_confirm_complete">웨이팅 등록 완료!</string>
+    <string name="waiting_dialog_waiting_confirm_description">입장 순서가 되면 안내해드릴게요.</string>
+    <string name="waiting_dialog_waiting_confirm_waiting_number">웨이팅 번호</string>
+    <string name="waiting_dialog_waiting_confirm_id">%d번</string>
+    <string name="waiting_dialog_waiting_confirm_people">인원수</string>
+    <string name="waiting_dialog_waiting_confirm_people_number">%d명</string>
+    <string name="waiting_dialog_waiting_confirm_previous_waiting">내 앞 웨이팅</string>
+    <string name="waiting_dialog_waiting_confirm_previous_waiting_number">%d팀</string>
+    <string name="waiting_dialog_waiting_confirm_button">완료</string>
+    <string name="waiting_cancel_dialog_title">웨이팅을 취소합니다</string>
+    <string name="waiting_cancel_dialog_description">정말 취소 하시겠습니까?</string>
+    <string name="waiting_no_show_dialog_title">부재 웨이팅을 지웁니다</string>
+    <string name="waiting_no_show_dialog_description">문제가 있는 경우 해당 부스 운영자에 문의바랍니다</string>
+
+</resources>

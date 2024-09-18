@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="waiting_title">웨이팅</string>
+    <string name="waiting_my_waiting">나의 웨이팅</string>
+    <string name="waiting_total_cases">총 %d건</string>
+    <string name="waiting_sort">정렬</string>
+    <string name="waiting_current_order">현재 내 순서</string>
+    <string name="waiting_waiting_number">웨이팅번호</string>
+    <string name="waiting_people">인원</string>
+    <string name="waiting_cancel_waiting">웨이팅 취소</string>
+    <string name="waiting_booth_check">부스 확인하기</string>
+    <string name="waiting_nth">번째</string>
+    <string name="waiting_no_waiting">신청한 웨이팅이 없어요</string>
+    <string name="waiting_no_waiting_description">주점/부스 구경하러 가기></string>
+    <string name="waiting_my_turn">입장해주세요</string>
+    <string name="waiting_no_show">부재 처리</string>
+    <string name="waiting_no_show_description">부재 웨이팅 지우기</string>
+
+</resources>

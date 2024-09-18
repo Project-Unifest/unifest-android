@@ -32,12 +32,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 
@@ -73,7 +74,7 @@ fun BoothItem(
                     modifier = Modifier
                         .size(86.dp)
                         .clip(RoundedCornerShape(16.dp)),
-                    placeholder = painterResource(id = R.drawable.item_placeholder),
+                    placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
                 Column(
                     modifier = Modifier.padding(start = 15.dp),
@@ -97,7 +98,7 @@ fun BoothItem(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_green),
+                            imageVector = ImageVector.vectorResource(designR.drawable.ic_location_green),
                             contentDescription = "Location Icon",
                             tint = Color.Unspecified,
                         )

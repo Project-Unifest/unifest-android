@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -17,11 +18,12 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.booth.R
 
 @Composable
 fun Tag(
-    menuStatus: String = "",
     modifier: Modifier = Modifier,
+    menuStatus: String = "",
 ) {
     Box(
         modifier = modifier
@@ -32,7 +34,7 @@ fun Tag(
         when (menuStatus) {
             "SOLD_OUT" -> {
                 Text(
-                    text = "품절 임박 5개 미만 남음",
+                    text = stringResource(R.string.almost_sold_out_less_than_5_left),
                     style = Content7,
                     color = MaterialTheme.colorScheme.error,
                 )

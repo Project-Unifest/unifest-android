@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.SearchTextField
@@ -47,6 +46,7 @@ import com.unifest.android.feature.intro.viewmodel.IntroUiEvent
 import com.unifest.android.feature.intro.viewmodel.IntroUiState
 import com.unifest.android.feature.intro.viewmodel.IntroViewModel
 import kotlinx.collections.immutable.persistentListOf
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun IntroRoute(
@@ -144,7 +144,7 @@ fun IntroContent(
             SearchTextField(
                 searchText = uiState.searchText,
                 updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
-                searchTextHintRes = R.string.intro_search_text_hint,
+                searchTextHintRes = designR.string.search_text_hint,
                 onSearch = { onAction(IntroUiAction.OnSearch(it)) },
                 clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                 modifier = Modifier

@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
@@ -77,7 +77,7 @@ fun IncomingFestivalCard(
                 Spacer(modifier = Modifier.height(5.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
+                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_grey),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)

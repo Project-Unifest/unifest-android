@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.common.utils.parseAndFormatTime
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -36,8 +36,10 @@ import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import java.time.LocalTime
+
 @Composable
 fun BoothDescription(
     name: String,
@@ -109,16 +111,16 @@ fun BoothDescription(
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = if (isBoothRunning) {
-                    stringResource(id = R.string.booth_isRunning)
+                    stringResource(id = R.string.booth_is_running)
                 } else {
-                    stringResource(id = R.string.booth_isClosed)
+                    stringResource(id = R.string.booth_is_closed)
                 },
                 color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_below),
+                imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
                 contentDescription = "arrow below",
                 tint = Color.Unspecified,
             )
@@ -145,7 +147,7 @@ fun BoothDescription(
             modifier = Modifier.padding(top = 8.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
                 contentDescription = "location icon",
                 tint = Color.Unspecified,
             )

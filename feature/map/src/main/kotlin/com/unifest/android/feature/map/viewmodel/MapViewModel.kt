@@ -13,7 +13,7 @@ import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel

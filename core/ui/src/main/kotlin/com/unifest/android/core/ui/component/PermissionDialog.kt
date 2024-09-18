@@ -20,10 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.ui.R
+import com.unifest.android.core.designsystem.R as designR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +66,7 @@ fun PermissionDialog(
                     text = if (isPermanentlyDeclined) {
                         stringResource(id = R.string.go_to_app_setting)
                     } else {
-                        stringResource(id = R.string.check)
+                        stringResource(id = designR.string.confirm)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

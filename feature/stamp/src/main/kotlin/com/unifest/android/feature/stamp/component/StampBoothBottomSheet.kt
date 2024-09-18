@@ -32,8 +32,8 @@ import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampBoothModel
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content2
+import com.unifest.android.feature.stamp.R
 import com.unifest.android.feature.stamp.viewmodel.StampUiAction
 import com.unifest.android.feature.stamp.viewmodel.StampUiState
 import kotlinx.collections.immutable.ImmutableList

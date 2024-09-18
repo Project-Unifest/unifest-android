@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="map_booth_search_text_field_hint">부스 / 주점을 검색해보세요.</string>
+    <string name="map_popular_booth">인기 부스</string>
+    <string name="map_ranking">%d위</string>
+    <string name="map_popular_booth_update_failed_message">인기 부스 갱신을 실패했습니다.</string>
+    <string name="map_search_no_result_message">검색 결과가 없습니다</string>
+
+</resources>

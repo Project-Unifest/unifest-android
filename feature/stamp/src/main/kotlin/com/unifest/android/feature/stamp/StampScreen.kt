@@ -56,7 +56,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2

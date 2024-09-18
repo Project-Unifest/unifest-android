@@ -27,7 +27,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.DarkGrey100
@@ -42,6 +41,8 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.designsystem.theme.WaitingNumber5
 import com.unifest.android.core.model.MyWaitingModel
+import com.unifest.android.feature.waiting.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 
 @Composable
@@ -83,7 +84,7 @@ fun WaitingInfoItem(
                 )
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
                         contentDescription = "Location Icon",
                         modifier = Modifier.align(Alignment.CenterVertically),
                         tint = Color.Unspecified,

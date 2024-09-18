@@ -10,8 +10,9 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.WaitingRepository
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.feature.booth.R
+import com.unifest.android.core.designsystem.R as designR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -210,17 +211,17 @@ class BoothViewModel @Inject constructor(
                     }
                     if (currentBookmarkFlag) {
                         likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_message)))
                     }
                 }
                 .onFailure {
                     if (currentBookmarkFlag) {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                     } else {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                     }
                 }
         }
@@ -231,7 +232,7 @@ class BoothViewModel @Inject constructor(
             likedFestivalRepository.registerLikedFestival()
                 .onSuccess {}
                 .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                 }
         }
     }
@@ -241,7 +242,7 @@ class BoothViewModel @Inject constructor(
             likedFestivalRepository.unregisterLikedFestival()
                 .onSuccess {}
                 .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                 }
         }
     }

@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content4
@@ -43,6 +43,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.component.StarImage
+import com.unifest.android.feature.home.R
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -105,7 +106,7 @@ fun FestivalScheduleItem(
                 Spacer(modifier = Modifier.height(7.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_grey),
+                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_grey),
                         contentDescription = "Location Icon",
                         modifier = Modifier
                             .size(10.dp)
