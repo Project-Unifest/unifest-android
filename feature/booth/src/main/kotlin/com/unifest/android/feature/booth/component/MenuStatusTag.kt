@@ -16,6 +16,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.Content7
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun Tag(
@@ -87,5 +88,7 @@ fun Tag(
 @ComponentPreview
 @Composable
 fun TagPreview() {
-    Tag(menuStatus = "10개 미만 남음")
+    UnifestTheme {
+        Tag(menuStatus = "10개 미만 남음")
+    }
 }

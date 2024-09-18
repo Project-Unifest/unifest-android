@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unifest.android.core.common.utils.parseAndFormatTime
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
@@ -37,9 +38,6 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-
 @Composable
 fun BoothDescription(
     name: String,
@@ -55,23 +53,6 @@ fun BoothDescription(
     val maxWidth = remember(configuration) {
         val screenWidth = configuration.screenWidthDp.dp - 40.dp
         screenWidth * (2 / 3f)
-    }
-    // 포매터 정의
-    val formatter = DateTimeFormatter.ofPattern("HH:mm")
-    val parser = DateTimeFormatter.ofPattern("HH:mm:ss")
-
-    // 시간 파싱 및 형식화 함수
-    fun parseAndFormatTime(time: String?): Pair<String, LocalTime?> {
-        return if (time.isNullOrBlank() || time == "등록된 정보가 없습니다") {
-            "등록된 정보가 없습니다" to null
-        } else {
-            try {
-                val localTime = LocalTime.parse(time, parser)
-                localTime.format(formatter) to localTime
-            } catch (e: DateTimeParseException) {
-                "등록된 정보가 없습니다" to null
-            }
-        }
     }
 
     val (openTimeFormatted, openLocalTime) = parseAndFormatTime(openTime)
