@@ -9,8 +9,10 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.data.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.feature.booth.R
+import com.unifest.android.core.designsystem.R as designR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -29,6 +31,7 @@ class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
+    private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     companion object {
@@ -46,6 +49,7 @@ class BoothViewModel @Inject constructor(
     init {
         getBoothDetail()
         getLikedBooths()
+        getMyWaitingList()
     }
 
     fun onAction(action: BoothUiAction) {
@@ -58,7 +62,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnMenuImageDialogDismiss -> hideMenuImageDialog()
             is BoothUiAction.OnPinNumberUpdated -> updatePinNumberText(action.pinNumber)
             is BoothUiAction.OnWaitingTelUpdated -> updateWaitingTelText(action.tel)
-            is BoothUiAction.OnWaitingButtonClick -> setPinCheckDialogVisible(true)
+            is BoothUiAction.OnWaitingButtonClick -> checkMyWaitingListNumbers()
             is BoothUiAction.OnDialogPinButtonClick -> checkPinValidation()
             is BoothUiAction.OnDialogWaitingButtonClick -> requestBoothWaiting()
             is BoothUiAction.OnWaitingDialogDismiss -> setWaitingDialogVisible(false)
@@ -69,6 +73,40 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
+            is BoothUiAction.OnRunningClick -> expandRunningTime()
+        }
+    }
+
+    private fun checkMyWaitingListNumbers() {
+        viewModelScope.launch {
+            val isAlreadyInWaitingList = _uiState.value.myWaitingList.any { it.boothId == _uiState.value.boothDetailInfo.id }
+            when {
+                isAlreadyInWaitingList -> {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
+                }
+
+                _uiState.value.myWaitingList.size >= 3 -> {
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
+                }
+
+                else -> {
+                    setPinCheckDialogVisible(true)
+                }
+            }
+        }
+    }
+
+    private fun getMyWaitingList() {
+        viewModelScope.launch {
+            waitingRepository.getMyWaitingList()
+                .onSuccess { waitingLists ->
+                    _uiState.update {
+                        it.copy(myWaitingList = waitingLists.toImmutableList())
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
         }
     }
 
@@ -145,6 +183,12 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    private fun expandRunningTime() {
+        _uiState.update {
+            it.copy(isRunning = !it.isRunning)
+        }
+    }
+
     private fun toggleBookmark() {
         val currentBookmarkFlag = _uiState.value.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
@@ -167,17 +211,17 @@ class BoothViewModel @Inject constructor(
                     }
                     if (currentBookmarkFlag) {
                         likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_message)))
                     }
                 }
                 .onFailure {
                     if (currentBookmarkFlag) {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                     } else {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                     }
                 }
         }
@@ -188,7 +232,7 @@ class BoothViewModel @Inject constructor(
             likedFestivalRepository.registerLikedFestival()
                 .onSuccess {}
                 .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_saved_failed_message)))
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                 }
         }
     }
@@ -198,7 +242,7 @@ class BoothViewModel @Inject constructor(
             likedFestivalRepository.unregisterLikedFestival()
                 .onSuccess {}
                 .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                 }
         }
     }

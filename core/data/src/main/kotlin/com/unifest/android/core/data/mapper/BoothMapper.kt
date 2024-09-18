@@ -24,6 +24,8 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         longitude = longitude,
         menus = menus.map { it.toModel() },
         waitingEnabled = waitingEnabled,
+        openTime = openTime ?: "",
+        closeTime = closeTime ?: "",
     )
 }
 
@@ -33,6 +35,7 @@ internal fun Menu.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl ?: "",
+        status = status ?: "",
     )
 }
 

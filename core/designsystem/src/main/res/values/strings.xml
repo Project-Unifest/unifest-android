@@ -1,105 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    intro-->
-    <string name="intro_top_app_bar_title">Uni-Fest</string>
-    <string name="intro_add_complete">추가 완료</string>
-    <string name="intro_info_title">관심있는 학교 축제를 추가해보세요</string>
-    <string name="intro_info_description">관심 학교는 언제든지 수정 가능합니다</string>
-    <string name="intro_search_text_hint">학교를 검색해보세요</string>
-    <string name="intro_liked_festivals_title">나의 관심 축제</string>
-    <string name="intro_clear_item_button_text">모두 선택 해제</string>
-    <string-array name="region_tab_titles">
-        <item>전체</item>
-        <item>서울</item>
-        <item>경기/인천</item>
-        <item>강원</item>
-        <item>대전/충청</item>
-        <item>광주/전라</item>
-        <item>부산/대구</item>
-        <item>경상도</item>
-    </string-array>
-    <string name="total_festivals_count">총 %d개</string>
-    <string name="intro_no_result">검색 결과가 없어요</string>
+    <string name="search_text_hint">학교를 검색해보세요</string>
+    <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
+    <string name="festival_search_onboarding_title">여기를 터치하여 해당 학교로 이동해보세요.</string>
+    <string name="interest_festival_snack_bar">현재는 건국대학교만 서비스중이에요!</string>
+    <string name="liked_festivals_title">나의 관심 축제</string>
 
-    <!--    Home    -->
-    <string name="home_festival_schedule_text">의 축제 일정</string>
-    <string name="home_festival_schedule_empty_text">오늘은 축제가 열리는 학교가 없어요</string>
-    <string name="home_incoming_festival_text">다가오는 축제 일정</string>
-    <string name="home_add_interest_festival_button">관심 축제 추가하기</string>
-    <string name="home_add_interest_festival_in_item_button">관심 축제로 추가</string>
-    <string name="home_add_interest_festival_saved_message">관심 축제로 저장했습니다</string>
-    <string name="home_add_interest_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
-    <string name='home_empty_festival_text'>축제 일정 없음</string>
-    <string name="home_empty_festival_schedule_description_text">오늘은 축제가 열리는 학교가 없어요</string>
-
-    <!--    Booth-->
-    <string name="booth_check_locaiton">위치 확인하기</string>
-    <string name="booth_menu">메뉴</string>
-    <string name="booth_waiting_button">웨이팅 하기</string>
-    <string name="booth_waiting_button_invalid">웨이팅 기능을 지원하지 않는 부스입니다</string>
     <string name="liked_booth_saved_message">관심 부스로 저장했습니다.</string>
     <string name="liked_booth_saved_failed_message">관심 부스로 저장을 실패했습니다.</string>
     <string name="liked_booth_removed_message">관심 부스에서 삭제했습니다.</string>
     <string name="liked_booth_removed_failed_message">관심 부스에서 삭제를 실패했습니다.</string>
-    <string name="booth_empty_menu">등록된 메뉴가 없어요.</string>
-    <string name="booth_empty_waiting">올바른 전화번호를 입력해 주세요!</string>
-
-    <!--    Map    -->
-    <string name="map_booth_search_text_field_hint">부스 / 주점을 검색해보세요.</string>
-    <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
-    <string name="map_popular_booth">인기 부스</string>
-    <string name="map_ranking">%d위</string>
-    <string name="permission_required">권한 필요</string>
-    <string name="go_to_app_setting">앱 설정으로 이동</string>
-    <string name="check">확인</string>
-    <string name="map_popular_booth_update_failed_message">인기 부스 갱신을 실패했습니다.</string>
-    <string name="map_search_no_result_message">검색 결과가 없습니다</string>
-
-    <!-- Waiting Screen -->
-    <string name="waiting_title">웨이팅</string>
-    <string name="waiting_my_waiting">나의 웨이팅</string>
-    <string name="waiting_total_cases">총 %d건</string>
-    <string name="waiting_sort">정렬</string>
-    <string name="waiting_current_order">현재 내 순서</string>
-    <string name="waiting_waiting_number">웨이팅번호</string>
-    <string name="waiting_people">인원</string>
-    <string name="waiting_cancel_waiting">웨이팅 취소</string>
-    <string name="waiting_booth_check">부스 확인하기</string>
-    <string name="waiting_nth">번째</string>
-    <string name="waiting_cancel_dialog_title">웨이팅을 취소합니다</string>
-    <string name="waiting_cancel_dialog_description">정말 취소 하시겠습니까?</string>
-    <string name="waiting_no_waiting">신청한 웨이팅이 없어요</string>
-    <string name="waiting_no_waiting_description">주점/부스 구경하러 가기></string>
-    <string name="waiting_my_turn">입장해주세요</string>
-
-    <!--    Menu    -->
-    <string name="menu_title">메뉴</string>
-    <string name="menu_my_liked_festival">나의 관심 축제</string>
-    <string name="menu_add">추가하기 ></string>
-    <string name="menu_liked_booth">관심 부스</string>
-    <string name="menu_watch_more">더보기 ></string>
-    <string name="menu_questions">이용 문의</string>
-    <string name="menu_admin_mode">운영자 모드 진입</string>
-    <string name="menu_liked_booth_empty">관심 부스 없음</string>
-    <string name="menu_insert_liked_booth">지도에서 관심있는 부스를 추가해주세요</string>
-    <string name="menu_interest_festival_snack_bar">현재는 건국대학교만 서비스중이에요!</string>
-
-    <!--    Liked Booth List   -->
-    <string name="liked_booth_title">관심 부스</string>
-
-    <!--    Festival Search BottomSheet-->
     <string name="festival_search_text_field_hint"> 학교 / 축제 이름을 검색해보세요.</string>
-    <string name="my_liked_festival">나의 관심 축제</string>
-    <string name="edit">편집</string>
-    <string name="finish">완료</string>
-    <string name="add">추가</string>
-    <string name="search_result">검색결과</string>
     <string name="no_result">검색 결과가 없어요</string>
-    <string name="festival_search_onboarding_title">여기를 터치하여 해당 학교로 이동해보세요.</string>
-    <string name="liked_festival_saved_message">관심 축제로 저장했습니다.</string>
-    <string name="liked_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
-    <string name="liked_festival_removed_message">관심 축제에서 삭제했습니다.</string>
-    <string name="liked_festival_removed_failed_message">관심 축제에서 삭제를 실패했습니다.</string>
 
     <!--    Dialog-->
     <string name="server_error_title">서버 문제 발생</string>
@@ -114,44 +26,5 @@
     <string name="app_update_title">업데이트가 필요합니다</string>
     <string name="app_update_description">원활한 서비스 이용을 위해\n최신 버전으로 업데이트가 필요합니다</string>
     <string name="app_update_confirm">업데이트 하기</string>
-
-    <!--    Waiting Dialog-->
-    <string name="waiting_dialog_enter_booth_pin">부스 PIN 입력</string>
-    <string name="waiting_dialog_enter_booth_pin_hint">4자리 PIN을 입력해주세요</string>
-    <string name="waiting_dialog_enter_booth_pin_description">웨이팅 PIN은 부스 운영자에게 문의해주세요!</string>
-    <string name="waiting_dialog_enter_booth_pin_description_error">올바르지 않은 PIN입니다. 부스 운영자에 문의바랍니다.</string>
-    <string name="waiting_dialog_enter_booth_pin_button">PIN 입력</string>
-    <string name="waiting_dialog_telephone_waiting_number">현재 내 앞 웨이팅</string>
-    <string name="waiting_dialog_telephone_waiting_number_hint">전화번호를 입력해주세요</string>
-    <string name="waiting_dialog_telephone_privacy">개인정보 처리방침</string>
-    <string name="waiting_dialog_telephone_and"> 및 </string>
-    <string name="waiting_dialog_telephone_third">제 3자 제공방침</string>
-    <string name="waiting_dialog_telephone_agree">에 동의합니다</string>
-    <string name="waiting_dialog_telephone_button">웨이팅 신청</string>
-    <string name="waiting_dialog_telephone_people">인원수</string>
-    <string name="waiting_dialog_telephone_waiting_team">%d 팀</string>
-    <string name="waiting_dialog_waiting_confirm_complete">웨이팅 등록 완료!</string>
-    <string name="waiting_dialog_waiting_confirm_description">입장 순서가 되면 안내해드릴게요.</string>
-    <string name="waiting_dialog_waiting_confirm_waiting_number">웨이팅 번호</string>
-    <string name="waiting_dialog_waiting_confirm_id">%d번</string>
-    <string name="waiting_dialog_waiting_confirm_people">인원수</string>
-    <string name="waiting_dialog_waiting_confirm_people_number">%d명</string>
-    <string name="waiting_dialog_waiting_confirm_previous_waiting">내 앞 웨이팅</string>
-    <string name="waiting_dialog_waiting_confirm_previous_waiting_number">%d팀</string>
-    <string name="waiting_dialog_waiting_confirm_button">완료</string>
-
-    <!--   Contact-->
-    <string name="contact_title">이용문의</string>
-
-    <!--    Stamp-->
-    <string name="stamp_title">스탬프</string>
-    <string name="receive_stamp">스탬프 받기</string>
-    <string name="stamp_collection_status">지금까지 모은 스탬프</string>
-    <string name="refresh">새로고침</string>
-    <string name="find_stamp_booth">스탬프 부스 찾아보기</string>
-    <string name="stamp_qr_scan_title">스탬프 QR 스캔</string>
-    <string name="stamp_qr_scan_description1">카메라를 조준선에 맞춰주세요!</string>
-    <string name="stamp_qr_scan_description2">※ 하나의 부스에서는 하나의 스탬프만 받을 수 있습니다.</string>
-    <string name="stamp_booth">스탬프 가능 부스</string>
 
 </resources>

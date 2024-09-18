@@ -27,11 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.booth.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 
 @Composable
@@ -62,7 +63,7 @@ fun BoothBottomBar(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                        imageVector = ImageVector.vectorResource(if (isBookmarked) designR.drawable.ic_bookmarked else designR.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
                         tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.clickableSingle {

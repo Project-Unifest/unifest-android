@@ -55,7 +55,6 @@ import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothTitle0
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.DarkBlueGreen
@@ -67,6 +66,7 @@ import com.unifest.android.core.designsystem.theme.LightRed
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.home.R
 import com.unifest.android.feature.home.clickable
 import com.unifest.android.feature.home.displayText
 import com.unifest.android.feature.home.rememberFirstVisibleMonthAfterScroll
@@ -172,7 +172,7 @@ fun ModeToggleButton(
             .fillMaxWidth()
             .requiredHeight(40.dp)
             .paint(
-                painter = painterResource(id = R.drawable.calender_bottom),
+                painter = painterResource(id = R.drawable.ic_calender_bottom),
                 contentScale = ContentScale.FillBounds,
             )
             .then(modifier),

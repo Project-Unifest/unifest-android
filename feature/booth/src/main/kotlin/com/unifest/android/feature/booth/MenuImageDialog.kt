@@ -93,6 +93,7 @@ private fun MenuImageDialogPreview() {
                 name = "모둠 사시미",
                 price = 45000,
                 imgUrl = "",
+                status = "10개 미만 남음",
             ),
         )
     }

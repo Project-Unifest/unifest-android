@@ -40,12 +40,12 @@ import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.festival.preview.FestivalPreviewParameterProvider
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun FestivalSearchResults(
@@ -167,7 +167,7 @@ fun FestivalSearchResultItem(
                     .noRippleClickable {},
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_check),
+                    imageVector = ImageVector.vectorResource(designR.drawable.ic_check),
                     contentDescription = "Checked",
                     tint = MaterialTheme.colorScheme.primary,
                 )

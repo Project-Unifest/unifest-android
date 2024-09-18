@@ -24,7 +24,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title2
@@ -50,7 +50,7 @@ fun StampBoothItem(
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                placeholder = painterResource(id = R.drawable.item_placeholder),
+                placeholder = painterResource(id = designR.drawable.item_placeholder),
             )
             Spacer(modifier = Modifier.width(14.dp))
             Column(
@@ -76,7 +76,7 @@ fun StampBoothItem(
                 Spacer(modifier = Modifier.height(6.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
                         contentDescription = "Location Icon",
                         tint = Color.Unspecified,
                     )

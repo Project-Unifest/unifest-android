@@ -7,8 +7,8 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.feature.home.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

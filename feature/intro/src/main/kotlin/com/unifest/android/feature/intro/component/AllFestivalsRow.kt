@@ -31,7 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.feature.intro.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content3
@@ -116,7 +117,7 @@ fun AllFestivalsTabRow(
             ) {
                 if (festivals.isEmpty()) {
                     Text(
-                        text = stringResource(id = R.string.intro_no_result),
+                        text = stringResource(id = designR.string.no_result),
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(bottom = 92.dp),

@@ -72,7 +72,6 @@ import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.Title4
@@ -95,6 +94,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
+import com.unifest.android.core.designsystem.R as designR
 
 val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     arrayOf(
@@ -298,7 +298,7 @@ internal fun MapScreen(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.5430, 127.07673671067072), 14.8)
+        position = CameraPosition(LatLng(37.0122749, 127.2635972), 15.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
@@ -334,7 +334,7 @@ internal fun MapScreen(
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = R.string.festival_search_text_field_hint,
+                searchTextHintRes = designR.string.festival_search_text_field_hint,
                 likedFestivals = festivalUiState.likedFestivals,
                 festivalSearchResults = festivalUiState.festivalSearchResults,
                 isSearchMode = festivalUiState.isSearchMode,

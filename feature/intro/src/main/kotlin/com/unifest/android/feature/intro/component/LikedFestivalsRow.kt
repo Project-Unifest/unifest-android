@@ -17,11 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.intro.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -41,7 +42,7 @@ fun LikedFestivalsRow(
         ) {
             if (selectedFestivals.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.intro_liked_festivals_title),
+                    text = stringResource(id = designR.string.liked_festivals_title),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Title3,
                 )
@@ -49,7 +50,7 @@ fun LikedFestivalsRow(
                     onClick = { onAction(IntroUiAction.OnClearSelectionClick) },
                 ) {
                     Text(
-                        text = stringResource(id = R.string.intro_clear_item_button_text),
+                        text = stringResource(id = R.string.clear_item_button_text),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textDecoration = TextDecoration.Underline,
                         style = Content6,

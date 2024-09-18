@@ -9,7 +9,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.main.MainActivity
 import timber.log.Timber
 
@@ -41,7 +41,7 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
         val channelId = CHANNEL_ID
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(designR.mipmap.ic_launcher)
             .setContentTitle(remoteMessage.notification?.title.toString())
             .setContentText(remoteMessage.notification?.body.toString())
             .setAutoCancel(true)

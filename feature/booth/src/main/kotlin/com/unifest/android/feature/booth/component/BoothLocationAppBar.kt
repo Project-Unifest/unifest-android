@@ -23,7 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -47,7 +47,7 @@ fun BoothLocationAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_gray),
+                    imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_gray),
                     contentDescription = "뒤로 가기",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

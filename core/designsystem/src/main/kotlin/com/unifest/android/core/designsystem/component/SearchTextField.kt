@@ -230,7 +230,7 @@ private fun SearchTextFieldPreview() {
         SearchTextField(
             searchText = TextFieldValue(),
             updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
+            searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},
             modifier = Modifier
@@ -248,7 +248,7 @@ private fun FestivalSearchTextFieldPreview() {
         FestivalSearchTextField(
             searchText = TextFieldValue("건국대학교"),
             updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
+            searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},
             setEnableSearchMode = {},

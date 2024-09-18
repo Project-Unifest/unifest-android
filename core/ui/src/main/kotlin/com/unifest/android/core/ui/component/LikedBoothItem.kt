@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
@@ -56,7 +56,7 @@ fun LikedBoothItem(
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),
-                placeholder = painterResource(id = R.drawable.item_placeholder),
+                placeholder = painterResource(id = designR.drawable.item_placeholder),
             )
             Spacer(modifier = Modifier.width(14.dp))
             Column(
@@ -82,7 +82,7 @@ fun LikedBoothItem(
                 Spacer(modifier = Modifier.height(13.dp))
                 Row {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
+                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
                         contentDescription = "Location Icon",
                         tint = Color.Unspecified,
                     )
@@ -96,7 +96,7 @@ fun LikedBoothItem(
                 }
             }
             Icon(
-                imageVector = ImageVector.vectorResource(if (booth.isLiked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
+                imageVector = ImageVector.vectorResource(if (booth.isLiked) designR.drawable.ic_bookmarked else designR.drawable.ic_bookmark),
                 contentDescription = "Bookmark Icon",
                 tint = bookMarkColor,
                 modifier = Modifier

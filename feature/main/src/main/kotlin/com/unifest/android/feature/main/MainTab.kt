@@ -1,7 +1,6 @@
 package com.unifest.android.feature.main
 
 import androidx.compose.runtime.Composable
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.core.navigation.Route
 

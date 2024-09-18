@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_title">메뉴</string>
+    <string name="menu_my_liked_festival">나의 관심 축제</string>
+    <string name="menu_add">추가하기 ></string>
+    <string name="menu_liked_booth">관심 부스</string>
+    <string name="menu_watch_more">더보기 ></string>
+    <string name="menu_questions">이용 문의</string>
+    <string name="menu_admin_mode">운영자 모드 진입</string>
+
+</resources>

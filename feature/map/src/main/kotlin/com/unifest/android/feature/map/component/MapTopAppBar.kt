@@ -15,13 +15,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.SearchTextField
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.component.BoothFilterChips
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
+import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

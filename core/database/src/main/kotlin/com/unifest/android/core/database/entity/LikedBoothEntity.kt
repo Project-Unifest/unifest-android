@@ -39,4 +39,5 @@ data class MenuEntity(
     val name: String = "",
     val price: Int = 0,
     val imgUrl: String = "",
+    val status: String = "",
 )

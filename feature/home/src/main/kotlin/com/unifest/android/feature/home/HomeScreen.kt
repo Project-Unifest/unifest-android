@@ -33,7 +33,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
 import com.unifest.android.core.designsystem.theme.Content6
@@ -55,6 +54,7 @@ import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import java.time.format.DateTimeFormatter
+import com.unifest.android.core.designsystem.R as designR
 
 // TODO 이미 관심 축제로 추가된 축제는 관심 축제로 추가하기 버튼이 보이면 안됨
 @Composable
@@ -224,7 +224,7 @@ internal fun HomeScreen(
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
                 searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = R.string.festival_search_text_field_hint,
+                searchTextHintRes = designR.string.festival_search_text_field_hint,
                 likedFestivals = festivalUiState.likedFestivals,
                 festivalSearchResults = festivalUiState.festivalSearchResults,
                 isSearchMode = festivalUiState.isSearchMode,
