@@ -32,6 +32,7 @@ internal enum class MainTab(
         label = "지도",
         route = MainTabRoute.Map,
     ),
+
 //    STAMP(
 //        iconResId = R.drawable.ic_stamp,
 //        selectedIconResId = R.drawable.ic_selected_stamp,
