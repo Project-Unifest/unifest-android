@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberAsyncImagePainter
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
@@ -142,6 +143,9 @@ internal fun StampScreen(
     onAction: (StampUiAction) -> Unit,
 ) {
     val activity = LocalContext.current.findActivity()
+
+    val checkedStampPainter = rememberAsyncImagePainter(R.drawable.ic_checked_stamp)
+    val uncheckedStampPainter = rememberAsyncImagePainter(R.drawable.ic_unchecked_stamp)
 
     Box(
         modifier = Modifier
@@ -256,8 +260,7 @@ internal fun StampScreen(
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (uiState.stampBoothList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
-                                    else painterResource(id = R.drawable.ic_unchecked_stamp),
+                                    painter = if (uiState.stampBoothList[index].isChecked) checkedStampPainter else uncheckedStampPainter,
                                     contentDescription = "stamp image",
                                     modifier = Modifier
                                         .fillMaxSize()
