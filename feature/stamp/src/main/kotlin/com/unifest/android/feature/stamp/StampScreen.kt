@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -52,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
@@ -143,8 +143,8 @@ internal fun StampScreen(
 ) {
     val activity = LocalContext.current.findActivity()
 
-    val checkedStampPainter = rememberAsyncImagePainter(R.drawable.ic_checked_stamp)
-    val uncheckedStampPainter = rememberAsyncImagePainter(R.drawable.ic_unchecked_stamp)
+//    val checkedStampPainter = rememberAsyncImagePainter(R.drawable.ic_checked_stamp)
+//    val uncheckedStampPainter = rememberAsyncImagePainter(R.drawable.ic_unchecked_stamp)
 
     Box(
         modifier = Modifier
@@ -259,7 +259,8 @@ internal fun StampScreen(
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (uiState.stampBoothList[index].isChecked) checkedStampPainter else uncheckedStampPainter,
+                                    painter = if (uiState.stampBoothList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
+                                    else painterResource(id = R.drawable.ic_unchecked_stamp),
                                     contentDescription = "stamp image",
                                     modifier = Modifier
                                         .fillMaxSize()

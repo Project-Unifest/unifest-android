@@ -48,7 +48,7 @@ internal class MainNavController(
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MAP -> navController.navigateToMap(navOptions)
-            MainTab.STAMP -> navController.navigateToStamp(navOptions)
+            // MainTab.STAMP -> navController.navigateToStamp(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
     }
