@@ -10,6 +10,7 @@ sealed interface MapUiAction {
     data object OnSearchTextCleared : MapUiAction
     data class OnSearch(val searchText: TextFieldValue) : MapUiAction
     data class OnBoothMarkerClick(val booths: List<BoothMapModel>) : MapUiAction
+
     // data class OnBoothMarkerClick(val booth: BoothMapModel) : MapUiAction
     data object OnTogglePopularBooth : MapUiAction
     data class OnBoothItemClick(val boothId: Long) : MapUiAction

@@ -317,40 +317,40 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedBooth(booth: BoothMapModel) {
-        if (_uiState.value.isPopularMode) {
-            viewModelScope.launch {
-                _uiState.update {
-                    it.copy(isPopularMode = false)
-                }
-                delay(500)
-                _uiState.update {
-                    it.copy(
-                        isBoothSelectionMode = true,
-                        selectedBoothList = listOf(booth).toImmutableList(),
-                    )
-                }
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    isBoothSelectionMode = true,
-                    selectedBoothList = listOf(booth).toImmutableList(),
-                )
-            }
-        }
-        _uiState.update {
-            it.copy(
-                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
-                    if (boothMapModel.id == booth.id) {
-                        boothMapModel.copy(isSelected = true)
-                    } else {
-                        boothMapModel.copy(isSelected = false)
-                    }
-                }.toImmutableList(),
-            )
-        }
-    }
+//    private fun updateSelectedBooth(booth: BoothMapModel) {
+//        if (_uiState.value.isPopularMode) {
+//            viewModelScope.launch {
+//                _uiState.update {
+//                    it.copy(isPopularMode = false)
+//                }
+//                delay(500)
+//                _uiState.update {
+//                    it.copy(
+//                        isBoothSelectionMode = true,
+//                        selectedBoothList = listOf(booth).toImmutableList(),
+//                    )
+//                }
+//            }
+//        } else {
+//            _uiState.update {
+//                it.copy(
+//                    isBoothSelectionMode = true,
+//                    selectedBoothList = listOf(booth).toImmutableList(),
+//                )
+//            }
+//        }
+//        _uiState.update {
+//            it.copy(
+//                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+//                    if (boothMapModel.id == booth.id) {
+//                        boothMapModel.copy(isSelected = true)
+//                    } else {
+//                        boothMapModel.copy(isSelected = false)
+//                    }
+//                }.toImmutableList(),
+//            )
+//        }
+//    }
 
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
         if (_uiState.value.isPopularMode) {
