@@ -1,8 +1,8 @@
 package com.unifest.android.feature.waiting.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -20,6 +21,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -27,13 +29,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
+import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.Content1
-import com.unifest.android.core.designsystem.theme.DarkGrey100
-import com.unifest.android.core.designsystem.theme.DarkGrey200
-import com.unifest.android.core.designsystem.theme.DarkRed
-import com.unifest.android.core.designsystem.theme.LightGrey100
-import com.unifest.android.core.designsystem.theme.LightRed
+import com.unifest.android.core.designsystem.theme.LightPrimary700
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -42,31 +40,32 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.designsystem.theme.WaitingNumber5
 import com.unifest.android.core.model.MyWaitingModel
 import com.unifest.android.feature.waiting.R
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun WaitingInfoItem(
     myWaitingModel: MyWaitingModel,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
-    Card(
-        colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-            disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        modifier = Modifier.fillMaxWidth(),
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
+            .background(
+                color = if (myWaitingModel.status != "NOSHOW") {
+                    MaterialTheme.colorScheme.surfaceBright
+                } else {
+                    MaterialTheme.colorScheme.surfaceContainerHigh
+                },
+                shape = RoundedCornerShape(8.dp)
+            )
     ) {
         Column(
             modifier = Modifier
                 .then(
                     if (myWaitingModel.status != "NOSHOW") {
-                        Modifier.background(
-                            if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100,
-                        )
+                        Modifier.background(MaterialTheme.colorScheme.surfaceBright)
                     } else {
                         Modifier
                     },
@@ -117,7 +116,11 @@ fun WaitingInfoItem(
                             }
                         },
                         style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = if (myWaitingModel.status == "NOSHOW") {
+                            LightPrimary700
+                        } else {
+                            MaterialTheme.colorScheme.primary
+                        },
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -169,7 +172,8 @@ fun WaitingInfoItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                UnifestOutlinedButton(
+                // todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
+                UnifestButton(
                     onClick = {
                         if (myWaitingModel.status == "NOSHOW") {
                             onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
@@ -177,10 +181,7 @@ fun WaitingInfoItem(
                             onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
                         }
                     },
-                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
-                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
-                    contentColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
-                    // todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
@@ -189,15 +190,14 @@ fun WaitingInfoItem(
                         } else {
                             stringResource(id = R.string.waiting_cancel_waiting)
                         },
-                        color = if (isSystemInDarkTheme()) DarkRed else LightRed,
+                        color = MaterialTheme.colorScheme.surfaceTint,
                         style = Title5,
                     )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
-                UnifestOutlinedButton(
+                UnifestButton(
                     onClick = { onWaitingUiAction(WaitingUiAction.OnCheckBoothDetailClick(myWaitingModel.boothId)) },
-                    containerColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
-                    borderColor = if (isSystemInDarkTheme()) DarkGrey100 else Color.White,
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(

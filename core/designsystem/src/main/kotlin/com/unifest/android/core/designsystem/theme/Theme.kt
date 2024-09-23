@@ -53,11 +53,15 @@ private val LightColorScheme = lightColorScheme(
     onSurface = LightGrey500,
     // surface의 변형, 비활성화된 요소나 구분선에 사용
     surfaceVariant = LightGrey600,
+    surfaceTint = LightRed,
     // surfaceVariant 위의 텍스트나 아이콘 색상
     onSurfaceVariant = LightGrey600,
     // 경계선이나 구분선 등에 사용되는 색상
     outline = LightGrey200,
     scrim = LightGrey300,
+    surfaceBright = LightGrey100,
+    surfaceContainer = Color.White,
+    surfaceContainerHigh = LightPrimary50,
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -89,9 +93,13 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = DarkGrey500,
     surfaceVariant = DarkGrey600,
     onSurfaceVariant = DarkGrey600,
+    surfaceTint = DarkRed,
     // 다크 모드에서의  경계선이나 구분선 색상
     outline = DarkGrey200,
     scrim = DarkGrey300,
+    surfaceBright = DarkGrey200,
+    surfaceContainer = DarkGrey100,
+    surfaceContainerHigh = DarkGrey300,
 )
 
 @Composable
