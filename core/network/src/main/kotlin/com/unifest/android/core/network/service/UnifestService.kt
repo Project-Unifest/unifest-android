@@ -3,8 +3,8 @@ package com.unifest.android.core.network.service
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
-import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.request.LikedFestivalRequest
+import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.response.AllBoothsResponse
 import com.unifest.android.core.network.response.BoothDetailResponse
 import com.unifest.android.core.network.response.CheckPinValidationResponse
@@ -16,8 +16,8 @@ import com.unifest.android.core.network.response.MyWaitingResponse
 import com.unifest.android.core.network.response.PopularBoothsResponse
 import com.unifest.android.core.network.response.WaitingResponse
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -117,7 +117,7 @@ interface UnifestService {
     )
 
     // 관심 축제 해제
-    @DELETE("megaphone/subscribe")
+    @HTTP(method = "DELETE", path = "megaphone/subscribe", hasBody = true)
     suspend fun unregisterLikedFestival(
         @Body likedFestivalRequest: LikedFestivalRequest,
     )

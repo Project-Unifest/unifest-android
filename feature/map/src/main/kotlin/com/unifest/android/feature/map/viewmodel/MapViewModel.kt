@@ -65,6 +65,7 @@ class MapViewModel @Inject constructor(
             try {
                 val token = messagingRepository.refreshFCMToken()
                 token?.let {
+                    Timber.d("New FCM token: $it")
                     messagingRepository.setFCMToken(it)
                 }
             } catch (e: Exception) {
