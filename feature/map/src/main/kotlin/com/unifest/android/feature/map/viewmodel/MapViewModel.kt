@@ -147,7 +147,7 @@ class MapViewModel @Inject constructor(
             englishCategories.contains(booth.category)
         }
         _uiState.update {
-            it.copy(filteredBoothsList = filteredBooths.toImmutableList())
+            it.copy(filteredBoothList = filteredBooths.toImmutableList())
         }
     }
 
@@ -291,7 +291,7 @@ class MapViewModel @Inject constructor(
                             currentState.copy(
                                 selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
                                 isBoothSelectionMode = false,
-                                filteredBoothsList = currentState.filteredBoothsList.map { booth ->
+                                filteredBoothList = currentState.filteredBoothList.map { booth ->
                                     booth.copy(isSelected = false)
                                 }.toImmutableList(),
                             )
@@ -341,7 +341,7 @@ class MapViewModel @Inject constructor(
 //        }
 //        _uiState.update {
 //            it.copy(
-//                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+//                filteredBoothList = it.filteredBoothList.map { boothMapModel ->
 //                    if (boothMapModel.id == booth.id) {
 //                        boothMapModel.copy(isSelected = true)
 //                    } else {
@@ -353,6 +353,8 @@ class MapViewModel @Inject constructor(
 //    }
 
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
+        Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
+        Timber.d("filteredBoothsList: ${_uiState.value.filteredBoothList}")
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {
@@ -377,7 +379,7 @@ class MapViewModel @Inject constructor(
         if (booths.size == 1) {
             _uiState.update {
                 it.copy(
-                    filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                    filteredBoothList = it.filteredBoothList.map { boothMapModel ->
                         if (boothMapModel.id == booths[0].id) {
                             boothMapModel.copy(isSelected = true)
                         } else {
@@ -386,6 +388,7 @@ class MapViewModel @Inject constructor(
                     }.toImmutableList(),
                 )
             }
+            Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
         }
     }
 

@@ -445,33 +445,12 @@ fun MapContent(
                         .clusterMarkerUpdater { info, marker ->
                             val size = info.size
                             marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster_icon)
-//                            marker.subCaptionText =
-//                                if (info.minZoom == 10) {
-//                                    (info.tag as ItemData).category
-//                                } else {
-//                                    ""
-//                                }
                             marker.captionText = size.toString()
                             marker.setCaptionAligns(Align.Center)
                             marker.captionColor = android.graphics.Color.WHITE
                             marker.captionHaloColor = android.graphics.Color.TRANSPARENT
                             marker.onClickListener = DefaultClusterOnClickListener(info)
                         }
-//                        .leafMarkerUpdater(
-//                            object : DefaultLeafMarkerUpdater() {
-//                                override fun updateLeafMarker(info: LeafMarkerInfo, marker: Marker) {
-//                                    super.updateLeafMarker(info, marker)
-//                                    marker.apply {
-//                                        icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
-//                                            .getMarkerIcon((info.key as BoothMapModel).isSelected)
-//                                        onClickListener = Overlay.OnClickListener {
-//                                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
-//                                            true
-//                                        }
-//                                    }
-//                                }
-//                            },
-//                        )
                         .leafMarkerUpdater { info, marker ->
                             marker.icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
                                 .getMarkerIcon((info.key as BoothMapModel).isSelected)

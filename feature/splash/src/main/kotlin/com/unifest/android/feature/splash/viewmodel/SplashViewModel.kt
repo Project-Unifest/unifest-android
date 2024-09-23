@@ -3,7 +3,6 @@ package com.unifest.android.feature.splash.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
