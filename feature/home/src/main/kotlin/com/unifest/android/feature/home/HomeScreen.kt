@@ -191,7 +191,7 @@ internal fun HomeScreen(
                         .fillMaxWidth()
                         .padding(20.dp),
                     contentColor = MaterialTheme.colorScheme.onSecondary,
-                    borderColor = MaterialTheme.colorScheme.surfaceVariant,
+                    borderColor = MaterialTheme.colorScheme.secondaryContainer,
                 ) {
                     Text(
                         text = stringResource(id = R.string.home_add_interest_festival_button),
