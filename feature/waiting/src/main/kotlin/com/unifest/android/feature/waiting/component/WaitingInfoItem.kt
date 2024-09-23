@@ -169,7 +169,6 @@ fun WaitingInfoItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                // todo: 색상 지정 제대로 안되고 핑크빛 도는 이유 찾아야 함
                 UnifestButton(
                     onClick = {
                         if (myWaitingModel.status == "NOSHOW") {

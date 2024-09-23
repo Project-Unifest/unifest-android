@@ -11,8 +11,8 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
@@ -36,7 +36,6 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
-    private val messagingRepository: MessagingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -50,27 +49,12 @@ class MapViewModel @Inject constructor(
         permission: String,
         isGranted: Boolean,
     ) {
-        if (isGranted && permissionDialogQueue.isEmpty()) {
-            refreshFCMToken()
-        }
+//        if (isGranted && permissionDialogQueue.isEmpty()) {
+//            refreshFCMToken()
+//        }
 
         if (!isGranted && !permissionDialogQueue.contains(permission)) {
             permissionDialogQueue.add(permission)
-        }
-    }
-
-    @Suppress("TooGenericExceptionCaught")
-    private fun refreshFCMToken() {
-        viewModelScope.launch {
-            try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error getting or saving FCM token")
-            }
         }
     }
 
@@ -174,10 +158,22 @@ class MapViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(festivalInfo = festivals[0])
                         }
+                        addLikeFestival(festivals[0])
                     }
                 }
                 .onFailure { exception ->
                     handleException(exception, this@MapViewModel)
+                }
+        }
+    }
+    private fun addLikeFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                }
+                .onFailure { exception ->
+                    Timber.e(exception)
                 }
         }
     }

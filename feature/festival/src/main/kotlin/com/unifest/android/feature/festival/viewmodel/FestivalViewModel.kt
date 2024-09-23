@@ -143,6 +143,7 @@ class FestivalViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
+                    Timber.e(exception)
                 }
         }
     }
