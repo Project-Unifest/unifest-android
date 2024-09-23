@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -196,6 +197,7 @@ class FestivalViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_failed_message)))
+                    Timber.e(exception)
                 }
         }
     }
