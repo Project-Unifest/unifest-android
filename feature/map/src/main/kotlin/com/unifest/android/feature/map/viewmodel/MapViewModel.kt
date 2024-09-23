@@ -11,8 +11,8 @@ import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
@@ -36,7 +36,6 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
-    private val messagingRepository: MessagingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -50,26 +49,12 @@ class MapViewModel @Inject constructor(
         permission: String,
         isGranted: Boolean,
     ) {
-        if (isGranted && permissionDialogQueue.isEmpty()) {
-            refreshFCMToken()
-        }
+//        if (isGranted && permissionDialogQueue.isEmpty()) {
+//            refreshFCMToken()
+//        }
 
         if (!isGranted && !permissionDialogQueue.contains(permission)) {
             permissionDialogQueue.add(permission)
-        }
-    }
-
-    @Suppress("TooGenericExceptionCaught")
-    private fun refreshFCMToken() {
-        viewModelScope.launch {
-            try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    messagingRepository.setFCMToken(it)
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error getting or saving FCM token")
-            }
         }
     }
 
@@ -92,8 +77,8 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
-            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
-            is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
@@ -147,7 +132,7 @@ class MapViewModel @Inject constructor(
             englishCategories.contains(booth.category)
         }
         _uiState.update {
-            it.copy(filteredBoothsList = filteredBooths.toImmutableList())
+            it.copy(filteredBoothList = filteredBooths.toImmutableList())
         }
     }
 
@@ -173,10 +158,22 @@ class MapViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(festivalInfo = festivals[0])
                         }
+                        addLikeFestival(festivals[0])
                     }
                 }
                 .onFailure { exception ->
                     handleException(exception, this@MapViewModel)
+                }
+        }
+    }
+    private fun addLikeFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                }
+                .onFailure { exception ->
+                    Timber.e(exception)
                 }
         }
     }
@@ -291,7 +288,7 @@ class MapViewModel @Inject constructor(
                             currentState.copy(
                                 selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
                                 isBoothSelectionMode = false,
-                                filteredBoothsList = currentState.filteredBoothsList.map { booth ->
+                                filteredBoothList = currentState.filteredBoothList.map { booth ->
                                     booth.copy(isSelected = false)
                                 }.toImmutableList(),
                             )
@@ -317,42 +314,44 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedBooth(booth: BoothMapModel) {
-        if (_uiState.value.isPopularMode) {
-            viewModelScope.launch {
-                _uiState.update {
-                    it.copy(isPopularMode = false)
-                }
-                delay(500)
-                _uiState.update {
-                    it.copy(
-                        isBoothSelectionMode = true,
-                        selectedBoothList = listOf(booth).toImmutableList(),
-                    )
-                }
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    isBoothSelectionMode = true,
-                    selectedBoothList = listOf(booth).toImmutableList(),
-                )
-            }
-        }
-        _uiState.update {
-            it.copy(
-                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
-                    if (boothMapModel.id == booth.id) {
-                        boothMapModel.copy(isSelected = true)
-                    } else {
-                        boothMapModel.copy(isSelected = false)
-                    }
-                }.toImmutableList(),
-            )
-        }
-    }
+//    private fun updateSelectedBooth(booth: BoothMapModel) {
+//        if (_uiState.value.isPopularMode) {
+//            viewModelScope.launch {
+//                _uiState.update {
+//                    it.copy(isPopularMode = false)
+//                }
+//                delay(500)
+//                _uiState.update {
+//                    it.copy(
+//                        isBoothSelectionMode = true,
+//                        selectedBoothList = listOf(booth).toImmutableList(),
+//                    )
+//                }
+//            }
+//        } else {
+//            _uiState.update {
+//                it.copy(
+//                    isBoothSelectionMode = true,
+//                    selectedBoothList = listOf(booth).toImmutableList(),
+//                )
+//            }
+//        }
+//        _uiState.update {
+//            it.copy(
+//                filteredBoothList = it.filteredBoothList.map { boothMapModel ->
+//                    if (boothMapModel.id == booth.id) {
+//                        boothMapModel.copy(isSelected = true)
+//                    } else {
+//                        boothMapModel.copy(isSelected = false)
+//                    }
+//                }.toImmutableList(),
+//            )
+//        }
+//    }
 
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
+        Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
+        Timber.d("filteredBoothsList: ${_uiState.value.filteredBoothList}")
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {
@@ -377,7 +376,7 @@ class MapViewModel @Inject constructor(
         if (booths.size == 1) {
             _uiState.update {
                 it.copy(
-                    filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                    filteredBoothList = it.filteredBoothList.map { boothMapModel ->
                         if (boothMapModel.id == booths[0].id) {
                             boothMapModel.copy(isSelected = true)
                         } else {
@@ -386,6 +385,7 @@ class MapViewModel @Inject constructor(
                     }.toImmutableList(),
                 )
             }
+            Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
         }
     }
 

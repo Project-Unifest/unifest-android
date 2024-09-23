@@ -18,13 +18,6 @@ internal enum class MainTab(
         label = "홈",
         route = MainTabRoute.Home,
     ),
-    WAITING(
-        iconResId = R.drawable.ic_waiting,
-        selectedIconResId = R.drawable.ic_selected_waiting,
-        contentDescription = "Waiting Icon",
-        label = "웨이팅",
-        route = MainTabRoute.Waiting,
-    ),
     MAP(
         iconResId = R.drawable.ic_map,
         selectedIconResId = R.drawable.ic_selected_map,
@@ -32,13 +25,21 @@ internal enum class MainTab(
         label = "지도",
         route = MainTabRoute.Map,
     ),
-    STAMP(
-        iconResId = R.drawable.ic_stamp,
-        selectedIconResId = R.drawable.ic_selected_stamp,
-        contentDescription = "Stamp Icon",
-        label = "스탬프",
-        route = MainTabRoute.Stamp,
+    WAITING(
+        iconResId = R.drawable.ic_waiting,
+        selectedIconResId = R.drawable.ic_selected_waiting,
+        contentDescription = "Waiting Icon",
+        label = "웨이팅",
+        route = MainTabRoute.Waiting,
     ),
+
+//    STAMP(
+//        iconResId = R.drawable.ic_stamp,
+//        selectedIconResId = R.drawable.ic_selected_stamp,
+//        contentDescription = "Stamp Icon",
+//        label = "스탬프",
+//        route = MainTabRoute.Stamp,
+//    ),
     MENU(
         iconResId = R.drawable.ic_menu,
         selectedIconResId = R.drawable.ic_selected_menu,

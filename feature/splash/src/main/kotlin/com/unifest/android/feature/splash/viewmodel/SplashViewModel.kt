@@ -2,7 +2,8 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -12,11 +13,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val onboardingRepository: OnboardingRepository,
+    // private val onboardingRepository: OnboardingRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
+    private val messagingRepository: MessagingRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SplashUiState())
@@ -34,12 +38,38 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun checkIntroCompletion() {
+//    // 학교를 하나만 서비스 하기 때문에 Intro 스킵
+//    fun checkIntroCompletion() {
+//        viewModelScope.launch {
+//            if (onboardingRepository.checkIntroCompletion()) {
+//                _uiEvent.send(SplashUiEvent.NavigateToMain)
+//            } else {
+//                _uiEvent.send(SplashUiEvent.NavigateToIntro)
+//            }
+//        }
+//    }
+
+    private fun setRecentLikedFestival() {
         viewModelScope.launch {
-            if (onboardingRepository.checkIntroCompletion()) {
-                _uiEvent.send(SplashUiEvent.NavigateToMain)
-            } else {
-                _uiEvent.send(SplashUiEvent.NavigateToIntro)
+            likedFestivalRepository.setRecentLikedFestival("한경대")
+            likedFestivalRepository.setRecentLikedFestivalId(2L)
+            _uiEvent.send(SplashUiEvent.NavigateToMain)
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    fun refreshFCMToken() {
+        viewModelScope.launch {
+            try {
+                val token = messagingRepository.refreshFCMToken()
+                token?.let {
+                    Timber.d("New FCM token: $it")
+                    messagingRepository.setFCMToken(it)
+                    // 한경대로 고정
+                    setRecentLikedFestival()
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Error getting or saving FCM token")
             }
         }
     }

@@ -143,6 +143,9 @@ internal fun StampScreen(
 ) {
     val activity = LocalContext.current.findActivity()
 
+//    val checkedStampPainter = rememberAsyncImagePainter(R.drawable.ic_checked_stamp)
+//    val uncheckedStampPainter = rememberAsyncImagePainter(R.drawable.ic_unchecked_stamp)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
