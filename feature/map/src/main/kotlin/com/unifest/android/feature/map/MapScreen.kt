@@ -69,6 +69,7 @@ import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Align
@@ -102,6 +103,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import kotlinx.collections.immutable.persistentListOf
 import com.unifest.android.core.designsystem.R as designR
 
 val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -379,14 +381,14 @@ fun MapContent(
             ),
             locationSource = rememberFusedLocationSource(),
         ) {
-//            PolygonOverlay(
-//                coords = uiState.outerCords,
-//                color = Color.Gray.copy(alpha = 0.3f),
-//                outlineColor = Color.Gray,
-//                outlineWidth = 1.dp,
-//                holes = persistentListOf(uiState.innerHole),
-//            )
-//            uiState.filteredBoothsList.forEach { booth ->
+            PolygonOverlay(
+                coords = uiState.outerCords,
+                color = Color.Gray.copy(alpha = 0.3f),
+                outlineColor = Color.Gray,
+                outlineWidth = 1.dp,
+                holes = persistentListOf(uiState.innerHole),
+            )
+//            uiState.filteredBoothList.forEach { booth ->
 //                Marker(
 //                    state = MarkerState(position = booth.position),
 //                    icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
@@ -398,7 +400,7 @@ fun MapContent(
 //            }
 
             var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
-            DisposableMapEffect(uiState.boothList) { map ->
+            DisposableMapEffect(uiState.filteredBoothList) { map ->
                 if (clusterManager == null) {
                     clusterManager = Clusterer.ComplexBuilder<BoothMapModel>()
                         .minClusteringZoom(9)
@@ -462,7 +464,7 @@ fun MapContent(
                         .build()
                         .apply { this.map = map }
                 }
-                val boothListMap = uiState.boothList.associateWith { booth -> ItemData(booth.name, booth.category) }
+                val boothListMap = uiState.filteredBoothList.associateWith { booth -> ItemData(booth.name, booth.category) }
                 clusterManager?.addAll(boothListMap)
                 onDispose {
                     clusterManager?.clear()
