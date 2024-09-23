@@ -81,7 +81,7 @@ fun ToolTip(
         content()
         LaunchedEffect(key1 = Unit) {
             scope.launch {
-                delay(500)
+                delay(1000)
                 balloonWindow.awaitAlignEnd()
             }
         }
