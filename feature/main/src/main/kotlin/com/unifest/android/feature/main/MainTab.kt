@@ -18,19 +18,19 @@ internal enum class MainTab(
         label = "홈",
         route = MainTabRoute.Home,
     ),
-    WAITING(
-        iconResId = R.drawable.ic_waiting,
-        selectedIconResId = R.drawable.ic_selected_waiting,
-        contentDescription = "Waiting Icon",
-        label = "웨이팅",
-        route = MainTabRoute.Waiting,
-    ),
     MAP(
         iconResId = R.drawable.ic_map,
         selectedIconResId = R.drawable.ic_selected_map,
         contentDescription = "Map Icon",
         label = "지도",
         route = MainTabRoute.Map,
+    ),
+    WAITING(
+        iconResId = R.drawable.ic_waiting,
+        selectedIconResId = R.drawable.ic_selected_waiting,
+        contentDescription = "Waiting Icon",
+        label = "웨이팅",
+        route = MainTabRoute.Waiting,
     ),
 
 //    STAMP(
