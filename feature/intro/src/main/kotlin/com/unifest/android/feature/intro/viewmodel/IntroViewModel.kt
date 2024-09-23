@@ -185,7 +185,7 @@ class IntroViewModel @Inject constructor(
                 likedFestivalRepository.insertLikedFestivalAtSearch(festival)
             }
             likedFestivalRepository.setRecentLikedFestival("한경대")
-            likedFestivalRepository.setRecentLikedFestivalId(1L)
+            likedFestivalRepository.setRecentLikedFestivalId(2L)
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)
         }

@@ -2,6 +2,7 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val onboardingRepository: OnboardingRepository,
+    // private val onboardingRepository: OnboardingRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SplashUiState())
@@ -34,13 +36,22 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun checkIntroCompletion() {
+//    // 학교를 하나만 서비스 하기 때문에 Intro 스킵
+//    fun checkIntroCompletion() {
+//        viewModelScope.launch {
+//            if (onboardingRepository.checkIntroCompletion()) {
+//                _uiEvent.send(SplashUiEvent.NavigateToMain)
+//            } else {
+//                _uiEvent.send(SplashUiEvent.NavigateToIntro)
+//            }
+//        }
+//    }
+
+    fun setRecentLikedFestival() {
         viewModelScope.launch {
-            if (onboardingRepository.checkIntroCompletion()) {
-                _uiEvent.send(SplashUiEvent.NavigateToMain)
-            } else {
-                _uiEvent.send(SplashUiEvent.NavigateToIntro)
-            }
+            likedFestivalRepository.setRecentLikedFestival("한경대")
+            likedFestivalRepository.setRecentLikedFestivalId(2L)
+            _uiEvent.send(SplashUiEvent.NavigateToMain)
         }
     }
 
