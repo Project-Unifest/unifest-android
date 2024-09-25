@@ -24,13 +24,25 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(remoteMessage: RemoteMessage) {
         val requestCode = System.currentTimeMillis().toInt()
 
-        val intent = Intent(this, MainActivity::class.java)
+//        val intent = Intent(this, MainActivity::class.java)
+//
+//        for (key in remoteMessage.data.keys) {
+//            intent.putExtra(key, remoteMessage.data.getValue(key))
+//        }
+//
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        for (key in remoteMessage.data.keys) {
-            intent.putExtra(key, remoteMessage.data.getValue(key))
+        Timber.tag("UnifestFirebaseMessagingService").d("boothId: ${remoteMessage.data["boothId"]}")
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra("navigate_to_booth", true)
+            // FCM data에서 boothId를 가져와 Intent에 추가
+            remoteMessage.data["boothId"]?.let {
+                putExtra("boothId", it)
+            }
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         } else {

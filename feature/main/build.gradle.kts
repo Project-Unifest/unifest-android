@@ -27,6 +27,6 @@ dependencies {
         libs.coil.compose,
         libs.compose.system.ui.controller,
         libs.androidx.navigation.compose,
-
+        libs.timber,
     )
 }
