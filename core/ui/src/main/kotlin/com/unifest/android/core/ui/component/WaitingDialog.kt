@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -139,7 +140,6 @@ fun WaitingPinDialog(
                 Spacer(modifier = Modifier.height(10.dp))
                 AnimatedContent(targetState = isWrongPinInserted) { isWrongPinInserted ->
                     Row(
-                        modifier = Modifier.height(24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.width(14.dp))
