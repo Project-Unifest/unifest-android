@@ -108,7 +108,7 @@ fun WaitingInfoItem(
                             "CALLED" -> stringResource(id = R.string.waiting_my_turn)
                             else -> myWaitingModel.waitingOrder.toString()
                         },
-                        style = if (myWaitingModel.waitingOrder.toInt() == 1) WaitingNumber5 else WaitingNumber,
+                        style = if (myWaitingModel.status == "CALLED") WaitingNumber5 else WaitingNumber,
                         color = if (myWaitingModel.status == "NOSHOW") {
                             LightPrimary700
                         } else {
@@ -117,7 +117,7 @@ fun WaitingInfoItem(
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    if (myWaitingModel.waitingOrder.toInt() != 1 && myWaitingModel.status != "NOSHOW") {
+                    if (myWaitingModel.status != "CALLED" && myWaitingModel.status != "NOSHOW") {
                         Text(
                             text = stringResource(id = R.string.waiting_nth),
                             fontSize = 18.sp,
