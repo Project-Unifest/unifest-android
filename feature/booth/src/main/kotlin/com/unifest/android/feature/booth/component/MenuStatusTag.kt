@@ -78,7 +78,7 @@ fun Tag(
 
             else -> {
                 Text(
-                    text = menuStatus,
+                    text = "등록된 정보 없음",
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
