@@ -68,7 +68,7 @@ fun FestivalSearchBottomSheet(
 //    )
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
-        confirmValueChange = { it != SheetValue.Hidden },
+        // confirmValueChange = { it != SheetValue.Hidden },
     )
 
     ModalBottomSheet(
@@ -98,7 +98,6 @@ fun FestivalSearchBottomSheet(
         windowInsets = WindowInsets(top = 0),
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surface)
             .padding(top = 18.dp),
     ) {
         Column(
