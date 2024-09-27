@@ -13,5 +13,7 @@
     <string name="booth_waiting_already_exists">이미 웨이팅 한 부스에요!</string>
     <string name="sold_out">품절</string>
     <string name="almost_sold_out_less_than_5_left">품절 임박 5개 미만 남음</string>
+    <string name="no_menu_status">등록된 정보 없음</string>
+    <string name="enough_status">여유 재고</string>
 
 </resources>

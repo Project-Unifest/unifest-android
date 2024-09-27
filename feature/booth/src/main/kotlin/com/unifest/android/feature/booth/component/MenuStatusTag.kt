@@ -70,7 +70,7 @@ fun Tag(
 
             "ENOUGH" -> {
                 Text(
-                    text = "여유 재고",
+                    text = stringResource(R.string.enough_status),
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
@@ -78,7 +78,7 @@ fun Tag(
 
             else -> {
                 Text(
-                    text = "등록된 정보 없음",
+                    text = stringResource(id = R.string.no_menu_status),
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
