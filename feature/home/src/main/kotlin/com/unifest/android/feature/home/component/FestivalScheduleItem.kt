@@ -146,23 +146,23 @@ fun FestivalScheduleItem(
                 }
             }
         }
-        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
-            UnifestOutlinedButton(
-                onClick = {
-                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-                contentPadding = PaddingValues(6.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-                    style = BoothLocation,
-                )
-            }
-        }
+//        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
+//            UnifestOutlinedButton(
+//                onClick = {
+//                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(48.dp)
+//                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
+//                contentPadding = PaddingValues(6.dp),
+//            ) {
+//                Text(
+//                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
+//                    style = BoothLocation,
+//                )
+//            }
+//        }
     }
 }
 
