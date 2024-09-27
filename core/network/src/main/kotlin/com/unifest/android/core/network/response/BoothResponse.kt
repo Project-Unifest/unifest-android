@@ -83,7 +83,7 @@ data class Menu(
     val price: Int,
     @SerialName("imgUrl")
     val imgUrl: String? = null,
-    @SerialName("status")
+    @SerialName("menuStatus")
     val status: String? = null,
 )
 

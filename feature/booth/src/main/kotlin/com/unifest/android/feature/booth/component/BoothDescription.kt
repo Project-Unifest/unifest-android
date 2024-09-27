@@ -67,6 +67,9 @@ fun BoothDescription(
     val isBoothRunning = openLocalTime != null && closeLocalTime != null &&
         currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
 
+    // 부스 운영 여부 확인 안됨
+    val isBoothRunningDetailProvided = openLocalTime != null && closeLocalTime != null
+
     Column(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -110,7 +113,9 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = if (isBoothRunning) {
+                text = if (!isBoothRunningDetailProvided) {
+                    stringResource(id = R.string.booth_is_unknown_running)
+                } else if (isBoothRunning) {
                     stringResource(id = R.string.booth_is_running)
                 } else {
                     stringResource(id = R.string.booth_is_closed)
