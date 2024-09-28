@@ -1,4 +1,4 @@
-package com.unifest.feature.navigator
+package com.unifest.android.feature.navigator
 
 import android.app.Activity
 import android.content.Intent

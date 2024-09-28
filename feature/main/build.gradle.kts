@@ -13,6 +13,7 @@ android {
 dependencies {
     implementations(
         projects.feature.booth,
+        projects.feature.festival,
         projects.feature.home,
         projects.feature.likedBooth,
         projects.feature.intro,

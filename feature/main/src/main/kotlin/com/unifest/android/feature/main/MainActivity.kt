@@ -11,7 +11,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.feature.navigator.IntroNavigator
+import com.unifest.android.feature.navigator.IntroNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import timber.log.Timber

@@ -46,8 +46,8 @@ android {
 
         getByName("release") {
             isDebuggable = false
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             signingConfig = signingConfigs.getByName("release")
             manifestPlaceholders += mapOf(
                 "appName" to "@string/app_name",
@@ -64,18 +64,25 @@ dependencies {
     implementations(
         projects.core.common,
         projects.core.data,
+        projects.core.database,
+        projects.core.datastore,
         projects.core.designsystem,
+        projects.core.model,
         projects.core.navigation,
         projects.core.network,
-        projects.core.datastore,
         projects.core.ui,
 
+        projects.feature.booth,
+        projects.feature.festival,
         projects.feature.home,
         projects.feature.intro,
+        projects.feature.likedBooth,
         projects.feature.main,
         projects.feature.map,
         projects.feature.menu,
+        projects.feature.navigator,
         projects.feature.splash,
+        projects.feature.stamp,
         projects.feature.waiting,
 
         libs.androidx.activity.compose,

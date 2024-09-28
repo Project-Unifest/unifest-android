@@ -34,7 +34,7 @@ fun Tag(
         when (menuStatus) {
             "SOLD_OUT" -> {
                 Text(
-                    text = stringResource(R.string.almost_sold_out_less_than_5_left),
+                    text = stringResource(R.string.sold_out),
                     style = Content7,
                     color = MaterialTheme.colorScheme.error,
                 )
@@ -70,7 +70,7 @@ fun Tag(
 
             "ENOUGH" -> {
                 Text(
-                    text = "여유 재고",
+                    text = stringResource(R.string.enough_status),
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
@@ -78,7 +78,7 @@ fun Tag(
 
             else -> {
                 Text(
-                    text = menuStatus,
+                    text = stringResource(id = R.string.no_menu_status),
                     style = Content7,
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )

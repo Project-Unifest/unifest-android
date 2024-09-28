@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -139,7 +141,6 @@ fun WaitingPinDialog(
                 Spacer(modifier = Modifier.height(10.dp))
                 AnimatedContent(targetState = isWrongPinInserted) { isWrongPinInserted ->
                     Row(
-                        modifier = Modifier.height(24.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Spacer(modifier = Modifier.width(14.dp))
@@ -180,7 +181,7 @@ fun WaitingPinDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun WaitingDialog(
     boothName: String,
@@ -314,8 +315,8 @@ fun WaitingDialog(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                FlowRow(
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(

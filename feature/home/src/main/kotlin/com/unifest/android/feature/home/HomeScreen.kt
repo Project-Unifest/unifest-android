@@ -168,7 +168,7 @@ internal fun HomeScreen(
                         FestivalScheduleItem(
                             festival = festival,
                             scheduleIndex = scheduleIndex,
-                            likedFestivals = homeUiState.likedFestivals,
+//                            likedFestivals = homeUiState.likedFestivals,
                             selectedDate = homeUiState.selectedDate,
                             isDataReady = homeUiState.isDataReady,
                             isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],

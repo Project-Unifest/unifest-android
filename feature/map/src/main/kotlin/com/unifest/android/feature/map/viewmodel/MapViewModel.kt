@@ -282,7 +282,7 @@ class MapViewModel @Inject constructor(
     private fun setEnablePopularMode() {
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                boothRepository.getPopularBooths(1)
+                boothRepository.getPopularBooths(festivalId = 2)
                     .onSuccess { booths ->
                         _uiState.update { currentState ->
                             currentState.copy(
