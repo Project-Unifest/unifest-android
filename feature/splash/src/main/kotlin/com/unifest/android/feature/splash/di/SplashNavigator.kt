@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import com.unifest.android.core.common.extension.startActivityWithAnimation
 import com.unifest.android.feature.splash.SplashActivity
-import com.unifest.feature.navigator.SplashNavigator
+import com.unifest.android.feature.navigator.SplashNavigator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

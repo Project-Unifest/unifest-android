@@ -13,9 +13,9 @@ android {
 dependencies {
     implementations(
         projects.feature.booth,
+        projects.feature.festival,
         projects.feature.home,
         projects.feature.likedBooth,
-        projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,
         projects.feature.navigator,
@@ -27,6 +27,5 @@ dependencies {
         libs.coil.compose,
         libs.compose.system.ui.controller,
         libs.androidx.navigation.compose,
-
     )
 }

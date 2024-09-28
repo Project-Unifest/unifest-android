@@ -20,20 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontwarn java.lang.invoke.StringConcatFactory
--dontwarn com.unifest.android.core.common.ErrorHandlerActions
 -dontwarn com.unifest.android.core.common.ObserveEventKt
--dontwarn com.unifest.android.core.common.utils.DateUtilsKt
--dontwarn com.unifest.android.core.designsystem.component.ButtonKt
--dontwarn com.unifest.android.core.designsystem.component.DialogKt
--dontwarn com.unifest.android.core.designsystem.component.LoadingWheelKt
--dontwarn com.unifest.android.core.designsystem.component.NetworkImageKt
+-dontwarn com.unifest.android.core.common.UiText$DirectString
+-dontwarn com.unifest.android.core.common.UiText
+-dontwarn com.unifest.android.core.common.extension.ContextKt
 -dontwarn com.unifest.android.core.designsystem.component.ScaffoldKt
--dontwarn com.unifest.android.core.designsystem.component.SearchTextFieldKt
--dontwarn com.unifest.android.core.designsystem.theme.ColorKt
 -dontwarn com.unifest.android.core.designsystem.theme.FontKt
 -dontwarn com.unifest.android.core.designsystem.theme.ThemeKt
--dontwarn com.unifest.android.core.ui.component.LikedFestivalGridKt
--dontwarn com.unifest.android.feature.navigator.MainNavigator
--dontwarn com.unifest.android.feature.navigator.Navigator$DefaultImpls
--dontwarn com.unifest.android.feature.navigator.Navigator
+-dontwarn java.lang.invoke.StringConcatFactory
