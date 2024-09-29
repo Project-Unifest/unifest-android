@@ -274,6 +274,8 @@ class BoothViewModel @Inject constructor(
                             boothPinNumber = "",
                         )
                     }
+                    // TODO fcm Topic 등록
+                    waitingRepository.registerFCMTopic(waiting.waitingId.toString())
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
                 }.onFailure { exception ->
