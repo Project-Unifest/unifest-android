@@ -15,4 +15,6 @@ data class BoothWaitingRequest(
     val partySize: Long,
     @SerialName("pinNumber")
     val pinNumber: String,
+    @SerialName("fcmToken")
+    val fcmToken: String,
 )
