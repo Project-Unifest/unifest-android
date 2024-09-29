@@ -11,17 +11,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.navigator.IntroNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var introNavigator: IntroNavigator
-
     private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -58,13 +58,13 @@ internal class LikedFestivalRepositoryImpl @Inject constructor(
 
     override suspend fun registerLikedFestival() = runSuspendCatching {
         val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
-        val fcmToken = tokenDataSource.getFCMToken() ?: ""
+        val fcmToken = tokenDataSource.getFCMToken()
         service.registerLikedFestival(LikedFestivalRequest(festivalId, fcmToken))
     }
 
     override suspend fun unregisterLikedFestival() = runSuspendCatching {
         val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
-        val fcmToken = tokenDataSource.getFCMToken() ?: ""
+        val fcmToken = tokenDataSource.getFCMToken()
         service.unregisterLikedFestival(LikedFestivalRequest(festivalId, fcmToken))
     }
 }
