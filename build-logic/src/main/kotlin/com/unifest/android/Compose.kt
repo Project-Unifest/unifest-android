@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 //    }
 //}
 
-internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, *>) {
+internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *>) {
     extension.apply {
         buildFeatures {
             compose = true

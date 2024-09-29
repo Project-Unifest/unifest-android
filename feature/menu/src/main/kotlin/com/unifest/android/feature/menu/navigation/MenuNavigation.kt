@@ -6,11 +6,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.feature.menu.MenuRoute
 
+const val MENU_ROUTE = "menu_route"
+
 fun NavController.navigateToMenu(navOptions: NavOptions) {
-    navigate(MainTabRoute.Menu, navOptions)
+    // navigate(MainTabRoute.Menu, navOptions)
+    navigate(MENU_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.menuNavGraph(
@@ -20,7 +22,8 @@ fun NavGraphBuilder.menuNavGraph(
     navigateToBoothDetail: (Long) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
 ) {
-    composable<MainTabRoute.Menu> {
+    // composable<MainTabRoute.Menu> {
+    composable(route = MENU_ROUTE) {
         MenuRoute(
             padding = padding,
             popBackStack = popBackStack,

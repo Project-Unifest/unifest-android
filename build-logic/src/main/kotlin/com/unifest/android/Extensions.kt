@@ -25,7 +25,7 @@ internal val Project.isAndroidProject: Boolean
     get() = pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION) ||
         pluginManager.hasPlugin(Plugins.ANDROID_LIBRARY)
 
-internal val Project.androidExtensions: CommonExtension<*, *, *, *, *, *>
+internal val Project.androidExtensions: CommonExtension<*, *, *, *, *>
     get() {
         return if (pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION)) {
             extensions.getByType<BaseAppModuleExtension>()

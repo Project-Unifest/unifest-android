@@ -12,6 +12,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -303,6 +304,7 @@ private fun checkLocationPermission(activity: Activity): Boolean {
         activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
@@ -362,7 +364,7 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MapContent(
     uiState: MapUiState,

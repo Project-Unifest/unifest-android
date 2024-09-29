@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -130,6 +131,7 @@ internal fun MenuRoute(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenuScreen(
     padding: PaddingValues,
@@ -263,10 +265,16 @@ fun MenuScreen(
                             index = index,
                             totalCount = menuUiState.likedBooths.size,
                             deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
-                            modifier = Modifier.animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = null,
-                                placementSpec = tween(
+//                            modifier = Modifier.animateItem(
+//                                fadeInSpec = null,
+//                                fadeOutSpec = null,
+//                                placementSpec = tween(
+//                                    durationMillis = 500,
+//                                    easing = LinearOutSlowInEasing,
+//                                ),
+//                            ),
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = tween(
                                     durationMillis = 500,
                                     easing = LinearOutSlowInEasing,
                                 ),

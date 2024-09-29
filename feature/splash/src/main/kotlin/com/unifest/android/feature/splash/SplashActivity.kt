@@ -45,13 +45,13 @@ class SplashActivity : ComponentActivity() {
                 SplashRoute(
 //                    navigateToIntro = {
 //                        introNavigator.navigateFrom(
-//                            activity = this,
+//                            activity = this@SplashActivity,
 //                            withFinish = true,
 //                        )
 //                    },
                     navigateToMain = {
                         mainNavigator.navigateFrom(
-                            activity = this,
+                            activity = this@SplashActivity,
                             withFinish = true,
                         )
                     },
