@@ -48,7 +48,7 @@ fun NavGraphBuilder.boothNavGraph(
             },
         ),
     ) {
-        /// composable<Route.Booth.BoothDetail> { navBackStackEntry ->
+        // composable<Route.Booth.BoothDetail> { navBackStackEntry ->
         composable(route = BOOTH_DETAIL_ROUTE) { navBackStackEntry ->
             val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(

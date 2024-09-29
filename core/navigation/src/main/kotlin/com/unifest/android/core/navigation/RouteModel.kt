@@ -1,7 +1,5 @@
 package com.unifest.android.core.navigation
 
-import kotlinx.serialization.Serializable
-
 // sealed interface MainTabRoute : Route {
 //     @Serializable
 //     data object Home : MainTabRoute
