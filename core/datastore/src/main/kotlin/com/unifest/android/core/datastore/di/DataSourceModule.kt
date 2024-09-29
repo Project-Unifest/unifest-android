@@ -4,6 +4,8 @@ import com.unifest.android.core.datastore.OnboardingDataSource
 import com.unifest.android.core.datastore.OnboardingDataSourceImpl
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSourceImpl
+import com.unifest.android.core.datastore.SettingDataSource
+import com.unifest.android.core.datastore.SettingDataSourceImpl
 import com.unifest.android.core.datastore.TokenDataSource
 import com.unifest.android.core.datastore.TokenDataSourceImpl
 import dagger.Binds
@@ -26,4 +28,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindTokenDataSource(tokenDataSourceImpl: TokenDataSourceImpl): TokenDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingDataSource(settingDataSourceImpl: SettingDataSourceImpl): SettingDataSource
 }

@@ -8,17 +8,6 @@ plugins {
 
 android {
     namespace = "com.unifest.android.feature.main"
-
-    android {
-        buildTypes {
-            debug {
-                isMinifyEnabled = false
-            }
-            release {
-                isMinifyEnabled = false
-            }
-        }
-    }
 }
 
 dependencies {
@@ -27,7 +16,6 @@ dependencies {
         projects.feature.festival,
         projects.feature.home,
         projects.feature.likedBooth,
-        projects.feature.intro,
         projects.feature.map,
         projects.feature.menu,
         projects.feature.navigator,

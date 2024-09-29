@@ -14,6 +14,8 @@ import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.OnboardingRepositoryImpl
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepositoryImpl
+import com.unifest.android.core.data.repository.SettingRepository
+import com.unifest.android.core.data.repository.SettingRepositoryImpl
 import com.unifest.android.core.data.repository.WaitingRepository
 import com.unifest.android.core.data.repository.WaitingRepositoryImpl
 import dagger.Binds
@@ -56,4 +58,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMessagingRepository(messagingRepositoryImpl: MessagingRepositoryImpl): MessagingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingRepository(settingRepositoryImpl: SettingRepositoryImpl): SettingRepository
 }

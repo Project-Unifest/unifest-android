@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +25,9 @@ fun MenuItem(
     icon: ImageVector,
     title: String,
     onClick: () -> Unit,
+    isToggleMenuItem: Boolean = false,
+    checked: Boolean = true,
+    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -43,5 +48,16 @@ fun MenuItem(
             color = MaterialTheme.colorScheme.onBackground,
             style = Content8,
         )
+        if (isToggleMenuItem) {
+            Spacer(modifier = Modifier.weight(1f))
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                ),
+            )
+        }
     }
 }

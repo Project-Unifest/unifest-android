@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.navigator.IntroNavigator
 import com.unifest.android.feature.navigator.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
@@ -19,8 +18,8 @@ import javax.inject.Inject
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : ComponentActivity() {
-    @Inject
-    lateinit var introNavigator: IntroNavigator
+//    @Inject
+//    lateinit var introNavigator: IntroNavigator
 
     @Inject
     lateinit var mainNavigator: MainNavigator
@@ -44,15 +43,15 @@ class SplashActivity : ComponentActivity() {
 
             UnifestTheme {
                 SplashRoute(
-                    navigateToIntro = {
-                        introNavigator.navigateFrom(
-                            activity = this,
-                            withFinish = true,
-                        )
-                    },
+//                    navigateToIntro = {
+//                        introNavigator.navigateFrom(
+//                            activity = this@SplashActivity,
+//                            withFinish = true,
+//                        )
+//                    },
                     navigateToMain = {
                         mainNavigator.navigateFrom(
-                            activity = this,
+                            activity = this@SplashActivity,
                             withFinish = true,
                         )
                     },

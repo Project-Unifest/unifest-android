@@ -47,5 +47,5 @@ secrets {
 }
 
 fun getServerBaseUrl(propertyKey: String): String {
-    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
