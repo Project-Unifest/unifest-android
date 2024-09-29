@@ -1,16 +1,19 @@
 package com.unifest.android.feature.map.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +27,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,6 +43,21 @@ class MapViewModel @Inject constructor(
     private val _uiEvent = Channel<MapUiEvent>()
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
 
+    val permissionDialogQueue = mutableStateListOf<String>()
+
+    fun onPermissionResult(
+        permission: String,
+        isGranted: Boolean,
+    ) {
+//        if (isGranted && permissionDialogQueue.isEmpty()) {
+//            refreshFCMToken()
+//        }
+
+        if (!isGranted && !permissionDialogQueue.contains(permission)) {
+            permissionDialogQueue.add(permission)
+        }
+    }
+
     init {
         requestLocationPermission()
         searchSchoolName()
@@ -48,13 +67,7 @@ class MapViewModel @Inject constructor(
 
     private fun requestLocationPermission() {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestLocationPermission)
-        }
-    }
-
-    fun onPermissionResult(isGranted: Boolean) {
-        if (!isGranted) {
-            _uiState.update { it.copy(isPermissionDialogVisible = true) }
+            _uiEvent.send(MapUiEvent.RequestPermissions)
         }
     }
 
@@ -64,13 +77,13 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
-            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
-            is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
-            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
+            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
     }
 
@@ -88,29 +101,29 @@ class MapViewModel @Inject constructor(
         filterBoothsByType(_uiState.value.selectedBoothTypeChips)
     }
 
-    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType) {
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String?) {
         when (buttonType) {
-            PermissionDialogButtonType.CONFIRM -> {
-                viewModelScope.launch {
-                    _uiState.update {
-                        it.copy(isPermissionDialogVisible = false)
-                    }
-                    _uiEvent.send(MapUiEvent.RequestLocationPermission)
-                }
-            }
-
-            PermissionDialogButtonType.GO_TO_APP_SETTINGS -> {
-                viewModelScope.launch {
-                    _uiEvent.send(MapUiEvent.GoToAppSettings)
-                }
-            }
-
             PermissionDialogButtonType.DISMISS -> {
-                _uiState.update {
-                    it.copy(isPermissionDialogVisible = false)
+                dismissDialog()
+            }
+
+            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
+                viewModelScope.launch {
+                    _uiEvent.send(MapUiEvent.NavigateToAppSetting)
+                }
+            }
+
+            PermissionDialogButtonType.CONFIRM -> {
+                dismissDialog()
+                viewModelScope.launch {
+                    _uiEvent.send(MapUiEvent.RequestPermission(permission!!))
                 }
             }
         }
+    }
+
+    private fun dismissDialog() {
+        permissionDialogQueue.removeFirst()
     }
 
     private fun filterBoothsByType(chipList: List<String>) {
@@ -119,7 +132,7 @@ class MapViewModel @Inject constructor(
             englishCategories.contains(booth.category)
         }
         _uiState.update {
-            it.copy(filteredBoothsList = filteredBooths.toImmutableList())
+            it.copy(filteredBoothList = filteredBooths.toImmutableList())
         }
     }
 
@@ -145,6 +158,7 @@ class MapViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(festivalInfo = festivals[0])
                         }
+                        addLikeFestival(festivals[0])
                     }
                 }
                 .onFailure { exception ->
@@ -152,10 +166,21 @@ class MapViewModel @Inject constructor(
                 }
         }
     }
+    private fun addLikeFestival(festival: FestivalModel) {
+        viewModelScope.launch {
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                }
+                .onFailure { exception ->
+                    Timber.e(exception)
+                }
+        }
+    }
 
     fun getPopularBooths() {
         viewModelScope.launch {
-            boothRepository.getPopularBooths(1)
+            boothRepository.getPopularBooths(2)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
@@ -175,7 +200,7 @@ class MapViewModel @Inject constructor(
 
     fun getAllBooths() {
         viewModelScope.launch {
-            boothRepository.getAllBooths(1)
+            boothRepository.getAllBooths(2)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
@@ -257,13 +282,13 @@ class MapViewModel @Inject constructor(
     private fun setEnablePopularMode() {
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                boothRepository.getPopularBooths(1)
+                boothRepository.getPopularBooths(festivalId = 2)
                     .onSuccess { booths ->
                         _uiState.update { currentState ->
                             currentState.copy(
                                 selectedBoothList = booths.map { it.toMapModel() }.toImmutableList(),
                                 isBoothSelectionMode = false,
-                                filteredBoothsList = currentState.filteredBoothsList.map { booth ->
+                                filteredBoothList = currentState.filteredBoothList.map { booth ->
                                     booth.copy(isSelected = false)
                                 }.toImmutableList(),
                             )
@@ -289,42 +314,44 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedBooth(booth: BoothMapModel) {
-        if (_uiState.value.isPopularMode) {
-            viewModelScope.launch {
-                _uiState.update {
-                    it.copy(isPopularMode = false)
-                }
-                delay(500)
-                _uiState.update {
-                    it.copy(
-                        isBoothSelectionMode = true,
-                        selectedBoothList = listOf(booth).toImmutableList(),
-                    )
-                }
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    isBoothSelectionMode = true,
-                    selectedBoothList = listOf(booth).toImmutableList(),
-                )
-            }
-        }
-        _uiState.update {
-            it.copy(
-                filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
-                    if (boothMapModel.id == booth.id) {
-                        boothMapModel.copy(isSelected = true)
-                    } else {
-                        boothMapModel.copy(isSelected = false)
-                    }
-                }.toImmutableList(),
-            )
-        }
-    }
+//    private fun updateSelectedBooth(booth: BoothMapModel) {
+//        if (_uiState.value.isPopularMode) {
+//            viewModelScope.launch {
+//                _uiState.update {
+//                    it.copy(isPopularMode = false)
+//                }
+//                delay(500)
+//                _uiState.update {
+//                    it.copy(
+//                        isBoothSelectionMode = true,
+//                        selectedBoothList = listOf(booth).toImmutableList(),
+//                    )
+//                }
+//            }
+//        } else {
+//            _uiState.update {
+//                it.copy(
+//                    isBoothSelectionMode = true,
+//                    selectedBoothList = listOf(booth).toImmutableList(),
+//                )
+//            }
+//        }
+//        _uiState.update {
+//            it.copy(
+//                filteredBoothList = it.filteredBoothList.map { boothMapModel ->
+//                    if (boothMapModel.id == booth.id) {
+//                        boothMapModel.copy(isSelected = true)
+//                    } else {
+//                        boothMapModel.copy(isSelected = false)
+//                    }
+//                }.toImmutableList(),
+//            )
+//        }
+//    }
 
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
+        Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
+        Timber.d("filteredBoothsList: ${_uiState.value.filteredBoothList}")
         if (_uiState.value.isPopularMode) {
             viewModelScope.launch {
                 _uiState.update {
@@ -349,7 +376,7 @@ class MapViewModel @Inject constructor(
         if (booths.size == 1) {
             _uiState.update {
                 it.copy(
-                    filteredBoothsList = it.filteredBoothsList.map { boothMapModel ->
+                    filteredBoothList = it.filteredBoothList.map { boothMapModel ->
                         if (boothMapModel.id == booths[0].id) {
                             boothMapModel.copy(isSelected = true)
                         } else {
@@ -358,6 +385,7 @@ class MapViewModel @Inject constructor(
                     }.toImmutableList(),
                 )
             }
+            Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")
         }
     }
 

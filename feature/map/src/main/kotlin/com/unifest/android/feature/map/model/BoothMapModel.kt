@@ -22,6 +22,8 @@ data class BoothMapModel(
     }
 }
 
+data class ItemData(val name: String, val category: String)
+
 // @Parcelize
 // data class BoothMapModel(
 //     val id: Long = 0L,

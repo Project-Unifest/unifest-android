@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import com.unifest.android.core.common.extension.startActivityWithAnimation
 import com.unifest.android.feature.intro.IntroActivity
-import com.unifest.feature.navigator.IntroNavigator
+import com.unifest.android.feature.navigator.IntroNavigator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -9,7 +9,7 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -140,9 +140,9 @@ class MenuViewModel @Inject constructor(
                     updateLikedBooth(booth)
                     delay(500)
                     getLikedBooths()
-                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
                 }.onFailure {
-                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                 }
         }
     }
@@ -186,7 +186,7 @@ class MenuViewModel @Inject constructor(
                 // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 _uiEvent.send(MenuUiEvent.NavigateBack)
             } else {
-                _uiEvent.send(MenuUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+                _uiEvent.send(MenuUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
             }
         }
     }

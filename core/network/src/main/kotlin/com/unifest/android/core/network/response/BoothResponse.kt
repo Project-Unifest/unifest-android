@@ -65,6 +65,12 @@ data class BoothDetail(
     val longitude: Float,
     @SerialName("menus")
     val menus: List<Menu>,
+    @SerialName("waitingEnabled")
+    val waitingEnabled: Boolean,
+    @SerialName("openTime")
+    val openTime: String? = null,
+    @SerialName("closeTime")
+    val closeTime: String? = null,
 )
 
 @Serializable
@@ -77,6 +83,8 @@ data class Menu(
     val price: Int,
     @SerialName("imgUrl")
     val imgUrl: String? = null,
+    @SerialName("menuStatus")
+    val status: String? = null,
 )
 
 @Serializable

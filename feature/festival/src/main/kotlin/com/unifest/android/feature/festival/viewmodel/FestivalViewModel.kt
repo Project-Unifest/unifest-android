@@ -10,8 +10,9 @@ import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.festival.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -127,14 +129,22 @@ class FestivalViewModel @Inject constructor(
                 setFestivalSearchBottomSheetVisible(false)
                 _uiEvent.send(FestivalUiEvent.NavigateBack)
             } else {
-                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.menu_interest_festival_snack_bar)))
+                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
             }
         }
     }
 
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
+                    Timber.e(exception)
+                }
         }
     }
 
@@ -181,7 +191,15 @@ class FestivalViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.deleteLikedFestival(festival)
+            likedFestivalRepository.unregisterLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.deleteLikedFestival(festival)
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_failed_message)))
+                    Timber.e(exception)
+                }
         }
     }
 

@@ -1,21 +1,21 @@
 package com.unifest.android
 
 internal object Plugins {
-    const val JavaLibrary = "java-library"
-    const val KotlinJvm = "org.jetbrains.kotlin.jvm"
+    const val JAVA_LIBRARY = "java-library"
 
-    const val KotlinAndroid = "org.jetbrains.kotlin.android"
+    const val KOTLIN_JVM = "org.jetbrains.kotlin.jvm"
+    const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
+    const val KOTLINX_SERIALIZATION = "org.jetbrains.kotlin.plugin.serialization"
 
-    const val KotlinxSerialization = "org.jetbrains.kotlin.plugin.serialization"
+    const val ANDROID_APPLICATION = "com.android.application"
+    const val ANDROID_LIBRARY = "com.android.library"
+    const val COMPOSE_COMPILER = "org.jetbrains.kotlin.plugin.compose"
 
-    const val AndroidApplication = "com.android.application"
-    const val AndroidLibrary = "com.android.library"
+    const val ANDROIDX_ROOM = "androidx.room"
 
-    const val AndroidxRoom = "androidx.room"
+    const val HILT = "dagger.hilt.android.plugin"
+    const val KSP = "com.google.devtools.ksp"
 
-    const val hilt = "dagger.hilt.android.plugin"
-    const val Ksp = "com.google.devtools.ksp"
-
-    const val GoogleServices = "com.google.gms.google-services"
-    const val FirebaseCrashlytics = "com.google.firebase.crashlytics"
+    const val GOOGLE_SERVICES = "com.google.gms.google-services"
+    const val FIREBASE_CRASHLYTICS = "com.google.firebase.crashlytics"
 }

@@ -8,10 +8,14 @@ import com.unifest.android.core.data.repository.LikedBoothRepositoryImpl
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepositoryImpl
+import com.unifest.android.core.data.repository.MessagingRepository
+import com.unifest.android.core.data.repository.MessagingRepositoryImpl
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.OnboardingRepositoryImpl
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepositoryImpl
+import com.unifest.android.core.data.repository.WaitingRepository
+import com.unifest.android.core.data.repository.WaitingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -44,4 +48,12 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindRemoteConfigRepository(remoteConfigRepositoryImpl: RemoteConfigRepositoryImpl): RemoteConfigRepository
+
+    @Binds
+    @Singleton
+    abstract fun bingWaitingRepository(waitingRepositoryImpl: WaitingRepositoryImpl): WaitingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMessagingRepository(messagingRepositoryImpl: MessagingRepositoryImpl): MessagingRepository
 }

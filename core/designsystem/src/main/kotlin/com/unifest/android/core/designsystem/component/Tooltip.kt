@@ -15,23 +15,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.skydoves.balloon.ArrowOrientation
+import com.skydoves.balloon.ArrowOrientationRules
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
-import com.skydoves.balloon.compose.setBackgroundColor
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.Content5
-import com.unifest.android.core.designsystem.theme.MainColor
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,15 +44,18 @@ fun ToolTip(
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     val builder = rememberBalloonBuilder {
         setArrowSize(10)
         setArrowPosition(arrowPosition)
         setArrowOrientation(arrowOrientation)
+        setArrowOrientationRules(ArrowOrientationRules.ALIGN_FIXED)
         setWidth(BalloonSizeSpec.WRAP)
         setHeight(BalloonSizeSpec.WRAP)
         setPadding(9)
         setCornerRadius(8f)
-        setBackgroundColor(MainColor)
+        setBackgroundColor(context.getColor(R.color.tooltip_color))
         setBalloonAnimation(BalloonAnimation.FADE)
         setDismissWhenClicked(true)
         setDismissWhenTouchOutside(false)
@@ -77,6 +81,7 @@ fun ToolTip(
         content()
         LaunchedEffect(key1 = Unit) {
             scope.launch {
+                delay(1000)
                 balloonWindow.awaitAlignEnd()
             }
         }
@@ -138,7 +143,7 @@ fun SchoolSearchTitleWithToolTip(
 
 @ComponentPreview
 @Composable
-fun LikedFestivalToolTipPreview() {
+private fun LikedFestivalToolTipPreview() {
     UnifestTheme {
         LikedFestivalToolTip(
             completeOnboarding = {},
@@ -148,7 +153,7 @@ fun LikedFestivalToolTipPreview() {
 
 @ComponentPreview
 @Composable
-fun SchoolSearchTitleWithToolTipPreview() {
+private fun SchoolSearchTitleWithToolTipPreview() {
     UnifestTheme {
         SchoolSearchTitleWithToolTip(
             title = "건국대학교",

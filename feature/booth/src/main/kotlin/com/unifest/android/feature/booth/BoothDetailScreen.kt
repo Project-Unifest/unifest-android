@@ -1,28 +1,22 @@
 package com.unifest.android.feature.booth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,49 +25,38 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.clickableSingle
-import com.unifest.android.core.common.utils.formatAsCurrency
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.common.extension.navigateToAppSetting
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
-import com.unifest.android.core.designsystem.component.UnifestButton
-import com.unifest.android.core.designsystem.component.UnifestHorizontalDivider
-import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.core.designsystem.component.UnifestTopAppBar
-import com.unifest.android.core.designsystem.theme.BoothCaution
-import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.BoothTitle1
-import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
-import com.unifest.android.core.designsystem.theme.MainColor
-import com.unifest.android.core.designsystem.theme.MenuPrice
-import com.unifest.android.core.designsystem.theme.MenuTitle
+import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
-import com.unifest.android.core.designsystem.theme.Title4
-import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.BoothDetailModel
-import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.WaitingConfirmDialog
+import com.unifest.android.core.ui.component.WaitingDialog
+import com.unifest.android.core.ui.component.WaitingPinDialog
+import com.unifest.android.feature.booth.component.BoothBottomBar
+import com.unifest.android.feature.booth.component.BoothDescription
+import com.unifest.android.feature.booth.component.MenuItem
+import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
@@ -97,6 +80,9 @@ internal fun BoothDetailRoute(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }
+    val isDarkTheme = isSystemInDarkTheme()
+    val uriHandler = LocalUriHandler.current
+    val activity = context.findActivity()
 
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
@@ -105,8 +91,8 @@ internal fun BoothDetailRoute(
         )
         onDispose {
             systemUiController.setStatusBarColor(
-                color = Color.White,
-                darkIcons = true,
+                color = if (isDarkTheme) DarkGrey100 else Color.White,
+                darkIcons = !isDarkTheme,
             )
         }
     }
@@ -115,6 +101,8 @@ internal fun BoothDetailRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
+            is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
+            is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
             is BoothUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {
@@ -127,6 +115,9 @@ internal fun BoothDetailRoute(
                     job.cancel()
                 }
             }
+
+            is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+            is BoothUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
         }
     }
 
@@ -145,7 +136,11 @@ fun BoothDetailScreen(
     snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+    ) {
         BoothDetailContent(
             uiState = uiState,
             onAction = onAction,
@@ -153,16 +148,17 @@ fun BoothDetailScreen(
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
-            navigationIconRes = R.drawable.ic_arrow_back_gray,
+            navigationIconRes = designR.drawable.ic_arrow_back_gray,
             containerColor = Color.Transparent,
             onNavigationClick = { onAction(BoothUiAction.OnBackClick) },
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(padding),
         )
-        BottomBar(
+        BoothBottomBar(
             isBookmarked = uiState.isLiked,
             bookmarkCount = uiState.boothDetailInfo.likes,
+            isWaitingEnable = uiState.boothDetailInfo.waitingEnabled,
             onAction = onAction,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
@@ -198,6 +194,45 @@ fun BoothDetailScreen(
                 onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
+
+        if (uiState.isPinCheckDialogVisible) {
+            WaitingPinDialog(
+                boothName = uiState.boothDetailInfo.name,
+                pinNumber = uiState.boothPinNumber,
+                onPinNumberUpdated = { onAction(BoothUiAction.OnPinNumberUpdated(it)) },
+                onDialogPinButtonClick = { onAction(BoothUiAction.OnDialogPinButtonClick) },
+                onDismissRequest = { onAction(BoothUiAction.OnPinDialogDismiss) },
+                isWrongPinInserted = uiState.isWrongPinInserted,
+            )
+        }
+
+        if (uiState.isWaitingDialogVisible) {
+            WaitingDialog(
+                boothName = uiState.boothDetailInfo.name,
+                waitingCount = uiState.waitingTeamNumber,
+                phoneNumber = uiState.waitingTel,
+                partySize = uiState.waitingPartySize,
+                isPrivacyClicked = uiState.privacyConsentChecked,
+                onDismissRequest = { onAction(BoothUiAction.OnWaitingDialogDismiss) },
+                onWaitingMinusClick = { onAction(BoothUiAction.OnWaitingMinusClick) },
+                onWaitingPlusClick = { onAction(BoothUiAction.OnWaitingPlusClick) },
+                onDialogWaitingButtonClick = { onAction(BoothUiAction.OnDialogWaitingButtonClick) },
+                onWaitingTelUpdated = { onAction(BoothUiAction.OnWaitingTelUpdated(it)) },
+                onPolicyCheckBoxClick = { onAction(BoothUiAction.OnPolicyCheckBoxClick) },
+                onPrivacyPolicyClick = { onAction(BoothUiAction.OnPrivatePolicyClick) },
+                onThirdPartyPolicyClick = { onAction(BoothUiAction.OnThirdPartyPolicyClick) },
+            )
+        }
+
+        if (uiState.isConfirmDialogVisible) {
+            WaitingConfirmDialog(
+                boothName = uiState.boothDetailInfo.name,
+                waitingId = uiState.waitingId,
+                waitingPartySize = uiState.waitingPartySize,
+                waitingTeamNumber = uiState.waitingTeamNumber,
+                onConfirmClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
+            )
+        }
     }
 }
 
@@ -211,7 +246,14 @@ fun BoothDetailContent(
         modifier = modifier.fillMaxSize(),
     ) {
         item {
-            BoothImage(uiState.boothDetailInfo.thumbnail)
+            NetworkImage(
+                imgUrl = uiState.boothDetailInfo.thumbnail,
+                contentDescription = "Booth Image",
+                modifier = Modifier
+                    .height(260.dp)
+                    .fillMaxWidth(),
+                placeholder = painterResource(id = designR.drawable.image_placeholder),
+            )
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
@@ -220,13 +262,28 @@ fun BoothDetailContent(
                 warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
+                isRunning = uiState.isRunning,
+                openTime = uiState.boothDetailInfo.openTime,
+                closeTime = uiState.boothDetailInfo.closeTime,
                 onAction = onAction,
             )
         }
         item { Spacer(modifier = Modifier.height(32.dp)) }
-        item { UnifestHorizontalDivider() }
+        item {
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
         item { Spacer(modifier = Modifier.height(22.dp)) }
-        item { MenuText() }
+        item {
+            Text(
+                text = stringResource(id = R.string.booth_menu),
+                modifier = Modifier.padding(start = 20.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = Title2,
+            )
+        }
         item { Spacer(modifier = Modifier.height(16.dp)) }
         if (uiState.boothDetailInfo.menus.isEmpty()) {
             item {
@@ -237,7 +294,7 @@ fun BoothDetailContent(
                     Text(
                         text = stringResource(id = R.string.booth_empty_menu),
                         modifier = Modifier.padding(top = 76.dp),
-                        color = Color(0xFF7E7E7E),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = Content3,
                     )
                 }
@@ -256,392 +313,18 @@ fun BoothDetailContent(
     }
 }
 
-@Composable
-fun BottomBar(
-    bookmarkCount: Int,
-    isBookmarked: Boolean,
-    onAction: (BoothUiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val bookMarkColor = if (isBookmarked) MainColor else Color(0xFF4B4B4B)
-    Surface(
-        modifier = modifier.height(116.dp),
-        shadowElevation = 32.dp,
-        color = Color.White,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 27.dp, top = 15.dp, end = 15.dp, bottom = 15.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(
-                    modifier = Modifier.background(Color.White),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(if (isBookmarked) R.drawable.ic_bookmarked else R.drawable.ic_bookmark),
-                        contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
-                        tint = bookMarkColor,
-                        modifier = Modifier.clickableSingle {
-                            onAction(BoothUiAction.OnToggleBookmark)
-                        },
-                    )
-                    Text(
-                        text = "$bookmarkCount",
-                        color = bookMarkColor,
-                        style = BoothCaution.copy(fontWeight = FontWeight.Bold),
-                    )
-                }
-                Spacer(modifier = Modifier.width(18.dp))
-                UnifestButton(
-                    onClick = { /* showWaitingDialog = true */ },
-                    modifier = Modifier.fillMaxWidth(),
-                    contentPadding = PaddingValues(vertical = 15.dp),
-                    enabled = false,
-                    containerColor = Color(0xFF777777),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.booth_waiting_button_invalid),
-                        style = Title4,
-                        fontSize = 14.sp,
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun BoothImage(
-    imgUrl: String,
-) {
-    NetworkImage(
-        imgUrl = imgUrl,
-        contentDescription = "Booth Image",
-        modifier = Modifier
-            .height(260.dp)
-            .fillMaxWidth(),
-        placeholder = painterResource(id = R.drawable.ic_image_placeholder),
-    )
-}
-
-@Composable
-fun BoothDescription(
-    name: String,
-    warning: String,
-    description: String,
-    location: String,
-    onAction: (BoothUiAction) -> Unit,
-) {
-    val configuration = LocalConfiguration.current
-    val maxWidth = remember(configuration) {
-        val screenWidth = configuration.screenWidthDp.dp - 40.dp
-        screenWidth * (2 / 3f)
-    }
-
-    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = name,
-                modifier = Modifier
-                    .widthIn(max = maxWidth)
-                    .alignBy(LastBaseline),
-                style = BoothTitle1,
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = warning,
-                modifier = Modifier.alignBy(LastBaseline),
-                style = BoothCaution,
-                color = MainColor,
-            )
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Text(
-            text = description,
-            modifier = Modifier.padding(top = 8.dp),
-            style = Content2.copy(lineHeight = 18.sp),
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp),
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
-                contentDescription = "location icon",
-                tint = Color.Unspecified,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = location,
-                color = Color(0xFF393939),
-                style = BoothLocation,
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        UnifestOutlinedButton(
-            onClick = { onAction(BoothUiAction.OnCheckLocationClick) },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = stringResource(id = R.string.booth_check_locaiton),
-                style = Title5,
-            )
-        }
-    }
-}
-
-@Composable
-fun MenuText() {
-    Text(
-        text = stringResource(id = R.string.booth_menu),
-        modifier = Modifier.padding(start = 20.dp),
-        style = Title2,
-    )
-}
-
-@Composable
-fun MenuItem(
-    menu: MenuModel,
-    onAction: (BoothUiAction) -> Unit,
-) {
-    Row(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-    ) {
-        NetworkImage(
-            imgUrl = menu.imgUrl,
-            contentDescription = menu.name,
-            placeholder = painterResource(id = R.drawable.ic_item_placeholder),
-            modifier = Modifier
-                .size(86.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .clickable(
-                    onClick = {
-                        if (menu.imgUrl.isNotEmpty()) {
-                            onAction(BoothUiAction.OnMenuImageClick(menu))
-                        }
-                    },
-                ),
-        )
-        Spacer(modifier = Modifier.width(13.dp))
-        Column(
-            modifier = Modifier.align(Alignment.CenterVertically),
-        ) {
-            Text(
-                text = menu.name,
-                style = MenuTitle,
-                color = Color(0xFF545454),
-            )
-            Spacer(modifier = Modifier.height(3.dp))
-            Text(
-                text = menu.price.formatAsCurrency(),
-                style = MenuPrice,
-            )
-        }
-    }
-}
-
 @DevicePreview
 @Composable
-fun BoothScreenPreview() {
+private fun BoothScreenPreview(
+    @PreviewParameter(BoothDetailPreviewParameterProvider::class)
+    boothUiState: BoothUiState,
+) {
     UnifestTheme {
         BoothDetailScreen(
             padding = PaddingValues(),
-            uiState = BoothUiState(
-                boothDetailInfo = BoothDetailModel(
-                    id = 0L,
-                    name = "컴공 주점",
-                    category = "컴퓨터공학부 전용 부스",
-                    description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다. 100번째 방문자에게 깜짝 선물 증정 이벤트를 하고 있으니 많은 관심 부탁드려요~!",
-                    warning = "",
-                    location = "청심대 앞",
-                    latitude = 37.54224856023523f,
-                    longitude = 127.07605430700158f,
-                    menus = listOf(
-                        MenuModel(1L, "모둠 사시미", 45000, ""),
-                        MenuModel(2L, "모둠 사시미", 45000, ""),
-                        MenuModel(3L, "모둠 사시미", 45000, ""),
-                        MenuModel(4L, "모둠 사시미", 45000, ""),
-                    ),
-                ),
-            ),
+            uiState = boothUiState,
             snackBarState = SnackbarHostState(),
             onAction = {},
         )
     }
 }
-
-// @Composable
-// fun WaitingDialog(
-//    boothName: String,
-//    onDismissRequest: () -> Unit,
-//    onWaitingConfirm: (Int, String) -> Unit,
-// ) {
-//    var waitingCount by remember { mutableIntStateOf(0) }
-//    var phoneNumber by remember { mutableStateOf("") }
-//    //https://stackoverflow.com/questions/65243956/jetpack-compose-fullscreen-dialog
-//    Dialog(
-//        properties = DialogProperties(usePlatformDefaultWidth = false),
-//        onDismissRequest = onDismissRequest,
-//    ) {
-//        Box(
-//            Modifier
-//                .background(Color.Black.copy(alpha = 0.6f))
-//                .fillMaxSize(),
-//        ) {
-//            Card(
-//                modifier = Modifier
-//                    .align(Alignment.Center)
-//                    .padding(horizontal = 32.dp)
-//                    .background(Color.White),
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                        .fillMaxWidth(),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                ) {
-//                    Row {
-//                        Icon(
-//                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
-//                            contentDescription = "location icon",
-//                            tint = Color.Unspecified,
-//                        )
-//                        Spacer(modifier = Modifier.width(2.dp))
-//                        Text(text = boothName, style = Title3)
-//
-//
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(5.dp))
-//                    Text(text = "현재 내 앞 웨이팅", style = BoothLocation)
-//                    Spacer(modifier = Modifier.height(4.dp))
-//
-//                    Text(text = "$waitingCount 팀", style = WaitingTeam)
-//                    Spacer(modifier = Modifier.height(9.dp))
-//
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.SpaceBetween,
-//                    ) {
-//                        Text("인원 수", style = Title5, modifier = Modifier.padding(horizontal = 16.dp))
-//                        Row {
-//                            IconButton(
-//                                onClick = { if (waitingCount > 0) waitingCount-- },
-//                            )
-//                            { Icon(Icons.Default.Remove, contentDescription = "Decrease",) }
-//                            Spacer(modifier = Modifier.width(20.dp))
-//                            Text(
-//                                "$waitingCount",
-//                                Modifier.padding(horizontal = 16.dp),
-//                            )
-//                            Spacer(modifier = Modifier.width(20.dp))
-//                            IconButton(
-//                                onClick = { waitingCount++ },
-//                            )
-//                            { Icon(Icons.Default.Add, contentDescription = "Increase",) }
-//                        }
-//                    }
-//                    OutlinedTextField(
-//                        value = phoneNumber,
-//                        onValueChange = { phoneNumber = it },
-//                        label = { Text("전화번호 입력", style = BoothLocation) },
-//                        singleLine = true,
-//                    )
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    UnifestButton(
-//                        onClick = { onWaitingConfirm(waitingCount, phoneNumber) },
-//                        modifier = Modifier.fillMaxWidth(),
-//                    ) {
-//                        Text("웨이팅 신청")
-//                    }
-//                }
-//            }
-//        }
-//    }
-// }
-//
-//
-// @Composable
-// fun WaitingConfirmDialog(
-//    boothName: String,
-//    onDismissRequest: () -> Unit,
-//    onWaitingConfirm: (Int, String) -> Unit,
-// ) {
-//    //https://stackoverflow.com/questions/65243956/jetpack-compose-fullscreen-dialog
-//    Dialog(
-//        properties = DialogProperties(usePlatformDefaultWidth = false),
-//        onDismissRequest = onDismissRequest
-//    ) {
-//        Box(
-//            Modifier
-//                .background(Color.Black.copy(alpha = 0.6f))
-//                .fillMaxSize(),
-//        ) {
-//            Card(
-//                modifier = Modifier
-//                    .align(Alignment.Center)
-//                    .padding(horizontal = 32.dp)
-//                    .background(Color.White),
-//            ) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                        .fillMaxWidth(),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                ) {
-//                    Row {
-//                        Icon(
-//                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_green),
-//                            contentDescription = "location icon",
-//                            tint = Color.Unspecified,
-//                        )
-//                        Spacer(modifier = Modifier.width(2.dp))
-//                        Text(text = boothName, style = Title3)
-//
-//
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(5.dp))
-//                    Text(text = "웨이팅 등록 완료!", style = Title1)
-//                    Spacer(modifier = Modifier.height(4.dp))
-//                    Text(text = "입장 순서가 되면 안내 해드릴게요.", style = Content2)
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Row {
-//                        Column {
-//                            Text("웨이팅 번호", style = Title5)
-//                            Text("112번", style = WaitingTeam)
-//                        }
-//                        Spacer(modifier = Modifier.width(40.dp))
-//                        Column {
-//                            Text("인원수", style = Title5)
-//                            Text("3명", style = WaitingTeam)
-//                        }
-//                        Spacer(modifier = Modifier.width(40.dp))
-//                        Column {
-//                            Text("내 앞 웨이팅", style = Title5)
-//                            Text("35팀", style = WaitingTeam)
-//                        }
-//                    }
-//                    Spacer(modifier = Modifier.height(16.dp))
-//                    Row {
-//                        UnifestOutlinedButton(onClick = { /*TODO*/ }, borderColor = Color(0xFFD2D2D2), contentColor = Color.Black) {
-//                            Text(text = "웨이팅 취소")
-//                        }
-//                        Spacer(modifier = Modifier.width(6.dp))
-//                        UnifestButton(onClick = { /*TODO*/ }) {
-//                            Text(text = "순서 확인하기")
-//                        }
-//                    }
-//
-//                }
-//            }
-//        }
-//    }
-// }

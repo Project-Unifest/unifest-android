@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.dependencies
 
 internal class AndroidHiltConventionPlugin : BuildLogicConventionPlugin(
     {
-        applyPlugins(Plugins.hilt, Plugins.Ksp)
+        applyPlugins(Plugins.HILT, Plugins.KSP)
 
         dependencies {
             implementation(libs.hilt.android)

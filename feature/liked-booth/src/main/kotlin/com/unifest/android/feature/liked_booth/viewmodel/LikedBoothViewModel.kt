@@ -7,8 +7,8 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.LikedBoothModel
+import com.unifest.android.core.designsystem.R as designR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -34,7 +34,6 @@ class LikedBoothViewModel @Inject constructor(
     val uiEvent: Flow<LikedBoothUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        // observeLikedBooth()
         getLikedBooths()
     }
 
@@ -60,18 +59,6 @@ class LikedBoothViewModel @Inject constructor(
         }
     }
 
-//    private fun observeLikedBooth() {
-//        viewModelScope.launch {
-//            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
-//                _uiState.update {
-//                    it.copy(
-//                        likedBooths = likedBoothList.toImmutableList(),
-//                    )
-//                }
-//            }
-//        }
-//    }
-
     private fun navigateBack() {
         viewModelScope.launch {
             _uiEvent.send(LikedBoothUiEvent.NavigateBack)
@@ -91,26 +78,12 @@ class LikedBoothViewModel @Inject constructor(
                     updateLikedBooth(booth)
                     delay(500)
                     getLikedBooths()
-                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
+                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
                 }.onFailure {
-                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
+                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                 }
         }
     }
-
-//    private fun deleteLikedBooth(booth: BoothDetailModel) {
-//        viewModelScope.launch {
-//            boothRepository.likeBooth(booth.id)
-//                .onSuccess {
-//                    updateLikedBooth(booth)
-//                    delay(500)
-//                    likedBoothRepository.deleteLikedBooth(booth)
-//                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
-//                }.onFailure {
-//                    _uiEvent.send(LikedBoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
-//                }
-//        }
-//    }
 
     private fun updateLikedBooth(booth: LikedBoothModel) {
         _uiState.update {
@@ -126,10 +99,6 @@ class LikedBoothViewModel @Inject constructor(
             )
         }
     }
-
-//    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
-//        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
-//    }
 
     override fun setServerErrorDialogVisible(flag: Boolean) {
         _uiState.update {

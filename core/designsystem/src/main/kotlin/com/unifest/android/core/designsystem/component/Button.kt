@@ -5,27 +5,33 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.MultipleEventsCutter
+import com.unifest.android.core.common.get
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun UnifestButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    containerColor: Color = Color(0xFFf5678E),
+    containerColor: Color = MaterialTheme.colorScheme.primary,
     contentColor: Color = Color.White,
-    disabledContainerColor: Color = Color(0xFF9C9C9C),
+    disabledContainerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     disabledContentColor: Color = Color.White,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
     Button(
-        onClick = onClick,
+        onClick = { multipleEventsCutter.processEvent { onClick() } },
         modifier = modifier,
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),
@@ -42,10 +48,25 @@ fun UnifestButton(
 
 @ComponentPreview
 @Composable
-fun UnifestButtonPreview() {
-    UnifestButton(
-        onClick = {},
-    ) {
-        Text("Button")
+private fun UnifestButtonPreview() {
+    UnifestTheme {
+        UnifestButton(
+            onClick = {},
+        ) {
+            Text("Button")
+        }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun UnifestDisabledButtonPreview() {
+    UnifestTheme {
+        UnifestButton(
+            onClick = {},
+            enabled = false,
+        ) {
+            Text("Button")
+        }
     }
 }

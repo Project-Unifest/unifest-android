@@ -26,7 +26,7 @@ fun NetworkImage(
 ) {
     if (LocalInspectionMode.current) {
         Image(
-            painter = painterResource(id = R.drawable.ic_item_placeholder),
+            painter = painterResource(id = R.drawable.item_placeholder),
             contentDescription = "Example Image Icon",
             modifier = modifier,
         )
@@ -49,7 +49,7 @@ fun NetworkImage(
 
 @ComponentPreview
 @Composable
-fun NetworkImagePreview() {
+private fun NetworkImagePreview() {
     UnifestTheme {
         NetworkImage(
             imgUrl = "",

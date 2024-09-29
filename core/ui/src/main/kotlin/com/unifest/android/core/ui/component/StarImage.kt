@@ -61,7 +61,7 @@ fun StarImage(
 
 @ComponentPreview
 @Composable
-fun StarImagePreview() {
+private fun StarImagePreview() {
     UnifestTheme {
         StarImage(
             imgUrl = "",
@@ -75,7 +75,7 @@ fun StarImagePreview() {
 
 @ComponentPreview
 @Composable
-fun StarImageClickedPreview() {
+private fun StarImageClickedPreview() {
     UnifestTheme {
         StarImage(
             imgUrl = "",

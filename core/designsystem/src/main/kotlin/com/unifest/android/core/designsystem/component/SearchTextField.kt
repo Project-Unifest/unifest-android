@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -26,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -37,12 +40,13 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.LightPrimary100
+import com.unifest.android.core.designsystem.theme.LightPrimary500
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 val unifestTextSelectionColors = TextSelectionColors(
-    handleColor = MainColor,
-    backgroundColor = Color(0xFFFAB3BE),
+    handleColor = LightPrimary500,
+    backgroundColor = LightPrimary100,
 )
 
 @Composable
@@ -53,16 +57,21 @@ fun SearchTextField(
     onSearch: (TextFieldValue) -> Unit,
     clearSearchText: () -> Unit,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
-    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondaryContainer),
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
             value = searchText,
-            onValueChange = updateSearchText,
+            onValueChange = {
+                if (it.text.length <= 20) {
+                    updateSearchText(it)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
@@ -71,7 +80,9 @@ fun SearchTextField(
                     keyboardController?.hide()
                 },
             ),
-            textStyle = TextStyle(color = Color.Black),
+            singleLine = true,
+            textStyle = TextStyle(color = textColor),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = modifier
@@ -87,7 +98,7 @@ fun SearchTextField(
                         if (searchText.text.isEmpty()) {
                             Text(
                                 text = stringResource(id = searchTextHintRes),
-                                color = Color(0xFF848484),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 style = BoothLocation,
                             )
                         }
@@ -98,14 +109,15 @@ fun SearchTextField(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search),
                             contentDescription = "Search Icon",
-                            tint = Color.Unspecified,
-//                            modifier = Modifier.clickable {
-//                                onSearch(searchText)
-//                            },
+                            tint = MaterialTheme.colorScheme.secondaryContainer,
                         )
                     } else {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_delete_gray),
+                            imageVector = if (isSystemInDarkTheme()) {
+                                ImageVector.vectorResource(R.drawable.ic_delete_dark)
+                            } else {
+                                ImageVector.vectorResource(R.drawable.ic_delete_light)
+                            },
                             contentDescription = "Delete Icon",
                             tint = Color.Unspecified,
                             modifier = Modifier
@@ -131,9 +143,10 @@ fun FestivalSearchTextField(
     setEnableSearchMode: (Boolean) -> Unit,
     isSearchMode: Boolean,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.onBackground,
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
-    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = Color(0xFFBABABA)),
+    borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondaryContainer),
 ) {
     LaunchedEffect(key1 = searchText.text) {
         setEnableSearchMode(searchText.text.isNotEmpty())
@@ -142,10 +155,16 @@ fun FestivalSearchTextField(
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
             value = searchText,
-            onValueChange = updateSearchText,
+            onValueChange = {
+                if (it.text.length <= 20) {
+                    updateSearchText(it)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            textStyle = TextStyle(color = Color.Black),
+            singleLine = true,
+            textStyle = TextStyle(color = textColor),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = modifier
@@ -161,7 +180,7 @@ fun FestivalSearchTextField(
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
                             contentDescription = "Search Icon",
-                            tint = Color(0xFF767676),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.clickable {
                                 clearSearchText()
                             },
@@ -172,7 +191,7 @@ fun FestivalSearchTextField(
                         if (searchText.text.isEmpty()) {
                             Text(
                                 text = stringResource(id = searchTextHintRes),
-                                color = Color(0xFF848484),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 style = BoothLocation,
                             )
                         }
@@ -206,12 +225,12 @@ fun FestivalSearchTextField(
 
 @ComponentPreview
 @Composable
-fun SearchTextFieldPreview() {
+private fun SearchTextFieldPreview() {
     UnifestTheme {
         SearchTextField(
             searchText = TextFieldValue(),
             updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
+            searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},
             modifier = Modifier
@@ -224,12 +243,12 @@ fun SearchTextFieldPreview() {
 
 @ComponentPreview
 @Composable
-fun FestivalSearchTextFieldPreview() {
+private fun FestivalSearchTextFieldPreview() {
     UnifestTheme {
         FestivalSearchTextField(
             searchText = TextFieldValue("건국대학교"),
             updateSearchText = {},
-            searchTextHintRes = R.string.intro_search_text_hint,
+            searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},
             setEnableSearchMode = {},

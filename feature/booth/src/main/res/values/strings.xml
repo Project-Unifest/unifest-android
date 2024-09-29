@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="booth_check_locaiton">위치 확인하기</string>
+    <string name="booth_menu">메뉴</string>
+    <string name="booth_waiting_button">웨이팅 하기</string>
+    <string name="booth_waiting_button_invalid">웨이팅 기능을 지원하지 않는 부스입니다</string>
+    <string name="booth_empty_menu">등록된 메뉴가 없어요.</string>
+    <string name="booth_empty_waiting">올바른 전화번호를 입력해 주세요!</string>
+    <string name="booth_is_unknown_running">운영 시간</string>
+    <string name="booth_is_running">운영중</string>
+    <string name="booth_is_closed">운영종료</string>
+    <string name="booth_waiting_full">웨이팅은 최대 3부스까지 가능해요!</string>
+    <string name="booth_waiting_already_exists">이미 웨이팅 한 부스에요!</string>
+    <string name="sold_out">품절</string>
+    <string name="almost_sold_out_less_than_5_left">품절 임박 5개 미만 남음</string>
+    <string name="no_menu_status">등록된 정보 없음</string>
+    <string name="enough_status">여유 재고</string>
+
+</resources>

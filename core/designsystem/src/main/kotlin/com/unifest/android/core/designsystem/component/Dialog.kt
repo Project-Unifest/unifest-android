@@ -2,6 +2,7 @@ package com.unifest.android.core.designsystem.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +29,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
-import com.unifest.android.core.designsystem.theme.MainColor
+import com.unifest.android.core.designsystem.theme.DarkGrey400
+import com.unifest.android.core.designsystem.theme.LightGrey200
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -56,7 +59,7 @@ fun UnifestDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
-                .background(color = Color.White),
+                .background(color = MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(27.dp))
@@ -71,12 +74,12 @@ fun UnifestDialog(
             Text(
                 text = stringResource(id = titleResId),
                 style = Title2,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = descriptionResId),
-                color = Color(0xFF545454),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 style = BoothLocation,
             )
@@ -98,7 +101,7 @@ fun UnifestDialog(
                                 Modifier
                             },
                         ),
-                    containerColor = MainColor,
+                    containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = Color.White,
                 ) {
                     Text(
@@ -114,11 +117,11 @@ fun UnifestDialog(
                             .weight(1f)
                             .height(45.dp)
                             .padding(start = 4.dp),
-                        containerColor = Color(0xFFD2D2D2),
-                        contentColor = Color.Black,
+                        containerColor = if (isSystemInDarkTheme()) DarkGrey400 else LightGrey200,
                     ) {
                         Text(
                             text = stringResource(id = cancelTextResId),
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = Title5,
                         )
                     }
@@ -133,34 +136,38 @@ fun UnifestDialog(
 fun ServerErrorDialog(
     onRetryClick: () -> Unit,
 ) {
-    UnifestDialog(
-        onDismissRequest = {},
-        titleResId = R.string.server_error_title,
-        iconResId = R.drawable.ic_caution,
-        iconDescription = "Caution Icon",
-        descriptionResId = R.string.server_error_description,
-        confirmTextResId = R.string.retry,
-        cancelTextResId = null,
-        onCancelClick = {},
-        onConfirmClick = onRetryClick,
-    )
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.server_error_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.server_error_description,
+            confirmTextResId = R.string.retry,
+            cancelTextResId = null,
+            onCancelClick = {},
+            onConfirmClick = onRetryClick,
+        )
+    }
 }
 
 @Composable
 fun NetworkErrorDialog(
     onRetryClick: () -> Unit,
 ) {
-    UnifestDialog(
-        onDismissRequest = {},
-        titleResId = R.string.network_error_title,
-        iconResId = R.drawable.ic_network,
-        iconDescription = "Network Error Icon",
-        descriptionResId = R.string.network_error_description,
-        confirmTextResId = R.string.retry,
-        cancelTextResId = null,
-        onCancelClick = {},
-        onConfirmClick = onRetryClick,
-    )
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.network_error_title,
+            iconResId = R.drawable.ic_network,
+            iconDescription = "Network Error Icon",
+            descriptionResId = R.string.network_error_description,
+            confirmTextResId = R.string.retry,
+            cancelTextResId = null,
+            onCancelClick = {},
+            onConfirmClick = onRetryClick,
+        )
+    }
 }
 
 @Composable
@@ -168,17 +175,19 @@ fun LikedFestivalDeleteDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: () -> Unit,
 ) {
-    UnifestDialog(
-        onDismissRequest = {},
-        titleResId = R.string.liked_festival_delete_title,
-        iconResId = R.drawable.ic_caution,
-        iconDescription = "Caution Icon",
-        descriptionResId = R.string.liked_festival_delete_description,
-        confirmTextResId = R.string.confirm,
-        cancelTextResId = R.string.cancel,
-        onCancelClick = onCancelClick,
-        onConfirmClick = onConfirmClick,
-    )
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.liked_festival_delete_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.liked_festival_delete_description,
+            confirmTextResId = R.string.confirm,
+            cancelTextResId = R.string.cancel,
+            onCancelClick = onCancelClick,
+            onConfirmClick = onConfirmClick,
+        )
+    }
 }
 
 @Composable
@@ -190,23 +199,25 @@ fun AppUpdateDialog(
         dismissOnClickOutside = false,
     ),
 ) {
-    UnifestDialog(
-        onDismissRequest = onDismissRequest,
-        titleResId = R.string.app_update_title,
-        iconResId = R.drawable.ic_caution,
-        iconDescription = "Caution Icon",
-        descriptionResId = R.string.app_update_description,
-        confirmTextResId = R.string.app_update_confirm,
-        cancelTextResId = null,
-        onCancelClick = {},
-        onConfirmClick = onUpdateClick,
-        properties = properties,
-    )
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = onDismissRequest,
+            titleResId = R.string.app_update_title,
+            iconResId = R.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.app_update_description,
+            confirmTextResId = R.string.app_update_confirm,
+            cancelTextResId = null,
+            onCancelClick = {},
+            onConfirmClick = onUpdateClick,
+            properties = properties,
+        )
+    }
 }
 
 @ComponentPreview
 @Composable
-fun ServerErrorDialogPreview() {
+private fun ServerErrorDialogPreview() {
     UnifestTheme {
         ServerErrorDialog(onRetryClick = {})
     }
@@ -214,7 +225,7 @@ fun ServerErrorDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun NetworkErrorDialogPreview() {
+private fun NetworkErrorDialogPreview() {
     UnifestTheme {
         NetworkErrorDialog(onRetryClick = {})
     }
@@ -222,7 +233,7 @@ fun NetworkErrorDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalDeleteDialogPreview() {
+private fun LikedFestivalDeleteDialogPreview() {
     UnifestTheme {
         LikedFestivalDeleteDialog(
             onCancelClick = {},
@@ -233,7 +244,7 @@ fun LikedFestivalDeleteDialogPreview() {
 
 @ComponentPreview
 @Composable
-fun AppUpdateDialogPreview() {
+private fun AppUpdateDialogPreview() {
     UnifestTheme {
         AppUpdateDialog(
             onDismissRequest = {},

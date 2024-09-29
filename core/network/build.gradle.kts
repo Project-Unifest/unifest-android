@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.unifest.android.retrofit)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.google.secrets)
-    id("kotlinx-serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -47,5 +47,5 @@ secrets {
 }
 
 fun getServerBaseUrl(propertyKey: String): String {
-    return gradleLocalProperties(rootDir).getProperty(propertyKey)
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }

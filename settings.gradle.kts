@@ -31,6 +31,7 @@ include(
     ":core:datastore",
     ":core:designsystem",
     ":core:model",
+    ":core:navigation",
     ":core:network",
     ":core:ui",
 
@@ -45,4 +46,5 @@ include(
     ":feature:navigator",
     ":feature:splash",
     ":feature:waiting",
+    ":feature:stamp",
 )

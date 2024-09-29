@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 internal class JvmKotlinConventionPlugin : BuildLogicConventionPlugin({
-    applyPlugins(Plugins.JavaLibrary, Plugins.KotlinJvm)
+    applyPlugins(Plugins.JAVA_LIBRARY, Plugins.KOTLIN_JVM)
 
     extensions.configure<JavaPluginExtension> {
         sourceCompatibility = ApplicationConfig.JavaVersion

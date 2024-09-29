@@ -34,8 +34,9 @@ repositories {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 kotlin {
@@ -46,6 +47,7 @@ dependencies {
     compileOnly(libs.gradle.android)
     compileOnly(libs.gradle.kotlin)
     compileOnly(libs.gradle.androidx.room)
+    compileOnly(libs.compose.compiler.extension)
 
     compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

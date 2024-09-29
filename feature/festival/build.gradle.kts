@@ -14,6 +14,7 @@ dependencies {
         projects.core.data,
 
         libs.kotlinx.collections.immutable,
+        libs.compose.system.ui.controller,
         libs.timber,
     )
 }

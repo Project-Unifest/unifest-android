@@ -4,10 +4,12 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.WaitingModel
 import com.unifest.android.core.network.response.Booth
 import com.unifest.android.core.network.response.BoothDetail
 import com.unifest.android.core.network.response.LikedBooth
 import com.unifest.android.core.network.response.Menu
+import com.unifest.android.core.network.response.Waiting
 
 internal fun BoothDetail.toModel(): BoothDetailModel {
     return BoothDetailModel(
@@ -21,6 +23,9 @@ internal fun BoothDetail.toModel(): BoothDetailModel {
         latitude = latitude,
         longitude = longitude,
         menus = menus.map { it.toModel() },
+        waitingEnabled = waitingEnabled,
+        openTime = openTime ?: "",
+        closeTime = closeTime ?: "",
     )
 }
 
@@ -30,6 +35,7 @@ internal fun Menu.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl ?: "",
+        status = status ?: "",
     )
 }
 
@@ -57,5 +63,20 @@ internal fun LikedBooth.toModel(): LikedBoothModel {
         latitude = latitude,
         longitude = longitude,
         warning = warning,
+    )
+}
+
+internal fun Waiting.toModel(): WaitingModel {
+    return WaitingModel(
+        boothId = boothId,
+        waitingId = waitingId,
+        partySize = partySize,
+        tel = tel,
+        deviceId = deviceId,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        status = status,
+        waitingOrder = waitingOrder ?: 0L,
+        boothName = boothName,
     )
 }

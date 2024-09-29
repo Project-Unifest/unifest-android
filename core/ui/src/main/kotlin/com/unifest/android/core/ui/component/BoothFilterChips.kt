@@ -1,7 +1,9 @@
 package com.unifest.android.core.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -19,7 +21,7 @@ fun BoothFilterChips(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
     ) {
         items(
             items = boothFilters,
@@ -36,7 +38,7 @@ fun BoothFilterChips(
 
 @ComponentPreview
 @Composable
-fun BoothFilterChipsPreview() {
+private fun BoothFilterChipsPreview() {
     UnifestTheme {
         BoothFilterChips(
             onChipClick = {},

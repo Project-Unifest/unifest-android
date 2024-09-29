@@ -7,8 +7,8 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.feature.home.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -60,8 +60,14 @@ class HomeViewModel @Inject constructor(
 
     private fun addLikeFestival(festival: FestivalTodayModel) {
         viewModelScope.launch {
-            likedFestivalRepository.insertLikedFestivalAtHome(festival)
-            _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_snack_bar)))
+            likedFestivalRepository.registerLikedFestival()
+                .onSuccess {
+                    likedFestivalRepository.insertLikedFestivalAtHome(festival)
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_message)))
+                }
+                .onFailure { exception ->
+                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_failed_message)))
+                }
         }
     }
 

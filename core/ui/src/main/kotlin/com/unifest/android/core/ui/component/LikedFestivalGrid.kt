@@ -4,6 +4,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R
+import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
@@ -95,12 +97,13 @@ fun FestivalItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = Color.Black),
-        border = BorderStroke(1.dp, Color(0xFFD9D9D9)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim),
         modifier = modifier,
     ) {
         Box(
             modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
                 .clickable {
                     if (isEditMode) {
                         setLikedFestivalDeleteDialogVisible(festival)
@@ -122,32 +125,32 @@ fun FestivalItem(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
-                    placeholder = painterResource(id = R.drawable.ic_item_placeholder),
+                    placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = festival.schoolName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = festival.festivalName,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
-                    color = Color(0xFF979797),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )
             }
             if (isEditMode) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_delete_red),
+                    imageVector = ImageVector.vectorResource(id = designR.drawable.ic_delete_red),
                     contentDescription = "Delete Icon",
                     tint = Color.Unspecified,
                     modifier = Modifier
@@ -161,7 +164,29 @@ fun FestivalItem(
 
 @ComponentPreview
 @Composable
-fun LikedFestivalsGridPreview() {
+private fun FestivalItemPreview() {
+    UnifestTheme {
+        FestivalItem(
+            festival = FestivalModel(
+                1,
+                1,
+                "https://picsum.photos/36",
+                "서울대학교",
+                "서울",
+                "설대축제",
+                "2024-04-21",
+                "2024-04-23",
+                126.957f,
+                37.460f,
+            ),
+            onFestivalSelected = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun LikedFestivalsGridPreview() {
     val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(
@@ -190,7 +215,7 @@ fun LikedFestivalsGridPreview() {
 
 @ComponentPreview
 @Composable
-fun LikedFestivalsGridEditModePreview() {
+private fun LikedFestivalsGridEditModePreview() {
     val selectedFestivals = persistentListOf<FestivalModel>()
     repeat(5) {
         selectedFestivals.add(

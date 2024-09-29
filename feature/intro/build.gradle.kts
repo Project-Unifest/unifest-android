@@ -15,6 +15,17 @@ android {
     defaultConfig {
         buildConfigField("String", "PACKAGE_NAME", "\"${libs.versions.packageName.get()}\"")
     }
+
+    android {
+        buildTypes {
+            debug {
+                isMinifyEnabled = false
+            }
+            release {
+                isMinifyEnabled = false
+            }
+        }
+    }
 }
 
 dependencies {

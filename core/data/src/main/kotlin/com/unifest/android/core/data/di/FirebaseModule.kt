@@ -1,5 +1,6 @@
 package com.unifest.android.core.data.di
 
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.unifest.android.core.data.BuildConfig
@@ -23,5 +24,11 @@ internal object FirebaseModule {
             }
             setConfigSettingsAsync(configSettings)
         }
+    }
+
+    @Singleton
+    @Provides
+    fun provideMessaging(): FirebaseMessaging {
+        return FirebaseMessaging.getInstance()
     }
 }

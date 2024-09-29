@@ -2,6 +2,7 @@
 
 plugins {
     alias(libs.plugins.unifest.android.feature)
+    alias(libs.plugins.kotlin.serialization)
     // alias(libs.plugins.compose.investigator)
 }
 
@@ -11,6 +12,8 @@ android {
 
 dependencies {
     implementations(
+        projects.core.data,
+
         libs.kotlinx.collections.immutable,
         libs.timber,
     )
