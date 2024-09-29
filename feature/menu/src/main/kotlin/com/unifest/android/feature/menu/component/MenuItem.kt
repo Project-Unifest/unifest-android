@@ -58,7 +58,6 @@ fun MenuItem(
                     checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 ),
             )
-            Spacer(modifier = Modifier.width(16.dp))
         }
     }
 }
