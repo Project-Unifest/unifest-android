@@ -24,22 +24,19 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(remoteMessage: RemoteMessage) {
         val requestCode = System.currentTimeMillis().toInt()
 
-//        val intent = Intent(this, MainActivity::class.java)
-//
-//        for (key in remoteMessage.data.keys) {
-//            intent.putExtra(key, remoteMessage.data.getValue(key))
-//        }
-//
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-        Timber.tag("UnifestFirebaseMessagingService").d("boothId: ${remoteMessage.data["boothId"]}")
-
         val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra("navigate_to_booth", true)
-            // FCM data에서 boothId를 가져와 Intent에 추가
-            remoteMessage.data["boothId"]?.let {
-                putExtra("boothId", it)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).also {
+                if (remoteMessage.data["boothId"] != null) {
+                    if (remoteMessage.data["waitingId"] != null) {
+                        Timber.tag("UnifestFirebaseMessagingService").d("waitingId: ${remoteMessage.data["waitingId"]}")
+                        putExtra("navigate_to_waiting", true)
+                        putExtra("waitingId", remoteMessage.data["waitingId"])
+                    } else {
+                        Timber.tag("UnifestFirebaseMessagingService").d("boothId: ${remoteMessage.data["boothId"]}")
+                        putExtra("navigate_to_booth", true)
+                        putExtra("boothId", remoteMessage.data["boothId"])
+                    }
+                }
             }
         }
 

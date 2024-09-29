@@ -55,9 +55,15 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
 
-        if (intent.getBooleanExtra("navigate_to_booth", false)) {
+        if (intent.getBooleanExtra("navigate_to_waiting", false)) {
+            val waitingId = intent.getStringExtra("waitingId")
+            Timber.d("navigate_to_waiting -> waitingId: $waitingId")
+            if (waitingId != null) {
+                viewModel.setWaitingId(waitingId.toLong())
+            }
+        } else if (intent.getBooleanExtra("navigate_to_booth", false)) {
             val boothId = intent.getStringExtra("boothId")
-            Timber.d("boothId: $boothId")
+            Timber.d("navigate_to_booth -> boothId: $boothId")
             if (boothId != null) {
                 viewModel.setBoothId(boothId.toLong())
             }

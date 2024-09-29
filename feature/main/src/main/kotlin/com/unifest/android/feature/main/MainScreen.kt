@@ -42,7 +42,9 @@ internal fun MainScreen(
     val snackBarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val waitingId by viewModel.waitingId.collectAsState()
     val boothId by viewModel.boothId.collectAsState()
+
 
     val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
@@ -54,6 +56,13 @@ internal fun MainScreen(
             }
             delay(SnackBarDuration)
             job.cancel()
+        }
+    }
+
+    LaunchedEffect(waitingId) {
+        if (waitingId != 0L) {
+            navigator.navigate(MainTab.WAITING)
+            viewModel.setWaitingId(0L)
         }
     }
 
