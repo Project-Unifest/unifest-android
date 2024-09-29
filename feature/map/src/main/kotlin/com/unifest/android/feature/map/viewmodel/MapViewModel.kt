@@ -53,10 +53,6 @@ class MapViewModel @Inject constructor(
         permission: String,
         isGranted: Boolean,
     ) {
-//        if (isGranted && permissionDialogQueue.isEmpty()) {
-//            refreshFCMToken()
-//        }
-
         if (!isGranted && !permissionDialogQueue.contains(permission)) {
             permissionDialogQueue.add(permission)
         }
