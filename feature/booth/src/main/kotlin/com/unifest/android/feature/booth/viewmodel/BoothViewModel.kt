@@ -274,6 +274,7 @@ class BoothViewModel @Inject constructor(
                             boothPinNumber = "",
                         )
                     }
+                    waitingRepository.registerFCMTopic(waiting.waitingId.toString())
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
                 }.onFailure { exception ->

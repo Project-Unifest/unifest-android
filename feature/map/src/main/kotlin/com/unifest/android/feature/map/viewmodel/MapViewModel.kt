@@ -180,7 +180,7 @@ class MapViewModel @Inject constructor(
 
     fun getPopularBooths() {
         viewModelScope.launch {
-            boothRepository.getPopularBooths(festivalId = 2)
+            boothRepository.getPopularBooths(2)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
@@ -200,7 +200,7 @@ class MapViewModel @Inject constructor(
 
     fun getAllBooths() {
         viewModelScope.launch {
-            boothRepository.getAllBooths(festivalId = 2)
+            boothRepository.getAllBooths(2)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
