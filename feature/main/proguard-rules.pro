@@ -39,3 +39,4 @@
 -dontwarn com.unifest.android.feature.menu.navigation.MenuNavigationKt
 -dontwarn com.unifest.android.feature.stamp.navigation.StampNavigationKt
 -dontwarn com.unifest.android.feature.waiting.navigation.WaitingNavigationKt
+-dontwarn java.lang.invoke.StringConcatFactory
