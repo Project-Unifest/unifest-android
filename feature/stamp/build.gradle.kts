@@ -8,6 +8,17 @@ plugins {
 
 android {
     namespace = "com.unifest.android.feature.stamp"
+
+    android {
+        buildTypes {
+            debug {
+                isMinifyEnabled = false
+            }
+            release {
+                isMinifyEnabled = false
+            }
+        }
+    }
 }
 
 dependencies {
