@@ -13,3 +13,7 @@ annotation class RecentLikedFestivalDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class TokenDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class SettingDataStore

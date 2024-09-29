@@ -83,6 +83,7 @@ internal fun MenuRoute(
 ) {
     val menuUiState by menuViewModel.uiState.collectAsStateWithLifecycle()
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
+    val isClusteringEnabled by menuViewModel.isClusteringEnabled.collectAsStateWithLifecycle(true)
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val appVersion = remember {
@@ -125,6 +126,7 @@ internal fun MenuRoute(
         appVersion = appVersion,
         onMenuUiAction = menuViewModel::onMenuUiAction,
         onFestivalUiAction = festivalViewModel::onFestivalUiAction,
+        isClusteringEnabled = isClusteringEnabled,
     )
 }
 
@@ -136,6 +138,7 @@ fun MenuScreen(
     appVersion: String,
     onMenuUiAction: (MenuUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isClusteringEnabled: Boolean,
 ) {
     Box(
         modifier = Modifier
@@ -279,6 +282,24 @@ fun MenuScreen(
                 }
                 item {
                     MenuItem(
+                        icon = ImageVector.vectorResource(R.drawable.ic_clustering),
+                        title = stringResource(R.string.clustering),
+                        onClick = {},
+                        isToggleMenuItem = true,
+                        checked = isClusteringEnabled,
+                        onCheckedChange = { isChecked ->
+                            onMenuUiAction(MenuUiAction.OnToggleClustering(isChecked))
+                        },
+                    )
+                }
+                item {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
+                }
+                item {
+                    MenuItem(
                         icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
                         title = stringResource(id = R.string.menu_questions),
                         onClick = { onMenuUiAction(MenuUiAction.OnContactClick) },
@@ -362,6 +383,7 @@ fun MenuScreenPreview(
             appVersion = "1.0.0",
             onMenuUiAction = {},
             onFestivalUiAction = {},
+            isClusteringEnabled = true,
         )
     }
 }

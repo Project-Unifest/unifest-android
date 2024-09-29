@@ -10,6 +10,7 @@ sealed interface MenuUiAction {
     data object OnContactClick : MenuUiAction
     data object OnAdministratorModeClick : MenuUiAction
     data class OnRetryClick(val error: ErrorType) : MenuUiAction
+    data class OnToggleClustering(val isChecked: Boolean): MenuUiAction
 }
 
 enum class ErrorType {

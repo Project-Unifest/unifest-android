@@ -68,11 +68,13 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.Align
+import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.ObserveAsEvents
@@ -129,6 +131,7 @@ internal fun MapRoute(
 ) {
     val mapUiState by mapViewModel.uiState.collectAsStateWithLifecycle()
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
+    val isClusteringEnabled by mapViewModel.isClusteringEnabled.collectAsStateWithLifecycle(true)
     val context = LocalContext.current
     val activity = context.findActivity()
     val dialogQueue = mapViewModel.permissionDialogQueue
@@ -291,6 +294,7 @@ internal fun MapRoute(
         festivalUiState = festivalUiState,
         onMapUiAction = mapViewModel::onMapUiAction,
         onFestivalUiAction = festivalViewModel::onFestivalUiAction,
+        isClusteringEnabled = isClusteringEnabled,
     )
 }
 
@@ -306,6 +310,7 @@ internal fun MapScreen(
     festivalUiState: FestivalUiState,
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isClusteringEnabled: Boolean,
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(37.0122749, 127.2635972), 15.8)
@@ -327,6 +332,7 @@ internal fun MapScreen(
             pagerState = pagerState,
             onMapUiAction = onMapUiAction,
             onFestivalUiAction = onFestivalUiAction,
+            isClusteringEnabled = isClusteringEnabled,
         )
 
         if (mapUiState.isServerErrorDialogVisible) {
@@ -365,8 +371,10 @@ fun MapContent(
     pagerState: PagerState,
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isClusteringEnabled: Boolean,
 ) {
-    // val context = LocalContext.current
+    val context = LocalContext.current
+
     Box {
         NaverMap(
             cameraPositionState = cameraPositionState,
@@ -388,113 +396,116 @@ fun MapContent(
                 outlineWidth = 1.dp,
                 holes = persistentListOf(uiState.innerHole),
             )
-//            uiState.filteredBoothList.forEach { booth ->
-//                Marker(
-//                    state = MarkerState(position = booth.position),
-//                    icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
-//                    onClick = {
-//                        onMapUiAction(MapUiAction.OnBoothMarkerClick(booth))
-//                        true
-//                    },
-//                )
-//            }
 
-            var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
-            DisposableMapEffect(uiState.filteredBoothList) { map ->
-                if (clusterManager == null) {
-                    clusterManager = Clusterer.ComplexBuilder<BoothMapModel>()
-                        .minClusteringZoom(9)
-                        .maxClusteringZoom(16)
-                        .maxScreenDistance(200.0)
-                        .thresholdStrategy { zoom ->
-                            if (zoom <= 11) {
-                                0.0
-                            } else {
-                                70.0
-                            }
-                        }
-                        .distanceStrategy(object : DistanceStrategy {
-                            private val defaultDistanceStrategy = DefaultDistanceStrategy()
-
-                            override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
-                                return if (zoom <= 9) {
-                                    -1.0
-                                } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
-                                    if (zoom <= 11) {
-                                        -1.0
-                                    } else {
-                                        defaultDistanceStrategy.getDistance(zoom, node1, node2)
-                                    }
+            if (isClusteringEnabled) {
+                var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
+                DisposableMapEffect(uiState.filteredBoothList) { map ->
+                    if (clusterManager == null) {
+                        clusterManager = Clusterer.ComplexBuilder<BoothMapModel>()
+                            .minClusteringZoom(9)
+                            .maxClusteringZoom(16)
+                            .maxScreenDistance(200.0)
+                            .thresholdStrategy { zoom ->
+                                if (zoom <= 11) {
+                                    0.0
                                 } else {
-                                    10000.0
+                                    70.0
                                 }
                             }
-                        })
-                        .tagMergeStrategy { cluster ->
-                            if (cluster.maxZoom <= 9) {
-                                null
-                            } else {
-                                ItemData("", (cluster.children.first().tag as ItemData).category)
+                            .distanceStrategy(object : DistanceStrategy {
+                                private val defaultDistanceStrategy = DefaultDistanceStrategy()
+
+                                override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
+                                    return if (zoom <= 9) {
+                                        -1.0
+                                    } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
+                                        if (zoom <= 11) {
+                                            -1.0
+                                        } else {
+                                            defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                        }
+                                    } else {
+                                        10000.0
+                                    }
+                                }
+                            })
+                            .tagMergeStrategy { cluster ->
+                                if (cluster.maxZoom <= 9) {
+                                    null
+                                } else {
+                                    ItemData("", (cluster.children.first().tag as ItemData).category)
+                                }
                             }
-                        }
-                        .markerManager(object : DefaultMarkerManager() {
-                            override fun createMarker() = super.createMarker().apply {
-                                subCaptionTextSize = 10f
-                                subCaptionColor = android.graphics.Color.WHITE
-                                subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                            .markerManager(object : DefaultMarkerManager() {
+                                override fun createMarker() = super.createMarker().apply {
+                                    subCaptionTextSize = 10f
+                                    subCaptionColor = android.graphics.Color.WHITE
+                                    subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                                }
+                            })
+                            .clusterMarkerUpdater { info, marker ->
+                                val size = info.size
+                                marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
+                                marker.captionText = size.toString()
+                                marker.setCaptionAligns(Align.Center)
+                                marker.captionColor = android.graphics.Color.WHITE
+                                marker.captionHaloColor = android.graphics.Color.TRANSPARENT
+                                marker.onClickListener = DefaultClusterOnClickListener(info)
                             }
-                        })
-                        .clusterMarkerUpdater { info, marker ->
-                            val size = info.size
-                            marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster_icon)
-                            marker.captionText = size.toString()
-                            marker.setCaptionAligns(Align.Center)
-                            marker.captionColor = android.graphics.Color.WHITE
-                            marker.captionHaloColor = android.graphics.Color.TRANSPARENT
-                            marker.onClickListener = DefaultClusterOnClickListener(info)
-                        }
-                        .leafMarkerUpdater { info, marker ->
-                            marker.icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
-                                .getMarkerIcon((info.key as BoothMapModel).isSelected)
-                            marker.onClickListener = Overlay.OnClickListener {
-                                onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
-                                true
+                            .leafMarkerUpdater { info, marker ->
+                                marker.icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
+                                    .getMarkerIcon((info.key as BoothMapModel).isSelected)
+                                marker.onClickListener = Overlay.OnClickListener {
+                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
+                                    true
+                                }
                             }
-                        }
-                        .build()
-                        .apply { this.map = map }
+                            .build()
+                            .apply { this.map = map }
+                    }
+                    val boothListMap = uiState.filteredBoothList.associateWith { booth -> ItemData(booth.name, booth.category) }
+                    clusterManager?.addAll(boothListMap)
+                    onDispose {
+                        clusterManager?.clear()
+                    }
                 }
-                val boothListMap = uiState.filteredBoothList.associateWith { booth -> ItemData(booth.name, booth.category) }
-                clusterManager?.addAll(boothListMap)
-                onDispose {
-                    clusterManager?.clear()
+
+//                var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
+//                DisposableMapEffect(uiState.filteredBoothList) { map ->
+//                    if (clusterManager == null) {
+//                        clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
+//                            .clusterClickListener { booths ->
+//                                onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
+//                            }
+//                            .customMarker {
+//                                Marker().apply {
+//                                    icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
+//                                }
+//                            }
+//                            .markerClickListener { booth ->
+//                                onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
+//                            }
+//                            // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
+//                            .clickToCenter(false)
+//                            .make()
+//                    }
+//                    clusterManager?.addItems(uiState.filteredBoothList)
+//                    onDispose {
+//                        clusterManager?.clearItems()
+//                    }
+//                }
+            } else {
+                uiState.filteredBoothList.forEach { booth ->
+                    ComposeMarker(
+                        state = MarkerState(position = LatLng(booth.latitude, booth.longitude)),
+                        icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
+                        onClick = {
+                            onMapUiAction(MapUiAction.OnSingleBoothMarkerClick(booth))
+                            true
+                        },
+                    )
                 }
             }
-
-//            var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
-//            DisposableMapEffect(uiState.filteredBoothsList) { map ->
-//                if (clusterManager == null) {
-//                    clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
-//                        .customMarker {
-//                            Marker().apply {
-//                                icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
-//                            }
-//                        }
-//                        .markerClickListener { booth ->
-//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
-//                        }
-//                        .clusterClickListener { booths ->
-//                            onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
-//                        }
-//                        // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-//                        .clickToCenter(false)
-//                        .make()
-//                }
-//                clusterManager?.addItems(uiState.filteredBoothsList)
-//                onDispose {
-//                    clusterManager?.clearItems()
-//                }
-//            }
         }
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
@@ -583,6 +594,7 @@ private fun MapScreenPreview(
             festivalUiState = FestivalUiState(),
             onMapUiAction = {},
             onFestivalUiAction = {},
+            isClusteringEnabled = true,
         )
     }
 }

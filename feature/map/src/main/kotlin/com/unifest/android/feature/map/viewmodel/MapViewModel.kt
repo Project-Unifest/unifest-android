@@ -12,6 +12,7 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.data.repository.SettingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
@@ -36,12 +37,15 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
+    private val settingRepository: SettingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<MapUiEvent>()
     val uiEvent: Flow<MapUiEvent> = _uiEvent.receiveAsFlow()
+
+    val isClusteringEnabled = settingRepository.flowIsClusteringEnabled()
 
     val permissionDialogQueue = mutableStateListOf<String>()
 
@@ -78,7 +82,7 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
             is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
-            // is MapUiAction.OnBoothMarkerClick -> updateSelectedBooth(action.booth)
+            is MapUiAction.OnSingleBoothMarkerClick -> updateSelectedSingleBooth(action.booth)
             is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
             is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MapUiAction.OnRetryClick -> refresh(action.error)
@@ -314,40 +318,40 @@ class MapViewModel @Inject constructor(
         }
     }
 
-//    private fun updateSelectedBooth(booth: BoothMapModel) {
-//        if (_uiState.value.isPopularMode) {
-//            viewModelScope.launch {
-//                _uiState.update {
-//                    it.copy(isPopularMode = false)
-//                }
-//                delay(500)
-//                _uiState.update {
-//                    it.copy(
-//                        isBoothSelectionMode = true,
-//                        selectedBoothList = listOf(booth).toImmutableList(),
-//                    )
-//                }
-//            }
-//        } else {
-//            _uiState.update {
-//                it.copy(
-//                    isBoothSelectionMode = true,
-//                    selectedBoothList = listOf(booth).toImmutableList(),
-//                )
-//            }
-//        }
-//        _uiState.update {
-//            it.copy(
-//                filteredBoothList = it.filteredBoothList.map { boothMapModel ->
-//                    if (boothMapModel.id == booth.id) {
-//                        boothMapModel.copy(isSelected = true)
-//                    } else {
-//                        boothMapModel.copy(isSelected = false)
-//                    }
-//                }.toImmutableList(),
-//            )
-//        }
-//    }
+    private fun updateSelectedSingleBooth(booth: BoothMapModel) {
+        if (_uiState.value.isPopularMode) {
+            viewModelScope.launch {
+                _uiState.update {
+                    it.copy(isPopularMode = false)
+                }
+                delay(500)
+                _uiState.update {
+                    it.copy(
+                        isBoothSelectionMode = true,
+                        selectedBoothList = listOf(booth).toImmutableList(),
+                    )
+                }
+            }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isBoothSelectionMode = true,
+                    selectedBoothList = listOf(booth).toImmutableList(),
+                )
+            }
+        }
+        _uiState.update {
+            it.copy(
+                filteredBoothList = it.filteredBoothList.map { boothMapModel ->
+                    if (boothMapModel.id == booth.id) {
+                        boothMapModel.copy(isSelected = true)
+                    } else {
+                        boothMapModel.copy(isSelected = false)
+                    }
+                }.toImmutableList(),
+            )
+        }
+    }
 
     private fun updateSelectedBoothList(booths: List<BoothMapModel>) {
         Timber.d("booths.size: ${booths.size} updateSelectedBoothList: $booths")

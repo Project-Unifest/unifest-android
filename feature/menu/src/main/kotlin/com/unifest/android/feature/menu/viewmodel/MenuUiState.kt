@@ -11,4 +11,5 @@ data class MenuUiState(
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val isNetworkErrorDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
+    val isClusteringEnabled: Boolean = true,
 )
