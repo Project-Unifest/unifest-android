@@ -8,11 +8,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class MessagingRepositoryImpl @Inject constructor(
-    private val messaging: FirebaseMessaging,
+    private val firebaseMessaging: FirebaseMessaging,
     private val tokenDataSource: TokenDataSource,
 ) : MessagingRepository {
     override suspend fun refreshFCMToken(): String? = suspendCoroutine { continuation ->
-        messaging.token.addOnCompleteListener { task ->
+        firebaseMessaging.token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 continuation.resume(
                     task.result.also {

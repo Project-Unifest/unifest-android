@@ -32,7 +32,7 @@ class WaitingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerFCMTopic(waitingId: String) {
-        FirebaseMessaging.getInstance().subscribeToTopic("waiting_${waitingId}")
+        firebaseMessaging.subscribeToTopic("waiting_$waitingId")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Timber.d("Subscribed to topic successfully")

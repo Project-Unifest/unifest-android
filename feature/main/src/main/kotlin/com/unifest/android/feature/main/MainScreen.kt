@@ -45,7 +45,6 @@ internal fun MainScreen(
     val waitingId by viewModel.waitingId.collectAsState()
     val boothId by viewModel.boothId.collectAsState()
 
-
     val onShowSnackBar: (message: UiText) -> Unit = { message ->
         scope.launch {
             val job = launch {
