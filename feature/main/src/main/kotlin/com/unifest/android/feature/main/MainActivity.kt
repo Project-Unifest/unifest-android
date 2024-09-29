@@ -11,17 +11,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.navigator.IntroNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var introNavigator: IntroNavigator
-
     private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,15 +48,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
 
-        if (intent.getBooleanExtra("navigate_to_waiting", false)) {
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        if (intent.getStringExtra("waitingId") != null) {
             val waitingId = intent.getStringExtra("waitingId")
             Timber.d("navigate_to_waiting -> waitingId: $waitingId")
             if (waitingId != null) {
                 viewModel.setWaitingId(waitingId.toLong())
             }
-        } else if (intent.getBooleanExtra("navigate_to_booth", false)) {
+        } else if (intent.getStringExtra("boothId") != null) {
             val boothId = intent.getStringExtra("boothId")
             Timber.d("navigate_to_booth -> boothId: $boothId")
             if (boothId != null) {

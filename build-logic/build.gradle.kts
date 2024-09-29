@@ -47,7 +47,7 @@ dependencies {
     compileOnly(libs.gradle.android)
     compileOnly(libs.gradle.kotlin)
     compileOnly(libs.gradle.androidx.room)
-    compileOnly(libs.compose.compiler.extension)
+    // compileOnly(libs.compose.compiler.extension)
 
     compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

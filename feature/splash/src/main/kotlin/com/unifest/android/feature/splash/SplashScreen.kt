@@ -26,7 +26,7 @@ import com.unifest.android.feature.splash.viewmodel.SplashViewModel
 @Composable
 internal fun SplashRoute(
     navigateToMain: () -> Unit,
-    navigateToIntro: () -> Unit,
+    // navigateToIntro: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
@@ -42,9 +42,9 @@ internal fun SplashRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is SplashUiEvent.NavigateToIntro -> {
-                navigateToIntro()
-            }
+//            is SplashUiEvent.NavigateToIntro -> {
+//                navigateToIntro()
+//            }
 
             is SplashUiEvent.NavigateToMain -> {
                 navigateToMain()

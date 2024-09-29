@@ -16,6 +16,13 @@ import timber.log.Timber
 class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        Timber.d("$remoteMessage")
+        Timber.d("${remoteMessage.notification?.title}")
+        Timber.d("${remoteMessage.notification?.body}")
+        Timber.d("${remoteMessage.data.size}")
+        Timber.d("${remoteMessage.data.keys}")
+        Timber.d("${remoteMessage.data.entries}")
+
         if (remoteMessage.notification != null) {
             sendNotification(remoteMessage)
         }
@@ -24,18 +31,18 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(remoteMessage: RemoteMessage) {
         val requestCode = System.currentTimeMillis().toInt()
 
+        // Activity 의 onNewIntent 가 호출되기 위해선 해당 flag 들이 필요함
         val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).also {
-                if (remoteMessage.data["boothId"] != null) {
-                    if (remoteMessage.data["waitingId"] != null) {
-                        Timber.tag("UnifestFirebaseMessagingService").d("waitingId: ${remoteMessage.data["waitingId"]}")
-                        putExtra("navigate_to_waiting", true)
-                        putExtra("waitingId", remoteMessage.data["waitingId"])
-                    } else {
-                        Timber.tag("UnifestFirebaseMessagingService").d("boothId: ${remoteMessage.data["boothId"]}")
-                        putExtra("navigate_to_booth", true)
-                        putExtra("boothId", remoteMessage.data["boothId"])
-                    }
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        for (key in remoteMessage.data.keys) {
+            val value = remoteMessage.data[key]
+            when {
+                value == null -> Timber.d("Null value for key: $key")
+                else -> {
+                    intent.putExtra(key, value)
+                    Timber.d("data -> key $key -> $value")
                 }
             }
         }

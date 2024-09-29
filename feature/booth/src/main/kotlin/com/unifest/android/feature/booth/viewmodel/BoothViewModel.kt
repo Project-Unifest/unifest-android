@@ -12,6 +12,7 @@ import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.feature.booth.R
+import com.unifest.android.feature.booth.navigation.BOOTH_ID
 import com.unifest.android.core.designsystem.R as designR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -34,9 +35,9 @@ class BoothViewModel @Inject constructor(
     private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
-    companion object {
-        private const val BOOTH_ID = "boothId"
-    }
+//    companion object {
+//        private const val BOOTH_ID = "boothId"
+//    }
 
     private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
 

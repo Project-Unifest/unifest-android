@@ -9,6 +9,7 @@ import com.unifest.android.core.data.repository.BoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
+import com.unifest.android.core.data.repository.SettingRepository
 import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,12 +32,15 @@ class MenuViewModel @Inject constructor(
     private val likedFestivalRepository: LikedFestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
+    private val settingRepository: SettingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MenuUiState())
     val uiState: StateFlow<MenuUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<MenuUiEvent>()
     val uiEvent: Flow<MenuUiEvent> = _uiEvent.receiveAsFlow()
+
+    val isClusteringEnabled = settingRepository.flowIsClusteringEnabled()
 
     init {
         observeLikedFestivals()
@@ -53,6 +57,7 @@ class MenuViewModel @Inject constructor(
             is MenuUiAction.OnContactClick -> navigateToContact()
             is MenuUiAction.OnAdministratorModeClick -> navigateToAdministratorMode()
             is MenuUiAction.OnRetryClick -> refresh(action.error)
+            is MenuUiAction.OnToggleClustering -> updateIsClusteringEnabled(action.isChecked)
         }
     }
 
@@ -108,6 +113,12 @@ class MenuViewModel @Inject constructor(
 //            }
 //        }
 //    }
+
+    private fun updateIsClusteringEnabled(checked: Boolean) {
+        viewModelScope.launch {
+            settingRepository.updateIsClusteringEnabled(checked)
+        }
+    }
 
     private fun navigateToLikedBooth() {
         viewModelScope.launch {

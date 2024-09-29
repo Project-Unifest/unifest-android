@@ -7,5 +7,6 @@
     <string name="menu_watch_more">더보기 ></string>
     <string name="menu_questions">이용 문의</string>
     <string name="menu_admin_mode">운영자 모드 진입</string>
+    <string name="clustering">지도 위에 부스 묶어서 보기</string>
 
 </resources>

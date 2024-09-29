@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -83,6 +84,7 @@ internal fun MenuRoute(
 ) {
     val menuUiState by menuViewModel.uiState.collectAsStateWithLifecycle()
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
+    val isClusteringEnabled by menuViewModel.isClusteringEnabled.collectAsStateWithLifecycle(true)
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val appVersion = remember {
@@ -125,9 +127,11 @@ internal fun MenuRoute(
         appVersion = appVersion,
         onMenuUiAction = menuViewModel::onMenuUiAction,
         onFestivalUiAction = festivalViewModel::onFestivalUiAction,
+        isClusteringEnabled = isClusteringEnabled,
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenuScreen(
     padding: PaddingValues,
@@ -136,6 +140,7 @@ fun MenuScreen(
     appVersion: String,
     onMenuUiAction: (MenuUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isClusteringEnabled: Boolean,
 ) {
     Box(
         modifier = Modifier
@@ -260,10 +265,16 @@ fun MenuScreen(
                             index = index,
                             totalCount = menuUiState.likedBooths.size,
                             deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
-                            modifier = Modifier.animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = null,
-                                placementSpec = tween(
+//                            modifier = Modifier.animateItem(
+//                                fadeInSpec = null,
+//                                fadeOutSpec = null,
+//                                placementSpec = tween(
+//                                    durationMillis = 500,
+//                                    easing = LinearOutSlowInEasing,
+//                                ),
+//                            ),
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = tween(
                                     durationMillis = 500,
                                     easing = LinearOutSlowInEasing,
                                 ),
@@ -274,6 +285,24 @@ fun MenuScreen(
                 item {
                     HorizontalDivider(
                         thickness = 8.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
+                }
+                item {
+                    MenuItem(
+                        icon = ImageVector.vectorResource(R.drawable.ic_clustering),
+                        title = stringResource(R.string.clustering),
+                        onClick = {},
+                        isToggleMenuItem = true,
+                        checked = isClusteringEnabled,
+                        onCheckedChange = { isChecked ->
+                            onMenuUiAction(MenuUiAction.OnToggleClustering(isChecked))
+                        },
+                    )
+                }
+                item {
+                    HorizontalDivider(
+                        thickness = 1.dp,
                         color = MaterialTheme.colorScheme.outline,
                     )
                 }
@@ -362,6 +391,7 @@ fun MenuScreenPreview(
             appVersion = "1.0.0",
             onMenuUiAction = {},
             onFestivalUiAction = {},
+            isClusteringEnabled = true,
         )
     }
 }

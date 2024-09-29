@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
-internal fun Project.configureAndroid(extension: CommonExtension<*, *, *, *, *, *>) {
+internal fun Project.configureAndroid(extension: CommonExtension<*, *, *, *, *>) {
     extension.apply {
         compileSdk = libs.versions.compileSdk.get().toInt()
 
