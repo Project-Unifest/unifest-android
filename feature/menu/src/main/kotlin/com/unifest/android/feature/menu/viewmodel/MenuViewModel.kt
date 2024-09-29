@@ -114,7 +114,6 @@ class MenuViewModel @Inject constructor(
 //        }
 //    }
 
-
     private fun updateIsClusteringEnabled(checked: Boolean) {
         viewModelScope.launch {
             settingRepository.updateIsClusteringEnabled(checked)

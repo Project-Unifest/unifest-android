@@ -18,7 +18,7 @@ class SettingDataSourceImpl @Inject constructor(
 
     override val settingsData = dataStore.data.map { preferences ->
         SettingsData(
-            isClusteringEnabled = preferences[KEY_IS_CLUSTERING_ENABLED] ?: true
+            isClusteringEnabled = preferences[KEY_IS_CLUSTERING_ENABLED] ?: true,
         )
     }
 

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class SettingRepositoryImpl @Inject constructor(
-    private val settingDataSource: SettingDataSource
+    private val settingDataSource: SettingDataSource,
 ) : SettingRepository {
     override fun flowIsClusteringEnabled(): Flow<Boolean> =
         settingDataSource.settingsData.map { settingsData -> settingsData.isClusteringEnabled }
