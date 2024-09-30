@@ -1,5 +1,10 @@
 package com.unifest.android.feature.main
 
+import com.unifest.android.feature.home.navigation.HOME_ROUTE
+import com.unifest.android.feature.map.navigation.MAP_ROUTE
+import com.unifest.android.feature.menu.navigation.MENU_ROUTE
+import com.unifest.android.feature.waiting.navigation.WAITING_ROUTE
+
 internal enum class MainTab(
     val iconResId: Int,
     val selectedIconResId: Int,
@@ -14,7 +19,7 @@ internal enum class MainTab(
         contentDescription = "Home Icon",
         label = "홈",
         // route = MainTabRoute.Home,
-        route = "home_route",
+        route = HOME_ROUTE,
     ),
     MAP(
         iconResId = R.drawable.ic_map,
@@ -22,7 +27,7 @@ internal enum class MainTab(
         contentDescription = "Map Icon",
         label = "지도",
         // route = MainTabRoute.Map,
-        route = "map_route",
+        route = MAP_ROUTE,
     ),
     WAITING(
         iconResId = R.drawable.ic_waiting,
@@ -30,7 +35,7 @@ internal enum class MainTab(
         contentDescription = "Waiting Icon",
         label = "웨이팅",
         // route = MainTabRoute.Waiting,
-        route = "waiting_route",
+        route = WAITING_ROUTE,
     ),
     //    STAMP(
 //        iconResId = R.drawable.ic_stamp,
@@ -38,7 +43,7 @@ internal enum class MainTab(
 //        contentDescription = "Stamp Icon",
 //        label = "스탬프",
 //        route = MainTabRoute.Stamp,
-//        route = "stamp_route",
+//        route = STAMP_ROUTE,
 //    ),
 
     MENU(
@@ -47,7 +52,7 @@ internal enum class MainTab(
         contentDescription = "Menu Icon",
         label = "메뉴",
         // route = MainTabRoute.Menu,
-        route = "stamp_route",
+        route = MENU_ROUTE,
     ),
     ;
 
