@@ -33,7 +33,9 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
 
         // Activity 의 onNewIntent 가 호출되기 위해선 해당 flag 들이 필요함
         val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            // addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra("notification", true)
         }
 
         for (key in remoteMessage.data.keys) {

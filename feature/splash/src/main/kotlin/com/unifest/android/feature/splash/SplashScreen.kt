@@ -36,8 +36,21 @@ internal fun SplashRoute(
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
+//            if (activity.intent?.getBooleanExtra("notification", false) == true) {
+//                mainNavigator.navigateFrom(
+//                    activity = this@SplashActivity,
+//                    withFinish = true,
+//                    intentBuilder = {
+//                        putExtras(intent)
+//                    },
+//                )
+//            } else {
+//                viewModel.refreshFCMToken()
+//            }
+//        }
             viewModel.refreshFCMToken()
         }
+
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
