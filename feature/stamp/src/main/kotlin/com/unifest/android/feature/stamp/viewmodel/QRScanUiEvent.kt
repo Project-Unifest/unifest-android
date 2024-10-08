@@ -4,7 +4,7 @@ import com.unifest.android.core.common.UiText
 
 sealed interface QRScanUiEvent {
     data object NavigateBack : QRScanUiEvent
-    data object ScanSuccess : QRScanUiEvent
+    data class ScanSuccess(val entryCode: String) : QRScanUiEvent
     data class ScanError(val errorType: QRErrorType) : QRScanUiEvent
     data class ShowToast(val text: UiText) : QRScanUiEvent
 }
@@ -14,13 +14,13 @@ data class QRScanException(
 ) : Exception(errorType?.name)
 
 enum class QRErrorType {
-    ShowNotToday, UsedTicket, TicketNotFound;
+    BoothNotToday, UsedStamp, StampNotFound;
 
     companion object {
         fun fromString(type: String?): QRErrorType? = when (type?.trim()?.uppercase()) {
-            "SHOW_NOT_TODAY" -> ShowNotToday
-            "USED_TICKET" -> UsedTicket
-            "TICKET_NOT_FOUND" -> TicketNotFound
+            "BOOTH_NOT_TODAY" -> BoothNotToday
+            "USED_STAMP" -> UsedStamp
+            "STAMP_NOT_FOUND" -> StampNotFound
             else -> null
         }
     }

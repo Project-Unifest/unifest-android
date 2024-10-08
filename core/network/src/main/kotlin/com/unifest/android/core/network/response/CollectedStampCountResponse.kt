@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LikeBoothResponse(
+data class CollectedStampCountResponse(
     @SerialName("code")
     val code: String,
     @SerialName("message")

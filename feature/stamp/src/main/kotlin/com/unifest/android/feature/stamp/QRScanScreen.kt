@@ -28,7 +28,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
@@ -47,7 +46,6 @@ fun QRScanScreen(
     viewModel: QRScanViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val activity = context.findActivity()
 
     LaunchedEffect(barcodeView) {
         barcodeView.resume()
@@ -56,18 +54,17 @@ fun QRScanScreen(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is QRScanUiEvent.NavigateBack -> popBackStack()
+            is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong())
             is QRScanUiEvent.ScanError -> {
                 when (event.errorType) {
-                    QRErrorType.ShowNotToday -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.UsedTicket -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.TicketNotFound -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                    QRErrorType.BoothNotToday -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                    QRErrorType.UsedStamp -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                    QRErrorType.StampNotFound -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            is QRScanUiEvent.ScanSuccess -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
             is QRScanUiEvent.ShowToast -> {
                 Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
-                activity.finish()
             }
         }
     }

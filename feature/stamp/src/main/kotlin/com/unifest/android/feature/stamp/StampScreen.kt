@@ -32,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -128,6 +129,10 @@ internal fun StampRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getCollectedStampCount()
+    }
+
     StampScreen(
         padding = padding,
         uiState = uiState,
@@ -215,7 +220,7 @@ internal fun StampScreen(
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                    append("${uiState.receivedStamp}")
+                                    append("${uiState.collectedStampCount}")
                                 }
                                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
                                     append(" / ${uiState.stampBoothList.size} 개")
@@ -259,7 +264,7 @@ internal fun StampScreen(
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (uiState.stampBoothList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
+                                    painter = if (index < uiState.collectedStampCount - 1) painterResource(id = R.drawable.ic_checked_stamp)
                                     else painterResource(id = R.drawable.ic_unchecked_stamp),
                                     contentDescription = "stamp image",
                                     modifier = Modifier

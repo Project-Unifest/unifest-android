@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.handleException
+import com.unifest.android.core.data.repository.StampRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +19,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StampViewModel @Inject constructor(
-    // private val stampRepository: StampRepository,
+    private val stampRepository: StampRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(StampUiState())
     val uiState: StateFlow<StampUiState> = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<StampUiEvent>()
     val uiEvent: Flow<StampUiEvent> = _uiEvent.receiveAsFlow()
+
+    init {
+        getStampEnabledBoothList()
+    }
 
     fun onAction(action: StampUiAction) {
         when (action) {
@@ -36,6 +42,35 @@ class StampViewModel @Inject constructor(
         }
     }
 
+    fun getCollectedStampCount() {
+        viewModelScope.launch {
+            stampRepository.getCollectedStampCount()
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(collectedStampCount = it.collectedStampCount)
+                    }
+                }.onFailure { exception ->
+                    handleException(exception, this@StampViewModel)
+                }
+        }
+    }
+
+    private fun getStampEnabledBoothList() {
+        viewModelScope.launch {
+            stampRepository.getStampEnabledBoothList()
+                .onSuccess {
+                    _uiState.update {
+                        it.copy(
+                            enabledStampCount = it.stampBoothList.size,
+                            stampBoothList = it.stampBoothList,
+                        )
+                    }
+                }.onFailure { exception ->
+                    handleException(exception, this@StampViewModel)
+                }
+        }
+    }
+
     private fun setStampBoothDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isStampBoothDialogVisible = flag)
@@ -43,7 +78,7 @@ class StampViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        // API 재 호출
+        getCollectedStampCount()
     }
 
     private fun requestLocationPermission() {
