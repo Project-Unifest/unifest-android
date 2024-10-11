@@ -2,7 +2,9 @@ package com.unifest.android.feature.stamp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.QRErrorHandlerActions
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.StampRepository
 import com.unifest.android.feature.stamp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class QRScanViewModel @Inject constructor(
     private val stampRepository: StampRepository,
-) : ViewModel() {
+) : ViewModel(), QRErrorHandlerActions {
     private val _uiState = MutableStateFlow(QRScanUiState())
     val uiState: StateFlow<QRScanUiState> = _uiState.asStateFlow()
 
@@ -38,12 +41,11 @@ class QRScanViewModel @Inject constructor(
             stampRepository.registerStamp(boothId)
                 .onSuccess {
                     _uiEvent.send(QRScanUiEvent.ShowToast(UiText.StringResource(R.string.stamp_register_completed)))
-                    _uiEvent.send(QRScanUiEvent.NavigateBack)
                 }.onFailure { exception ->
-                    // TODO 케이스 별로 처리 필요
                     Timber.e(exception)
-                    _uiEvent.send(QRScanUiEvent.ShowToast(UiText.StringResource(R.string.stamp_register_failed)))
+                    handleException(exception, this@QRScanViewModel)
                 }
+            _uiEvent.send(QRScanUiEvent.NavigateBack)
         }
     }
 
@@ -62,6 +64,24 @@ class QRScanViewModel @Inject constructor(
         Timber.d("스캔 결과: $entryCode")
         viewModelScope.launch {
             _uiEvent.send(QRScanUiEvent.ScanSuccess(entryCode))
+        }
+    }
+
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    override fun showErrorMessage(message: UiText) {
+        viewModelScope.launch {
+            _uiEvent.send(QRScanUiEvent.ShowToast(message))
         }
     }
 }

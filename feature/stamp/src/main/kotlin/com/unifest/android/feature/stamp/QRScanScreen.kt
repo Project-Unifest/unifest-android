@@ -32,7 +32,6 @@ import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
-import com.unifest.android.feature.stamp.viewmodel.QRErrorType
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
@@ -55,14 +54,6 @@ fun QRScanScreen(
         when (event) {
             is QRScanUiEvent.NavigateBack -> popBackStack()
             is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong())
-            is QRScanUiEvent.ScanError -> {
-                when (event.errorType) {
-                    QRErrorType.BoothNotToday -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.UsedStamp -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.StampNotFound -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                }
-            }
-
             is QRScanUiEvent.ShowToast -> {
                 Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
             }
