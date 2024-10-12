@@ -129,12 +129,9 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    @Suppress("UnusedParameter")
     private fun navigateToBoothDetail(boothId: Long) {
         viewModelScope.launch {
-            // 임시 구현
-            // _uiEvent.send(StampUiEvent.NavigateToBoothDetail(boothId))
-            _uiEvent.send(StampUiEvent.NavigateToBoothDetail(79L))
+            _uiEvent.send(StampUiEvent.NavigateToBoothDetail(boothId))
         }
     }
 
