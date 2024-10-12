@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -68,12 +69,22 @@ fun QRScanScreen(
             QRScanBottomBar()
         },
     ) { innerPadding ->
-        AndroidView(
+        Box(
             modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            factory = { barcodeView },
-        )
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { barcodeView },
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(designR.drawable.ic_qr_scan_crosshair),
+                contentDescription = "QR Scan Frame",
+                tint = Color.Unspecified,
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
     }
 }
 
