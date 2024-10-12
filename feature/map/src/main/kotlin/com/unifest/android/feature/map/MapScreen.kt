@@ -122,6 +122,7 @@ val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRA
     )
 }
 
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun MapRoute(
     padding: PaddingValues,
@@ -304,6 +305,8 @@ private fun checkLocationPermission(activity: Activity): Boolean {
         activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
+@ExperimentalNaverMapApi
+@ExperimentalFoundationApi
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
@@ -314,7 +317,7 @@ internal fun MapScreen(
     isClusteringEnabled: Boolean,
 ) {
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(36.969868, 127.871726), 15.8)
+        position = CameraPosition(LatLng(36.970898, 127.871726), 15.2)
     }
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
@@ -582,6 +585,7 @@ fun MapContent(
     }
 }
 
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
 @DevicePreview
 @Composable
 private fun MapScreenPreview(
