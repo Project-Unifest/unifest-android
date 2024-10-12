@@ -261,7 +261,7 @@ internal fun StampScreen(
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (index < uiState.collectedStampCount - 1) painterResource(id = R.drawable.ic_checked_stamp)
+                                    painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
                                     else painterResource(id = R.drawable.ic_unchecked_stamp),
                                     contentDescription = "stamp image",
                                     modifier = Modifier

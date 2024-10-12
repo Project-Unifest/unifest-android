@@ -7,6 +7,7 @@ import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.StampRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,9 +46,9 @@ class StampViewModel @Inject constructor(
     fun getCollectedStampCount() {
         viewModelScope.launch {
             stampRepository.getCollectedStampCount()
-                .onSuccess {
+                .onSuccess { collectedStampCount ->
                     _uiState.update {
-                        it.copy(collectedStampCount = it.collectedStampCount)
+                        it.copy(collectedStampCount = collectedStampCount)
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
@@ -58,11 +59,11 @@ class StampViewModel @Inject constructor(
     private fun getStampEnabledBoothList() {
         viewModelScope.launch {
             stampRepository.getStampEnabledBoothList()
-                .onSuccess {
+                .onSuccess { stampEnalbledBoothList ->
                     _uiState.update {
                         it.copy(
-                            enabledStampCount = it.stampBoothList.size,
-                            stampBoothList = it.stampBoothList,
+                            enabledStampCount = stampEnalbledBoothList.size,
+                            stampBoothList = stampEnalbledBoothList.toImmutableList(),
                         )
                     }
                 }.onFailure { exception ->
