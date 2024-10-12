@@ -30,6 +30,10 @@ class QRScanActivity : ComponentActivity() {
             barcodeView.decoderFactory = DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
             initializeFromIntent(intent)
             decodeContinuous(callback)
+
+            val viewFinder = viewFinder
+            viewFinder.setLaserVisibility(false)
+            viewFinder.setMaskColor(ContextCompat.getColor(context, R.color.viewfinder_mask))
             statusView.isVisible = false
         }
     }
