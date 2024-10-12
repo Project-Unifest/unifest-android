@@ -304,7 +304,6 @@ private fun checkLocationPermission(activity: Activity): Boolean {
         activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MapScreen(
     padding: PaddingValues,
@@ -315,7 +314,7 @@ internal fun MapScreen(
     isClusteringEnabled: Boolean,
 ) {
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(37.0122749, 127.2635972), 15.8)
+        position = CameraPosition(LatLng(36.969868, 127.871726), 15.8)
     }
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
