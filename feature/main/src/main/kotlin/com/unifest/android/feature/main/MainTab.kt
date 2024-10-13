@@ -3,6 +3,7 @@ package com.unifest.android.feature.main
 import com.unifest.android.feature.home.navigation.HOME_ROUTE
 import com.unifest.android.feature.map.navigation.MAP_ROUTE
 import com.unifest.android.feature.menu.navigation.MENU_ROUTE
+import com.unifest.android.feature.stamp.navigation.STAMP_ROUTE
 import com.unifest.android.feature.waiting.navigation.WAITING_ROUTE
 
 internal enum class MainTab(
@@ -37,14 +38,14 @@ internal enum class MainTab(
         // route = MainTabRoute.Waiting,
         route = WAITING_ROUTE,
     ),
-    //    STAMP(
-//        iconResId = R.drawable.ic_stamp,
-//        selectedIconResId = R.drawable.ic_selected_stamp,
-//        contentDescription = "Stamp Icon",
-//        label = "스탬프",
-//        route = MainTabRoute.Stamp,
-//        route = STAMP_ROUTE,
-//    ),
+    STAMP(
+        iconResId = R.drawable.ic_stamp,
+        selectedIconResId = R.drawable.ic_selected_stamp,
+        contentDescription = "Stamp Icon",
+        label = "스탬프",
+        // route = MainTabRoute.Stamp,
+        route = STAMP_ROUTE,
+    ),
 
     MENU(
         iconResId = R.drawable.ic_menu,

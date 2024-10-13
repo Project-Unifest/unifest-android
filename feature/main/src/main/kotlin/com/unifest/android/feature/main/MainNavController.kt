@@ -16,6 +16,7 @@ import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
+import com.unifest.android.feature.stamp.navigation.navigateToStamp
 import com.unifest.android.feature.waiting.navigation.navigateToWaiting
 
 internal class MainNavController(
@@ -49,7 +50,7 @@ internal class MainNavController(
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MAP -> navController.navigateToMap(navOptions)
-            // MainTab.STAMP -> navController.navigateToStamp(navOptions)
+            MainTab.STAMP -> navController.navigateToStamp(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
     }
