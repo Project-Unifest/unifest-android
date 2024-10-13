@@ -16,6 +16,8 @@ import com.unifest.android.core.data.repository.RemoteConfigRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepositoryImpl
 import com.unifest.android.core.data.repository.SettingRepository
 import com.unifest.android.core.data.repository.SettingRepositoryImpl
+import com.unifest.android.core.data.repository.StampRepository
+import com.unifest.android.core.data.repository.StampRepositoryImpl
 import com.unifest.android.core.data.repository.WaitingRepository
 import com.unifest.android.core.data.repository.WaitingRepositoryImpl
 import dagger.Binds
@@ -62,4 +64,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSettingRepository(settingRepositoryImpl: SettingRepositoryImpl): SettingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindStampRepository(stampRepositoryImpl: StampRepositoryImpl): StampRepository
 }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,12 +29,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
-import com.unifest.android.feature.stamp.viewmodel.QRErrorType
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
@@ -47,7 +46,6 @@ fun QRScanScreen(
     viewModel: QRScanViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val activity = context.findActivity()
 
     LaunchedEffect(barcodeView) {
         barcodeView.resume()
@@ -56,18 +54,9 @@ fun QRScanScreen(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is QRScanUiEvent.NavigateBack -> popBackStack()
-            is QRScanUiEvent.ScanError -> {
-                when (event.errorType) {
-                    QRErrorType.ShowNotToday -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.UsedTicket -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                    QRErrorType.TicketNotFound -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            is QRScanUiEvent.ScanSuccess -> Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+            is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong())
             is QRScanUiEvent.ShowToast -> {
                 Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
-                activity.finish()
             }
         }
     }
@@ -80,12 +69,22 @@ fun QRScanScreen(
             QRScanBottomBar()
         },
     ) { innerPadding ->
-        AndroidView(
+        Box(
             modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            factory = { barcodeView },
-        )
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { barcodeView },
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(designR.drawable.ic_qr_scan_crosshair),
+                contentDescription = "QR Scan Frame",
+                tint = Color.Unspecified,
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
     }
 }
 

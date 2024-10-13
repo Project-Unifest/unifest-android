@@ -4,17 +4,20 @@ import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.request.LikedFestivalRequest
+import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.request.WaitingRequest
-import com.unifest.android.core.network.response.AllBoothsResponse
-import com.unifest.android.core.network.response.BoothDetailResponse
+import com.unifest.android.core.network.response.booth.AllBoothsResponse
+import com.unifest.android.core.network.response.booth.BoothDetailResponse
 import com.unifest.android.core.network.response.CheckPinValidationResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
-import com.unifest.android.core.network.response.LikeBoothResponse
-import com.unifest.android.core.network.response.LikedBoothsResponse
+import com.unifest.android.core.network.response.booth.LikeBoothResponse
+import com.unifest.android.core.network.response.booth.LikedBoothsResponse
 import com.unifest.android.core.network.response.MyWaitingResponse
-import com.unifest.android.core.network.response.PopularBoothsResponse
+import com.unifest.android.core.network.response.booth.PopularBoothsResponse
+import com.unifest.android.core.network.response.CollectedStampCountResponse
 import com.unifest.android.core.network.response.WaitingResponse
+import com.unifest.android.core.network.response.booth.StampBoothsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -121,4 +124,22 @@ interface UnifestService {
     suspend fun unregisterLikedFestival(
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
+
+    // 스탬프 조화
+    @GET("stamps")
+    suspend fun getCollectedStampCount(
+        @Query("token") token: String,
+    ): CollectedStampCountResponse
+
+    // 스탬프 추가
+    @POST("stamps")
+    suspend fun registerStamp(
+        @Body registerStampRequest: RegisterStampRequest,
+    )
+
+    // 스탬프 기능 활성화된 부스 확인
+    @GET("stamps/{festival-id}")
+    suspend fun getStampEnabledBoothList(
+        @Path("festival-id") festivalId: Long,
+    ): StampBoothsResponse
 }
