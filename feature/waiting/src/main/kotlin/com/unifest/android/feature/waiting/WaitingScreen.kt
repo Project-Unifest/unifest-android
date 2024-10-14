@@ -156,7 +156,7 @@ internal fun WaitingScreen(
             }
             item { Spacer(modifier = Modifier.height(8.dp)) }
             itemsIndexed(
-                items = waitingUiState.myWaitingList,
+                items = waitingUiState.myWaitingList.sortedBy { it.waitingId },
                 key = { _, waitingItem -> waitingItem.waitingId },
             ) { _, waitingItem ->
                 Column {
