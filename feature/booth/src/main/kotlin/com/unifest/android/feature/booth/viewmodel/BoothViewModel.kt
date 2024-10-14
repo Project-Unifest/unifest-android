@@ -50,7 +50,6 @@ class BoothViewModel @Inject constructor(
     init {
         getBoothDetail()
         getLikedBooths()
-        getMyWaitingList()
     }
 
     fun onAction(action: BoothUiAction) {
@@ -80,20 +79,30 @@ class BoothViewModel @Inject constructor(
 
     private fun checkMyWaitingListNumbers() {
         viewModelScope.launch {
-            val isAlreadyInWaitingList = _uiState.value.myWaitingList.any { it.boothId == _uiState.value.boothDetailInfo.id }
-            when {
-                isAlreadyInWaitingList -> {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
-                }
+            waitingRepository.getMyWaitingList()
+                .onSuccess { waitingLists ->
+                    _uiState.update {
+                        it.copy(myWaitingList = waitingLists.toImmutableList())
+                    }
 
-                _uiState.value.myWaitingList.size >= 3 -> {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
-                }
+                    val isAlreadyInWaitingList = _uiState.value.myWaitingList.any { it.boothId == _uiState.value.boothDetailInfo.id }
+                    when {
+                        isAlreadyInWaitingList -> {
+                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
+                        }
 
-                else -> {
-                    setPinCheckDialogVisible(true)
+                        _uiState.value.myWaitingList.size >= 3 -> {
+                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
+                        }
+
+                        else -> {
+                            setPinCheckDialogVisible(true)
+                        }
+                    }
                 }
-            }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
         }
     }
 

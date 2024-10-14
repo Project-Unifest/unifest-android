@@ -16,7 +16,7 @@ data class MapUiState(
     val selectedBoothList: ImmutableList<BoothMapModel> = persistentListOf(),
     val boothSearchText: TextFieldValue = TextFieldValue(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
-    val selectedBoothTypeChips: ImmutableList<String> = persistentListOf("주점", "먹거리", "이벤트", "일반"),
+    val selectedBoothTypeChips: ImmutableList<String> = persistentListOf("체험", "푸드트럭", "교내", "교외"),
     val filteredBoothList: ImmutableList<BoothMapModel> = persistentListOf(),
     val isPopularMode: Boolean = false,
     val isBoothSelectionMode: Boolean = false,
