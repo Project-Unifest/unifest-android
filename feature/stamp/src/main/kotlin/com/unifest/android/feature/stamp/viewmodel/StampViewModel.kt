@@ -59,11 +59,11 @@ class StampViewModel @Inject constructor(
     private fun getStampEnabledBoothList() {
         viewModelScope.launch {
             stampRepository.getStampEnabledBoothList()
-                .onSuccess { stampEnalbledBoothList ->
+                .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(
-                            enabledStampCount = stampEnalbledBoothList.size,
-                            stampBoothList = stampEnalbledBoothList.toImmutableList(),
+                            enabledStampCount = stampEnabledBoothList.size,
+                            stampBoothList = stampEnabledBoothList.toImmutableList(),
                         )
                     }
                 }.onFailure { exception ->
