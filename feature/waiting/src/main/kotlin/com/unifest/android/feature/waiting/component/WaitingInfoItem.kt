@@ -168,7 +168,7 @@ fun WaitingInfoItem(
                 UnifestButton(
                     onClick = {
                         if (myWaitingModel.status == "NOSHOW") {
-                            onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
+                            onWaitingUiAction(WaitingUiAction.OnCancelNoShowWaitingClick(myWaitingModel.waitingId))
                         } else {
                             onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
                         }
