@@ -341,21 +341,6 @@ fun WaitingDialog(
                         },
                     )
                     Text(
-                        text = " " + stringResource(id = R.string.waiting_dialog_telephone_and) + " ",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = Content6,
-                    )
-                    Text(
-                        text = stringResource(id = R.string.waiting_dialog_telephone_third),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = Content6.copy(
-                            textDecoration = TextDecoration.Underline,
-                        ),
-                        modifier = Modifier.clickable {
-                            onThirdPartyPolicyClick()
-                        },
-                    )
-                    Text(
                         text = stringResource(id = R.string.waiting_dialog_telephone_agree),
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         style = Content6,
