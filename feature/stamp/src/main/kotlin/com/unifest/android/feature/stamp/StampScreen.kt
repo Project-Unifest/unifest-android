@@ -57,6 +57,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
@@ -298,6 +299,13 @@ internal fun StampScreen(
                         Spacer(modifier = Modifier.width(22.dp))
                     }
                     Spacer(modifier = Modifier.height(21.dp))
+                }
+                if (uiState.isLoading) {
+                    LoadingWheel(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                    )
                 }
             }
         }
