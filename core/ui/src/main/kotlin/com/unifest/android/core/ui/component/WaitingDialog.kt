@@ -196,7 +196,6 @@ fun WaitingDialog(
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
-    onThirdPartyPolicyClick: () -> Unit,
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
@@ -568,7 +567,6 @@ private fun WaitingDialogPreview() {
             isPrivacyClicked = false,
             onPolicyCheckBoxClick = { },
             onPrivacyPolicyClick = { },
-            onThirdPartyPolicyClick = { },
         )
     }
 }

@@ -220,7 +220,6 @@ fun BoothDetailScreen(
                 onWaitingTelUpdated = { onAction(BoothUiAction.OnWaitingTelUpdated(it)) },
                 onPolicyCheckBoxClick = { onAction(BoothUiAction.OnPolicyCheckBoxClick) },
                 onPrivacyPolicyClick = { onAction(BoothUiAction.OnPrivatePolicyClick) },
-                onThirdPartyPolicyClick = { onAction(BoothUiAction.OnThirdPartyPolicyClick) },
             )
         }
 
