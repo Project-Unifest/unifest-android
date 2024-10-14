@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +28,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
@@ -42,9 +45,11 @@ import com.unifest.android.core.designsystem.R as designR
 fun QRScanScreen(
     barcodeView: DecoratedBarcodeView,
     popBackStack: () -> Unit,
+    complete: () -> Unit,
     onAction: (QRScanUiAction) -> Unit,
     viewModel: QRScanViewModel = hiltViewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     LaunchedEffect(barcodeView) {
@@ -54,6 +59,8 @@ fun QRScanScreen(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is QRScanUiEvent.NavigateBack -> popBackStack()
+            is QRScanUiEvent.RegisterStampCompleted -> complete()
+            is QRScanUiEvent.RegisterStampFailed -> popBackStack()
             is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong())
             is QRScanUiEvent.ShowToast -> {
                 Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
@@ -84,6 +91,13 @@ fun QRScanScreen(
                 tint = Color.Unspecified,
                 modifier = Modifier.align(Alignment.Center),
             )
+            if (uiState.isLoading) {
+                LoadingWheel(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center),
+                )
+            }
         }
     }
 }

@@ -38,14 +38,17 @@ class QRScanViewModel @Inject constructor(
 
     fun registerStamp(boothId: Long) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             stampRepository.registerStamp(boothId)
                 .onSuccess {
                     _uiEvent.send(QRScanUiEvent.ShowToast(UiText.StringResource(R.string.stamp_register_completed)))
+                    _uiEvent.send(QRScanUiEvent.RegisterStampCompleted)
                 }.onFailure { exception ->
                     Timber.e(exception)
                     handleException(exception, this@QRScanViewModel)
+                    _uiEvent.send(QRScanUiEvent.RegisterStampFailed)
                 }
-            _uiEvent.send(QRScanUiEvent.NavigateBack)
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
