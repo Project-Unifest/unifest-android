@@ -28,6 +28,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,7 +40,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.unifest.android.core.common.MultipleEventsCutter
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.get
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -156,9 +159,12 @@ internal fun WaitingScreen(
                         color = MaterialTheme.colorScheme.onBackground,
                         style = Content7,
                     )
+                    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
                     Row(
                         modifier = Modifier.clickable {
-                            onWaitingUiAction(WaitingUiAction.OnRefresh)
+                            multipleEventsCutter.processEvent {
+                                onWaitingUiAction(WaitingUiAction.OnRefresh)
+                            }
                         },
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
