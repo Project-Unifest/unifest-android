@@ -124,7 +124,7 @@ class FestivalViewModel @Inject constructor(
 
     private fun setRecentLikedFestival(schoolName: String) {
         viewModelScope.launch {
-            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+            if (schoolName == "한국교통대학교") {
                 // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 setFestivalSearchBottomSheetVisible(false)
                 _uiEvent.send(FestivalUiEvent.NavigateBack)

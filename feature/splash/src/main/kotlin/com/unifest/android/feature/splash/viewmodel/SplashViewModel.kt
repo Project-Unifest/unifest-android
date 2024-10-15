@@ -51,7 +51,7 @@ class SplashViewModel @Inject constructor(
 
     private fun setRecentLikedFestival() {
         viewModelScope.launch {
-            likedFestivalRepository.setRecentLikedFestival("한국교통대")
+            likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
             likedFestivalRepository.setRecentLikedFestivalId(2L)
             _uiEvent.send(SplashUiEvent.NavigateToMain)
         }
@@ -65,7 +65,7 @@ class SplashViewModel @Inject constructor(
                 token?.let {
                     Timber.d("New FCM token: $it")
                     messagingRepository.setFCMToken(it)
-                    // 한국교통대로 고정
+                    // 한국교통대학교로 고정
                     setRecentLikedFestival()
                 }
             } catch (e: Exception) {
