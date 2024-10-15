@@ -3,8 +3,8 @@
 minSdk = "26"
 targetSdk = "34"
 compileSdk = "34"
-versionCode = "22"
-versionName = "1.2.1"
+versionCode = "23"
+versionName = "1.2.2"
 packageName = "com.unifest.android"
 
 android-gradle-plugin = "8.2.2"
