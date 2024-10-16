@@ -152,7 +152,7 @@ class MapViewModel @Inject constructor(
 
     private fun searchSchoolName() {
         viewModelScope.launch {
-            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival())
+            festivalRepository.searchSchool("한국교통대학교")
                 .onSuccess { festivals ->
                     if (festivals.isNotEmpty()) {
                         _uiState.update {
@@ -403,10 +403,10 @@ class MapViewModel @Inject constructor(
 
     private fun String.toEnglishCategory(): String {
         return when (this) {
-            "주점" -> "BAR"
-            "먹거리" -> "FOOD"
-            "이벤트" -> "EVENT"
-            "일반" -> "NORMAL"
+            "체험" -> "BAR"
+            "푸드트럭" -> "FOOD"
+            "교내" -> "EVENT"
+            "교외" -> "NORMAL"
             "의무실" -> "MEDICAL"
             "화장실" -> "TOILET"
             else -> ""

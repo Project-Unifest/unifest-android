@@ -196,7 +196,6 @@ fun WaitingDialog(
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
-    onThirdPartyPolicyClick: () -> Unit,
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
@@ -338,21 +337,6 @@ fun WaitingDialog(
                         ),
                         modifier = Modifier.clickable {
                             onPrivacyPolicyClick()
-                        },
-                    )
-                    Text(
-                        text = " " + stringResource(id = R.string.waiting_dialog_telephone_and) + " ",
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        style = Content6,
-                    )
-                    Text(
-                        text = stringResource(id = R.string.waiting_dialog_telephone_third),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = Content6.copy(
-                            textDecoration = TextDecoration.Underline,
-                        ),
-                        modifier = Modifier.clickable {
-                            onThirdPartyPolicyClick()
                         },
                     )
                     Text(
@@ -583,7 +567,6 @@ private fun WaitingDialogPreview() {
             isPrivacyClicked = false,
             onPolicyCheckBoxClick = { },
             onPrivacyPolicyClick = { },
-            onThirdPartyPolicyClick = { },
         )
     }
 }

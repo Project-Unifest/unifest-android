@@ -56,7 +56,14 @@ class QRScanActivity : ComponentActivity() {
             UnifestTheme {
                 QRScanScreen(
                     barcodeView = barcodeView,
-                    popBackStack = { finish() },
+                    popBackStack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    },
+                    complete = {
+                        setResult(RESULT_OK)
+                        finish()
+                    },
                     onAction = viewModel::onAction,
                 )
             }

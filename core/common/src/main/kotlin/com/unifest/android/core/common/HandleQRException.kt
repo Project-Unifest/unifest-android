@@ -47,7 +47,7 @@ private fun handleHttpException(exception: HttpException, actions: QRErrorHandle
             val errorBody = exception.response()?.errorBody()?.string()
             try {
                 val errorResponse = errorBody?.let { jsonRule.decodeFromString(ErrorResponse.serializer(), it) }
-                if (errorResponse != null && errorResponse.code == 9000) {
+                if (errorResponse != null && errorResponse.code == "9000") {
                     actions.showErrorMessage(UiText.StringResource(R.string.already_collected_stamp))
                 } else {
                     actions.showErrorMessage(UiText.StringResource(R.string.not_found_stamp))

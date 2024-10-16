@@ -39,7 +39,7 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
-            is WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
+            is WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick -> cancelBoothNoShowWaiting()
             is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
             is WaitingUiAction.OnRefresh -> getMyWaitingList()
         }
@@ -82,6 +82,20 @@ class WaitingViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     setWaitingCancelDialogVisible(false)
+                    handleException(exception, this@WaitingViewModel)
+                }
+        }
+    }
+
+    private fun cancelBoothNoShowWaiting() {
+        viewModelScope.launch {
+            waitingRepository.cancelBoothWaiting(_uiState.value.waitingCancelDialogWaitingId)
+                .onSuccess {
+                    getMyWaitingList()
+                    setNoShowWaitingCancelDialogVisible(false)
+                }
+                .onFailure { exception ->
+                    setNoShowWaitingCancelDialogVisible(false)
                     handleException(exception, this@WaitingViewModel)
                 }
         }

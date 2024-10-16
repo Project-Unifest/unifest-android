@@ -87,7 +87,7 @@ fun MapTopAppBarPreview() {
             isOnboardingCompleted = false,
             onMapUiAction = {},
             onFestivalUiAction = {},
-            selectedChips = persistentListOf("주점", "먹거리"),
+            selectedChips = persistentListOf("체험", "푸드트럭"),
         )
     }
 }

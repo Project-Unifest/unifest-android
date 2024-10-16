@@ -45,6 +45,7 @@ class StampViewModel @Inject constructor(
 
     fun getCollectedStampCount() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             stampRepository.getCollectedStampCount()
                 .onSuccess { collectedStampCount ->
                     _uiState.update {
@@ -53,17 +54,18 @@ class StampViewModel @Inject constructor(
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
                 }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
     private fun getStampEnabledBoothList() {
         viewModelScope.launch {
             stampRepository.getStampEnabledBoothList()
-                .onSuccess { stampEnalbledBoothList ->
+                .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(
-                            enabledStampCount = stampEnalbledBoothList.size,
-                            stampBoothList = stampEnalbledBoothList.toImmutableList(),
+                            enabledStampCount = stampEnabledBoothList.size,
+                            stampBoothList = stampEnabledBoothList.toImmutableList(),
                         )
                     }
                 }.onFailure { exception ->

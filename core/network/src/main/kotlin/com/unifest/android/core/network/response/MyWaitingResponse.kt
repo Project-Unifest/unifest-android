@@ -32,7 +32,7 @@ data class MyWaiting(
     @SerialName("status")
     val status: String = "",
     @SerialName("waitingOrder")
-    val waitingOrder: Long = 0L,
+    val waitingOrder: Long? = 0L,
     @SerialName("boothName")
     val boothName: String = "",
 )
