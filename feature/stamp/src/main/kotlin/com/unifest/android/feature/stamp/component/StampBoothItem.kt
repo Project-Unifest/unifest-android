@@ -66,13 +66,15 @@ fun StampBoothItem(
                     style = Title2,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stampBooth.description,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    style = Content2,
-                )
+                stampBooth.description?.let {
+                    Text(
+                        text = it,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = Content2,
+                    )
+                }
                 Spacer(modifier = Modifier.height(6.dp))
                 Row {
                     Icon(
@@ -105,6 +107,11 @@ private fun StampBoothItemPreview() {
                 category = "부스 카테고리",
                 description = "부스 설명",
                 location = "부스 위치",
+                enabled = true,
+                latitude = 0F,
+                longitude = 0F,
+                waitingEnabled = true,
+                stampEnabled = true,
             ),
         )
     }

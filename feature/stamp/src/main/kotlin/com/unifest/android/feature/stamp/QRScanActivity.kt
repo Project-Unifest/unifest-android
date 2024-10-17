@@ -30,6 +30,7 @@ class QRScanActivity : ComponentActivity() {
             barcodeView.decoderFactory = DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
             initializeFromIntent(intent)
             decodeContinuous(callback)
+            viewFinder.setLaserVisibility(false)
             statusView.isVisible = false
         }
     }
@@ -55,7 +56,14 @@ class QRScanActivity : ComponentActivity() {
             UnifestTheme {
                 QRScanScreen(
                     barcodeView = barcodeView,
-                    popBackStack = { finish() },
+                    popBackStack = {
+                        setResult(RESULT_CANCELED)
+                        finish()
+                    },
+                    complete = {
+                        setResult(RESULT_OK)
+                        finish()
+                    },
                     onAction = viewModel::onAction,
                 )
             }

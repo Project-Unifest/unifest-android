@@ -193,7 +193,7 @@ class MenuViewModel @Inject constructor(
 
     private fun setRecentLikedFestival(schoolName: String) {
         viewModelScope.launch {
-            if (schoolName == likedFestivalRepository.getRecentLikedFestival()) {
+            if (schoolName == "한국교통대학교") {
                 // likedFestivalRepository.setRecentLikedFestival(schoolName)
                 _uiEvent.send(MenuUiEvent.NavigateBack)
             } else {

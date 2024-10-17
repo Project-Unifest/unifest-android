@@ -13,7 +13,7 @@ internal fun MyWaiting.toModel(): MyWaitingModel {
         createdAt = createdAt,
         updatedAt = updatedAt,
         status = status,
-        waitingOrder = waitingOrder,
+        waitingOrder = waitingOrder ?: 0L,
         boothName = boothName,
     )
 }

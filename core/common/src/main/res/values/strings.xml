@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="already_collected_stamp">이미 스탬프를 찍은 부스입니다.</string>
+    <string name="not_found_stamp">올바르지 않은 QR 코드입니다. 운영자에 문의바랍니다.</string>
+</resources>

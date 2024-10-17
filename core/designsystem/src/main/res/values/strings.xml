@@ -3,7 +3,7 @@
     <string name="search_text_hint">학교를 검색해보세요</string>
     <string name="map_school_search_tool_tip_description">여기를 눌러서 학교를 검색해보세요.</string>
     <string name="festival_search_onboarding_title">여기를 터치하여 해당 학교로 이동해보세요.</string>
-    <string name="interest_festival_snack_bar">현재는 한경대학교만 서비스중이에요!</string>
+    <string name="interest_festival_snack_bar">현재는 한국교통대학교만 서비스중이에요!</string>
     <string name="liked_festivals_title">나의 관심 축제</string>
 
     <string name="liked_booth_saved_message">관심 부스로 저장했습니다.</string>

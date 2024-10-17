@@ -1,6 +1,7 @@
 package com.unifest.android.feature.stamp
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -32,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +52,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
@@ -111,10 +114,16 @@ internal fun StampRoute(
         },
     )
 
+    val qrScanLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            viewModel.getCollectedStampCount()
+        }
+    }
+
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is StampUiEvent.NavigateBack -> popBackStack()
-            is StampUiEvent.NavigateToQRScan -> startActivity(context, Intent(context, QRScanActivity::class.java), null)
+            is StampUiEvent.NavigateToQRScan -> qrScanLauncher.launch(Intent(context, QRScanActivity::class.java))
             is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
             is StampUiEvent.NavigateToAppSetting -> {
                 val intent = Intent(
@@ -126,6 +135,10 @@ internal fun StampRoute(
 
             is StampUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getCollectedStampCount()
     }
 
     StampScreen(
@@ -142,9 +155,6 @@ internal fun StampScreen(
     onAction: (StampUiAction) -> Unit,
 ) {
     val activity = LocalContext.current.findActivity()
-
-//    val checkedStampPainter = rememberAsyncImagePainter(R.drawable.ic_checked_stamp)
-//    val uncheckedStampPainter = rememberAsyncImagePainter(R.drawable.ic_unchecked_stamp)
 
     Box(
         modifier = Modifier
@@ -215,7 +225,7 @@ internal fun StampScreen(
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                    append("${uiState.receivedStamp}")
+                                    append("${uiState.collectedStampCount}")
                                 }
                                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
                                     append(" / ${uiState.stampBoothList.size} 개")
@@ -225,7 +235,7 @@ internal fun StampScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Row(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.clickableSingle {
                                 onAction(StampUiAction.OnRefreshClick)
                             },
                             verticalAlignment = Alignment.CenterVertically,
@@ -259,7 +269,7 @@ internal fun StampScreen(
                         ) { index ->
                             Box {
                                 Image(
-                                    painter = if (uiState.stampBoothList[index].isChecked) painterResource(id = R.drawable.ic_checked_stamp)
+                                    painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
                                     else painterResource(id = R.drawable.ic_unchecked_stamp),
                                     contentDescription = "stamp image",
                                     modifier = Modifier
@@ -296,6 +306,13 @@ internal fun StampScreen(
                         Spacer(modifier = Modifier.width(22.dp))
                     }
                     Spacer(modifier = Modifier.height(21.dp))
+                }
+                if (uiState.isLoading) {
+                    LoadingWheel(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                    )
                 }
             }
         }
