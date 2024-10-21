@@ -60,7 +60,7 @@ balloon = "1.6.7"
 calendar-compose = "2.6.0"
 flexible-bottomsheet = "0.1.5"
 
-naver-map-compose = "1.7.1"
+naver-map-compose = "1.8.0"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
 zxing = "4.3.0"
