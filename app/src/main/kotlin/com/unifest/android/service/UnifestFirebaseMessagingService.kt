@@ -9,9 +9,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.main.MainActivity
 import timber.log.Timber
+import com.unifest.android.core.designsystem.R as designR
 
 class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
