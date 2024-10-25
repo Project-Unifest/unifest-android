@@ -99,7 +99,6 @@ class BoothViewModel @Inject constructor(
                         _uiState.value.myWaitingList.size >= 3 -> {
                             _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
                         }
-                        
                         else -> {
                             setPinCheckDialogVisible(true)
                         }
