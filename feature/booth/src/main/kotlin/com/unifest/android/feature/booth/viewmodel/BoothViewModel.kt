@@ -84,17 +84,22 @@ class BoothViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(myWaitingList = waitingLists.toImmutableList())
                     }
+                    val currentBoothId = _uiState.value.boothDetailInfo.id
+                    val matchingBooth = _uiState.value.myWaitingList.find { it.boothId == currentBoothId }
 
-                    val isAlreadyInWaitingList = _uiState.value.myWaitingList.any { it.boothId == _uiState.value.boothDetailInfo.id }
                     when {
-                        isAlreadyInWaitingList -> {
+                        matchingBooth?.status == "NOSHOW" -> {
+                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_noshow)))
+                        }
+
+                        matchingBooth != null -> {
                             _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
                         }
 
                         _uiState.value.myWaitingList.size >= 3 -> {
                             _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
                         }
-
+                        
                         else -> {
                             setPinCheckDialogVisible(true)
                         }

@@ -11,6 +11,7 @@
     <string name="booth_is_closed">운영종료</string>
     <string name="booth_waiting_full">웨이팅은 최대 3부스까지 가능해요!</string>
     <string name="booth_waiting_already_exists">이미 웨이팅 한 부스에요!</string>
+    <string name="booth_waiting_noshow">웨이팅 부재처리를 먼저 삭제해주세요!</string>
     <string name="sold_out">품절</string>
     <string name="almost_sold_out_less_than_5_left">품절 임박 5개 미만 남음</string>
     <string name="no_menu_status">등록된 정보 없음</string>
