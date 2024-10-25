@@ -9,9 +9,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.main.MainActivity
 import timber.log.Timber
+import com.unifest.android.core.designsystem.R as designR
 
 class UnifestFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -34,6 +34,7 @@ class UnifestFirebaseMessagingService : FirebaseMessagingService() {
         // Activity 의 onNewIntent 가 호출되기 위해선 해당 flag 들이 필요함
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra("notification", true)
         }
 
         for (key in remoteMessage.data.keys) {

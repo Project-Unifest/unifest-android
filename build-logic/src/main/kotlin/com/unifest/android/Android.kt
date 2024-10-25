@@ -29,15 +29,5 @@ internal fun Project.configureAndroid(extension: CommonExtension<*, *, *, *, *, 
             coreLibraryDesugaring(libs.desugar.jdk.libs)
             detektPlugins(libs.detekt.formatting)
         }
-
-        buildTypes {
-            getByName("release") {
-                isMinifyEnabled = true
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
-                )
-            }
-        }
     }
 }
