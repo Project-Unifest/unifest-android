@@ -67,6 +67,10 @@ internal class MainNavController(
         navController.navigateToLikedBooth()
     }
 
+    fun navigateToWaiting() {
+        navigate(MainTab.WAITING)
+    }
+
     private fun popBackStack() {
         navController.popBackStack()
     }

@@ -17,6 +17,7 @@ const val BOOTH_ID = "booth_id"
 const val BOOTH_ROUTE = "booth_route/{$BOOTH_ID}"
 const val BOOTH_DETAIL_ROUTE = "booth_detail_route"
 const val BOOTH_LOCATION_ROUTE = "booth_location_route"
+const val WAITING_ROUTE = "waiting_route"
 
 fun NavController.navigateToBoothDetail(
     boothId: Long,
@@ -35,6 +36,7 @@ fun NavGraphBuilder.boothNavGraph(
     navController: NavHostController,
     popBackStack: () -> Unit,
     navigateToBoothLocation: () -> Unit,
+    navigateToWaiting: () -> Unit,
 ) {
 //    navigation<Route.Booth>(
 //        startDestination = Route.Booth.BoothDetail::class,
@@ -55,6 +57,7 @@ fun NavGraphBuilder.boothNavGraph(
                 padding = padding,
                 onBackClick = popBackStack,
                 navigateToBoothLocation = navigateToBoothLocation,
+                navigateToWaiting = navigateToWaiting,
                 viewModel = viewModel,
             )
         }

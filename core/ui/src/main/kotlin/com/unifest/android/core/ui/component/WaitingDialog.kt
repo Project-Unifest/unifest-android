@@ -535,6 +535,27 @@ fun NoShowWaitingCancelDialog(
     }
 }
 
+
+@Composable
+fun NoShowAlertDialog(
+    onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit,
+) {
+    UnifestTheme {
+        UnifestDialog(
+            onDismissRequest = {},
+            titleResId = R.string.waiting_no_show_title,
+            iconResId = designR.drawable.ic_caution,
+            iconDescription = "Caution Icon",
+            descriptionResId = R.string.waiting_no_show_alert_description,
+            confirmTextResId = R.string.waiting_no_show_button,
+            cancelTextResId = R.string.waiting_no_show_cancel,
+            onCancelClick = onCancelClick,
+            onConfirmClick = onConfirmClick,
+        )
+    }
+}
+
 @ComponentPreview
 @Composable
 private fun WaitingPinDialogPreview() {

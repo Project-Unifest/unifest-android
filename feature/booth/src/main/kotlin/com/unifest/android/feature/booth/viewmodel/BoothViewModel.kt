@@ -74,6 +74,8 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
             is BoothUiAction.OnRunningClick -> expandRunningTime()
+            is BoothUiAction.OnMoveClick -> navigateToWaiting()
+            is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
         }
     }
 
@@ -89,7 +91,7 @@ class BoothViewModel @Inject constructor(
 
                     when {
                         matchingBooth?.status == "NOSHOW" -> {
-                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_noshow)))
+                            setNoShowDialogVisible(true)
                         }
 
                         matchingBooth != null -> {
@@ -194,6 +196,13 @@ class BoothViewModel @Inject constructor(
     private fun navigateToBoothLocation() {
         viewModelScope.launch {
             _uiEvent.send(BoothUiEvent.NavigateToBoothLocation)
+        }
+    }
+
+    private fun navigateToWaiting() {
+        setNoShowDialogVisible(false)
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.NavigateToWaiting)
         }
     }
 
@@ -420,6 +429,12 @@ class BoothViewModel @Inject constructor(
     private fun setWaitingDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isWaitingDialogVisible = flag)
+        }
+    }
+
+    private fun setNoShowDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNoShowDialogVisible = flag)
         }
     }
 
