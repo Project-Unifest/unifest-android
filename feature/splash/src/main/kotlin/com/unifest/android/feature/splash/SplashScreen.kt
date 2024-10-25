@@ -50,7 +50,6 @@ internal fun SplashRoute(
 //        }
             viewModel.refreshFCMToken()
         }
-
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
