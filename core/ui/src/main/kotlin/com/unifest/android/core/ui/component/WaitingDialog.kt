@@ -604,3 +604,14 @@ private fun WaitingConfirmDialogPreview() {
         )
     }
 }
+
+@ComponentPreview
+@Composable
+private fun NoShowAlertDialogPreview() {
+    UnifestTheme {
+        NoShowAlertDialog(
+            onCancelClick = { },
+            onConfirmClick = { },
+        )
+    }
+}

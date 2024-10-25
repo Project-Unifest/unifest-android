@@ -33,8 +33,8 @@
     <string name="waiting_cancel_dialog_description">정말 취소 하시겠습니까?</string>
     <string name="waiting_no_show_dialog_title">부재 웨이팅을 지웁니다</string>
     <string name="waiting_no_show_dialog_description">문제가 있는 경우 해당 부스 운영자에 문의바랍니다</string>
-    <string name="waiting_no_show_title">웨이팅 부재 처리된 부스입니다</string>
-    <string name="waiting_no_show_alert_description">해당 부스에서 다시 웨이팅하려면 부재 웨이팅을 지워야해요. 웨이팅 탭으로 이동하시겠어요?</string>
+    <string name="waiting_no_show_title">부재 처리된 부스에요</string>
+    <string name="waiting_no_show_alert_description">다시 웨이팅하려면 부재 웨이팅을 지워야해요. \n웨이팅 탭으로 이동하시겠어요?</string>
     <string name="waiting_no_show_button">이동하기</string>
     <string name="waiting_no_show_cancel">취소</string>
 
