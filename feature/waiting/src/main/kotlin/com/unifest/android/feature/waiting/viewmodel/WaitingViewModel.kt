@@ -47,6 +47,9 @@ class WaitingViewModel @Inject constructor(
     }
 
     fun getMyWaitingList() {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
         viewModelScope.launch {
             delay(1000)
             waitingRepository.getMyWaitingList()
@@ -58,6 +61,9 @@ class WaitingViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@WaitingViewModel)
                 }
+        }
+        _uiState.update {
+            it.copy(isLoading = false)
         }
     }
 

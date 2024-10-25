@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.clickableSingle
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -241,6 +242,10 @@ internal fun WaitingScreen(
             onCancelClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick) },
             onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick) },
         )
+    }
+
+    if (waitingUiState.isLoading) {
+        LoadingWheel(modifier = Modifier.fillMaxSize())
     }
 }
 
