@@ -8,6 +8,7 @@ import com.unifest.android.core.data.repository.WaitingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +36,7 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCancelNoShowWaitingClick -> setNoShowWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
-            is WaitingUiAction.OnPullToRefresh -> setNetworkErrorDialogVisible(false)
+            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList()
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
@@ -47,6 +48,7 @@ class WaitingViewModel @Inject constructor(
 
     fun getMyWaitingList() {
         viewModelScope.launch {
+            delay(1000)
             waitingRepository.getMyWaitingList()
                 .onSuccess { waitingLists ->
                     _uiState.update {
