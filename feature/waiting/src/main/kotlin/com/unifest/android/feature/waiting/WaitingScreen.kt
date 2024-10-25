@@ -76,7 +76,7 @@ internal fun WaitingRoute(
         }
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.getMyWaitingList()
+        viewModel.getMyWaitingList(false)
     }
 
     WaitingScreen(

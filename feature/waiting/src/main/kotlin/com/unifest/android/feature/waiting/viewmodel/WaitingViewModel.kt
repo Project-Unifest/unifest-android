@@ -28,7 +28,7 @@ class WaitingViewModel @Inject constructor(
     val uiEvent: Flow<WaitingUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        getMyWaitingList()
+        getMyWaitingList(isRefresh = false)
     }
 
     fun onWaitingUiAction(action: WaitingUiAction) {
@@ -36,22 +36,22 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCancelNoShowWaitingClick -> setNoShowWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
-            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList()
+            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList(true)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick -> cancelBoothNoShowWaiting()
             is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
-            is WaitingUiAction.OnRefresh -> getMyWaitingList()
+            is WaitingUiAction.OnRefresh -> getMyWaitingList(true)
         }
     }
 
-    fun getMyWaitingList() {
+    fun getMyWaitingList(isRefresh: Boolean) {
         _uiState.update {
             it.copy(isLoading = true)
         }
         viewModelScope.launch {
-            delay(1000)
+            if (isRefresh) delay(1000)
             waitingRepository.getMyWaitingList()
                 .onSuccess { waitingLists ->
                     _uiState.update {
@@ -61,9 +61,9 @@ class WaitingViewModel @Inject constructor(
                 .onFailure { exception ->
                     handleException(exception, this@WaitingViewModel)
                 }
-        }
-        _uiState.update {
-            it.copy(isLoading = false)
+            _uiState.update {
+                it.copy(isLoading = false)
+            }
         }
     }
 
@@ -85,7 +85,7 @@ class WaitingViewModel @Inject constructor(
         viewModelScope.launch {
             waitingRepository.cancelBoothWaiting(_uiState.value.waitingCancelDialogWaitingId)
                 .onSuccess {
-                    getMyWaitingList()
+                    getMyWaitingList(false)
                     setWaitingCancelDialogVisible(false)
                 }
                 .onFailure { exception ->
@@ -99,7 +99,7 @@ class WaitingViewModel @Inject constructor(
         viewModelScope.launch {
             waitingRepository.cancelBoothWaiting(_uiState.value.waitingCancelDialogWaitingId)
                 .onSuccess {
-                    getMyWaitingList()
+                    getMyWaitingList(false)
                     setNoShowWaitingCancelDialogVisible(false)
                 }
                 .onFailure { exception ->
