@@ -51,7 +51,6 @@ import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.NoShowAlertDialog
-import com.unifest.android.core.ui.component.NoShowWaitingCancelDialog
 import com.unifest.android.core.ui.component.WaitingConfirmDialog
 import com.unifest.android.core.ui.component.WaitingDialog
 import com.unifest.android.core.ui.component.WaitingPinDialog
@@ -237,7 +236,7 @@ fun BoothDetailScreen(
             )
         }
 
-        if(uiState.isNoShowDialogVisible) {
+        if (uiState.isNoShowDialogVisible) {
             NoShowAlertDialog(
                 onCancelClick = { onAction(BoothUiAction.OnNoShowDialogCancelClick) },
                 onConfirmClick = { onAction(BoothUiAction.OnMoveClick) },
