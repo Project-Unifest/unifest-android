@@ -50,6 +50,7 @@ import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.NoShowAlertDialog
 import com.unifest.android.core.ui.component.WaitingConfirmDialog
 import com.unifest.android.core.ui.component.WaitingDialog
 import com.unifest.android.core.ui.component.WaitingPinDialog
@@ -73,6 +74,7 @@ internal fun BoothDetailRoute(
     padding: PaddingValues,
     onBackClick: () -> Unit,
     navigateToBoothLocation: () -> Unit,
+    navigateToWaiting: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -101,6 +103,7 @@ internal fun BoothDetailRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> onBackClick()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
+            is BoothUiEvent.NavigateToWaiting -> navigateToWaiting()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
             is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
             is BoothUiEvent.ShowSnackBar -> {
@@ -230,6 +233,13 @@ fun BoothDetailScreen(
                 waitingPartySize = uiState.waitingPartySize,
                 waitingTeamNumber = uiState.waitingTeamNumber,
                 onConfirmClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
+            )
+        }
+
+        if (uiState.isNoShowDialogVisible) {
+            NoShowAlertDialog(
+                onCancelClick = { onAction(BoothUiAction.OnNoShowDialogCancelClick) },
+                onConfirmClick = { onAction(BoothUiAction.OnMoveClick) },
             )
         }
     }

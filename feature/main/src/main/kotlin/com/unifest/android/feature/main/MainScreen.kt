@@ -101,6 +101,7 @@ internal fun MainScreen(
                 navController = navigator.navController,
                 popBackStack = navigator::popBackStackIfNotMap,
                 navigateToBoothLocation = navigator::navigateToBoothLocation,
+                navigateToWaiting = navigator::navigateToWaiting,
             )
             waitingNavGraph(
                 padding = innerPadding,

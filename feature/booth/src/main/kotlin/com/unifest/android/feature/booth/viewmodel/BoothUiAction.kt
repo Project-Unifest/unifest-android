@@ -23,6 +23,8 @@ sealed interface BoothUiAction {
     data object OnPrivatePolicyClick : BoothUiAction
     data object OnThirdPartyPolicyClick : BoothUiAction
     data object OnRunningClick : BoothUiAction
+    data object OnMoveClick : BoothUiAction
+    data object OnNoShowDialogCancelClick : BoothUiAction
 }
 
 enum class ErrorType {

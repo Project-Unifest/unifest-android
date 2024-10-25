@@ -23,15 +23,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+//  import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+//  import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
+//  import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.clickableSingle
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -56,7 +57,7 @@ import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
-import kotlinx.coroutines.delay
+//  import kotlinx.coroutines.delay
 
 @Composable
 internal fun WaitingRoute(
@@ -75,7 +76,7 @@ internal fun WaitingRoute(
         }
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.getMyWaitingList()
+        viewModel.getMyWaitingList(false)
     }
 
     WaitingScreen(
@@ -92,20 +93,20 @@ internal fun WaitingScreen(
     waitingUiState: WaitingUiState,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
-    val pullToRefreshState = rememberPullToRefreshState()
+//    val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
-        if (pullToRefreshState.isRefreshing) {
-            delay(1000)
-            onWaitingUiAction(WaitingUiAction.OnRefresh)
-            pullToRefreshState.endRefresh()
-        }
-    }
+//    LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
+//        if (pullToRefreshState.isRefreshing) {
+//            delay(1000)
+//            onWaitingUiAction(WaitingUiAction.OnRefresh)
+//            pullToRefreshState.endRefresh()
+//        }
+//    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection)
+//            .nestedScroll(pullToRefreshState.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
@@ -192,12 +193,12 @@ internal fun WaitingScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
-        if (pullToRefreshState.isRefreshing) {
-            PullToRefreshContainer(
-                modifier = Modifier.align(Alignment.TopCenter),
-                state = pullToRefreshState,
-            )
-        }
+//        if (pullToRefreshState.isRefreshing) {
+//            PullToRefreshContainer(
+//                modifier = Modifier.align(Alignment.TopCenter),
+//                state = pullToRefreshState,
+//            )
+//        }
     }
     if (waitingUiState.myWaitingList.isEmpty()) {
         Box(
@@ -241,6 +242,10 @@ internal fun WaitingScreen(
             onCancelClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick) },
             onConfirmClick = { onWaitingUiAction(WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick) },
         )
+    }
+
+    if (waitingUiState.isLoading) {
+        LoadingWheel(modifier = Modifier.fillMaxSize())
     }
 }
 
