@@ -36,7 +36,7 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCancelNoShowWaitingClick -> setNoShowWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
-            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList(true)
+//            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList(false)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
