@@ -24,34 +24,3 @@ internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, 
         }
     }
 }
-
-// internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *>) {
-//     extension.apply {
-//         buildFeatures {
-//             compose = true
-//         }
-//
-//         composeOptions {
-//             kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
-//         }
-//
-//         dependencies {
-//             implementation(libs.androidx.compose.bom)
-//             androidTestImplementation(libs.androidx.compose.bom)
-//             implementation(libs.bundles.androidx.compose)
-//         }
-//     }
-//
-//     tasks.withType<KotlinCompile>().configureEach {
-//         kotlinOptions {
-//             freeCompilerArgs = freeCompilerArgs + listOf(
-//                 "-P",
-//                 "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$rootDir/report/compose-metrics",
-//             )
-//             freeCompilerArgs = freeCompilerArgs + listOf(
-//                 "-P",
-//                 "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$rootDir/report/compose-reports",
-//             )
-//         }
-//     }
-// }

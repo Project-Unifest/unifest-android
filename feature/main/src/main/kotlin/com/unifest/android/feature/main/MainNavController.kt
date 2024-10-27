@@ -21,7 +21,7 @@ import com.unifest.android.feature.menu.navigation.navigateToMenu
 import com.unifest.android.feature.stamp.navigation.navigateToStamp
 import com.unifest.android.feature.waiting.navigation.navigateToWaiting
 
-internal class MainNavigator(
+internal class MainNavController(
     val navController: NavHostController,
 ) {
     private val currentDestination: NavDestination?
@@ -34,11 +34,6 @@ internal class MainNavigator(
         @Composable get() = MainTab.find { tab ->
             currentDestination?.hasRoute(tab::class) == true
         }
-
-//    val currentTab: MainTab?
-//        @Composable get() = currentDestination
-//            ?.route
-//            ?.let(MainTab.Companion::find)
 
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
@@ -85,13 +80,6 @@ internal class MainNavigator(
         }
     }
 
-//    // https://github.com/droidknights/DroidKnights2023_App/pull/243/commits/4bfb6d13908eaaab38ab3a59747d628efa3893cb
-//    fun popBackStackIfNotMap() {
-//        if (!isSameCurrentDestination(HOME_ROUTE)) {
-//            popBackStack()
-//        }
-//    }
-
     fun clearBackStack() {
         val options = NavOptions.Builder()
             .setPopUpTo(navController.graph.findStartDestination().id, inclusive = false)
@@ -103,24 +91,15 @@ internal class MainNavigator(
         return navController.currentDestination?.hasRoute<T>() == true
     }
 
-//    private fun isSameCurrentDestination(route: String) =
-//        navController.currentDestination?.route == route
-
     @Composable
     fun shouldShowBottomBar() = MainTab.contains {
         currentDestination?.hasRoute(it::class) == true
     }
-
-//    @Composable
-//    fun shouldShowBottomBar(): Boolean {
-//        val currentRoute = currentDestination?.route ?: return false
-//        return currentRoute in MainTab
-//    }
 }
 
 @Composable
-internal fun rememberMainNavigator(
+internal fun rememberMainNavController(
     navController: NavHostController = rememberNavController(),
-): MainNavigator = remember(navController) {
-    MainNavigator(navController)
+): MainNavController = remember(navController) {
+    MainNavController(navController)
 }

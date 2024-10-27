@@ -10,7 +10,6 @@ internal enum class MainTab(
     internal val contentDescription: String,
     val label: String,
     val route: MainTabRoute,
-    // val route: String,
 ) {
     HOME(
         iconResId = R.drawable.ic_home,
@@ -18,7 +17,6 @@ internal enum class MainTab(
         contentDescription = "Home Icon",
         label = "홈",
         route = MainTabRoute.Home,
-        // route = HOME_ROUTE,
     ),
     MAP(
         iconResId = R.drawable.ic_map,
@@ -26,7 +24,6 @@ internal enum class MainTab(
         contentDescription = "Map Icon",
         label = "지도",
         route = MainTabRoute.Map,
-        // route = MAP_ROUTE,
     ),
     WAITING(
         iconResId = R.drawable.ic_waiting,
@@ -34,7 +31,6 @@ internal enum class MainTab(
         contentDescription = "Waiting Icon",
         label = "웨이팅",
         route = MainTabRoute.Waiting,
-        // route = WAITING_ROUTE,
     ),
     STAMP(
         iconResId = R.drawable.ic_stamp,
@@ -42,16 +38,13 @@ internal enum class MainTab(
         contentDescription = "Stamp Icon",
         label = "스탬프",
         route = MainTabRoute.Stamp,
-        // route = STAMP_ROUTE,
     ),
-
     MENU(
         iconResId = R.drawable.ic_menu,
         selectedIconResId = R.drawable.ic_selected_menu,
         contentDescription = "Menu Icon",
         label = "메뉴",
         route = MainTabRoute.Menu,
-        // route = MENU_ROUTE,
     ),
     ;
 
@@ -66,14 +59,4 @@ internal enum class MainTab(
             return entries.map { it.route }.any { predicate(it) }
         }
     }
-
-//    companion object {
-//        operator fun contains(route: String): Boolean {
-//            return entries.map { it.route }.contains(route)
-//        }
-//
-//        fun find(route: String): MainTab? {
-//            return entries.find { it.route == route }
-//        }
-//    }
 }

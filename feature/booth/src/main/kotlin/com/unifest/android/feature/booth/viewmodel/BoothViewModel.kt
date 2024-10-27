@@ -36,11 +36,6 @@ class BoothViewModel @Inject constructor(
     private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
-    companion object {
-        private const val BOOTH_ID = "boothId"
-    }
-
-    // private val boothId: Long = requireNotNull(savedStateHandle.get<Long>(BOOTH_ID)) { "boothId is required." }
     private val boothId = savedStateHandle.toRoute<Route.Booth.BoothDetail>().boothId
 
     private val _uiState = MutableStateFlow(BoothUiState())

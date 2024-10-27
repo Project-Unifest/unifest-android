@@ -7,7 +7,6 @@ import org.gradle.kotlin.dsl.configure
 internal class AndroidApplicationComposeConventionPlugin : BuildLogicConventionPlugin(
     {
         applyPlugins(Plugins.ANDROID_APPLICATION, Plugins.KOTLIN_COMPOSE)
-        // applyPlugins(Plugins.ANDROID_APPLICATION)
 
         extensions.configure<ApplicationExtension> {
             configureCompose(this)

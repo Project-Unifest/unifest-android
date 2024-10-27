@@ -8,11 +8,8 @@ import androidx.navigation.compose.composable
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.feature.waiting.WaitingRoute
 
-// const val WAITING_ROUTE = "waiting_route"
-
 fun NavController.navigateToWaiting(navOptions: NavOptions) {
     navigate(MainTabRoute.Waiting, navOptions)
-    // navigate(WAITING_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.waitingNavGraph(
@@ -21,7 +18,6 @@ fun NavGraphBuilder.waitingNavGraph(
     navigateToBoothDetail: (Long) -> Unit,
 ) {
     composable<MainTabRoute.Waiting> {
-    // composable(route = WAITING_ROUTE) {
         WaitingRoute(
             padding = padding,
             popBackStack = popBackStack,
