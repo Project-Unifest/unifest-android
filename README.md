@@ -1,7 +1,7 @@
 # unifest-android
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-8.7-green.svg)](https://gradle.org/)
-[![Android Studio](https://img.shields.io/badge/Android%20Studio-2023.2.1%20%28Iguana%29-green)](https://developer.android.com/studio)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-2024.1.1%20%28Koala%29-green)](https://developer.android.com/studio)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 <br/>
@@ -61,6 +61,7 @@
 
 - Dagger Hilt
 - Retrofit, OkHttp
+- Firebase(Analytics, Crashlytics)
 - Timber
 - [Compose-Stable-Marker](https://github.com/skydoves/compose-stable-marker)
 - [Landscapist](https://github.com/skydoves/landscapist), Coil-Compose
@@ -69,7 +70,7 @@
 - [Naver-Map-Compose](https://github.com/fornewid/naver-map-compose)
 - [Balloon](https://github.com/skydoves/Balloon)
 - [Calendar](https://github.com/kizitonwose/Calendar)
-- Firebase(Analytics, Crashlytics)
+- [Zxing](https://github.com/journeyapps/zxing-android-embedded)
 
 #### Test & Code analysis
 
@@ -105,6 +106,7 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 │   ├── datastore
 │   ├── designsystem
 │   ├── model
+│   ├── navigation
 │   ├── network
 │   └── ui
 ├── feature
@@ -118,6 +120,7 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 │   ├── menu
 │   ├── navigator
 │   ├── splash
+│   ├── stamp
 │   └── waiting
 ├── gradle
 │   └── libs.versions.toml

@@ -1,7 +1,7 @@
-import com.unifest.android.applyPlugins
-import com.unifest.android.implementation
-import com.unifest.android.libs
-import com.unifest.android.project
+import com.unifest.android.convention.applyPlugins
+import com.unifest.android.convention.implementation
+import com.unifest.android.convention.libs
+import com.unifest.android.convention.project
 import org.gradle.kotlin.dsl.dependencies
 
 internal class AndroidFeatureConventionPlugin : BuildLogicConventionPlugin(

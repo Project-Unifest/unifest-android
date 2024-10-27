@@ -9,14 +9,14 @@ import kotlinx.collections.immutable.persistentListOf
 internal class MenuPreviewParameterProvider : PreviewParameterProvider<MenuUiState> {
     override val values = sequenceOf(
         MenuUiState(
-            festivals = persistentListOf(
+            likedFestivals = persistentListOf(
                 FestivalModel(
                     1,
                     1,
                     "https://picsum.photos/36",
                     "서울대학교",
                     "서울",
-                    "설대축제",
+                    "설대축제 설대축제 설대축제",
                     "2024-04-21",
                     "2024-04-23",
                     126.957f,
