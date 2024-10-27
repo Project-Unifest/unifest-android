@@ -7,9 +7,9 @@ versionCode = "24"
 versionName = "1.2.3"
 packageName = "com.unifest.android"
 
-android-gradle-plugin = "8.2.2"
-# kotlin-core = "2.0.20"
-kotlin-core = "1.9.24"
+android-gradle-plugin = "8.5.2"
+kotlin-core = "2.0.21"
+# kotlin-core = "1.9.24"
 gradle-dependency-handler-extensions = "1.1.0"
 
 google-secrets = "2.0.1"
@@ -19,9 +19,10 @@ kotlin-detekt = "1.23.6"
 kotlin-ktlint-gradle = "11.6.1"
 kotlin-ktlint-source = "0.50.0"
 
-kotlinx-coroutines = "1.8.0"
-kotlinx-datetime = "0.5.0"
-kotlinx-serialization = "1.6.3"
+kotlinx-coroutines = "1.9.0"
+kotlinx-datetime = "0.6.0"
+kotlinx-serialization = "1.7.3"
+# kotlinx-serialization = "1.6.3"
 kotlinx-serialization-converter = "1.0.0"
 kotlinx-collections-immutable = "0.3.8"
 
@@ -31,29 +32,29 @@ androidx-core = "1.13.1"
 androidx-lifecycle = "2.8.6"
 androidx-splash = "1.0.1"
 androidx-startup = "1.2.0"
-androidx-navigation = "2.8.2"
+androidx-navigation = "2.8.3"
 androidx-datastore = "1.1.1"
 androidx-room = "2.6.1"
-androidx-activity-compose = "1.9.2"
-androidx-compose-compiler = "1.5.14"
-androidx-compose-bom = "2024.05.00"
-androidx-compose = "1.7.3"
+androidx-activity-compose = "1.9.3"
+#androidx-compose-compiler = "1.5.14"
+#androidx-compose-bom = "2024.05.00"
+androidx-compose = "1.7.4"
 androidx-compose-material3 = "1.2.1"
 androidx-compose-animation = "1.7.0-alpha08"
 androidx-hilt-navigation-compose = "1.2.0"
 
-desugar-jdk-libs = "2.0.4"
+desugar-jdk-libs = "2.1.2"
 hilt = "2.52"
 javax-inject = "1"
 retrofit = "2.11.0"
 okhttp = "5.0.0-alpha.14"
 coil-compose = "2.7.0"
 timber = "5.0.1"
-firebase-bom = "33.4.0"
+firebase-bom = "33.5.1"
 firebase-crashlytics = "3.0.2"
 firebase-config = "21.6.3"
-# ksp = "2.0.20-1.0.25"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.21-1.0.25"
+# ksp = "1.9.24-1.0.20"
 compose-extensions = "1.6.8"
 compose-stable-marker = "1.0.4"
 # compose-investigator = "1.5.11-0.2.1"
@@ -93,22 +94,22 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-# androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidx-compose" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
+# androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+# androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
-# androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidx-compose" }
-androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended"}
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
+# androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended"}
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
-# androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidx-compose" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
-# androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidx-compose" }
+# androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-# androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
+# androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-# androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidx-compose" }
+# androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+# androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }

@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.unifest.android
+package com.unifest.android.convention
 
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
@@ -25,7 +25,7 @@ internal val Project.isAndroidProject: Boolean
     get() = pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION) ||
         pluginManager.hasPlugin(Plugins.ANDROID_LIBRARY)
 
-internal val Project.androidExtensions: CommonExtension<*, *, *, *, *>
+internal val Project.androidExtensions: CommonExtension<*, *, *, *, *, *>
     get() {
         return if (pluginManager.hasPlugin(Plugins.ANDROID_APPLICATION)) {
             extensions.getByType<BaseAppModuleExtension>()
