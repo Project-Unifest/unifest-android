@@ -1,4 +1,4 @@
-package com.unifest.android
+package com.unifest.android.convention
 
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.dsl.DependencyHandler

@@ -1,8 +1,8 @@
 import com.android.build.gradle.LibraryExtension
-import com.unifest.android.Plugins
-import com.unifest.android.applyPlugins
-import com.unifest.android.configureAndroid
-import com.unifest.android.libs
+import com.unifest.android.convention.Plugins
+import com.unifest.android.convention.applyPlugins
+import com.unifest.android.convention.configureAndroid
+import com.unifest.android.convention.libs
 import org.gradle.kotlin.dsl.configure
 
 internal class AndroidLibraryConventionPlugin : BuildLogicConventionPlugin({

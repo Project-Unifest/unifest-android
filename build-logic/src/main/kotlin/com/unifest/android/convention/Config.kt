@@ -1,4 +1,4 @@
-package com.unifest.android
+package com.unifest.android.convention
 
 internal object ApplicationConfig {
     val JavaVersion = org.gradle.api.JavaVersion.VERSION_17
