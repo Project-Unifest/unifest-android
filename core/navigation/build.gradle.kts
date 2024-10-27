@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.unifest.android.library)
+    alias(libs.plugins.unifest.android.library.compose)
     alias(libs.plugins.kotlin.serialization)
 }
 

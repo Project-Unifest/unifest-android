@@ -21,4 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.unifest.android.feature.map.model.** { *; }
-
+-keep class com.unifest.android.core.navigation.** { *; }
