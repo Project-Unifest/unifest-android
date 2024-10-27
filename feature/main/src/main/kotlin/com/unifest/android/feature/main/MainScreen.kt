@@ -37,7 +37,7 @@ private const val SnackBarDuration = 1000L
 
 @Composable
 internal fun MainScreen(
-    navigator: MainNavController = rememberMainNavController(),
+    navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val snackBarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -131,7 +131,7 @@ internal fun MainScreen(
 }
 
 @Composable
-private fun HandleNewIntent(navigator: MainNavController) {
+private fun HandleNewIntent(navigator: MainNavigator) {
     val activity = LocalContext.current as ComponentActivity
     DisposableEffect(Unit) {
         val onNewIntentConsumer = Consumer<Intent> { intent ->
