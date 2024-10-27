@@ -17,8 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.Content8
+import com.unifest.android.feature.menu.R
 
 @Composable
 fun MenuItem(
@@ -60,4 +63,14 @@ fun MenuItem(
             )
         }
     }
+}
+
+@ComponentPreview
+@Composable
+private fun MenuItemPreview() {
+    MenuItem(
+        icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
+        title = "메뉴",
+        onClick = {},
+    )
 }
