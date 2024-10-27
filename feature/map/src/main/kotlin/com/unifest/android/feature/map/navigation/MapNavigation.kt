@@ -9,11 +9,8 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.feature.map.MapRoute
 
-// const val MAP_ROUTE = "map_route"
-
 fun NavController.navigateToMap(navOptions: NavOptions) {
     navigate(MainTabRoute.Map, navOptions)
-    // navigate(MAP_ROUTE, navOptions)
 }
 
 fun NavGraphBuilder.mapNavGraph(
@@ -22,7 +19,6 @@ fun NavGraphBuilder.mapNavGraph(
     onShowSnackBar: (UiText) -> Unit,
 ) {
     composable<MainTabRoute.Map> {
-    // composable(route = MAP_ROUTE) {
         MapRoute(
             padding = padding,
             navigateToBoothDetail = navigateToBoothDetail,
