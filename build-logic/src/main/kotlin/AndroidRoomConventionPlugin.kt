@@ -1,9 +1,9 @@
 import androidx.room.gradle.RoomExtension
-import com.unifest.android.Plugins
-import com.unifest.android.applyPlugins
-import com.unifest.android.implementation
-import com.unifest.android.ksp
-import com.unifest.android.libs
+import com.unifest.android.convention.Plugins
+import com.unifest.android.convention.applyPlugins
+import com.unifest.android.convention.implementation
+import com.unifest.android.convention.ksp
+import com.unifest.android.convention.libs
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 

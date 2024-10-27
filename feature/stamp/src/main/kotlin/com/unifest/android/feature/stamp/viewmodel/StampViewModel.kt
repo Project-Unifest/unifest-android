@@ -9,6 +9,7 @@ import com.unifest.android.core.data.repository.StampRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,9 +44,10 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    fun getCollectedStampCount() {
+    fun getCollectedStampCount(isRefresh: Boolean = false) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+            if (isRefresh) delay(1000)
             stampRepository.getCollectedStampCount()
                 .onSuccess { collectedStampCount ->
                     _uiState.update {
@@ -81,7 +83,7 @@ class StampViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        getCollectedStampCount()
+        getCollectedStampCount(isRefresh = true)
     }
 
     private fun requestLocationPermission() {

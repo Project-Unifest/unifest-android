@@ -307,13 +307,6 @@ internal fun StampScreen(
                     }
                     Spacer(modifier = Modifier.height(21.dp))
                 }
-                if (uiState.isLoading) {
-                    LoadingWheel(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.Center),
-                    )
-                }
             }
         }
 
@@ -333,6 +326,10 @@ internal fun StampScreen(
                 stampBoothList = uiState.stampBoothList,
                 onAction = onAction,
             )
+        }
+
+        if (uiState.isLoading) {
+            LoadingWheel(modifier = Modifier.fillMaxSize())
         }
     }
 }
