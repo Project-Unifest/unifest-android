@@ -20,7 +20,6 @@ class IntroActivity : ComponentActivity() {
     lateinit var mainNavigator: MainNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             val systemUiController = rememberExSystemUiController()
