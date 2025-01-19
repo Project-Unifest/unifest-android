@@ -66,7 +66,12 @@ class QRScanViewModel @Inject constructor(
     fun scan(entryCode: String) {
         Timber.d("스캔 결과: $entryCode")
         viewModelScope.launch {
-            _uiEvent.send(QRScanUiEvent.ScanSuccess(entryCode))
+            val boothId = entryCode.toLongOrNull()
+            if (boothId != null) {
+                _uiEvent.send(QRScanUiEvent.ScanSuccess(entryCode))
+            } else {
+                handleException(NumberFormatException("Invalid QR code: $entryCode"), this@QRScanViewModel)
+            }
         }
     }
 

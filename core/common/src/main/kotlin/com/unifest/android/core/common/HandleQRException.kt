@@ -35,6 +35,11 @@ fun handleException(exception: Throwable, actions: QRErrorHandlerActions) {
             actions.setServerErrorDialogVisible(true)
         }
 
+        is NumberFormatException -> {
+            Timber.e(exception)
+            actions.showErrorMessage(UiText.StringResource(R.string.not_found_stamp))
+        }
+
         else -> {
             Timber.e(exception)
         }

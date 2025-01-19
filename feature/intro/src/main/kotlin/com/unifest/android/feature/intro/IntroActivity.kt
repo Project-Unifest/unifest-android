@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.navigator.MainNavigator
@@ -20,7 +19,6 @@ class IntroActivity : ComponentActivity() {
     lateinit var mainNavigator: MainNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             val systemUiController = rememberExSystemUiController()
