@@ -72,7 +72,7 @@ private const val SnackBarDuration = 1000L
 @Composable
 internal fun BoothDetailRoute(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
     navigateToBoothLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
@@ -101,7 +101,7 @@ internal fun BoothDetailRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is BoothUiEvent.NavigateBack -> onBackClick()
+            is BoothUiEvent.NavigateBack -> popBackStack()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
             is BoothUiEvent.NavigateToWaiting -> navigateToWaiting()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)

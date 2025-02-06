@@ -33,14 +33,14 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BoothLocationRoute(
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     BoothLocationScreen(
         uiState = uiState,
-        onBackClick = onBackClick,
+        popBackStack = popBackStack,
     )
 }
 
@@ -48,7 +48,7 @@ fun BoothLocationRoute(
 @Composable
 fun BoothLocationScreen(
     uiState: BoothUiState,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
@@ -81,7 +81,7 @@ fun BoothLocationScreen(
         }
 
         BoothLocationAppBar(
-            onBackClick = onBackClick,
+            onBackClick = popBackStack,
             boothName = uiState.boothDetailInfo.name,
             boothLocation = uiState.boothDetailInfo.location,
             modifier = Modifier.align(Alignment.TopCenter),
@@ -98,7 +98,7 @@ fun BoothLocationScreenPreview(
     UnifestTheme {
         BoothLocationScreen(
             uiState = boothUiState,
-            onBackClick = {},
+            popBackStack = {},
         )
     }
 }
