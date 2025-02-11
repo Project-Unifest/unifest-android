@@ -44,7 +44,7 @@ class MessagingRepositoryImpl @Inject constructor(
             RegisterFCMTokenRequest(
                 deviceId = deviceId,
                 fcmToken = fcmToken,
-            )
+            ),
         )
     }
 }

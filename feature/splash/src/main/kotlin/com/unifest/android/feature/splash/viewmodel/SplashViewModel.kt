@@ -53,7 +53,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
             likedFestivalRepository.setRecentLikedFestivalId(2L)
-            _uiEvent.send(SplashUiEvent.NavigateToMain)
         }
     }
 

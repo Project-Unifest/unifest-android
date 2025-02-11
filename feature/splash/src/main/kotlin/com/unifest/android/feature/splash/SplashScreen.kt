@@ -37,6 +37,7 @@ internal fun SplashRoute(
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
             viewModel.refreshFCMToken()
+            navigateToMain()
         }
     }
 
