@@ -61,10 +61,11 @@ class SplashViewModel @Inject constructor(
     fun refreshFCMToken() {
         viewModelScope.launch {
             try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
+                val fcmToken = messagingRepository.refreshFCMToken()
+                fcmToken?.let { token ->
+                    Timber.d("New FCM token: $token")
+                    messagingRepository.registerFCMToken(token)
+                    messagingRepository.setFCMToken(token)
                     // 한국교통대학교로 고정
                     setRecentLikedFestival()
                 }
