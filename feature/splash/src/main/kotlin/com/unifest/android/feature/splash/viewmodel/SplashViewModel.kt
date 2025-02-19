@@ -64,7 +64,11 @@ class SplashViewModel @Inject constructor(
                 fcmToken?.let { token ->
                     Timber.d("New FCM token: $token")
                     messagingRepository.registerFCMToken(token)
-                    messagingRepository.setFCMToken(token)
+                        .onSuccess {
+                            messagingRepository.setFCMToken(token)
+                        }.onFailure { exception ->
+                            Timber.e(exception, "Error registering FCM token")
+                        }
                     // 한국교통대학교로 고정
                     setRecentLikedFestival()
                 }
