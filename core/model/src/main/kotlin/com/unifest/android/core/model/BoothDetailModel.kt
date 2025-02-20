@@ -17,8 +17,8 @@ data class BoothDetailModel(
     val likes: Int = 0,
     val isLiked: Boolean = false,
     val waitingEnabled: Boolean = false,
-    val openTime: String = "",
-    val closeTime: String = "",
+    val scheduleList: List<ScheduleModel> = emptyList(),
+    val stampEnabled: Boolean = false,
 )
 
 @Stable
@@ -42,4 +42,20 @@ data class WaitingModel(
     val status: String = "",
     val waitingOrder: Long = 0L,
     val boothName: String = "",
+)
+
+@Stable
+data class ScheduleModel(
+    val id: Long,
+    val date: String,
+    val openTime: TimeModel,
+    val closeTime: TimeModel,
+)
+
+@Stable
+data class TimeModel(
+    val hour: Int,
+    val minute: Int,
+    val second: Int,
+    val nano: Int,
 )
