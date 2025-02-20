@@ -12,7 +12,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-val boothFilters = persistentListOf("체험", "푸드트럭", "교내", "교외", "의무실", "화장실")
+val boothFilters = persistentListOf("주점", "먹거리", "이벤트", "일반", "의무실", "화장실")
 
 @Composable
 fun BoothFilterChips(
@@ -42,7 +42,7 @@ private fun BoothFilterChipsPreview() {
     UnifestTheme {
         BoothFilterChips(
             onChipClick = {},
-            selectedChips = persistentListOf("체험", "푸드트럭"),
+            selectedChips = persistentListOf("주점", "먹거리"),
         )
     }
 }
