@@ -272,8 +272,7 @@ fun BoothDetailContent(
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
                 isRunning = uiState.isRunning,
-                openTime = uiState.boothDetailInfo.openTime,
-                closeTime = uiState.boothDetailInfo.closeTime,
+                scheduleList = uiState.boothDetailInfo.scheduleList,
                 onAction = onAction,
             )
         }
