@@ -11,10 +11,9 @@ import java.time.format.DateTimeFormatter
  * @return 날짜, 요일별 부스 운영시간
  */
 fun ScheduleModel.toFormattedString(): String {
-    // 날짜 파싱
+    // LocalDate 타입으로 변환
     val localDate = LocalDate.parse(this.date)
 
-    // 요일 구하기 (월, 화, 수, 목, 금, 토, 일)
     val dayOfWeekKorean = when (localDate.dayOfWeek.value) {
         1 -> "월"
         2 -> "화"
@@ -26,7 +25,6 @@ fun ScheduleModel.toFormattedString(): String {
         else -> ""
     }
 
-    // 시간 파싱 및 포맷팅
     val openLocalTime = LocalTime.parse(this.openTime)
     val closeLocalTime = LocalTime.parse(this.closeTime)
 
@@ -34,6 +32,5 @@ fun ScheduleModel.toFormattedString(): String {
     val formattedOpenTime = openLocalTime.format(timeFormatter)
     val formattedCloseTime = closeLocalTime.format(timeFormatter)
 
-    // 최종 형식 반환
     return "${localDate.monthValue}월 ${localDate.dayOfMonth}일 $dayOfWeekKorean $formattedOpenTime-$formattedCloseTime"
 }
