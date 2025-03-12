@@ -55,7 +55,7 @@ fun BoothDescription(
     warning: String,
     description: String,
     location: String,
-    isRunning: Boolean,
+    isScheduleExpanded: Boolean,
     scheduleList: ImmutableList<ScheduleModel>,
     onAction: (BoothUiAction) -> Unit,
 ) {
@@ -67,7 +67,7 @@ fun BoothDescription(
 
     // 현재 시간과 날짜 가져오기
     val currentTime = LocalTime.now()
-    val currentDate = java.time.LocalDate.now()
+    val currentDate = LocalDate.now()
 
     // 부스가 현재 운영 중인지 확인
     val isBoothRunning = scheduleList.any { schedule ->
@@ -120,7 +120,7 @@ fun BoothDescription(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(top = 8.dp)
-                .clickable { onAction(BoothUiAction.OnRunningClick) },
+                .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
@@ -141,7 +141,7 @@ fun BoothDescription(
                 tint = Color.Unspecified,
             )
         }
-        AnimatedVisibility(visible = isRunning) {
+        AnimatedVisibility(visible = isScheduleExpanded) {
             LazyColumn(
                 modifier = Modifier
                     .height((23 * scheduleList.size).dp)
@@ -200,7 +200,7 @@ private fun BoothDescriptionPreview() {
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
             location = "공학관",
-            isRunning = true,
+            isScheduleExpanded = false,
             scheduleList = persistentListOf(
                 ScheduleModel(
                     id = 14,

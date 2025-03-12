@@ -272,7 +272,7 @@ fun BoothDetailContent(
                 warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
-                isRunning = uiState.isRunning,
+                isScheduleExpanded = uiState.isScheduleExpanded,
                 scheduleList = uiState.boothDetailInfo.scheduleList.toImmutableList(),
                 onAction = onAction,
             )
