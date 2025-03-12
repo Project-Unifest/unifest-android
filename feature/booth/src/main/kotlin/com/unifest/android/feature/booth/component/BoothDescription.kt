@@ -2,8 +2,11 @@ package com.unifest.android.feature.booth.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unifest.android.core.common.extension.toFormattedString
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
@@ -39,6 +43,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
@@ -48,7 +54,7 @@ fun BoothDescription(
     description: String,
     location: String,
     isRunning: Boolean,
-    scheduleList: List<ScheduleModel>,
+    scheduleList: ImmutableList<ScheduleModel>,
     onAction: (BoothUiAction) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -72,6 +78,7 @@ fun BoothDescription(
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp)
             .animateContentSize(),
     ) {
@@ -126,14 +133,18 @@ fun BoothDescription(
         }
         AnimatedVisibility(visible = isRunning) {
             LazyColumn(
-                modifier = Modifier.height((14 * scheduleList.size).dp)
+                modifier = Modifier
+                    .height((23 * scheduleList.size).dp)
+                    .padding(start = 24.dp),
+                contentPadding = PaddingValues(vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
                 items(
                     items = scheduleList,
                     key = { it.id },
                 ) { schedule ->
                     Text(
-                        text = "${schedule.date} ${schedule.openTime}-${schedule.closeTime}",
+                        text = schedule.toFormattedString(),
                         color = MaterialTheme.colorScheme.onBackground,
                         style = BoothLocation,
                     )
@@ -172,7 +183,7 @@ fun BoothDescription(
 
 @ComponentPreview
 @Composable
-fun BoothDescriptionPreview() {
+private fun BoothDescriptionPreview() {
     UnifestTheme {
         BoothDescription(
             name = "공대주점",
@@ -180,7 +191,20 @@ fun BoothDescriptionPreview() {
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
             location = "공학관",
             isRunning = true,
-            scheduleList = emptyList(),
+            scheduleList = persistentListOf(
+                ScheduleModel(
+                    id = 14,
+                    date = "2025-03-12",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+                ScheduleModel(
+                    id = 15,
+                    date = "2025-03-12",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+            ),
             onAction = {},
         )
     }

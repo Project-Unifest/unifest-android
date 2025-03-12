@@ -63,6 +63,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import com.unifest.android.feature.booth.viewmodel.ErrorType
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
@@ -272,7 +273,7 @@ fun BoothDetailContent(
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
                 isRunning = uiState.isRunning,
-                scheduleList = uiState.boothDetailInfo.scheduleList,
+                scheduleList = uiState.boothDetailInfo.scheduleList.toImmutableList(),
                 onAction = onAction,
             )
         }
