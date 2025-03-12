@@ -48,14 +48,6 @@ data class WaitingModel(
 data class ScheduleModel(
     val id: Long,
     val date: String,
-    val openTime: TimeModel,
-    val closeTime: TimeModel,
-)
-
-@Stable
-data class TimeModel(
-    val hour: Int,
-    val minute: Int,
-    val second: Int,
-    val nano: Int,
+    val openTime: String,
+    val closeTime: String,
 )

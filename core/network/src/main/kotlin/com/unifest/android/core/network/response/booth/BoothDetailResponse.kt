@@ -50,19 +50,7 @@ data class Schedule(
     @SerialName("date")
     val date: String,
     @SerialName("openTime")
-    val openTime: Time,
+    val openTime: String,
     @SerialName("closeTime")
-    val closeTime: Time,
-)
-
-@Serializable
-data class Time(
-    @SerialName("hour")
-    val hour: Int,
-    @SerialName("minute")
-    val minute: Int,
-    @SerialName("second")
-    val second: Int,
-    @SerialName("nano")
-    val nano: Int,
+    val closeTime: String,
 )

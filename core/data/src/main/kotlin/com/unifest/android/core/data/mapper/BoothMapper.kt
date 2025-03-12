@@ -6,7 +6,6 @@ import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.core.model.StampBoothModel
-import com.unifest.android.core.model.TimeModel
 import com.unifest.android.core.model.WaitingModel
 import com.unifest.android.core.network.response.Waiting
 import com.unifest.android.core.network.response.booth.Booth
@@ -15,7 +14,6 @@ import com.unifest.android.core.network.response.booth.LikedBooth
 import com.unifest.android.core.network.response.booth.Menu
 import com.unifest.android.core.network.response.booth.Schedule
 import com.unifest.android.core.network.response.booth.StampBooth
-import com.unifest.android.core.network.response.booth.Time
 
 internal fun BoothDetail.toModel(): BoothDetailModel {
     return BoothDetailModel(
@@ -39,17 +37,8 @@ internal fun Schedule.toModel(): ScheduleModel {
     return ScheduleModel(
         id = id,
         date = date,
-        openTime = openTime.toModel(),
-        closeTime = closeTime.toModel(),
-    )
-}
-
-internal fun Time.toModel(): TimeModel {
-    return TimeModel(
-        hour = hour,
-        minute = minute,
-        second = second,
-        nano = nano,
+        openTime = openTime,
+        closeTime = closeTime,
     )
 }
 
