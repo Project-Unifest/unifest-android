@@ -45,6 +45,8 @@ import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import java.time.LocalDate
+import java.time.LocalTime
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
@@ -63,18 +65,25 @@ fun BoothDescription(
         screenWidth * (2 / 3f)
     }
 
-//    val (openTimeFormatted, openLocalTime) = parseAndFormatTime(openTime)
-//    val (closeTimeFormatted, closeLocalTime) = parseAndFormatTime(closeTime)
-//
-//    // 현재 시간 가져오기
-//    val currentTime = LocalTime.now()
-//
-//    // 부스 운영 여부 확인
-//    val isBoothRunning = openLocalTime != null && closeLocalTime != null &&
-//        currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
-//
-//    // 부스 운영 여부 확인 안됨
-//    val isBoothRunningDetailProvided = openLocalTime != null && closeLocalTime != null
+    // 현재 시간과 날짜 가져오기
+    val currentTime = LocalTime.now()
+    val currentDate = java.time.LocalDate.now()
+
+    // 부스가 현재 운영 중인지 확인
+    val isBoothRunning = scheduleList.any { schedule ->
+        // 날짜 확인
+        val scheduleDate = LocalDate.parse(schedule.date)
+        val isToday = scheduleDate.equals(currentDate)
+
+        // 오늘 날짜면 시간 확인
+        if (isToday) {
+            val openLocalTime = LocalTime.parse(schedule.openTime)
+            val closeLocalTime = LocalTime.parse(schedule.closeTime)
+            currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
+        } else {
+            false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -120,7 +129,8 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = stringResource(id = R.string.booth_is_running),
+                text = if (isBoothRunning) stringResource(id = R.string.booth_is_running)
+                else stringResource(id = R.string.booth_is_closed),
                 color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
@@ -137,7 +147,7 @@ fun BoothDescription(
                     .height((23 * scheduleList.size).dp)
                     .padding(start = 24.dp),
                 contentPadding = PaddingValues(vertical = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(7.dp)
+                verticalArrangement = Arrangement.spacedBy(7.dp),
             ) {
                 items(
                     items = scheduleList,
@@ -200,7 +210,7 @@ private fun BoothDescriptionPreview() {
                 ),
                 ScheduleModel(
                     id = 15,
-                    date = "2025-03-12",
+                    date = "2025-03-13",
                     openTime = "10:00:00",
                     closeTime = "18:00:00",
                 ),
