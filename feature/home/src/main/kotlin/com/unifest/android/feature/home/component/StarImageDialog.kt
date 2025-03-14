@@ -1,4 +1,4 @@
-package com.unifest.android.feature.home
+package com.unifest.android.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
