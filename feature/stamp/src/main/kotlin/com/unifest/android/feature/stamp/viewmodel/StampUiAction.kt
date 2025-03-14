@@ -9,4 +9,6 @@ sealed interface StampUiAction {
     data class OnPermissionDialogButtonClick(val buttonType: PermissionDialogButtonType) : StampUiAction
     data object OnDismiss : StampUiAction
     data class OnStampBoothItemClick(val boothId: Long) : StampUiAction
+    data object OnDropDownMenuClick: StampUiAction
+    data object OnDropDownMenuDismiss : StampUiAction
 }

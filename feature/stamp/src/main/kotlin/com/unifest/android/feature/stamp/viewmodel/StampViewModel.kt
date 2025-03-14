@@ -41,6 +41,8 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
+            is StampUiAction.OnDropDownMenuClick -> showDropDownMenu()
+            is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
         }
     }
 
@@ -137,6 +139,18 @@ class StampViewModel @Inject constructor(
     private fun navigateToBoothDetail(boothId: Long) {
         viewModelScope.launch {
             _uiEvent.send(StampUiEvent.NavigateToBoothDetail(boothId))
+        }
+    }
+
+    private fun showDropDownMenu() {
+        _uiState.update {
+            it.copy(isDropDownMenuOpened = true)
+        }
+    }
+
+    private fun hideDropDownMenu() {
+        _uiState.update {
+            it.copy(isDropDownMenuOpened = false)
         }
     }
 

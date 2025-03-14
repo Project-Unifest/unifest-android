@@ -72,6 +72,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.CameraPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
+import com.unifest.android.feature.stamp.component.SchoolsDropDownMenu
 import com.unifest.android.feature.stamp.component.StampBoothBottomSheet
 import com.unifest.android.feature.stamp.component.StampButton
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
@@ -179,7 +180,14 @@ internal fun StampScreen(
                     style = BoothTitle2,
                 )
             }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            SchoolsDropDownMenu(
+                schools = uiState.stampAvailableSchools,
+                isDropDownMenuOpened = uiState.isDropDownMenuOpened,
+                onAction = onAction,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -322,7 +330,7 @@ internal fun StampScreen(
 
         if (uiState.isStampBoothDialogVisible) {
             StampBoothBottomSheet(
-                schoolName = uiState.schoolName,
+                schoolName = uiState.selectedSchool.name,
                 stampBoothList = uiState.stampBoothList,
                 onAction = onAction,
             )
