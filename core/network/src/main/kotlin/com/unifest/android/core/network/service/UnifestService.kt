@@ -125,7 +125,7 @@ interface UnifestService {
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
-    // 스탬프 조화
+    // 스탬프 조회
     @GET("stamps")
     suspend fun getCollectedStampCount(
         @Query("token") token: String,
