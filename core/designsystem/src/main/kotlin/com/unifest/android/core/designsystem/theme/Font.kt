@@ -207,3 +207,9 @@ val QRDescription = TextStyle(
     fontWeight = FontWeight.Light,
     fontSize = 13.sp,
 )
+
+val StampSchools = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 18.sp,
+)

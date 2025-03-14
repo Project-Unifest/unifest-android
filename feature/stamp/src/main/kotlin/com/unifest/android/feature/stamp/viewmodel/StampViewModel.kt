@@ -43,6 +43,7 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
             is StampUiAction.OnDropDownMenuClick -> showDropDownMenu()
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
+            is StampUiAction.OnSchoolSelect -> updateSelectedSchool(action.school)
         }
     }
 
@@ -151,6 +152,17 @@ class StampViewModel @Inject constructor(
     private fun hideDropDownMenu() {
         _uiState.update {
             it.copy(isDropDownMenuOpened = false)
+        }
+    }
+
+    private fun updateSelectedSchool(school: School) {
+        if (_uiState.value.selectedSchool == school) return
+
+        _uiState.update {
+            it.copy(
+                selectedSchool = school,
+                isDropDownMenuOpened = false,
+            )
         }
     }
 

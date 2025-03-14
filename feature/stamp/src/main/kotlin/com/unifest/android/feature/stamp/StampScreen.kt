@@ -182,10 +182,13 @@ internal fun StampScreen(
             }
             Spacer(modifier = Modifier.height(12.dp))
             SchoolsDropDownMenu(
-                schools = uiState.stampAvailableSchools,
                 isDropDownMenuOpened = uiState.isDropDownMenuOpened,
+                schools = uiState.stampAvailableSchools,
+                selectedSchool = uiState.selectedSchool,
                 onAction = onAction,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
             Box(
@@ -204,7 +207,7 @@ internal fun StampScreen(
                         Spacer(modifier = Modifier.width(24.dp))
                         Column {
                             Text(
-                                text = "한국교통대학교",
+                                text = uiState.selectedSchool.name,
                                 color = MaterialTheme.colorScheme.onBackground,
                                 style = Title1,
                             )
