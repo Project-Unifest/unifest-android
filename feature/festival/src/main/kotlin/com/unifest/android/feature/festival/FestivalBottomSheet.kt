@@ -94,7 +94,7 @@ fun FestivalSearchBottomSheet(
                 )
             }
         },
-        windowInsets = WindowInsets(top = 0),
+        contentWindowInsets = { WindowInsets(top = 0) },
         modifier = Modifier
             .fillMaxHeight()
             .padding(top = 18.dp),

@@ -74,7 +74,7 @@ fun StampBoothBottomSheet(
                 )
             }
         },
-        windowInsets = WindowInsets(top = 0),
+        contentWindowInsets = { WindowInsets(top = 0) },
         modifier = Modifier
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.surface)
