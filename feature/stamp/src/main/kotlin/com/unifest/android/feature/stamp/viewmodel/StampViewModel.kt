@@ -51,9 +51,9 @@ class StampViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
             stampRepository.getCollectedStampCount()
-                .onSuccess { collectedStampCount ->
+                .onSuccess { stampRecordList ->
                     _uiState.update {
-                        it.copy(collectedStampCount = collectedStampCount)
+                        it.copy(collectedStampCount = stampRecordList.size)
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)

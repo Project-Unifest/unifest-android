@@ -6,7 +6,7 @@ import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.core.model.WaitingModel
-import com.unifest.android.core.network.response.Waiting
+import com.unifest.android.core.network.response.waiting.Waiting
 import com.unifest.android.core.network.response.booth.Booth
 import com.unifest.android.core.network.response.booth.BoothDetail
 import com.unifest.android.core.network.response.booth.LikedBooth
@@ -80,23 +80,5 @@ internal fun Waiting.toModel(): WaitingModel {
         status = status,
         waitingOrder = waitingOrder ?: 0L,
         boothName = boothName,
-    )
-}
-
-internal fun StampBooth.toModel(): StampBoothModel {
-    return StampBoothModel(
-        id = id,
-        name = name,
-        category = category,
-        description = description,
-        thumbnail = thumbnail,
-        location = location,
-        latitude = latitude,
-        longitude = longitude,
-        enabled = enabled,
-        waitingEnabled = waitingEnabled,
-        openTime = openTime,
-        closeTime = closeTime,
-        stampEnabled = stampEnabled,
     )
 }

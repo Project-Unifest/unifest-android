@@ -8,15 +8,15 @@ import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.response.booth.AllBoothsResponse
 import com.unifest.android.core.network.response.booth.BoothDetailResponse
-import com.unifest.android.core.network.response.CheckPinValidationResponse
+import com.unifest.android.core.network.response.waiting.CheckPinValidationResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
 import com.unifest.android.core.network.response.booth.LikeBoothResponse
 import com.unifest.android.core.network.response.booth.LikedBoothsResponse
-import com.unifest.android.core.network.response.MyWaitingResponse
+import com.unifest.android.core.network.response.waiting.MyWaitingResponse
 import com.unifest.android.core.network.response.booth.PopularBoothsResponse
-import com.unifest.android.core.network.response.CollectedStampCountResponse
-import com.unifest.android.core.network.response.WaitingResponse
+import com.unifest.android.core.network.response.stamp.CollectedStampCountResponse
+import com.unifest.android.core.network.response.waiting.WaitingResponse
 import com.unifest.android.core.network.response.booth.StampBoothsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -128,7 +128,7 @@ interface UnifestService {
     // 스탬프 조회
     @GET("stamps")
     suspend fun getCollectedStampCount(
-        @Query("token") token: String,
+        @Query("deviceId") token: String,
     ): CollectedStampCountResponse
 
     // 스탬프 추가

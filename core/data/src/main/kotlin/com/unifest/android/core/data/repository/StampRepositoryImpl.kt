@@ -17,7 +17,7 @@ internal class StampRepositoryImpl @Inject constructor(
 ) : StampRepository {
     override suspend fun getCollectedStampCount() = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.getCollectedStampCount(deviceId).data
+        service.getCollectedStampCount(deviceId).data.map { it.toModel()}
     }
 
     override suspend fun getStampEnabledBoothList() = runSuspendCatching {

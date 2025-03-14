@@ -76,8 +76,8 @@ private fun SchoolsDropDownMenuPreview() {
         SchoolsDropDownMenu(
             isDropDownMenuOpened = true,
             schools = persistentListOf(
-                School(1, "한국교통대학교"),
-                School(2, "서울시립대학교"),
+                School(1, "서울시립대학교"),
+                School(2, "한국교통대학교"),
                 School(3, "한양대학교"),
                 School(4, "고려대학교"),
                 School(5, "홍익대학교"),
