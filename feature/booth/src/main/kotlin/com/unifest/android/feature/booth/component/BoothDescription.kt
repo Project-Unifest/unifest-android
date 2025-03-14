@@ -126,7 +126,7 @@ fun BoothDescription(
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
                 imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
-                contentDescription = "arrow below",
+                contentDescription = "Arrow Down",
                 tint = Color.Unspecified,
             )
         }

@@ -204,19 +204,38 @@ internal fun StampScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Spacer(modifier = Modifier.width(24.dp))
+                        Spacer(modifier = Modifier.width(25.dp))
                         Column {
                             Text(
-                                text = uiState.selectedSchool.name,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                style = Title1,
+                                text = buildAnnotatedString {
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                                        append("${uiState.collectedStampCount}")
+                                    }
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                                        append(" / ${uiState.stampBoothList.size}개")
+                                    }
+                                },
+                                style = StampCount,
                             )
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.stamp_collection_status),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = Content1,
-                            )
+                            Row(
+                                modifier = Modifier.clickableSingle {
+                                    onAction(StampUiAction.OnRefreshClick)
+                                },
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.refresh),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = Content2,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
+                                    contentDescription = "refresh icon",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         StampButton(
@@ -227,45 +246,7 @@ internal fun StampScreen(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(21.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                    append("${uiState.collectedStampCount}")
-                                }
-                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
-                                    append(" / ${uiState.stampBoothList.size} 개")
-                                }
-                            },
-                            style = StampCount,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Row(
-                            modifier = Modifier.clickableSingle {
-                                onAction(StampUiAction.OnRefreshClick)
-                            },
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.refresh),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = Content2,
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
-                                contentDescription = "refresh icon",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(24.dp))
-                    }
-                    Spacer(modifier = Modifier.height(44.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
@@ -290,7 +271,7 @@ internal fun StampScreen(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(54.dp))
+                    Spacer(modifier = Modifier.height(28.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -311,12 +292,12 @@ internal fun StampScreen(
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = "arrow right icon",
+                            contentDescription = "Arrow Right Icon",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Spacer(modifier = Modifier.width(22.dp))
+                        Spacer(modifier = Modifier.width(21.dp))
                     }
-                    Spacer(modifier = Modifier.height(21.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
             }
         }

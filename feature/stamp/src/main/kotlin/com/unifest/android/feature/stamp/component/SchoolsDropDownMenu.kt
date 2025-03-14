@@ -65,11 +65,8 @@ internal fun SchoolsDropDownMenu(
                     shape = RoundedCornerShape(8.dp),
                 )
                 .clickable {
-                    if (isDropDownMenuOpened) {
-                        onAction(StampUiAction.OnDropDownMenuDismiss)
-                    } else {
-                        onAction(StampUiAction.OnDropDownMenuClick)
-                    }
+                    if (isDropDownMenuOpened) onAction(StampUiAction.OnDropDownMenuDismiss)
+                    else onAction(StampUiAction.OnDropDownMenuClick)
                 },
             verticalAlignment = Alignment.CenterVertically,
         ) {
