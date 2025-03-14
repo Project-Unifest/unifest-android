@@ -31,7 +31,7 @@ import com.unifest.android.core.model.MenuModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuImageDialog(
+internal fun MenuImageDialog(
     onDismissRequest: () -> Unit,
     menu: MenuModel,
     modifier: Modifier = Modifier,

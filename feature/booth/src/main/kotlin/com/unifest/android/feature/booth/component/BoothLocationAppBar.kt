@@ -30,7 +30,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoothLocationAppBar(
+internal fun BoothLocationAppBar(
     onBackClick: () -> Unit,
     boothName: String,
     boothLocation: String,
@@ -83,7 +83,7 @@ fun BoothLocationAppBar(
 
 @ComponentPreview
 @Composable
-fun BoothLocationAppBarPreview() {
+private fun BoothLocationAppBarPreview() {
     UnifestTheme {
         BoothLocationAppBar(
             onBackClick = {},

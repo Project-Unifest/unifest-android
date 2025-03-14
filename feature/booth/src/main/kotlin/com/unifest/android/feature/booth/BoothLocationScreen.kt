@@ -32,7 +32,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun BoothLocationRoute(
+internal fun BoothLocationRoute(
     popBackStack: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
@@ -46,7 +46,7 @@ fun BoothLocationRoute(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun BoothLocationScreen(
+internal fun BoothLocationScreen(
     uiState: BoothUiState,
     popBackStack: () -> Unit,
 ) {
@@ -91,7 +91,7 @@ fun BoothLocationScreen(
 
 @DevicePreview
 @Composable
-fun BoothLocationScreenPreview(
+private fun BoothLocationScreenPreview(
     @PreviewParameter(BoothDetailPreviewParameterProvider::class)
     boothUiState: BoothUiState,
 ) {

@@ -30,7 +30,7 @@ import com.unifest.android.core.model.StarInfoModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StarImageDialog(
+internal fun StarImageDialog(
     onDismissRequest: () -> Unit,
     star: StarInfoModel,
     modifier: Modifier = Modifier,

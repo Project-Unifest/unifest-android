@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StampBoothBottomSheet(
+internal fun StampBoothBottomSheet(
     schoolName: String,
     stampBoothList: ImmutableList<StampBoothModel>,
     onAction: (StampUiAction) -> Unit,
@@ -128,7 +128,7 @@ fun StampBoothBottomSheet(
 
 @ComponentPreview
 @Composable
-fun SchoolSearchBottomSheetPreview() {
+private fun SchoolSearchBottomSheetPreview() {
     UnifestTheme {
         StampBoothBottomSheet(
             schoolName = "",

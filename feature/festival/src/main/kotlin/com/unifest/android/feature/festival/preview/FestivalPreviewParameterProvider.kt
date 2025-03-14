@@ -5,7 +5,7 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import kotlinx.collections.immutable.persistentListOf
 
-class FestivalPreviewParameterProvider : PreviewParameterProvider<FestivalUiState> {
+internal class FestivalPreviewParameterProvider : PreviewParameterProvider<FestivalUiState> {
     override val values = sequenceOf(
         FestivalUiState(
             festivals = persistentListOf(

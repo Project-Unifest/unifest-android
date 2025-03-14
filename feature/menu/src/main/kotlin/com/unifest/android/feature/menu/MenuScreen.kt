@@ -89,7 +89,7 @@ internal fun MenuRoute(
     val uriHandler = LocalUriHandler.current
     val appVersion = remember {
         try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "Unknown"
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.tag("AppVersion").e(e, "Failed to get package info")
             "Unknown"
@@ -133,7 +133,7 @@ internal fun MenuRoute(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MenuScreen(
+internal fun MenuScreen(
     padding: PaddingValues,
     menuUiState: MenuUiState,
     festivalUiState: FestivalUiState,
@@ -379,7 +379,7 @@ fun MenuScreen(
 
 @DevicePreview
 @Composable
-fun MenuScreenPreview(
+private fun MenuScreenPreview(
     @PreviewParameter(MenuPreviewParameterProvider::class)
     menuUiState: MenuUiState,
 ) {

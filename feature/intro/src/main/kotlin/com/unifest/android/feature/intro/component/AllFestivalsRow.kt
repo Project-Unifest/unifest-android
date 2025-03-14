@@ -46,9 +46,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AllFestivalsTabRow(
+internal fun AllFestivalsTabRow(
     festivals: ImmutableList<FestivalModel>,
     isSearchLoading: Boolean,
     onAction: (IntroUiAction) -> Unit,

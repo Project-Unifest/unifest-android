@@ -336,7 +336,7 @@ internal fun StampScreen(
 
 @DevicePreview
 @Composable
-fun StampScreenPreview(
+private fun StampScreenPreview(
     @PreviewParameter(StampPreviewParameterProvider::class)
     stampUiState: StampUiState,
 ) {

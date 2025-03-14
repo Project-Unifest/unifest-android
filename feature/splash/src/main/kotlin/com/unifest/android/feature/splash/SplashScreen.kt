@@ -73,7 +73,7 @@ internal fun SplashRoute(
 }
 
 @Composable
-fun SplashScreen(
+internal fun SplashScreen(
     shouldUpdate: Boolean?,
     uiState: SplashUiState,
     onAction: (SplashUiAction) -> Unit,

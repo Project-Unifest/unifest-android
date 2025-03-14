@@ -41,7 +41,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import java.time.LocalTime
 
 @Composable
-fun BoothDescription(
+internal fun BoothDescription(
     name: String,
     warning: String,
     description: String,
@@ -50,6 +50,7 @@ fun BoothDescription(
     openTime: String,
     closeTime: String,
     onAction: (BoothUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val configuration = LocalConfiguration.current
     val maxWidth = remember(configuration) {
@@ -71,7 +72,7 @@ fun BoothDescription(
     val isBoothRunningDetailProvided = openLocalTime != null && closeLocalTime != null
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 20.dp)
             .animateContentSize(),
     ) {
@@ -178,7 +179,7 @@ fun BoothDescription(
 
 @ComponentPreview
 @Composable
-fun BoothDescriptionPreview() {
+private fun BoothDescriptionPreview() {
     UnifestTheme {
         BoothDescription(
             name = "공대주점",

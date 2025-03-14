@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class QRScanActivity : ComponentActivity() {
+internal class QRScanActivity : ComponentActivity() {
     private val barcodeView: DecoratedBarcodeView by lazy {
         DecoratedBarcodeView(this).apply {
             barcodeView.decoderFactory = DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))

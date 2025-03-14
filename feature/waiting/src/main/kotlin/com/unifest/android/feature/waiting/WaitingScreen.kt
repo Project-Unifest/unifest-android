@@ -23,15 +23,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-//  import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-//  import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-//  import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -57,7 +54,6 @@ import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiEvent
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiState
 import com.unifest.android.feature.waiting.viewmodel.WaitingViewModel
-//  import kotlinx.coroutines.delay
 
 @Composable
 internal fun WaitingRoute(
@@ -86,7 +82,6 @@ internal fun WaitingRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WaitingScreen(
     padding: PaddingValues,
@@ -251,7 +246,7 @@ internal fun WaitingScreen(
 
 @DevicePreview
 @Composable
-fun WaitingScreenPreview(
+private fun WaitingScreenPreview(
     @PreviewParameter(WaitingPreviewParameterProvider::class)
     waitingUiState: WaitingUiState,
 ) {

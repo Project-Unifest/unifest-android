@@ -28,7 +28,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun LikedFestivalsRow(
+internal fun LikedFestivalsRow(
     selectedFestivals: ImmutableList<FestivalModel>,
     onAction: (IntroUiAction) -> Unit,
 ) {

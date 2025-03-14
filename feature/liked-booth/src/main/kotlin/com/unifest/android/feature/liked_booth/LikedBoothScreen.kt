@@ -133,7 +133,7 @@ internal fun LikedBoothScreen(
 
 @DevicePreview
 @Composable
-fun LikedBoothScreenPreview(
+private fun LikedBoothScreenPreview(
     @PreviewParameter(LikedBoothPreviewParameterProvider::class)
     likedBoothUiState: LikedBoothUiState,
 ) {

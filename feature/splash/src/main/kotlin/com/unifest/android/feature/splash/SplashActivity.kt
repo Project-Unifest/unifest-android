@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
-class SplashActivity : ComponentActivity() {
+internal class SplashActivity : ComponentActivity() {
 //    @Inject
 //    lateinit var introNavigator: IntroNavigator
 

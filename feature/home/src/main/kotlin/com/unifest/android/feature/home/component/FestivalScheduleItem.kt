@@ -45,7 +45,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun FestivalScheduleItem(
+internal fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     scheduleIndex: Int,
 //    likedFestivals: ImmutableList<FestivalModel>,
@@ -162,7 +162,7 @@ fun FestivalScheduleItem(
 
 @ComponentPreview
 @Composable
-fun FestivalScheduleItemPreview() {
+private fun FestivalScheduleItemPreview() {
     UnifestTheme {
         FestivalScheduleItem(
             festival = FestivalTodayModel(

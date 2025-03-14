@@ -14,7 +14,7 @@ import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiContro
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class IntroActivity : ComponentActivity() {
+internal class IntroActivity : ComponentActivity() {
     @Inject
     lateinit var mainNavigator: MainNavigator
 

@@ -43,7 +43,7 @@ import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 
 @Composable
-fun BoothItem(
+internal fun BoothItem(
     boothInfo: BoothMapModel,
     isPopularMode: Boolean,
     ranking: Int,
@@ -121,7 +121,7 @@ fun BoothItem(
 }
 
 @Composable
-fun RankingBadge(ranking: Int) {
+internal fun RankingBadge(ranking: Int) {
     Box(
         modifier = Modifier
             .size(width = 43.dp, height = 45.dp)
@@ -141,7 +141,7 @@ fun RankingBadge(ranking: Int) {
 
 @ComponentPreview
 @Composable
-fun BoothItemPreview() {
+private fun BoothItemPreview() {
     UnifestTheme {
         BoothItem(
             boothInfo = BoothMapModel(

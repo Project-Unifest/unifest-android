@@ -24,7 +24,7 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.feature.menu.R
 
 @Composable
-fun MenuItem(
+internal fun MenuItem(
     icon: ImageVector,
     title: String,
     onClick: () -> Unit,

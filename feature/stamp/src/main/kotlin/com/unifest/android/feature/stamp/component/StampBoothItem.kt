@@ -33,7 +33,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampBoothModel
 
 @Composable
-fun StampBoothItem(
+internal fun StampBoothItem(
     stampBooth: StampBoothModel,
     modifier: Modifier = Modifier,
 ) {

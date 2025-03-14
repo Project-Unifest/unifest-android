@@ -187,7 +187,7 @@ fun FestivalSearchBottomSheet(
 
 @ComponentPreview
 @Composable
-fun SchoolSearchBottomSheetPreview(
+private fun SchoolSearchBottomSheetPreview(
     @PreviewParameter(FestivalPreviewParameterProvider::class)
     festivalUiState: FestivalUiState,
 ) {
