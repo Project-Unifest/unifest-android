@@ -6,7 +6,7 @@ import com.unifest.android.core.model.StampRecordModel
 
 interface StampRepository {
     suspend fun getCollectedStamps(): Result<List<StampRecordModel>>
-    suspend fun getStampEnabledBoothList(): Result<List<StampBoothModel>>
+    suspend fun getStampEnabledBooths(): Result<List<StampBoothModel>>
     suspend fun registerStamp(boothId: Long): Result<Unit>
-    suspend fun getStampFestivals(): Result<List<StampFestivalModel>>
+    suspend fun getStampEnabledFestivals(): Result<List<StampFestivalModel>>
 }

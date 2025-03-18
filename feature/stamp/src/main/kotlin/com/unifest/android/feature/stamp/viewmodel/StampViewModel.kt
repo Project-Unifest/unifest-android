@@ -6,6 +6,7 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.repository.StampRepository
+import com.unifest.android.core.model.StampFestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -30,7 +31,8 @@ class StampViewModel @Inject constructor(
     val uiEvent: Flow<StampUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        getStampEnabledBoothList()
+        getStampEnabledFestivals()
+        getStampEnabledBooths()
     }
 
     fun onAction(action: StampUiAction) {
@@ -43,7 +45,7 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
             is StampUiAction.OnDropDownMenuClick -> showDropDownMenu()
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
-            is StampUiAction.OnSchoolSelect -> updateSelectedSchool(action.school)
+            is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
         }
     }
 
@@ -63,9 +65,24 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getStampEnabledBoothList() {
+    private fun getStampEnabledFestivals() {
         viewModelScope.launch {
-            stampRepository.getStampEnabledBoothList()
+            stampRepository.getStampEnabledFestivals()
+                .onSuccess { stampEnabledFestivalList ->
+                    _uiState.update {
+                        it.copy(
+                            stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),
+                        )
+                    }
+                }.onFailure { exception ->
+                    handleException(exception, this@StampViewModel)
+                }
+        }
+    }
+
+    private fun getStampEnabledBooths() {
+        viewModelScope.launch {
+            stampRepository.getStampEnabledBooths()
                 .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(
@@ -155,12 +172,12 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedSchool(school: School) {
-        if (_uiState.value.selectedSchool == school) return
+    private fun updateSelectedFestival(festival: StampFestivalModel) {
+        if (_uiState.value.selectedFestival == festival) return
 
         _uiState.update {
             it.copy(
-                selectedSchool = school,
+                selectedFestival = festival,
                 isDropDownMenuOpened = false,
             )
         }

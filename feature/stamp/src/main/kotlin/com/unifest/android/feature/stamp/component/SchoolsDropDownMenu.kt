@@ -36,8 +36,8 @@ import com.unifest.android.core.designsystem.theme.DarkGrey200
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.StampSchools
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.feature.stamp.R
-import com.unifest.android.feature.stamp.viewmodel.School
 import com.unifest.android.feature.stamp.viewmodel.StampUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -45,8 +45,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun SchoolsDropDownMenu(
     isDropDownMenuOpened: Boolean,
-    schools: ImmutableList<School>,
-    selectedSchool: School,
+    festivals: ImmutableList<StampFestivalModel>,
+    selectedFestival: StampFestivalModel,
     onAction: (StampUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +72,7 @@ internal fun SchoolsDropDownMenu(
         ) {
             Spacer(modifier = Modifier.width(25.dp))
             Text(
-                text = selectedSchool.name,
+                text = selectedFestival.name,
                 modifier = Modifier.weight(1f),
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
@@ -108,14 +108,14 @@ internal fun SchoolsDropDownMenu(
                             .heightIn(max = 240.dp)
                     ) {
                         items(
-                            items = schools,
-                            key = { it.id }
+                            items = festivals,
+                            key = { it.festivalId }
                         ) { school ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        onAction(StampUiAction.OnSchoolSelect(school))
+                                        onAction(StampUiAction.OnFestivalSelect(school))
                                     }
                                     .padding(horizontal = 25.dp, vertical = 15.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -140,14 +140,14 @@ private fun SchoolsDropDownMenuPreview() {
     UnifestTheme {
         SchoolsDropDownMenu(
             isDropDownMenuOpened = true,
-            schools = persistentListOf(
-                School(1, "서울시립대학교"),
-                School(2, "한국교통대학교"),
-                School(3, "한양대학교"),
-                School(4, "고려대학교"),
-                School(5, "홍익대학교"),
+            festivals = persistentListOf(
+                StampFestivalModel(1, "서울시립대학교"),
+                StampFestivalModel(2, "한국교통대학교"),
+                StampFestivalModel(3, "한양대학교"),
+                StampFestivalModel(4, "고려대학교"),
+                StampFestivalModel(5, "홍익대학교"),
             ),
-            selectedSchool = School(1, "서울시립대학교"),
+            selectedFestival = StampFestivalModel(1, "서울시립대학교"),
             onAction = {},
             modifier = Modifier
                 .fillMaxWidth()

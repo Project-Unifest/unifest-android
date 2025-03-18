@@ -1,6 +1,7 @@
 package com.unifest.android.feature.stamp.viewmodel
 
 import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.model.StampFestivalModel
 
 sealed interface StampUiAction {
     data object OnReceiveStampClick : StampUiAction
@@ -11,5 +12,5 @@ sealed interface StampUiAction {
     data class OnStampBoothItemClick(val boothId: Long) : StampUiAction
     data object OnDropDownMenuClick: StampUiAction
     data object OnDropDownMenuDismiss: StampUiAction
-    data class OnSchoolSelect(val school: School) : StampUiAction
+    data class OnFestivalSelect(val festival: StampFestivalModel) : StampUiAction
 }

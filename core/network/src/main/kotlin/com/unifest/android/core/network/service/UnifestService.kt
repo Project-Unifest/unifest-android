@@ -140,11 +140,11 @@ interface UnifestService {
 
     // 스탬프 기능 활성화된 부스 조회
     @GET("stamps/{festival-id}")
-    suspend fun getStampEnabledBoothList(
+    suspend fun getStampEnabledBooths(
         @Path("festival-id") festivalId: Long,
     ): StampBoothsResponse
 
     // 스탬프 기능 지원하는 축제 목록 조회
     @GET("stamps/festivals")
-    suspend fun getStampFestivalList(): StampFestivalsResponse
+    suspend fun getStampEnabledFestivals(): StampFestivalsResponse
 }

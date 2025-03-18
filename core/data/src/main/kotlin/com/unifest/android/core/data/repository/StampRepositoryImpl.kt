@@ -5,7 +5,6 @@ import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
-import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,9 +20,10 @@ internal class StampRepositoryImpl @Inject constructor(
         service.getCollectedStamps(deviceId).data.map { it.toModel()}
     }
 
-    override suspend fun getStampEnabledBoothList() = runSuspendCatching {
+    // TODO festivalId 변경 가능하도록 수정 필요
+    override suspend fun getStampEnabledBooths() = runSuspendCatching {
         val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
-        service.getStampEnabledBoothList(festivalId).data.map { it.toModel() }
+        service.getStampEnabledBooths(festivalId).data.map { it.toModel() }
     }
 
     override suspend fun registerStamp(boothId: Long) = runSuspendCatching {
@@ -31,7 +31,7 @@ internal class StampRepositoryImpl @Inject constructor(
         service.registerStamp(RegisterStampRequest(token = deviceId, boothId = boothId))
     }
 
-    override suspend fun getStampFestivals() = runSuspendCatching {
-        service.getStampFestivalList().data.map { it.toModel() }
+    override suspend fun getStampEnabledFestivals() = runSuspendCatching {
+        service.getStampEnabledFestivals().data.map { it.toModel() }
     }
 }

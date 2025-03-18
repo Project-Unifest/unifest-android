@@ -60,14 +60,12 @@ import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
-import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.DarkGrey200
 import com.unifest.android.core.designsystem.theme.DarkGrey400
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.StampCount
-import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.CameraPermissionTextProvider
@@ -183,8 +181,8 @@ internal fun StampScreen(
             Spacer(modifier = Modifier.height(12.dp))
             SchoolsDropDownMenu(
                 isDropDownMenuOpened = uiState.isDropDownMenuOpened,
-                schools = uiState.stampAvailableSchools,
-                selectedSchool = uiState.selectedSchool,
+                festivals = uiState.stampEnabledFestivalList,
+                selectedFestival = uiState.selectedFestival,
                 onAction = onAction,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -314,7 +312,7 @@ internal fun StampScreen(
 
         if (uiState.isStampBoothDialogVisible) {
             StampBoothBottomSheet(
-                schoolName = uiState.selectedSchool.name,
+                schoolName = uiState.selectedFestival.name,
                 stampBoothList = uiState.stampBoothList,
                 onAction = onAction,
             )
