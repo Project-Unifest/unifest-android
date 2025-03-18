@@ -15,9 +15,9 @@ internal class StampRepositoryImpl @Inject constructor(
     private val service: UnifestService,
     private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
 ) : StampRepository {
-    override suspend fun getCollectedStampCount() = runSuspendCatching {
+    override suspend fun getCollectedStamps() = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.getCollectedStampCount(deviceId).data.map { it.toModel()}
+        service.getCollectedStamps(deviceId).data.map { it.toModel()}
     }
 
     override suspend fun getStampEnabledBoothList() = runSuspendCatching {

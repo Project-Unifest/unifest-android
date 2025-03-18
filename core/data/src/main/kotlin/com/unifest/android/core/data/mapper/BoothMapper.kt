@@ -4,14 +4,12 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
-import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.core.model.WaitingModel
 import com.unifest.android.core.network.response.waiting.Waiting
 import com.unifest.android.core.network.response.booth.Booth
 import com.unifest.android.core.network.response.booth.BoothDetail
 import com.unifest.android.core.network.response.booth.LikedBooth
 import com.unifest.android.core.network.response.booth.Menu
-import com.unifest.android.core.network.response.booth.StampBooth
 
 internal fun BoothDetail.toModel(): BoothDetailModel {
     return BoothDetailModel(

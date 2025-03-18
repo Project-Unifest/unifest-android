@@ -18,7 +18,7 @@ data class StampRecord(
     @SerialName("stampRecordId")
     val stampRecordId: Long,
     @SerialName("stampInfoId")
-    val stampInfoId: Long,
+    val boothId: Long,
     @SerialName("deviceId")
     val deviceId: String,
 )

@@ -17,7 +17,7 @@ import com.unifest.android.core.network.response.waiting.MyWaitingResponse
 import com.unifest.android.core.network.response.booth.PopularBoothsResponse
 import com.unifest.android.core.network.response.stamp.CollectedStampCountResponse
 import com.unifest.android.core.network.response.waiting.WaitingResponse
-import com.unifest.android.core.network.response.booth.StampBoothsResponse
+import com.unifest.android.core.network.response.stamp.StampBoothsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -127,7 +127,7 @@ interface UnifestService {
 
     // 스탬프 조회
     @GET("stamps")
-    suspend fun getCollectedStampCount(
+    suspend fun getCollectedStamps(
         @Query("deviceId") token: String,
     ): CollectedStampCountResponse
 

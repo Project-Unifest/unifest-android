@@ -51,7 +51,7 @@ class StampViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
-            stampRepository.getCollectedStampCount()
+            stampRepository.getCollectedStamps()
                 .onSuccess { stampRecordList ->
                     _uiState.update {
                         it.copy(collectedStampCount = stampRecordList.size)
