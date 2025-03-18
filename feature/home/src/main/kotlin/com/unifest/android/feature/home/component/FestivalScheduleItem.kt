@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatWithDayOfWeek
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.Content5
 import com.unifest.android.core.designsystem.theme.DarkBlueGreen
@@ -39,10 +38,10 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.ui.component.StarImage
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun FestivalScheduleItem(
@@ -50,7 +49,7 @@ internal fun FestivalScheduleItem(
     scheduleIndex: Int,
 //    likedFestivals: ImmutableList<FestivalModel>,
     selectedDate: LocalDate,
-    isStarImageClicked: ImmutableList<Boolean>,
+    // isStarImageClicked: ImmutableList<Boolean>,
     isDataReady: Boolean,
     onHomeUiAction: (HomeUiAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -124,13 +123,13 @@ internal fun FestivalScheduleItem(
                         StarImage(
                             imgUrl = starInfo.imgUrl,
                             onClick = {
-                                onHomeUiAction(HomeUiAction.OnToggleStarImageClick(scheduleIndex, starIndex, !isStarImageClicked[starIndex]))
+                                onHomeUiAction(HomeUiAction.OnStarImageClick(scheduleIndex, starIndex))
                             },
-                            onLongClick = {
-                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
-                            },
-                            isClicked = isStarImageClicked[starIndex],
-                            label = starInfo.name,
+//                            onLongClick = {
+//                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
+//                            },
+//                            isClicked = isStarImageClicked[starIndex],
+//                            label = starInfo.name,
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape),
@@ -178,7 +177,7 @@ private fun FestivalScheduleItemPreview() {
             scheduleIndex = 0,
 //            likedFestivals = persistentListOf(),
             selectedDate = LocalDate.now(),
-            isStarImageClicked = persistentListOf(),
+//            isStarImageClicked = persistentListOf(),
             isDataReady = true,
             onHomeUiAction = {},
         )

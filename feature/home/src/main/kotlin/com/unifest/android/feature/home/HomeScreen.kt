@@ -172,7 +172,7 @@ internal fun HomeScreen(
 //                            likedFestivals = homeUiState.likedFestivals,
                             selectedDate = homeUiState.selectedDate,
                             isDataReady = homeUiState.isDataReady,
-                            isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
+//                            isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
                             onHomeUiAction = onHomeUiAction,
                         )
                     }
