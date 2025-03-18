@@ -49,7 +49,7 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    fun getCollectedStampCount(isRefresh: Boolean = false) {
+    fun getCollectedStamps(isRefresh: Boolean = false) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
@@ -103,7 +103,7 @@ class StampViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        getCollectedStampCount(isRefresh = true)
+        getCollectedStamps(isRefresh = true)
     }
 
     private fun requestLocationPermission() {

@@ -115,7 +115,7 @@ internal fun StampRoute(
 
     val qrScanLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.getCollectedStampCount()
+            viewModel.getCollectedStamps()
         }
     }
 
@@ -137,7 +137,7 @@ internal fun StampRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getCollectedStampCount()
+        viewModel.getCollectedStamps()
     }
 
     StampScreen(
