@@ -18,6 +18,7 @@ import com.unifest.android.core.network.response.booth.PopularBoothsResponse
 import com.unifest.android.core.network.response.stamp.CollectedStampCountResponse
 import com.unifest.android.core.network.response.waiting.WaitingResponse
 import com.unifest.android.core.network.response.stamp.StampBoothsResponse
+import com.unifest.android.core.network.response.stamp.StampFestivalsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -53,7 +54,7 @@ interface UnifestService {
         @Query("date") date: String,
     ): FestivalTodayResponse
 
-    // 상위 5개 부스 확인
+    // 상위 5개 부스 조회
     @GET("api/booths")
     suspend fun getPopularBooths(
         @Query("festivalId") festivalId: Long,
@@ -137,9 +138,13 @@ interface UnifestService {
         @Body registerStampRequest: RegisterStampRequest,
     )
 
-    // 스탬프 기능 활성화된 부스 확인
+    // 스탬프 기능 활성화된 부스 조회
     @GET("stamps/{festival-id}")
     suspend fun getStampEnabledBoothList(
         @Path("festival-id") festivalId: Long,
     ): StampBoothsResponse
+
+    // 스탬프 기능 지원하는 축제 목록 조회
+    @GET("stamps/festivals")
+    suspend fun getStampFestivalList(): StampFestivalsResponse
 }

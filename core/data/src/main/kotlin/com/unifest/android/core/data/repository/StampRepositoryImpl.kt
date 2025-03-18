@@ -5,6 +5,7 @@ import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
+import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,5 +29,9 @@ internal class StampRepositoryImpl @Inject constructor(
     override suspend fun registerStamp(boothId: Long) = runSuspendCatching {
         val deviceId = getDeviceId(context)
         service.registerStamp(RegisterStampRequest(token = deviceId, boothId = boothId))
+    }
+
+    override suspend fun getStampFestivals() = runSuspendCatching {
+        service.getStampFestivalList().data.map { it.toModel() }
     }
 }
