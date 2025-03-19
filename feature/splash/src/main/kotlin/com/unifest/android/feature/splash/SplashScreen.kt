@@ -22,11 +22,12 @@ import com.unifest.android.feature.splash.viewmodel.SplashUiAction
 import com.unifest.android.feature.splash.viewmodel.SplashUiEvent
 import com.unifest.android.feature.splash.viewmodel.SplashUiState
 import com.unifest.android.feature.splash.viewmodel.SplashViewModel
+import androidx.core.net.toUri
 
 @Composable
 internal fun SplashRoute(
     navigateToMain: () -> Unit,
-    // navigateToIntro: () -> Unit,
+    navigateToIntro: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
@@ -42,9 +43,9 @@ internal fun SplashRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-//            is SplashUiEvent.NavigateToIntro -> {
-//                navigateToIntro()
-//            }
+            is SplashUiEvent.NavigateToIntro -> {
+                navigateToIntro()
+            }
 
             is SplashUiEvent.NavigateToMain -> {
                 navigateToMain()
@@ -53,7 +54,7 @@ internal fun SplashRoute(
             is SplashUiEvent.NavigateToPlayStore -> {
                 val playStoreUrl = "http://play.google.com/store/apps/details?id=${BuildConfig.PACKAGE_NAME}"
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(playStoreUrl)
+                    data = playStoreUrl.toUri()
                     setPackage("com.android.vending")
                 }
                 startActivity(context, intent, null)
