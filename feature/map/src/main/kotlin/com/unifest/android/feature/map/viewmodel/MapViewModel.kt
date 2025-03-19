@@ -37,7 +37,7 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
-    private val settingRepository: SettingRepository,
+    settingRepository: SettingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -150,6 +150,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    // TODO 로직 변경
     private fun searchSchoolName() {
         viewModelScope.launch {
             festivalRepository.searchSchool("한국교통대학교")
@@ -166,6 +167,7 @@ class MapViewModel @Inject constructor(
                 }
         }
     }
+
     private fun addLikeFestival(festival: FestivalModel) {
         viewModelScope.launch {
             likedFestivalRepository.registerLikedFestival()

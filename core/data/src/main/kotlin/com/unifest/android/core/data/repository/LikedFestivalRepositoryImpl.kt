@@ -36,6 +36,10 @@ internal class LikedFestivalRepositoryImpl @Inject constructor(
         likedFestivalDao.insertLikedFestival(festival.toEntity())
     }
 
+    override suspend fun insertLikedFestivals(festivals: List<FestivalModel>) {
+        likedFestivalDao.insertLikedFestivals(festivals.map { it.toEntity()})
+    }
+
     override suspend fun deleteLikedFestival(festival: FestivalModel) {
         likedFestivalDao.deleteLikedFestival(festival.toEntity())
     }

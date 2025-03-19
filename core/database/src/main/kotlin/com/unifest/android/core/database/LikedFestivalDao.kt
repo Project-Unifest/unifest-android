@@ -11,10 +11,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LikedFestivalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLikedFestival(userInfo: LikedFestivalEntity)
+    suspend fun insertLikedFestival(festivals: LikedFestivalEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLikedFestivals(festivals: List<LikedFestivalEntity>)
 
     @Delete
-    suspend fun deleteLikedFestival(userInfo: LikedFestivalEntity)
+    suspend fun deleteLikedFestival(festival: LikedFestivalEntity)
 
     @Query("SELECT * FROM liked_festival")
     fun getLikedFestivalList(): Flow<List<LikedFestivalEntity>>
