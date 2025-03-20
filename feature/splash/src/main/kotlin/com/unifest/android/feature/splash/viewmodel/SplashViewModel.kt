@@ -49,14 +49,6 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private fun setRecentLikedFestival() {
-        viewModelScope.launch {
-            likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
-            likedFestivalRepository.setRecentLikedFestivalId(2L)
-            _uiEvent.send(SplashUiEvent.NavigateToMain)
-        }
-    }
-
     @Suppress("TooGenericExceptionCaught")
     fun refreshFCMToken() {
         viewModelScope.launch {
@@ -65,8 +57,6 @@ class SplashViewModel @Inject constructor(
                 token?.let {
                     Timber.d("New FCM token: $it")
                     messagingRepository.setFCMToken(it)
-                    // 한국교통대학교로 고정
-                    setRecentLikedFestival()
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error getting or saving FCM token")

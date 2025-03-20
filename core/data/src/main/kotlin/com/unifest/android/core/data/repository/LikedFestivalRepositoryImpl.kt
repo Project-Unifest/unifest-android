@@ -44,30 +44,22 @@ internal class LikedFestivalRepositoryImpl @Inject constructor(
         likedFestivalDao.deleteLikedFestival(festival.toEntity())
     }
 
-    override suspend fun getRecentLikedFestival(): String {
-        return recentLikedFestivalDataSource.getRecentLikedFestivalName()
+    override suspend fun getRecentLikedFestival(): FestivalModel {
+        return recentLikedFestivalDataSource.getRecentLikedFestival()
     }
 
-    override suspend fun setRecentLikedFestival(festivalName: String) {
-        recentLikedFestivalDataSource.setRecentLikedFestivalName(festivalName)
-    }
-
-    override suspend fun getRecentLikedFestivalId(): Long {
-        return recentLikedFestivalDataSource.getRecentLikedFestivalId()
-    }
-
-    override suspend fun setRecentLikedFestivalId(festivalId: Long) {
-        recentLikedFestivalDataSource.setRecentLikedFestivalId(festivalId)
+    override suspend fun setRecentLikedFestival(festival: FestivalModel) {
+        recentLikedFestivalDataSource.setRecentLikedFestival(festival)
     }
 
     override suspend fun registerLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
         val fcmToken = tokenDataSource.getFCMToken()
         service.registerLikedFestival(LikedFestivalRequest(festivalId, fcmToken))
     }
 
     override suspend fun unregisterLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
         val fcmToken = tokenDataSource.getFCMToken()
         service.unregisterLikedFestival(LikedFestivalRequest(festivalId, fcmToken))
     }

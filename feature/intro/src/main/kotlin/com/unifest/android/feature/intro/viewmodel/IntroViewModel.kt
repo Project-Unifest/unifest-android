@@ -176,8 +176,7 @@ class IntroViewModel @Inject constructor(
         viewModelScope.launch {
             likedFestivalRepository.apply {
                 insertLikedFestivals(_uiState.value.selectedFestivals)
-                setRecentLikedFestivalId(_uiState.value.selectedFestivals.first().festivalId)
-                setRecentLikedFestival(_uiState.value.selectedFestivals.first().festivalName)
+                setRecentLikedFestival(_uiState.value.selectedFestivals.first())
             }
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)

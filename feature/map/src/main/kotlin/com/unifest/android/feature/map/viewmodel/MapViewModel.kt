@@ -123,7 +123,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun dismissDialog() {
-        permissionDialogQueue.removeFirst()
+        permissionDialogQueue.removeAt(0)
     }
 
     private fun filterBoothsByType(chipList: List<String>) {
@@ -150,10 +150,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    // TODO 로직 변경
     private fun searchSchoolName() {
         viewModelScope.launch {
-            festivalRepository.searchSchool("한국교통대학교")
+            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival().schoolName)
                 .onSuccess { festivals ->
                     if (festivals.isNotEmpty()) {
                         _uiState.update {
