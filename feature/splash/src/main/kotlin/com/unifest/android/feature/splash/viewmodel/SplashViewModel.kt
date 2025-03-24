@@ -53,7 +53,6 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
             likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
             likedFestivalRepository.setRecentLikedFestivalId(2L)
-            _uiEvent.send(SplashUiEvent.NavigateToMain)
         }
     }
 
@@ -61,10 +60,15 @@ class SplashViewModel @Inject constructor(
     fun refreshFCMToken() {
         viewModelScope.launch {
             try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
+                val fcmToken = messagingRepository.refreshFCMToken()
+                fcmToken?.let { token ->
+                    Timber.d("New FCM token: $token")
+                    messagingRepository.registerFCMToken(token)
+                        .onSuccess {
+                            messagingRepository.setFCMToken(token)
+                        }.onFailure { exception ->
+                            Timber.e(exception, "Error registering FCM token")
+                        }
                     // 한국교통대학교로 고정
                     setRecentLikedFestival()
                 }
