@@ -60,7 +60,8 @@ class MapViewModel @Inject constructor(
 
     init {
         requestLocationPermission()
-        searchSchoolName()
+        getRecentLikedFestival()
+        // searchSchoolName()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
@@ -84,6 +85,15 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+        }
+    }
+
+    private fun getRecentLikedFestival() {
+        viewModelScope.launch {
+            val recentLikedFestival = likedFestivalRepository.getRecentLikedFestival()
+            _uiState.update {
+                it.copy(festivalInfo = recentLikedFestival)
+            }
         }
     }
 
@@ -150,35 +160,36 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun searchSchoolName() {
-        viewModelScope.launch {
-            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival().schoolName)
-                .onSuccess { festivals ->
-                    if (festivals.isNotEmpty()) {
-                        _uiState.update {
-                            it.copy(festivalInfo = festivals[0])
-                        }
-                        addLikeFestival(festivals[0])
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@MapViewModel)
-                }
-        }
-    }
+//    private fun searchSchoolName() {
+//        viewModelScope.launch {
+//            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival().schoolName)
+//                .onSuccess { festivals ->
+//                    if (festivals.isNotEmpty()) {
+//                        _uiState.update {
+//                            it.copy(festivalInfo = festivals[0])
+//                        }
+//                        addLikeFestival(festivals[0])
+//                    }
+//                }
+//                .onFailure { exception ->
+//                    handleException(exception, this@MapViewModel)
+//                }
+//        }
+//    }
 
-    private fun addLikeFestival(festival: FestivalModel) {
-        viewModelScope.launch {
-            likedFestivalRepository.registerLikedFestival()
-                .onSuccess {
-                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
-                }
-                .onFailure { exception ->
-                    Timber.e(exception)
-                }
-        }
-    }
+//    private fun addLikeFestival(festival: FestivalModel) {
+//        viewModelScope.launch {
+//            likedFestivalRepository.registerLikedFestival()
+//                .onSuccess {
+//                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+//                }
+//                .onFailure { exception ->
+//                    Timber.e(exception)
+//                }
+//        }
+//    }
 
+    // TODO 하드 코딩된 festivalId 제거
     fun getPopularBooths() {
         viewModelScope.launch {
             boothRepository.getPopularBooths(2)
@@ -199,6 +210,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
+    // TODO 하드 코딩된 festivalId 제거
     fun getAllBooths() {
         viewModelScope.launch {
             boothRepository.getAllBooths(2)
@@ -241,7 +253,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun refresh(error: ErrorType) {
-        searchSchoolName()
+        // searchSchoolName()
         getPopularBooths()
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
