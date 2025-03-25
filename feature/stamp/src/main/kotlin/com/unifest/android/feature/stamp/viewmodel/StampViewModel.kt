@@ -43,7 +43,10 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
-            is StampUiAction.OnDropDownMenuClick -> showDropDownMenu()
+            is StampUiAction.OnDropDownMenuClick -> {
+                if (_uiState.value.isDropDownMenuOpened) hideDropDownMenu()
+                else showDropDownMenu()
+            }
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
             is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
         }
