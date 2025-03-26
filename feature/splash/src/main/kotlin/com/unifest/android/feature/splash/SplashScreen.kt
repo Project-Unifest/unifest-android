@@ -39,6 +39,7 @@ internal fun SplashRoute(
         if (shouldUpdate == false) {
             viewModel.checkIntroCompletion()
             viewModel.refreshFCMToken()
+            navigateToMain()
         }
     }
 
@@ -80,13 +81,6 @@ fun SplashScreen(
     uiState: SplashUiState,
     onAction: (SplashUiAction) -> Unit,
 ) {
-    if (uiState.isLoading) {
-        LoadingWheel(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-        )
-    }
     if (shouldUpdate == true) {
         AppUpdateDialog(
             onDismissRequest = { onAction(SplashUiAction.OnUpdateDismissClick) },

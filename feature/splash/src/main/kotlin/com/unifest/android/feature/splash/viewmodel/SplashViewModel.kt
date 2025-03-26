@@ -53,10 +53,15 @@ class SplashViewModel @Inject constructor(
     fun refreshFCMToken() {
         viewModelScope.launch {
             try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
+                val fcmToken = messagingRepository.refreshFCMToken()
+                fcmToken?.let { token ->
+                    Timber.d("New FCM token: $token")
+                    messagingRepository.registerFCMToken(token)
+                        .onSuccess {
+                            messagingRepository.setFCMToken(token)
+                        }.onFailure { exception ->
+                            Timber.e(exception, "Error registering FCM token")
+                        }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error getting or saving FCM token")
