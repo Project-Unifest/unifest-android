@@ -202,7 +202,7 @@ internal fun MapRoute(
     )
 
     LaunchedEffect(key1 = mapUiState.festivalInfo) {
-        if (mapUiState.festivalInfo.schoolName != "") {
+        if (mapUiState.festivalInfo.festivalId != 0L) {
             mapViewModel.getAllBooths(mapUiState.festivalInfo.festivalId)
             mapViewModel.getPopularBooths(mapUiState.festivalInfo.festivalId)
         }
