@@ -3,7 +3,6 @@ package com.unifest.android.feature.stamp.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,11 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothTitle2
-import com.unifest.android.core.designsystem.theme.DarkGrey200
-import com.unifest.android.core.designsystem.theme.DarkGrey300
-import com.unifest.android.core.designsystem.theme.DarkGrey500
-import com.unifest.android.core.designsystem.theme.LightGrey100
-import com.unifest.android.core.designsystem.theme.LightGrey300
 import com.unifest.android.core.designsystem.theme.StampSchools
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampFestivalModel
@@ -62,10 +56,10 @@ internal fun SchoolsDropDownMenu(
                 .fillMaxWidth()
                 .height(56.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100)
+                .background(color = MaterialTheme.colorScheme.surfaceBright)
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     shape = RoundedCornerShape(8.dp),
                 )
                 .clickable {
@@ -100,11 +94,10 @@ internal fun SchoolsDropDownMenu(
                         .padding(horizontal = 20.dp)
                         .border(
                             width = 1.dp,
-                            color = if(isSystemInDarkTheme()) DarkGrey500 else LightGrey300,
+                            color = MaterialTheme.colorScheme.outlineVariant,
                             shape = RoundedCornerShape(8.dp),
                         ),
                     shape = RoundedCornerShape(8.dp),
-                    color = if (isSystemInDarkTheme()) DarkGrey300 else LightGrey100,
                     shadowElevation = 4.dp
                 ) {
                     LazyColumn(
@@ -123,14 +116,14 @@ internal fun SchoolsDropDownMenu(
                                     .clickable(
                                         onClick = { onAction(StampUiAction.OnFestivalSelect(school)) }
                                     )
-                                    .background(color = if (isSystemInDarkTheme()) DarkGrey500 else LightGrey100)
+                                    .background(color = MaterialTheme.colorScheme.inverseSurface)
                                     .padding(horizontal = 25.dp, vertical = 15.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
                                     text = school.name,
                                     style = StampSchools,
-                                    color = if (isSystemInDarkTheme()) LightGrey100 else DarkGrey300
+                                    color = MaterialTheme.colorScheme.inverseOnSurface,
                                 )
                             }
                         }
