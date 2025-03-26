@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.DarkGrey200
@@ -90,9 +91,6 @@ internal fun SchoolsDropDownMenu(
             Popup(
                 alignment = Alignment.TopStart,
                 offset = IntOffset(0, offsetInPx.toInt()),
-                onDismissRequest = {
-                    onAction(StampUiAction.OnDropDownMenuDismiss)
-                }
             ) {
                 Surface(
                     modifier = Modifier

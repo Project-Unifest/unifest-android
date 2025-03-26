@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,8 +45,15 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
             is StampUiAction.OnDropDownMenuClick -> {
-                if (_uiState.value.isDropDownMenuOpened) hideDropDownMenu()
-                else showDropDownMenu()
+                Timber.d("DropDown clicked. current state: ${_uiState.value.isDropDownMenuOpened}")
+                if (_uiState.value.isDropDownMenuOpened) {
+                    hideDropDownMenu()
+                    Timber.d("After hiding: ${_uiState.value.isDropDownMenuOpened}")
+                }
+                else {
+                    showDropDownMenu()
+                    Timber.d("After showing: ${_uiState.value.isDropDownMenuOpened}")
+                }
             }
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
             is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
