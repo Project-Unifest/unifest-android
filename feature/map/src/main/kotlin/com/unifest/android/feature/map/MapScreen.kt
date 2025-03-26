@@ -319,7 +319,7 @@ internal fun MapScreen(
     isClusteringEnabled: Boolean,
 ) {
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(36.970898, 127.871726), 15.2)
+        position = CameraPosition(LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2)
     }
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
@@ -368,7 +368,7 @@ internal fun MapScreen(
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MapContent(
     uiState: MapUiState,
@@ -418,23 +418,25 @@ fun MapContent(
                                     70.0
                                 }
                             }
-                            .distanceStrategy(object : DistanceStrategy {
-                                private val defaultDistanceStrategy = DefaultDistanceStrategy()
+                            .distanceStrategy(
+                                object : DistanceStrategy {
+                                    private val defaultDistanceStrategy = DefaultDistanceStrategy()
 
-                                override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
-                                    return if (zoom <= 9) {
-                                        -1.0
-                                    } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
-                                        if (zoom <= 11) {
+                                    override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
+                                        return if (zoom <= 9) {
                                             -1.0
+                                        } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
+                                            if (zoom <= 11) {
+                                                -1.0
+                                            } else {
+                                                defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                            }
                                         } else {
-                                            defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                            10000.0
                                         }
-                                    } else {
-                                        10000.0
                                     }
-                                }
-                            })
+                                },
+                            )
                             .tagMergeStrategy { cluster ->
                                 if (cluster.maxZoom <= 9) {
                                     null
@@ -442,13 +444,15 @@ fun MapContent(
                                     ItemData("", (cluster.children.first().tag as ItemData).category)
                                 }
                             }
-                            .markerManager(object : DefaultMarkerManager() {
-                                override fun createMarker() = super.createMarker().apply {
-                                    subCaptionTextSize = 10f
-                                    subCaptionColor = android.graphics.Color.WHITE
-                                    subCaptionHaloColor = android.graphics.Color.TRANSPARENT
-                                }
-                            })
+                            .markerManager(
+                                object : DefaultMarkerManager() {
+                                    override fun createMarker() = super.createMarker().apply {
+                                        subCaptionTextSize = 10f
+                                        subCaptionColor = android.graphics.Color.WHITE
+                                        subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                                    }
+                                },
+                            )
                             .clusterMarkerUpdater { info, marker ->
                                 val size = info.size
                                 marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
