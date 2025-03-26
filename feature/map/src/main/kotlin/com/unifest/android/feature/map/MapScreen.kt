@@ -201,9 +201,11 @@ internal fun MapRoute(
         },
     )
 
-    LaunchedEffect(key1 = Unit) {
-        mapViewModel.getAllBooths()
-        mapViewModel.getPopularBooths()
+    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+        if (mapUiState.festivalInfo.schoolName != "") {
+            mapViewModel.getAllBooths(mapUiState.festivalInfo.festivalId)
+            mapViewModel.getPopularBooths(mapUiState.festivalInfo.festivalId)
+        }
     }
 
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->

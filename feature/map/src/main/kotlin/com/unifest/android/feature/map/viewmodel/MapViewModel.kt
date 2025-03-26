@@ -13,7 +13,6 @@ import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.SettingRepository
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
@@ -61,7 +60,6 @@ class MapViewModel @Inject constructor(
     init {
         requestLocationPermission()
         getRecentLikedFestival()
-        // searchSchoolName()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
@@ -160,39 +158,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-//    private fun searchSchoolName() {
-//        viewModelScope.launch {
-//            festivalRepository.searchSchool(likedFestivalRepository.getRecentLikedFestival().schoolName)
-//                .onSuccess { festivals ->
-//                    if (festivals.isNotEmpty()) {
-//                        _uiState.update {
-//                            it.copy(festivalInfo = festivals[0])
-//                        }
-//                        addLikeFestival(festivals[0])
-//                    }
-//                }
-//                .onFailure { exception ->
-//                    handleException(exception, this@MapViewModel)
-//                }
-//        }
-//    }
-
-//    private fun addLikeFestival(festival: FestivalModel) {
-//        viewModelScope.launch {
-//            likedFestivalRepository.registerLikedFestival()
-//                .onSuccess {
-//                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
-//                }
-//                .onFailure { exception ->
-//                    Timber.e(exception)
-//                }
-//        }
-//    }
-
-    // TODO 하드 코딩된 festivalId 제거
-    fun getPopularBooths() {
+    fun getPopularBooths(festivalId: Long) {
         viewModelScope.launch {
-            boothRepository.getPopularBooths(2)
+            boothRepository.getPopularBooths(festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
@@ -210,10 +178,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    // TODO 하드 코딩된 festivalId 제거
-    fun getAllBooths() {
+    fun getAllBooths(festivalId: Long) {
         viewModelScope.launch {
-            boothRepository.getAllBooths(2)
+            boothRepository.getAllBooths(festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
@@ -253,8 +220,8 @@ class MapViewModel @Inject constructor(
     }
 
     private fun refresh(error: ErrorType) {
-        // searchSchoolName()
-        getPopularBooths()
+        getAllBooths(_uiState.value.festivalInfo.festivalId)
+        getPopularBooths(_uiState.value.festivalInfo.festivalId)
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)
@@ -295,7 +262,7 @@ class MapViewModel @Inject constructor(
     private fun setEnablePopularMode() {
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                boothRepository.getPopularBooths(festivalId = 2)
+                boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
                     .onSuccess { booths ->
                         _uiState.update { currentState ->
                             currentState.copy(
