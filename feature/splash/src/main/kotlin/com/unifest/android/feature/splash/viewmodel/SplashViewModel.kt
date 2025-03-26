@@ -20,7 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
     private val messagingRepository: MessagingRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel() {
