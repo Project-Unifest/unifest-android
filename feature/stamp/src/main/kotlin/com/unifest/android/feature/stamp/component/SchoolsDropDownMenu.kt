@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -88,7 +89,7 @@ internal fun SchoolsDropDownMenu(
         if (isDropDownMenuOpened) {
             Popup(
                 alignment = Alignment.TopStart,
-                offset = androidx.compose.ui.unit.IntOffset(0, offsetInPx.toInt()),
+                offset = IntOffset(0, offsetInPx.toInt()),
                 onDismissRequest = {
                     onAction(StampUiAction.OnDropDownMenuDismiss)
                 }
@@ -96,14 +97,17 @@ internal fun SchoolsDropDownMenu(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp), // 부모와 동일한 패딩 적용
+                        .padding(horizontal = 20.dp)
+                        .height(240.dp),
                     shape = RoundedCornerShape(8.dp),
-                    color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100,
+                    // color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100,
+                    color = MaterialTheme.colorScheme.background,
                     shadowElevation = 4.dp
                 ) {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(if (festivals.isEmpty()) 0.dp else (festivals.size * 48).dp)
                             .heightIn(max = 240.dp)
                     ) {
                         items(
@@ -113,9 +117,10 @@ internal fun SchoolsDropDownMenu(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable {
-                                        onAction(StampUiAction.OnFestivalSelect(school))
-                                    }
+                                    .clickable(
+                                        onClick = { onAction(StampUiAction.OnFestivalSelect(school)) }
+                                    )
+                                    .background(MaterialTheme.colorScheme.background)
                                     .padding(horizontal = 25.dp, vertical = 15.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
