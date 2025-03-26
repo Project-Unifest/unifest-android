@@ -318,12 +318,17 @@ internal fun MapScreen(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
-    // TODO 카메라 좌표 업데이트 대응 필요
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2)
-    }
+    val cameraPositionState = rememberCameraPositionState()
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
+
+    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+        if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
+            cameraPositionState.position = CameraPosition(
+                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
