@@ -69,13 +69,12 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.overlay.Align
-import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.unifest.android.core.common.ObserveAsEvents
@@ -107,6 +106,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
 import kotlinx.collections.immutable.persistentListOf
+import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
 val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -318,6 +318,7 @@ internal fun MapScreen(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
+    // TODO 카메라 좌표 업데이트 대응 필요
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2)
     }
@@ -507,7 +508,7 @@ fun MapContent(
             } else {
                 uiState.filteredBoothList.forEach { booth ->
                     ComposeMarker(
-                        state = MarkerState(position = LatLng(booth.latitude, booth.longitude)),
+                        state = rememberMarkerState(position = LatLng(booth.latitude, booth.longitude)),
                         icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
                         onClick = {
                             onMapUiAction(MapUiAction.OnSingleBoothMarkerClick(booth))
