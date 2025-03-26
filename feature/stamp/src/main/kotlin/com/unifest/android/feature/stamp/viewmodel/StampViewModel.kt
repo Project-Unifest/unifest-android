@@ -82,7 +82,7 @@ class StampViewModel @Inject constructor(
                 .onSuccess { stampEnabledFestivalList ->
                     _uiState.update {
                         it.copy(
-                            stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),
+                            // stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),
                         )
                     }
                 }.onFailure { exception ->

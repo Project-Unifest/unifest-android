@@ -31,11 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.DarkGrey200
+import com.unifest.android.core.designsystem.theme.DarkGrey300
+import com.unifest.android.core.designsystem.theme.DarkGrey500
 import com.unifest.android.core.designsystem.theme.LightGrey100
+import com.unifest.android.core.designsystem.theme.LightGrey300
 import com.unifest.android.core.designsystem.theme.StampSchools
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampFestivalModel
@@ -96,10 +98,13 @@ internal fun SchoolsDropDownMenu(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .height(240.dp),
+                        .border(
+                            width = 1.dp,
+                            color = if(isSystemInDarkTheme()) DarkGrey500 else LightGrey300,
+                            shape = RoundedCornerShape(8.dp),
+                        ),
                     shape = RoundedCornerShape(8.dp),
-                    // color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100,
-                    color = MaterialTheme.colorScheme.background,
+                    color = if (isSystemInDarkTheme()) DarkGrey300 else LightGrey100,
                     shadowElevation = 4.dp
                 ) {
                     LazyColumn(
@@ -118,14 +123,14 @@ internal fun SchoolsDropDownMenu(
                                     .clickable(
                                         onClick = { onAction(StampUiAction.OnFestivalSelect(school)) }
                                     )
-                                    .background(MaterialTheme.colorScheme.background)
+                                    .background(color = if (isSystemInDarkTheme()) DarkGrey500 else LightGrey100)
                                     .padding(horizontal = 25.dp, vertical = 15.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
                                     text = school.name,
                                     style = StampSchools,
-                                    color = MaterialTheme.colorScheme.onBackground,
+                                    color = if (isSystemInDarkTheme()) LightGrey100 else DarkGrey300
                                 )
                             }
                         }
