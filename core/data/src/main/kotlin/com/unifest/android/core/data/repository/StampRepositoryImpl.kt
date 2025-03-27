@@ -20,8 +20,7 @@ internal class StampRepositoryImpl @Inject constructor(
         service.getCollectedStamps(deviceId).data.map { it.toModel()}
     }
 
-    override suspend fun getStampEnabledBooths() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
+    override suspend fun getStampEnabledBooths(festivalId: Long) = runSuspendCatching {
         service.getStampEnabledBooths(festivalId).data.map { it.toModel() }
     }
 

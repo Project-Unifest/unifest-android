@@ -33,7 +33,6 @@ class StampViewModel @Inject constructor(
 
     init {
         getStampEnabledFestivals()
-        getStampEnabledBooths()
     }
 
     fun onAction(action: StampUiAction) {
@@ -81,9 +80,7 @@ class StampViewModel @Inject constructor(
             stampRepository.getStampEnabledFestivals()
                 .onSuccess { stampEnabledFestivalList ->
                     _uiState.update {
-                        it.copy(
-                            // stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),
-                        )
+                        it.copy(stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),)
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
@@ -91,9 +88,9 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getStampEnabledBooths() {
+    fun getStampEnabledBooths(festivalId: Long) {
         viewModelScope.launch {
-            stampRepository.getStampEnabledBooths()
+            stampRepository.getStampEnabledBooths(festivalId)
                 .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(

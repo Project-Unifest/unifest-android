@@ -140,6 +140,12 @@ internal fun StampRoute(
         viewModel.getCollectedStamps()
     }
 
+    LaunchedEffect(uiState.selectedFestival) {
+        if (uiState.selectedFestival.festivalId != 0L) {
+            viewModel.getStampEnabledBooths(uiState.selectedFestival.festivalId)
+        }
+    }
+
     StampScreen(
         padding = padding,
         uiState = uiState,
