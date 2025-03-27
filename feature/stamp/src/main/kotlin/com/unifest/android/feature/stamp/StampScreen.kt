@@ -192,7 +192,7 @@ internal fun StampScreen(
                 onAction = onAction,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
             )
             Spacer(modifier = Modifier.height(12.dp))
             Box(

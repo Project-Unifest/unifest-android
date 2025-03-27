@@ -20,4 +20,3 @@ data class StampFestival(
     @SerialName("name")
     val name: String,
 )
-

@@ -98,27 +98,27 @@ internal fun SchoolsDropDownMenu(
                             shape = RoundedCornerShape(8.dp),
                         ),
                     shape = RoundedCornerShape(8.dp),
-                    shadowElevation = 4.dp
+                    shadowElevation = 4.dp,
                 ) {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(if (festivals.isEmpty()) 0.dp else (festivals.size * 48).dp)
-                            .heightIn(max = 240.dp)
+                            .heightIn(max = 240.dp),
                     ) {
                         items(
                             items = festivals,
-                            key = { it.festivalId }
+                            key = { it.festivalId },
                         ) { school ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable(
-                                        onClick = { onAction(StampUiAction.OnFestivalSelect(school)) }
+                                        onClick = { onAction(StampUiAction.OnFestivalSelect(school)) },
                                     )
                                     .background(color = MaterialTheme.colorScheme.inverseSurface)
                                     .padding(horizontal = 25.dp, vertical = 15.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
                                     text = school.name,
