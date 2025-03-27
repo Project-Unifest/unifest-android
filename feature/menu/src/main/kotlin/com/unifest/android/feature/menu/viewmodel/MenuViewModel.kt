@@ -10,6 +10,7 @@ import com.unifest.android.core.data.repository.FestivalRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.SettingRepository
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +51,7 @@ class MenuViewModel @Inject constructor(
 
     fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
-            is MenuUiAction.OnLikedFestivalItemClick -> setRecentLikedFestival(action.schoolName)
+            is MenuUiAction.OnLikedFestivalItemClick -> setRecentLikedFestival(action.festival)
             is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
@@ -191,14 +192,10 @@ class MenuViewModel @Inject constructor(
 //        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
 //    }
 
-    private fun setRecentLikedFestival(schoolName: String) {
+    private fun setRecentLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            if (schoolName == "한국교통대학교") {
-                // likedFestivalRepository.setRecentLikedFestival(schoolName)
-                _uiEvent.send(MenuUiEvent.NavigateBack)
-            } else {
-                _uiEvent.send(MenuUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
-            }
+            likedFestivalRepository.setRecentLikedFestival(festival)
+            _uiEvent.send(MenuUiEvent.NavigateBack)
         }
     }
 

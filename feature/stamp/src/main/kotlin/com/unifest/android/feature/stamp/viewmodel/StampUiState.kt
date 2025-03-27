@@ -20,11 +20,11 @@ data class StampUiState(
 )
 
 val dummyStampEnabledFestivalList = persistentListOf(
-    StampFestivalModel(1, "한국교통대학교"),
-    StampFestivalModel(2, "서울시립대학교"),
+    StampFestivalModel(1, "서울시립대"),
+    StampFestivalModel(2, "한국교통대학교"),
     StampFestivalModel(3, "한양대학교"),
     StampFestivalModel(4, "고려대학교"),
     StampFestivalModel(5, "홍익대학교"),
 )
 
-val dummySelectedFestival = StampFestivalModel(1, "한국교통대학교")
+val dummySelectedFestival = StampFestivalModel(2, "한국교통대학교")

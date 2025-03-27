@@ -56,7 +56,7 @@ class FestivalViewModel @Inject constructor(
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnLikedFestivalSelected -> {
                 completeFestivalOnboarding()
-                setRecentLikedFestival(action.festival.schoolName)
+                setRecentLikedFestival(action.festival)
             }
 
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
@@ -122,15 +122,11 @@ class FestivalViewModel @Inject constructor(
         }
     }
 
-    private fun setRecentLikedFestival(schoolName: String) {
+    private fun setRecentLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            if (schoolName == "한국교통대학교") {
-                // likedFestivalRepository.setRecentLikedFestival(schoolName)
-                setFestivalSearchBottomSheetVisible(false)
-                _uiEvent.send(FestivalUiEvent.NavigateBack)
-            } else {
-                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
-            }
+            likedFestivalRepository.setRecentLikedFestival(festival)
+            setFestivalSearchBottomSheetVisible(false)
+            _uiEvent.send(FestivalUiEvent.NavigateBack)
         }
     }
 
