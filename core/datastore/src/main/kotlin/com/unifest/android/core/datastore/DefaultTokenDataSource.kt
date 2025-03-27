@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.first
 import java.io.IOException
 import javax.inject.Inject
 
-class TokenDataSourceImpl @Inject constructor(
+class DefaultTokenDataSource @Inject constructor(
     @OnboardingDataStore private val dataStore: DataStore<Preferences>,
 ) : TokenDataSource {
     private companion object {

@@ -5,7 +5,7 @@ import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.network.service.UnifestService
 import javax.inject.Inject
 
-internal class FestivalRepositoryImpl @Inject constructor(
+internal class DefaultFestivalRepository @Inject constructor(
     private val service: UnifestService,
 ) : FestivalRepository {
     override suspend fun getAllFestivals() = runSuspendCatching {

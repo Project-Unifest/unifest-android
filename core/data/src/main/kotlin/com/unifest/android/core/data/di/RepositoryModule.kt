@@ -1,25 +1,25 @@
 package com.unifest.android.core.data.di
 
 import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.BoothRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultBoothRepository
 import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.FestivalRepositoryImpl
-import com.unifest.android.core.data.repository.LikedBoothRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultFestivalRepository
+import com.unifest.android.core.data.repository.DefaultLikedBoothRepository
 import com.unifest.android.core.data.repository.LikedBoothRepository
 import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultLikedFestivalRepository
 import com.unifest.android.core.data.repository.MessagingRepository
-import com.unifest.android.core.data.repository.MessagingRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultMessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.data.repository.OnboardingRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultOnboardingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository
-import com.unifest.android.core.data.repository.RemoteConfigRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultRemoteConfigRepository
 import com.unifest.android.core.data.repository.SettingRepository
-import com.unifest.android.core.data.repository.SettingRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultSettingRepository
 import com.unifest.android.core.data.repository.StampRepository
-import com.unifest.android.core.data.repository.StampRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultStampRepository
 import com.unifest.android.core.data.repository.WaitingRepository
-import com.unifest.android.core.data.repository.WaitingRepositoryImpl
+import com.unifest.android.core.data.repository.DefaultWaitingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,41 +31,41 @@ import javax.inject.Singleton
 internal abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindFestivalRepository(festivalRepositoryImpl: FestivalRepositoryImpl): FestivalRepository
+    abstract fun bindFestivalRepository(defaultFestivalRepository: DefaultFestivalRepository): FestivalRepository
 
     @Binds
     @Singleton
-    abstract fun bindBoothRepository(boothRepositoryImpl: BoothRepositoryImpl): BoothRepository
+    abstract fun bindBoothRepository(defaultBoothRepository: DefaultBoothRepository): BoothRepository
 
     @Binds
     @Singleton
-    abstract fun bindLikedFestivalRepository(likedFestivalRepositoryImpl: LikedFestivalRepositoryImpl): LikedFestivalRepository
+    abstract fun bindLikedFestivalRepository(defaultLikedFestivalRepository: DefaultLikedFestivalRepository): LikedFestivalRepository
 
     @Binds
     @Singleton
-    abstract fun bindLikedBoothRepository(likedBoothRepositoryImpl: LikedBoothRepositoryImpl): LikedBoothRepository
+    abstract fun bindLikedBoothRepository(defaultLikedBoothRepository: DefaultLikedBoothRepository): LikedBoothRepository
 
     @Binds
     @Singleton
-    abstract fun bindOnboardingRepository(onboardingRepositoryImpl: OnboardingRepositoryImpl): OnboardingRepository
+    abstract fun bindOnboardingRepository(defaultOnboardingRepository: DefaultOnboardingRepository): OnboardingRepository
 
     @Binds
     @Singleton
-    abstract fun bindRemoteConfigRepository(remoteConfigRepositoryImpl: RemoteConfigRepositoryImpl): RemoteConfigRepository
+    abstract fun bindRemoteConfigRepository(defaultRemoteConfigRepository: DefaultRemoteConfigRepository): RemoteConfigRepository
 
     @Binds
     @Singleton
-    abstract fun bingWaitingRepository(waitingRepositoryImpl: WaitingRepositoryImpl): WaitingRepository
+    abstract fun bingWaitingRepository(defaultWaitingRepository: DefaultWaitingRepository): WaitingRepository
 
     @Binds
     @Singleton
-    abstract fun bindMessagingRepository(messagingRepositoryImpl: MessagingRepositoryImpl): MessagingRepository
+    abstract fun bindMessagingRepository(defaultMessagingRepository: DefaultMessagingRepository): MessagingRepository
 
     @Binds
     @Singleton
-    abstract fun bindSettingRepository(settingRepositoryImpl: SettingRepositoryImpl): SettingRepository
+    abstract fun bindSettingRepository(defaultSettingRepository: DefaultSettingRepository): SettingRepository
 
     @Binds
     @Singleton
-    abstract fun bindStampRepository(stampRepositoryImpl: StampRepositoryImpl): StampRepository
+    abstract fun bindStampRepository(defaultStampRepository: DefaultStampRepository): StampRepository
 }

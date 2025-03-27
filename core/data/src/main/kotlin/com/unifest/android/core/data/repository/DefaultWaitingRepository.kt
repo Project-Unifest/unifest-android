@@ -11,7 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
-class WaitingRepositoryImpl @Inject constructor(
+class DefaultWaitingRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val firebaseMessaging: FirebaseMessaging,

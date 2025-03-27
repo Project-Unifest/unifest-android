@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class RemoteConfigRepositoryImpl @Inject constructor(
+internal class DefaultRemoteConfigRepository @Inject constructor(
     private val remoteConfigDataSource: RemoteConfigDataSource,
 ) : RemoteConfigRepository {
     override fun shouldUpdate(): Flow<Boolean> = flow {

@@ -13,9 +13,8 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-class MessagingRepositoryImpl @Inject constructor(
+class DefaultMessagingRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val firebaseMessaging: FirebaseMessaging,
     private val tokenDataSource: TokenDataSource,
