@@ -74,7 +74,12 @@ fun BoothLocationScreen(
                 holes = persistentListOf(uiState.innerHole),
             )
             Marker(
-                state = rememberMarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
+                state = rememberMarkerState(
+                    position = LatLng(
+                        uiState.boothDetailInfo.latitude.toDouble(),
+                        uiState.boothDetailInfo.longitude.toDouble(),
+                    ),
+                ),
                 icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(false),
                 onClick = { true },
             )

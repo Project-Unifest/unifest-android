@@ -162,13 +162,13 @@ class IntroViewModel @Inject constructor(
 
     private fun addSelectedFestival(festival: FestivalModel) {
         _uiState.update {
-            it.copy(selectedFestivals = it.selectedFestivals.add(festival),)
+            it.copy(selectedFestivals = it.selectedFestivals.add(festival))
         }
     }
 
     private fun removeSelectedFestivals(festival: FestivalModel) {
         _uiState.update {
-            it.copy(selectedFestivals = it.selectedFestivals.remove(festival),)
+            it.copy(selectedFestivals = it.selectedFestivals.remove(festival))
         }
     }
 

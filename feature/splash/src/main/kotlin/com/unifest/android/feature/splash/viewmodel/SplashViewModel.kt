@@ -2,7 +2,6 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.MessagingRepository
 import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository

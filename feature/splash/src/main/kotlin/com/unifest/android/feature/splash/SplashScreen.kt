@@ -1,7 +1,6 @@
 package com.unifest.android.feature.splash
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
@@ -22,7 +22,6 @@ import com.unifest.android.feature.splash.viewmodel.SplashUiAction
 import com.unifest.android.feature.splash.viewmodel.SplashUiEvent
 import com.unifest.android.feature.splash.viewmodel.SplashUiState
 import com.unifest.android.feature.splash.viewmodel.SplashViewModel
-import androidx.core.net.toUri
 
 @Composable
 internal fun SplashRoute(

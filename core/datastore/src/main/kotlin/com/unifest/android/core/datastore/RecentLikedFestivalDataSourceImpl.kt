@@ -9,8 +9,10 @@ import com.unifest.android.core.datastore.di.RecentLikedFestivalDataStore
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -35,7 +37,8 @@ class RecentLikedFestivalDataSourceImpl @Inject constructor(
             } else {
                 try {
                     json.decodeFromString<FestivalModel>(festivalJson)
-                } catch (e: Exception) {
+                } catch (e: SerializationException) {
+                    Timber.e(e, "Failed to deserialize FestivalModel")
                     FestivalModel()
                 }
             }

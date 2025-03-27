@@ -16,5 +16,7 @@ dependencies {
 
         libs.androidx.datastore.preferences,
         libs.kotlinx.serialization.json,
+
+        libs.timber,
     )
 }
