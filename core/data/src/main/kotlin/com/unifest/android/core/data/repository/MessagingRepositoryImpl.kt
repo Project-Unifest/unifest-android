@@ -8,6 +8,7 @@ import com.unifest.android.core.datastore.TokenDataSource
 import com.unifest.android.core.network.request.RegisterFCMTokenRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -19,7 +20,7 @@ class MessagingRepositoryImpl @Inject constructor(
     private val tokenDataSource: TokenDataSource,
     private val service: UnifestService,
 ) : MessagingRepository {
-    override suspend fun refreshFCMToken(): String? = suspendCoroutine { continuation ->
+    override suspend fun refreshFCMToken(): String? = suspendCancellableCoroutine { continuation ->
         firebaseMessaging.token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 continuation.resume(
@@ -29,7 +30,9 @@ class MessagingRepositoryImpl @Inject constructor(
                 )
             } else {
                 Timber.e(task.exception)
-                continuation.resume(null)
+                if (!continuation.isCompleted) {
+                    continuation.resume(null)
+                }
             }
         }
     }
