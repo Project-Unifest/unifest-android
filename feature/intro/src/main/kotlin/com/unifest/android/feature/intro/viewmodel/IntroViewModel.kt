@@ -157,35 +157,27 @@ class IntroViewModel @Inject constructor(
     }
 
     private fun clearSelectedFestivals() {
-        _uiState.update {
-            it.copy(selectedFestivals = persistentListOf())
-        }
+        _uiState.update { it.copy(selectedFestivals = persistentListOf()) }
     }
 
     private fun addSelectedFestival(festival: FestivalModel) {
         _uiState.update {
-            it.copy(
-                selectedFestivals = it.selectedFestivals.add(festival),
-            )
+            it.copy(selectedFestivals = it.selectedFestivals.add(festival))
         }
     }
 
     private fun removeSelectedFestivals(festival: FestivalModel) {
         _uiState.update {
-            it.copy(
-                selectedFestivals = it.selectedFestivals.remove(festival),
-            )
+            it.copy(selectedFestivals = it.selectedFestivals.remove(festival))
         }
     }
 
-    // TODO 추후에 OO대로 고정하지 않고, 사용자가 선택한 학교로 변경
     private fun addLikedFestivals() {
         viewModelScope.launch {
-            _uiState.value.selectedFestivals.forEach { festival ->
-                likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+            likedFestivalRepository.apply {
+                insertLikedFestivals(_uiState.value.selectedFestivals)
+                setRecentLikedFestival(_uiState.value.selectedFestivals.first())
             }
-            likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
-            likedFestivalRepository.setRecentLikedFestivalId(2L)
             onboardingRepository.completeIntro(true)
             _uiEvent.send(IntroUiEvent.NavigateToMain)
         }

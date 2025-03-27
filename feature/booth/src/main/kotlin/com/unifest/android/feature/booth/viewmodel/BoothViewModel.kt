@@ -70,7 +70,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
-            is BoothUiAction.OnRunningClick -> expandRunningTime()
+            is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
         }
@@ -204,9 +204,9 @@ class BoothViewModel @Inject constructor(
         }
     }
 
-    private fun expandRunningTime() {
+    private fun toggleScheduleExpanded() {
         _uiState.update {
-            it.copy(isRunning = !it.isRunning)
+            it.copy(isScheduleExpanded = !it.isScheduleExpanded)
         }
     }
 

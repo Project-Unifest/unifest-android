@@ -20,9 +20,8 @@ internal class StampRepositoryImpl @Inject constructor(
         service.getCollectedStamps(deviceId).data.map { it.toModel()}
     }
 
-    // TODO festivalId 변경 가능하도록 수정 필요
-    override suspend fun getStampEnabledBooths() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestivalId()
+    override suspend fun getStampEnabledBoothList() = runSuspendCatching {
+        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
         service.getStampEnabledBooths(festivalId).data.map { it.toModel() }
     }
 

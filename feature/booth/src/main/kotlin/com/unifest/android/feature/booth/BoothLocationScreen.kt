@@ -18,10 +18,10 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
-import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberMarkerState
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
@@ -52,7 +52,7 @@ fun BoothLocationScreen(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(36.970898, 127.871726), 15.2)
+            position = CameraPosition(LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble()), 15.2)
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
@@ -74,7 +74,12 @@ fun BoothLocationScreen(
                 holes = persistentListOf(uiState.innerHole),
             )
             Marker(
-                state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
+                state = rememberMarkerState(
+                    position = LatLng(
+                        uiState.boothDetailInfo.latitude.toDouble(),
+                        uiState.boothDetailInfo.longitude.toDouble(),
+                    ),
+                ),
                 icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(false),
                 onClick = { true },
             )

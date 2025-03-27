@@ -4,6 +4,7 @@ import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.request.LikedFestivalRequest
+import com.unifest.android.core.network.request.RegisterFCMTokenRequest
 import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.response.booth.AllBoothsResponse
@@ -19,6 +20,10 @@ import com.unifest.android.core.network.response.stamp.CollectedStampCountRespon
 import com.unifest.android.core.network.response.waiting.WaitingResponse
 import com.unifest.android.core.network.response.stamp.StampBoothsResponse
 import com.unifest.android.core.network.response.stamp.StampFestivalsResponse
+import com.unifest.android.core.network.response.CollectedStampCountResponse
+import com.unifest.android.core.network.response.FCMTokenResponse
+import com.unifest.android.core.network.response.WaitingResponse
+import com.unifest.android.core.network.response.booth.StampBoothsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -147,4 +152,10 @@ interface UnifestService {
     // 스탬프 기능 지원하는 축제 목록 조회
     @GET("stamps/festivals")
     suspend fun getStampEnabledFestivals(): StampFestivalsResponse
+
+    // FCM 토큰 등록
+    @PUT("fcm-token")
+    suspend fun registerFCMToken(
+        @Body registerFCMTokenRequest: RegisterFCMTokenRequest,
+    ): FCMTokenResponse
 }

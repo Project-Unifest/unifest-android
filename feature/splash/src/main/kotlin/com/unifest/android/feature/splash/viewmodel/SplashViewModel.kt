@@ -2,8 +2,8 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.MessagingRepository
+import com.unifest.android.core.data.repository.OnboardingRepository
 import com.unifest.android.core.data.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    // private val onboardingRepository: OnboardingRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
+    private val onboardingRepository: OnboardingRepository,
     private val messagingRepository: MessagingRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel() {
@@ -38,22 +37,13 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-//    // 학교를 하나만 서비스 하기 때문에 Intro 스킵
-//    fun checkIntroCompletion() {
-//        viewModelScope.launch {
-//            if (onboardingRepository.checkIntroCompletion()) {
-//                _uiEvent.send(SplashUiEvent.NavigateToMain)
-//            } else {
-//                _uiEvent.send(SplashUiEvent.NavigateToIntro)
-//            }
-//        }
-//    }
-
-    private fun setRecentLikedFestival() {
+    fun checkIntroCompletion() {
         viewModelScope.launch {
-            likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
-            likedFestivalRepository.setRecentLikedFestivalId(2L)
-            _uiEvent.send(SplashUiEvent.NavigateToMain)
+            if (onboardingRepository.checkIntroCompletion()) {
+                _uiEvent.send(SplashUiEvent.NavigateToMain)
+            } else {
+                _uiEvent.send(SplashUiEvent.NavigateToIntro)
+            }
         }
     }
 
@@ -61,12 +51,15 @@ class SplashViewModel @Inject constructor(
     fun refreshFCMToken() {
         viewModelScope.launch {
             try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
-                    // 한국교통대학교로 고정
-                    setRecentLikedFestival()
+                val fcmToken = messagingRepository.refreshFCMToken()
+                fcmToken?.let { token ->
+                    Timber.d("New FCM token: $token")
+                    messagingRepository.registerFCMToken(token)
+                        .onSuccess {
+                            messagingRepository.setFCMToken(token)
+                        }.onFailure { exception ->
+                            Timber.e(exception, "Error registering FCM token")
+                        }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error getting or saving FCM token")

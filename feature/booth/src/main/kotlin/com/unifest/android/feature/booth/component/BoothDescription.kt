@@ -2,8 +2,11 @@ package com.unifest.android.feature.booth.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,9 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.unifest.android.core.common.utils.parseAndFormatTime
+import com.unifest.android.core.common.extension.toFormattedString
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -36,9 +40,14 @@ import com.unifest.android.core.designsystem.theme.BoothTitle1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import java.time.LocalDate
 import java.time.LocalTime
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun BoothDescription(
@@ -46,9 +55,8 @@ fun BoothDescription(
     warning: String,
     description: String,
     location: String,
-    isRunning: Boolean,
-    openTime: String,
-    closeTime: String,
+    isScheduleExpanded: Boolean,
+    scheduleList: ImmutableList<ScheduleModel>,
     onAction: (BoothUiAction) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -57,21 +65,29 @@ fun BoothDescription(
         screenWidth * (2 / 3f)
     }
 
-    val (openTimeFormatted, openLocalTime) = parseAndFormatTime(openTime)
-    val (closeTimeFormatted, closeLocalTime) = parseAndFormatTime(closeTime)
-
-    // 현재 시간 가져오기
+    // 현재 시간과 날짜 가져오기
     val currentTime = LocalTime.now()
+    val currentDate = LocalDate.now()
 
-    // 부스 운영 여부 확인
-    val isBoothRunning = openLocalTime != null && closeLocalTime != null &&
-        currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
+    // 부스가 현재 운영 중인지 확인
+    val isBoothRunning = scheduleList.any { schedule ->
+        // 날짜 확인
+        val scheduleDate = LocalDate.parse(schedule.date)
+        val isToday = scheduleDate.equals(currentDate)
 
-    // 부스 운영 여부 확인 안됨
-    val isBoothRunningDetailProvided = openLocalTime != null && closeLocalTime != null
+        // 오늘 날짜면 시간 확인
+        if (isToday) {
+            val openLocalTime = LocalTime.parse(schedule.openTime)
+            val closeLocalTime = LocalTime.parse(schedule.closeTime)
+            currentTime.isAfter(openLocalTime) && currentTime.isBefore(closeLocalTime)
+        } else {
+            false
+        }
+    }
 
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp)
             .animateContentSize(),
     ) {
@@ -104,7 +120,7 @@ fun BoothDescription(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(top = 8.dp)
-                .clickable { onAction(BoothUiAction.OnRunningClick) },
+                .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
@@ -113,13 +129,8 @@ fun BoothDescription(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = if (!isBoothRunningDetailProvided) {
-                    stringResource(id = R.string.booth_is_unknown_running)
-                } else if (isBoothRunning) {
-                    stringResource(id = R.string.booth_is_running)
-                } else {
-                    stringResource(id = R.string.booth_is_closed)
-                },
+                text = if (isBoothRunning) stringResource(id = R.string.booth_is_running)
+                else stringResource(id = R.string.booth_is_closed),
                 color = MaterialTheme.colorScheme.onBackground,
                 style = BoothLocation,
             )
@@ -130,20 +141,24 @@ fun BoothDescription(
                 tint = Color.Unspecified,
             )
         }
-        AnimatedVisibility(visible = isRunning) {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Open Time: $openTimeFormatted",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = BoothLocation,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Close Time: $closeTimeFormatted",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = BoothLocation,
-                )
+        AnimatedVisibility(visible = isScheduleExpanded) {
+            LazyColumn(
+                modifier = Modifier
+                    .height((23 * scheduleList.size).dp)
+                    .padding(start = 24.dp),
+                contentPadding = PaddingValues(vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(7.dp),
+            ) {
+                items(
+                    items = scheduleList,
+                    key = { it.id },
+                ) { schedule ->
+                    Text(
+                        text = schedule.toFormattedString(),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = BoothLocation,
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(11.dp))
@@ -178,16 +193,28 @@ fun BoothDescription(
 
 @ComponentPreview
 @Composable
-fun BoothDescriptionPreview() {
+private fun BoothDescriptionPreview() {
     UnifestTheme {
         BoothDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
             location = "공학관",
-            isRunning = true,
-            openTime = "10:00",
-            closeTime = "22:00",
+            isScheduleExpanded = false,
+            scheduleList = persistentListOf(
+                ScheduleModel(
+                    id = 14,
+                    date = "2025-03-12",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+                ScheduleModel(
+                    id = 15,
+                    date = "2025-03-13",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+            ),
             onAction = {},
         )
     }
