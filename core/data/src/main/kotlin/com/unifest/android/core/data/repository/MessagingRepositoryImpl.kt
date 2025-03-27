@@ -3,6 +3,7 @@ package com.unifest.android.core.data.repository
 import android.content.Context
 import com.google.firebase.messaging.FirebaseMessaging
 import com.unifest.android.core.common.getDeviceId
+import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.datastore.TokenDataSource
 import com.unifest.android.core.network.request.RegisterFCMTokenRequest
@@ -48,6 +49,6 @@ class MessagingRepositoryImpl @Inject constructor(
                 deviceId = deviceId,
                 fcmToken = fcmToken,
             ),
-        )
+        ).toModel()
     }
 }
