@@ -30,6 +30,7 @@ data class MapUiState(
         LatLng(30.0, 100.0),
         LatLng(30.0, 150.0),
     ),
+    // TODO 지원하는 학교들의 폴리콘 좌표 전부 추가 팔요
     val innerHole: ImmutableList<LatLng> = persistentListOf(
         LatLng(36.9665013, 127.8746701),
         LatLng(36.9697908, 127.8750296),

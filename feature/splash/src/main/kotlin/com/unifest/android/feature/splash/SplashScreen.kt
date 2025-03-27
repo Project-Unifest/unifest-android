@@ -1,7 +1,6 @@
 package com.unifest.android.feature.splash
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
@@ -26,7 +26,7 @@ import com.unifest.android.feature.splash.viewmodel.SplashViewModel
 @Composable
 internal fun SplashRoute(
     navigateToMain: () -> Unit,
-    // navigateToIntro: () -> Unit,
+    navigateToIntro: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
@@ -36,6 +36,7 @@ internal fun SplashRoute(
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
+            viewModel.checkIntroCompletion()
             viewModel.refreshFCMToken()
             navigateToMain()
         }
@@ -43,9 +44,9 @@ internal fun SplashRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-//            is SplashUiEvent.NavigateToIntro -> {
-//                navigateToIntro()
-//            }
+            is SplashUiEvent.NavigateToIntro -> {
+                navigateToIntro()
+            }
 
             is SplashUiEvent.NavigateToMain -> {
                 navigateToMain()
@@ -54,7 +55,7 @@ internal fun SplashRoute(
             is SplashUiEvent.NavigateToPlayStore -> {
                 val playStoreUrl = "http://play.google.com/store/apps/details?id=${BuildConfig.PACKAGE_NAME}"
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(playStoreUrl)
+                    data = playStoreUrl.toUri()
                     setPackage("com.android.vending")
                 }
                 startActivity(context, intent, null)
