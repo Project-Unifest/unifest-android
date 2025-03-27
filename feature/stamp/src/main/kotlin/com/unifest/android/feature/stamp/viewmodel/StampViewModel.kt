@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.data.repository.LikedFestivalRepository
 import com.unifest.android.core.data.repository.StampRepository
 import com.unifest.android.core.model.StampFestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StampViewModel @Inject constructor(
     private val stampRepository: StampRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(StampUiState())
     val uiState: StateFlow<StampUiState> = _uiState.asStateFlow()
@@ -33,6 +35,7 @@ class StampViewModel @Inject constructor(
 
     init {
         getStampEnabledFestivals()
+        getRecentLikedFestival()
     }
 
     fun onAction(action: StampUiAction) {
@@ -48,12 +51,12 @@ class StampViewModel @Inject constructor(
                 if (_uiState.value.isDropDownMenuOpened) {
                     hideDropDownMenu()
                     Timber.d("After hiding: ${_uiState.value.isDropDownMenuOpened}")
-                }
-                else {
+                } else {
                     showDropDownMenu()
                     Timber.d("After showing: ${_uiState.value.isDropDownMenuOpened}")
                 }
             }
+
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
             is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
         }
@@ -80,7 +83,7 @@ class StampViewModel @Inject constructor(
             stampRepository.getStampEnabledFestivals()
                 .onSuccess { stampEnabledFestivalList ->
                     _uiState.update {
-                        it.copy(stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList(),)
+                        it.copy(stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList())
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
@@ -101,6 +104,17 @@ class StampViewModel @Inject constructor(
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
                 }
+        }
+    }
+
+    fun getRecentLikedFestival() {
+        viewModelScope.launch {
+            val likedFestival = likedFestivalRepository.getRecentLikedFestival()
+            _uiState.update {
+                it.copy(
+                    selectedFestival = StampFestivalModel(festivalId = likedFestival.festivalId, name = likedFestival.schoolName),
+                )
+            }
         }
     }
 
