@@ -8,7 +8,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class RemoteConfigDataSourceImpl @Inject constructor(
+class DefaultRemoteConfigDataSource @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
 ) : RemoteConfigDataSource {
     override suspend fun getValue(key: String): FirebaseRemoteConfigValue? = suspendCancellableCoroutine { continuation ->

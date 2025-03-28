@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class LikedBoothRepositoryImpl @Inject constructor(
+internal class DefaultLikedBoothRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val likedBoothDao: LikedBoothDao,

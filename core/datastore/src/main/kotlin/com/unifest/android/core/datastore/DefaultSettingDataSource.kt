@@ -9,7 +9,7 @@ import com.unifest.android.core.datastore.model.SettingsData
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class SettingDataSourceImpl @Inject constructor(
+class DefaultSettingDataSource @Inject constructor(
     @OnboardingDataStore private val dataStore: DataStore<Preferences>,
 ) : SettingDataSource {
     private companion object PreferencesKey {

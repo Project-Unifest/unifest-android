@@ -1,4 +1,4 @@
-package com.unifest.android.core.network.response
+package com.unifest.android.core.network.response.waiting
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

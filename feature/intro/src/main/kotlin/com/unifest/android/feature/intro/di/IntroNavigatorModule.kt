@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-internal class IntroNavigatorImpl @Inject constructor() : IntroNavigator {
+internal class DefaultIntroNavigator @Inject constructor() : IntroNavigator {
     override fun navigateFrom(
         activity: Activity,
         withFinish: Boolean,
@@ -30,5 +30,5 @@ internal class IntroNavigatorImpl @Inject constructor() : IntroNavigator {
 internal abstract class IntroNavigatorModule {
     @Singleton
     @Binds
-    abstract fun bindIntroNavigator(introNavigatorImpl: IntroNavigatorImpl): IntroNavigator
+    abstract fun bindIntroNavigator(defaultIntroNavigator: DefaultIntroNavigator): IntroNavigator
 }

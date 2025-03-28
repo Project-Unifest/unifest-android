@@ -1,4 +1,4 @@
-package com.unifest.android.core.network.response.booth
+package com.unifest.android.core.network.response.stamp
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -38,7 +38,6 @@ internal fun SplashRoute(
         if (shouldUpdate == false) {
             viewModel.checkIntroCompletion()
             viewModel.refreshFCMToken()
-            navigateToMain()
         }
     }
 

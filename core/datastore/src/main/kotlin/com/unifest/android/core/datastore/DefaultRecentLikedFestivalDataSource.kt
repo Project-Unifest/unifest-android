@@ -10,13 +10,12 @@ import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-class RecentLikedFestivalDataSourceImpl @Inject constructor(
+class DefaultRecentLikedFestivalDataSource @Inject constructor(
     @RecentLikedFestivalDataStore private val dataStore: DataStore<Preferences>,
 ) : RecentLikedFestivalDataSource {
     private companion object {

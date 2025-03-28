@@ -11,5 +11,6 @@
     <string name="stamp_booth">스탬프 가능 부스</string>
     <string name="stamp_register_completed">스탬프가 성공적으로 등록 되었습니다.</string>
     <string name="stamp_register_failed">올바르지 않은 QR코드입니다. 운영자에 문의바랍니다.</string>
+    <string name="stamp_not_support_school">스탬프를 지원하지 않는 학교입니다</string>
 
 </resources>
