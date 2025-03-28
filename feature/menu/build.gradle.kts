@@ -29,7 +29,6 @@ android {
 
 dependencies {
     implementations(
-        projects.core.data,
         projects.feature.festival,
 
         libs.kotlinx.collections.immutable,

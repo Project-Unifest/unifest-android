@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.QRErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.StampRepository
+import com.nexters.bandalart.core.data.api.repository.StampRepository
 import com.unifest.android.feature.stamp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

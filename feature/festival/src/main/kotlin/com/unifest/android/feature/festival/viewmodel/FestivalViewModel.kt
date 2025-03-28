@@ -7,9 +7,9 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
+import com.nexters.bandalart.core.data.api.repository.FestivalRepository
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
+import com.nexters.bandalart.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.festival.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,9 +29,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FestivalViewModel @Inject constructor(
-    private val onboardingRepository: OnboardingRepository,
-    private val festivalRepository: FestivalRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
+    private val onboardingRepository: com.nexters.bandalart.core.data.api.repository.OnboardingRepository,
+    private val festivalRepository: com.nexters.bandalart.core.data.api.repository.FestivalRepository,
+    private val likedFestivalRepository: com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(FestivalUiState())
     val uiState: StateFlow<FestivalUiState> = _uiState.asStateFlow()

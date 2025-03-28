@@ -26,7 +26,8 @@ include(
     ":app",
 
     ":core:common",
-    ":core:data",
+    ":core:data:api",
+    ":core:data:impl",
     ":core:database",
     ":core:datastore",
     ":core:designsystem",
@@ -48,3 +49,4 @@ include(
     ":feature:waiting",
     ":feature:stamp",
 )
+

@@ -7,10 +7,10 @@ import androidx.navigation.toRoute
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.WaitingRepository
+import com.nexters.bandalart.core.data.api.repository.BoothRepository
+import com.nexters.bandalart.core.data.api.repository.LikedBoothRepository
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
+import com.nexters.bandalart.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.booth.R
@@ -30,10 +30,10 @@ import com.unifest.android.core.designsystem.R as designR
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
-    private val boothRepository: BoothRepository,
-    private val likedBoothRepository: LikedBoothRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
-    private val waitingRepository: WaitingRepository,
+    private val boothRepository: com.nexters.bandalart.core.data.api.repository.BoothRepository,
+    private val likedBoothRepository: com.nexters.bandalart.core.data.api.repository.LikedBoothRepository,
+    private val likedFestivalRepository: com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository,
+    private val waitingRepository: com.nexters.bandalart.core.data.api.repository.WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     private val boothId = savedStateHandle.toRoute<Route.Booth.BoothDetail>().boothId

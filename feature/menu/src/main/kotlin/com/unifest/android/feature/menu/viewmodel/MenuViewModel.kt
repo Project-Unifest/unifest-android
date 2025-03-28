@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.SettingRepository
+import com.nexters.bandalart.core.data.api.repository.BoothRepository
+import com.nexters.bandalart.core.data.api.repository.FestivalRepository
+import com.nexters.bandalart.core.data.api.repository.LikedBoothRepository
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
+import com.nexters.bandalart.core.data.api.repository.SettingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.LikedBoothModel

@@ -2,9 +2,9 @@ package com.unifest.android.feature.waiting.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nexters.bandalart.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.WaitingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel

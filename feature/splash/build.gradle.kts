@@ -19,7 +19,6 @@ android {
 
 dependencies {
     implementations(
-        projects.core.data,
         projects.feature.navigator,
 
         libs.kotlinx.collections.immutable,

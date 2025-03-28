@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.StampRepository
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
+import com.nexters.bandalart.core.data.api.repository.StampRepository
 import com.unifest.android.core.model.StampFestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -107,7 +107,7 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    fun getRecentLikedFestival() {
+    private fun getRecentLikedFestival() {
         viewModelScope.launch {
             val likedFestival = likedFestivalRepository.getRecentLikedFestival()
             _uiState.update {

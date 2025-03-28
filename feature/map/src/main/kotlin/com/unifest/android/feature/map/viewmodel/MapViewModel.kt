@@ -8,11 +8,11 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.data.repository.SettingRepository
+import com.nexters.bandalart.core.data.api.repository.BoothRepository
+import com.nexters.bandalart.core.data.api.repository.FestivalRepository
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
+import com.nexters.bandalart.core.data.api.repository.OnboardingRepository
+import com.nexters.bandalart.core.data.api.repository.SettingRepository
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel

@@ -15,7 +15,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.data.BuildConfig
 import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.feature.splash.viewmodel.SplashUiAction
