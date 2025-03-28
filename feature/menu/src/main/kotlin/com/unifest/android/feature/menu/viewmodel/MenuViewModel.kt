@@ -43,7 +43,6 @@ class MenuViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-        // observeLikedBooth()
     }
 
     fun onMenuUiAction(action: MenuUiAction) {
@@ -87,18 +86,6 @@ class MenuViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = false) }
         }
     }
-
-//    private fun observeLikedBooth() {
-//        viewModelScope.launch {
-//            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
-//                _uiState.update {
-//                    it.copy(
-//                        likedBooths = likedBoothList.toImmutableList(),
-//                    )
-//                }
-//            }
-//        }
-//    }
 
     private fun updateIsClusteringEnabled(checked: Boolean) {
         viewModelScope.launch {
@@ -144,20 +131,6 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-//    private fun deleteLikedBooth(booth: BoothDetailModel) {
-//        viewModelScope.launch {
-//            boothRepository.likeBooth(booth.id)
-//                .onSuccess {
-//                    updateLikedBooth(booth)
-//                    delay(500)
-//                    likedBoothRepository.deleteLikedBooth(booth)
-//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
-//                }.onFailure {
-//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
-//                }
-//        }
-//    }
-
     private fun updateLikedBooth(booth: LikedBoothModel) {
         _uiState.update {
             it.copy(
@@ -172,10 +145,6 @@ class MenuViewModel @Inject constructor(
             )
         }
     }
-
-//    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
-//        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
-//    }
 
     private fun setRecentLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
