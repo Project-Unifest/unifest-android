@@ -2,6 +2,7 @@ package com.unifest.android.core.common
 
 import retrofit2.HttpException
 import timber.log.Timber
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -20,7 +21,7 @@ fun handleException(exception: Throwable, actions: ErrorHandlerActions) {
             }
         }
 
-        is UnknownHostException -> {
+        is UnknownHostException, is ConnectException -> {
             actions.setNetworkErrorDialogVisible(true)
         }
 

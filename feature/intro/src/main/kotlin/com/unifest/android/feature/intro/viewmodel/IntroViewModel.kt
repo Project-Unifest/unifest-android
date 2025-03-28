@@ -196,6 +196,7 @@ class IntroViewModel @Inject constructor(
     }
 
     private fun refresh(error: ErrorType) {
+        getAllFestivals()
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)

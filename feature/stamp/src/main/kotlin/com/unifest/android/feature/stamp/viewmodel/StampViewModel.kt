@@ -41,7 +41,7 @@ class StampViewModel @Inject constructor(
     fun onAction(action: StampUiAction) {
         when (action) {
             is StampUiAction.OnReceiveStampClick -> requestLocationPermission()
-            is StampUiAction.OnRefreshClick -> refresh()
+            is StampUiAction.OnRefreshClick -> refreshCollectedStamps()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
@@ -59,6 +59,7 @@ class StampViewModel @Inject constructor(
 
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
             is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
+            is StampUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
@@ -124,7 +125,7 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun refresh() {
+    private fun refreshCollectedStamps() {
         getCollectedStamps(isRefresh = true)
     }
 
@@ -214,6 +215,15 @@ class StampViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getStampEnabledFestivals()
+        getCollectedStamps()
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }
