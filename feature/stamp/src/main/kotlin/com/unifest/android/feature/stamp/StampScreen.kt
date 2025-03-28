@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,10 +63,13 @@ import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.DarkGrey200
+import com.unifest.android.core.designsystem.theme.DarkGrey300
 import com.unifest.android.core.designsystem.theme.DarkGrey400
+import com.unifest.android.core.designsystem.theme.DarkGrey700
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.StampCount
+import com.unifest.android.core.designsystem.theme.Title0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.CameraPermissionTextProvider
@@ -153,6 +157,7 @@ internal fun StampRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun StampScreen(
     padding: PaddingValues,
@@ -195,113 +200,140 @@ internal fun StampScreen(
                     .padding(horizontal = 20.dp),
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(horizontal = 20.dp)
-                    .background(color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100, shape = RoundedCornerShape(10.dp)),
-            ) {
-                Column {
-                    Spacer(modifier = Modifier.height(26.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Spacer(modifier = Modifier.width(25.dp))
-                        Column {
-                            Text(
-                                text = buildAnnotatedString {
-                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                        append("${uiState.collectedStampCount}")
-                                    }
-                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
-                                        append(" / ${uiState.stampBoothList.size}개")
-                                    }
-                                },
-                                style = StampCount,
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Row(
-                                modifier = Modifier.clickableSingle {
-                                    onAction(StampUiAction.OnRefreshClick)
-                                },
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
+            if (uiState.stampEnabledFestivalList.contains(uiState.selectedFestival)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = 20.dp)
+                        .background(color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100, shape = RoundedCornerShape(10.dp)),
+                ) {
+                    Column {
+                        Spacer(modifier = Modifier.height(26.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Spacer(modifier = Modifier.width(25.dp))
+                            Column {
                                 Text(
-                                    text = stringResource(id = R.string.refresh),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    style = Content2,
+                                    text = buildAnnotatedString {
+                                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                                            append("${uiState.collectedStampCount}")
+                                        }
+                                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                                            append(" / ${uiState.stampBoothList.size}개")
+                                        }
+                                    },
+                                    style = StampCount,
                                 )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
-                                    contentDescription = "refresh icon",
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Row(
+                                    modifier = Modifier.clickableSingle {
+                                        onAction(StampUiAction.OnRefreshClick)
+                                    },
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.refresh),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        style = Content2,
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
+                                        contentDescription = "refresh icon",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            StampButton(
+                                onClick = {
+                                    onAction(StampUiAction.OnReceiveStampClick)
+                                },
+                                text = stringResource(id = R.string.receive_stamp),
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                        }
+                        Spacer(modifier = Modifier.height(40.dp))
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(4),
+                            modifier = Modifier
+                                .padding(horizontal = 24.dp)
+                                .height(if (uiState.stampBoothList.isEmpty()) 0.dp else (((uiState.stampBoothList.size - 1) / 4 + 1) * 84).dp),
+                            verticalArrangement = Arrangement.spacedBy(11.dp),
+                            horizontalArrangement = Arrangement.spacedBy(9.dp),
+                        ) {
+                            items(
+                                count = uiState.stampBoothList.size,
+                                key = { index -> uiState.stampBoothList[index].id },
+                            ) { index ->
+                                Box {
+                                    Image(
+                                        painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
+                                        else painterResource(id = R.drawable.ic_unchecked_stamp),
+                                        contentDescription = "stamp image",
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(10.dp)),
+                                    )
+                                }
                             }
                         }
-                        Spacer(modifier = Modifier.weight(1f))
-                        StampButton(
-                            onClick = {
-                                onAction(StampUiAction.OnReceiveStampClick)
-                            },
-                            text = stringResource(id = R.string.receive_stamp),
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                    }
-                    Spacer(modifier = Modifier.height(40.dp))
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(4),
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp)
-                            .height(if (uiState.stampBoothList.isEmpty()) 0.dp else (((uiState.stampBoothList.size - 1) / 4 + 1) * 84).dp),
-                        verticalArrangement = Arrangement.spacedBy(11.dp),
-                        horizontalArrangement = Arrangement.spacedBy(9.dp),
-                    ) {
-                        items(
-                            count = uiState.stampBoothList.size,
-                            key = { index -> uiState.stampBoothList[index].id },
-                        ) { index ->
-                            Box {
-                                Image(
-                                    painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
-                                    else painterResource(id = R.drawable.ic_unchecked_stamp),
-                                    contentDescription = "stamp image",
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(10.dp)),
-                                )
-                            }
+                        Spacer(modifier = Modifier.height(28.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .padding(horizontal = 24.dp)
+                                .background(color = if (isSystemInDarkTheme()) DarkGrey400 else Color.White, shape = RoundedCornerShape(7.dp))
+                                .clickable {
+                                    onAction(StampUiAction.OnFindStampBoothClick)
+                                },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Spacer(modifier = Modifier.width(24.dp))
+                            Text(
+                                text = stringResource(id = R.string.find_stamp_booth),
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                style = MenuTitle,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                                contentDescription = "Arrow Right Icon",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.width(21.dp))
                         }
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
-                    Spacer(modifier = Modifier.height(28.dp))
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .padding(horizontal = 24.dp)
-                            .background(color = if (isSystemInDarkTheme()) DarkGrey400 else Color.White, shape = RoundedCornerShape(7.dp))
-                            .clickable {
-                                onAction(StampUiAction.OnFindStampBoothClick)
-                            },
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(
-                            text = stringResource(id = R.string.find_stamp_booth),
-                            color = MaterialTheme.colorScheme.onSecondary,
-                            style = MenuTitle,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = "Arrow Right Icon",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        Spacer(modifier = Modifier.width(21.dp))
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(454.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceBright,
+                            shape = RoundedCornerShape(10.dp),
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_stamp_not_support),
+                        contentDescription = "Stamp Not Supported Icon",
+                        tint = if (isSystemInDarkTheme()) DarkGrey300 else DarkGrey700,
+                    )
+                    Spacer(modifier = Modifier.height(26.dp))
+                    Text(
+                        text = stringResource(id = R.string.stamp_not_support_school),
+                        color = DarkGrey400,
+                        style = Title0,
+                    )
                 }
             }
         }
