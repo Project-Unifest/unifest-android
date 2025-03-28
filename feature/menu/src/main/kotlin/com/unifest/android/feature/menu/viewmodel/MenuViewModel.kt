@@ -2,16 +2,14 @@ package com.unifest.android.feature.menu.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.common.ErrorHandlerActions
-import com.unifest.android.core.common.UiText
-import com.unifest.android.core.common.handleException
 import com.nexters.bandalart.core.data.api.repository.BoothRepository
-import com.nexters.bandalart.core.data.api.repository.FestivalRepository
 import com.nexters.bandalart.core.data.api.repository.LikedBoothRepository
 import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
 import com.nexters.bandalart.core.data.api.repository.SettingRepository
+import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.handleException
 import com.unifest.android.core.model.FestivalModel
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -26,10 +24,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.unifest.android.core.designsystem.R as designR
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
-    private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
@@ -46,7 +44,6 @@ class MenuViewModel @Inject constructor(
     init {
         observeLikedFestivals()
         // observeLikedBooth()
-        getAllFestivals()
     }
 
     fun onMenuUiAction(action: MenuUiAction) {
@@ -74,22 +71,9 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun getAllFestivals() {
-        viewModelScope.launch {
-            festivalRepository.getAllFestivals()
-                .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(festivals = festivals.toImmutableList())
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@MenuViewModel)
-                }
-        }
-    }
-
     fun getLikedBooths() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             likedBoothRepository.getLikedBooths()
                 .onSuccess { likedBooths ->
                     _uiState.update {
@@ -100,6 +84,7 @@ class MenuViewModel @Inject constructor(
                 }.onFailure { exception ->
                     handleException(exception, this@MenuViewModel)
                 }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
