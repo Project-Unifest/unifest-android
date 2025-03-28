@@ -1,6 +1,7 @@
 package com.nexters.bandalart.core.data.impl.repository
 
 import android.content.Context
+import com.nexters.bandalart.core.data.api.repository.BoothRepository
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
@@ -16,7 +17,7 @@ class DefaultBoothRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val tokenDataSource: TokenDataSource,
-) : com.nexters.bandalart.core.data.api.repository.BoothRepository {
+) : BoothRepository {
     override suspend fun getPopularBooths(festivalId: Long) = runSuspendCatching {
         service.getPopularBooths(festivalId).data.map { it.toModel() }
     }

@@ -2,6 +2,7 @@ package com.nexters.bandalart.core.data.impl.repository
 
 import android.content.Context
 import com.google.firebase.messaging.FirebaseMessaging
+import com.nexters.bandalart.core.data.api.repository.MessagingRepository
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
@@ -19,7 +20,7 @@ class DefaultMessagingRepository @Inject constructor(
     private val firebaseMessaging: FirebaseMessaging,
     private val tokenDataSource: TokenDataSource,
     private val service: UnifestService,
-) : com.nexters.bandalart.core.data.api.repository.MessagingRepository {
+) : MessagingRepository {
     override suspend fun refreshFCMToken(): String? = suspendCancellableCoroutine { continuation ->
         firebaseMessaging.token.addOnCompleteListener { task ->
             if (task.isSuccessful) {

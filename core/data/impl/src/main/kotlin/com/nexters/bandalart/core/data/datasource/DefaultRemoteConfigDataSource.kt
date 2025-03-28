@@ -3,6 +3,7 @@ package com.nexters.bandalart.core.data.datasource
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
+import com.nexters.bandalart.core.data.api.datasource.RemoteConfigDataSource
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import javax.inject.Inject
@@ -10,7 +11,7 @@ import kotlin.coroutines.resume
 
 class DefaultRemoteConfigDataSource @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
-) : com.nexters.bandalart.core.data.api.datasource.RemoteConfigDataSource {
+) : RemoteConfigDataSource {
     override suspend fun getValue(key: String): FirebaseRemoteConfigValue? = suspendCancellableCoroutine { continuation ->
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {

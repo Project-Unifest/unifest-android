@@ -1,5 +1,6 @@
 package com.nexters.bandalart.core.data.impl.repository
 
+import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
 import com.nexters.bandalart.core.data.mapper.toEntity
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
@@ -19,7 +20,7 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
     private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
     private val tokenDataSource: TokenDataSource,
     private val service: UnifestService,
-) : com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository {
+) : LikedFestivalRepository {
     override fun getLikedFestivals(): Flow<List<FestivalModel>> {
         return likedFestivalDao.getLikedFestivalList().map { likedFestivals ->
             likedFestivals.map { likedFestival ->

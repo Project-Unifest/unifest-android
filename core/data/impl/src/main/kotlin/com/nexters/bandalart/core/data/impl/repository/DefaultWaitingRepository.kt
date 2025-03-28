@@ -2,6 +2,7 @@ package com.nexters.bandalart.core.data.impl.repository
 
 import android.content.Context
 import com.google.firebase.messaging.FirebaseMessaging
+import com.nexters.bandalart.core.data.api.repository.WaitingRepository
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
@@ -15,7 +16,7 @@ class DefaultWaitingRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val firebaseMessaging: FirebaseMessaging,
-) : com.nexters.bandalart.core.data.api.repository.WaitingRepository {
+) : WaitingRepository {
     override suspend fun getMyWaitingList() = runSuspendCatching {
         service.getMyWaitingList(
             deviceId = getDeviceId(context),

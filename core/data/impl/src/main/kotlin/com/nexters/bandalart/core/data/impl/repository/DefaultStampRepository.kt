@@ -1,6 +1,7 @@
 package com.nexters.bandalart.core.data.impl.repository
 
 import android.content.Context
+import com.nexters.bandalart.core.data.api.repository.StampRepository
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
@@ -12,7 +13,7 @@ import javax.inject.Inject
 internal class DefaultStampRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
-) : com.nexters.bandalart.core.data.api.repository.StampRepository {
+) : StampRepository {
     override suspend fun getCollectedStamps() = runSuspendCatching {
         val deviceId = getDeviceId(context)
         service.getCollectedStamps(deviceId).data.map { it.toModel() }

@@ -29,9 +29,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FestivalViewModel @Inject constructor(
-    private val onboardingRepository: com.nexters.bandalart.core.data.api.repository.OnboardingRepository,
-    private val festivalRepository: com.nexters.bandalart.core.data.api.repository.FestivalRepository,
-    private val likedFestivalRepository: com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository,
+    private val onboardingRepository: OnboardingRepository,
+    private val festivalRepository: FestivalRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(FestivalUiState())
     val uiState: StateFlow<FestivalUiState> = _uiState.asStateFlow()

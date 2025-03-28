@@ -1,11 +1,12 @@
 package com.nexters.bandalart.core.data.impl.repository
 
+import com.nexters.bandalart.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.datastore.OnboardingDataSource
 import javax.inject.Inject
 
 internal class DefaultOnboardingRepository @Inject constructor(
     private val onboardingDataSource: OnboardingDataSource,
-) : com.nexters.bandalart.core.data.api.repository.OnboardingRepository {
+) : OnboardingRepository {
     override suspend fun checkIntroCompletion(): Boolean {
         return onboardingDataSource.checkIntroCompletion()
     }

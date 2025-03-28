@@ -30,10 +30,10 @@ import com.unifest.android.core.designsystem.R as designR
 
 @HiltViewModel
 class BoothViewModel @Inject constructor(
-    private val boothRepository: com.nexters.bandalart.core.data.api.repository.BoothRepository,
-    private val likedBoothRepository: com.nexters.bandalart.core.data.api.repository.LikedBoothRepository,
-    private val likedFestivalRepository: com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository,
-    private val waitingRepository: com.nexters.bandalart.core.data.api.repository.WaitingRepository,
+    private val boothRepository: BoothRepository,
+    private val likedBoothRepository: LikedBoothRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
+    private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
     private val boothId = savedStateHandle.toRoute<Route.Booth.BoothDetail>().boothId

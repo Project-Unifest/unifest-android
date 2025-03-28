@@ -1,6 +1,7 @@
 package com.nexters.bandalart.core.data.impl.repository
 
 import android.content.Context
+import com.nexters.bandalart.core.data.api.repository.LikedBoothRepository
 import com.nexters.bandalart.core.data.mapper.toEntity
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
@@ -17,7 +18,7 @@ internal class DefaultLikedBoothRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val likedBoothDao: LikedBoothDao,
-) : com.nexters.bandalart.core.data.api.repository.LikedBoothRepository {
+) : LikedBoothRepository {
     override suspend fun getLikedBooths() = runSuspendCatching {
         service.getLikedBooths(getDeviceId(context)).data.map { it.toModel() }
     }

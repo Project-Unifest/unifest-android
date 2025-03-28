@@ -1,5 +1,6 @@
 package com.nexters.bandalart.core.data.impl.repository
 
+import com.nexters.bandalart.core.data.api.repository.FestivalRepository
 import com.nexters.bandalart.core.data.mapper.toModel
 import com.nexters.bandalart.core.data.util.runSuspendCatching
 import com.unifest.android.core.network.service.UnifestService
@@ -7,7 +8,7 @@ import javax.inject.Inject
 
 internal class DefaultFestivalRepository @Inject constructor(
     private val service: UnifestService,
-) : com.nexters.bandalart.core.data.api.repository.FestivalRepository {
+) : FestivalRepository {
     override suspend fun getAllFestivals() = runSuspendCatching {
         service.getAllFestivals().data.map { it.toModel() }
     }
