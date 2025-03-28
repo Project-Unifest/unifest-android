@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -34,6 +35,7 @@ class SplashViewModel @Inject constructor(
         when (action) {
             is SplashUiAction.OnUpdateClick -> navigateToPlayStore()
             is SplashUiAction.OnUpdateDismissClick -> closeApp()
+            is SplashUiAction.OnConfirmClick -> closeApp()
         }
     }
 
@@ -48,22 +50,37 @@ class SplashViewModel @Inject constructor(
     }
 
     @Suppress("TooGenericExceptionCaught")
-    fun refreshFCMToken() {
-        viewModelScope.launch {
-            try {
-                val fcmToken = messagingRepository.refreshFCMToken()
-                fcmToken?.let { token ->
-                    Timber.d("New FCM token: $token")
-                    messagingRepository.registerFCMToken(token)
-                        .onSuccess {
-                            messagingRepository.setFCMToken(token)
-                        }.onFailure { exception ->
-                            Timber.e(exception, "Error registering FCM token")
-                        }
+    suspend fun refreshFCMToken(): Boolean {
+        return try {
+            val fcmToken = messagingRepository.refreshFCMToken()
+            if (fcmToken == null) {
+                Timber.e("FCM token is null")
+                _uiState.update {
+                    it.copy(isNetworkErrorDialogVisible = true)
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "Error getting or saving FCM token")
+                return false
             }
+
+            messagingRepository.registerFCMToken(fcmToken)
+                .fold(
+                    onSuccess = {
+                        messagingRepository.setFCMToken(fcmToken)
+                        true
+                    },
+                    onFailure = { exception ->
+                        Timber.e(exception, "Error registering FCM token")
+                        _uiState.update {
+                            it.copy(isNetworkErrorDialogVisible = true)
+                        }
+                        false
+                    },
+                )
+        } catch (e: Exception) {
+            Timber.e(e, "Error getting or saving FCM token")
+            _uiState.update {
+                it.copy(isNetworkErrorDialogVisible = true)
+            }
+            false
         }
     }
 
