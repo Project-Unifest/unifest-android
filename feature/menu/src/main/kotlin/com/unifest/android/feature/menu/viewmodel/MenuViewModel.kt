@@ -2,10 +2,10 @@ package com.unifest.android.feature.menu.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nexters.bandalart.core.data.api.repository.BoothRepository
-import com.nexters.bandalart.core.data.api.repository.LikedBoothRepository
-import com.nexters.bandalart.core.data.api.repository.LikedFestivalRepository
-import com.nexters.bandalart.core.data.api.repository.SettingRepository
+import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.api.repository.LikedBoothRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.SettingRepository
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException

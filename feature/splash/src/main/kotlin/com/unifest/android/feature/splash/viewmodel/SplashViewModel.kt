@@ -2,9 +2,9 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nexters.bandalart.core.data.api.repository.MessagingRepository
-import com.nexters.bandalart.core.data.api.repository.OnboardingRepository
-import com.nexters.bandalart.core.data.api.repository.RemoteConfigRepository
+import com.unifest.android.core.data.api.repository.MessagingRepository
+import com.unifest.android.core.data.api.repository.OnboardingRepository
+import com.unifest.android.core.data.api.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
