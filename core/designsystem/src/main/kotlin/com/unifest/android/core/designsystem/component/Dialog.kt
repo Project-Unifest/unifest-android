@@ -153,7 +153,9 @@ fun ServerErrorDialog(
 
 @Composable
 fun NetworkErrorDialog(
-    onRetryClick: () -> Unit,
+    confirmTextResId: Int = R.string.retry,
+    onRetryClick: () -> Unit = {},
+    onConfirmClick: () -> Unit = {},
 ) {
     UnifestTheme {
         UnifestDialog(
@@ -162,10 +164,10 @@ fun NetworkErrorDialog(
             iconResId = R.drawable.ic_network,
             iconDescription = "Network Error Icon",
             descriptionResId = R.string.network_error_description,
-            confirmTextResId = R.string.retry,
+            confirmTextResId = confirmTextResId,
             cancelTextResId = null,
             onCancelClick = {},
-            onConfirmClick = onRetryClick,
+            onConfirmClick = if (confirmTextResId == R.string.retry) onRetryClick else onConfirmClick,
         )
     }
 }

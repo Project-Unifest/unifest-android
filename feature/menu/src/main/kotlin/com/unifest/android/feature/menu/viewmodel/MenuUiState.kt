@@ -6,10 +6,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class MenuUiState(
-    val festivals: ImmutableList<FestivalModel> = persistentListOf(),
+    val isLoading: Boolean = false,
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val likedBooths: ImmutableList<LikedBoothModel> = persistentListOf(),
     val isNetworkErrorDialogVisible: Boolean = false,
     val isServerErrorDialogVisible: Boolean = false,
-    val isClusteringEnabled: Boolean = true,
 )

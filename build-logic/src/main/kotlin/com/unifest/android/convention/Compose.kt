@@ -16,18 +16,21 @@ internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, 
         }
 
         configure<ComposeCompilerGradlePluginExtension> {
-            enableStrongSkippingMode.set(true)
             includeSourceInformation.set(true)
 
             metricsDestination.file("build/composeMetrics")
             reportsDestination.file("build/composeReports")
 
-            stabilityConfigurationFile.set(project.rootDir.resolve("stability.config.conf"))
+            stabilityConfigurationFiles.addAll(
+                project.layout.projectDirectory.file("stability.config.conf"),
+            )
         }
 
         tasks.withType<KotlinCompile>().configureEach {
             compilerOptions {
-                freeCompilerArgs.addAll(buildComposeMetricsParameters())
+                freeCompilerArgs.addAll(
+                    buildComposeMetricsParameters(),
+                )
             }
         }
     }

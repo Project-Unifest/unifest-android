@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.StampRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.StampRepository
 import com.unifest.android.core.model.StampFestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,32 +40,26 @@ class StampViewModel @Inject constructor(
     fun onAction(action: StampUiAction) {
         when (action) {
             is StampUiAction.OnReceiveStampClick -> requestLocationPermission()
-            is StampUiAction.OnRefreshClick -> refresh()
+            is StampUiAction.OnRefreshClick -> refreshCollectedStamps()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
             is StampUiAction.OnDropDownMenuClick -> {
-                Timber.d("DropDown clicked. current state: ${_uiState.value.isDropDownMenuOpened}")
-                if (_uiState.value.isDropDownMenuOpened) {
-                    hideDropDownMenu()
-                    Timber.d("After hiding: ${_uiState.value.isDropDownMenuOpened}")
-                } else {
-                    showDropDownMenu()
-                    Timber.d("After showing: ${_uiState.value.isDropDownMenuOpened}")
-                }
+                if (_uiState.value.isDropDownMenuOpened) hideDropDownMenu() else showDropDownMenu()
             }
 
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
             is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
+            is StampUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
-    fun getCollectedStamps(isRefresh: Boolean = false) {
+    fun getCollectedStamps(festivalId: Long, isRefresh: Boolean = false) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
-            stampRepository.getCollectedStamps()
+            stampRepository.getCollectedStamps(festivalId)
                 .onSuccess { stampRecordList ->
                     _uiState.update {
                         it.copy(collectedStampCount = stampRecordList.size)
@@ -107,7 +100,7 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    fun getRecentLikedFestival() {
+    private fun getRecentLikedFestival() {
         viewModelScope.launch {
             val likedFestival = likedFestivalRepository.getRecentLikedFestival()
             _uiState.update {
@@ -124,8 +117,8 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun refresh() {
-        getCollectedStamps(isRefresh = true)
+    private fun refreshCollectedStamps() {
+        getCollectedStamps(festivalId = _uiState.value.selectedFestival.festivalId, isRefresh = true)
     }
 
     private fun requestLocationPermission() {
@@ -214,6 +207,15 @@ class StampViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getStampEnabledFestivals()
+        getCollectedStamps(_uiState.value.selectedFestival.festivalId)
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }

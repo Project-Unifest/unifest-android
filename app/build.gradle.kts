@@ -63,7 +63,8 @@ android {
 dependencies {
     implementations(
         projects.core.common,
-        projects.core.data,
+        projects.core.data.api,
+        projects.core.data.impl,
         projects.core.database,
         projects.core.datastore,
         projects.core.designsystem,

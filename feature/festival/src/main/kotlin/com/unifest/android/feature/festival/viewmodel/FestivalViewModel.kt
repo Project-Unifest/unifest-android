@@ -7,9 +7,9 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
+import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.festival.R
 import dagger.hilt.android.lifecycle.HiltViewModel

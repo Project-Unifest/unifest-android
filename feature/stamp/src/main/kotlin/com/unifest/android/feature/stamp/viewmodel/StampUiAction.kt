@@ -13,4 +13,10 @@ sealed interface StampUiAction {
     data object OnDropDownMenuClick : StampUiAction
     data object OnDropDownMenuDismiss : StampUiAction
     data class OnFestivalSelect(val festival: StampFestivalModel) : StampUiAction
+    data class OnRetryClick(val error: ErrorType) : StampUiAction
+}
+
+enum class ErrorType {
+    NETWORK,
+    SERVER,
 }

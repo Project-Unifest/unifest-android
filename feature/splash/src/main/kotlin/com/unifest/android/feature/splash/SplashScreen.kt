@@ -15,13 +15,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.data.BuildConfig
 import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.feature.splash.viewmodel.SplashUiAction
 import com.unifest.android.feature.splash.viewmodel.SplashUiEvent
 import com.unifest.android.feature.splash.viewmodel.SplashUiState
 import com.unifest.android.feature.splash.viewmodel.SplashViewModel
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun SplashRoute(
@@ -36,8 +37,10 @@ internal fun SplashRoute(
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
-            viewModel.checkIntroCompletion()
-            viewModel.refreshFCMToken()
+            val isFcmTokenRegistered = viewModel.refreshFCMToken()
+            if (isFcmTokenRegistered) {
+                viewModel.checkIntroCompletion()
+            }
         }
     }
 
@@ -91,6 +94,13 @@ fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
+        )
+    }
+
+    if (uiState.isNetworkErrorDialogVisible) {
+        NetworkErrorDialog(
+            onConfirmClick = { onAction(SplashUiAction.OnConfirmClick) },
+            confirmTextResId = designR.string.confirm,
         )
     }
 }
