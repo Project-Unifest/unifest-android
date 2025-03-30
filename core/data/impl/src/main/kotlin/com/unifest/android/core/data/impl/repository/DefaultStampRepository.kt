@@ -14,9 +14,9 @@ internal class DefaultStampRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: UnifestService,
 ) : StampRepository {
-    override suspend fun getCollectedStamps() = runSuspendCatching {
+    override suspend fun getCollectedStamps(festivalId: Long) = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.getCollectedStamps(deviceId).data.map { it.toModel() }
+        service.getCollectedStamps(deviceId, festivalId).data.map { it.toModel() }
     }
 
     override suspend fun getStampEnabledBooths(festivalId: Long) = runSuspendCatching {

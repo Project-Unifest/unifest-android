@@ -121,7 +121,7 @@ internal fun StampRoute(
 
     val qrScanLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.getCollectedStamps()
+            viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
         }
     }
 
@@ -142,12 +142,9 @@ internal fun StampRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.getCollectedStamps()
-    }
-
     LaunchedEffect(uiState.selectedFestival) {
         if (uiState.selectedFestival.festivalId != 0L) {
+            viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
             viewModel.getStampEnabledBooths(uiState.selectedFestival.festivalId)
         }
     }

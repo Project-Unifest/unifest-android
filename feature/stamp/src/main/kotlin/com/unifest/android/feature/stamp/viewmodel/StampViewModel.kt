@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,14 +46,7 @@ class StampViewModel @Inject constructor(
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
             is StampUiAction.OnDropDownMenuClick -> {
-                Timber.d("DropDown clicked. current state: ${_uiState.value.isDropDownMenuOpened}")
-                if (_uiState.value.isDropDownMenuOpened) {
-                    hideDropDownMenu()
-                    Timber.d("After hiding: ${_uiState.value.isDropDownMenuOpened}")
-                } else {
-                    showDropDownMenu()
-                    Timber.d("After showing: ${_uiState.value.isDropDownMenuOpened}")
-                }
+                if (_uiState.value.isDropDownMenuOpened) hideDropDownMenu() else showDropDownMenu()
             }
 
             is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
@@ -63,11 +55,11 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    fun getCollectedStamps(isRefresh: Boolean = false) {
+    fun getCollectedStamps(festivalId: Long, isRefresh: Boolean = false) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
-            stampRepository.getCollectedStamps()
+            stampRepository.getCollectedStamps(festivalId)
                 .onSuccess { stampRecordList ->
                     _uiState.update {
                         it.copy(collectedStampCount = stampRecordList.size)
@@ -126,7 +118,7 @@ class StampViewModel @Inject constructor(
     }
 
     private fun refreshCollectedStamps() {
-        getCollectedStamps(isRefresh = true)
+        getCollectedStamps(festivalId = _uiState.value.selectedFestival.festivalId, isRefresh = true)
     }
 
     private fun requestLocationPermission() {
@@ -220,7 +212,7 @@ class StampViewModel @Inject constructor(
 
     private fun refresh(error: ErrorType) {
         getStampEnabledFestivals()
-        getCollectedStamps()
+        getCollectedStamps(_uiState.value.selectedFestival.festivalId)
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)

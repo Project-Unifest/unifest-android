@@ -132,6 +132,7 @@ interface UnifestService {
     @GET("stamps")
     suspend fun getCollectedStamps(
         @Query("deviceId") token: String,
+        @Query("festivalId") festivalId: Long,
     ): CollectedStampCountResponse
 
     // 스탬프 추가
