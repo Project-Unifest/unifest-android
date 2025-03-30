@@ -148,7 +148,7 @@ internal fun HomeContent(
                 onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
                 allFestivals = homeUiState.allFestivals,
                 isWeekMode = homeUiState.isWeekMode,
-                ocClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
+                onClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
             )
         }
         item {
