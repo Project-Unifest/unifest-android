@@ -39,7 +39,7 @@ internal fun FestivalItem(
         modifier = Modifier
             .padding(vertical = 10.dp)
             .clickable {
-                onMenuUiAction(MenuUiAction.OnLikedFestivalItemClick(festival.schoolName))
+                onMenuUiAction(MenuUiAction.OnLikedFestivalItemClick(festival))
             },
     ) {
         Box(

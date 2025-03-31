@@ -1,7 +1,6 @@
 package com.unifest.android.feature.splash
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -11,22 +10,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.data.BuildConfig
 import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.feature.splash.viewmodel.SplashUiAction
 import com.unifest.android.feature.splash.viewmodel.SplashUiEvent
 import com.unifest.android.feature.splash.viewmodel.SplashUiState
 import com.unifest.android.feature.splash.viewmodel.SplashViewModel
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun SplashRoute(
     navigateToMain: () -> Unit,
-    // navigateToIntro: () -> Unit,
+    navigateToIntro: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
@@ -36,15 +37,18 @@ internal fun SplashRoute(
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
-            viewModel.refreshFCMToken()
+            val isFcmTokenRegistered = viewModel.refreshFCMToken()
+            if (isFcmTokenRegistered) {
+                viewModel.checkIntroCompletion()
+            }
         }
     }
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-//            is SplashUiEvent.NavigateToIntro -> {
-//                navigateToIntro()
-//            }
+            is SplashUiEvent.NavigateToIntro -> {
+                navigateToIntro()
+            }
 
             is SplashUiEvent.NavigateToMain -> {
                 navigateToMain()
@@ -53,7 +57,7 @@ internal fun SplashRoute(
             is SplashUiEvent.NavigateToPlayStore -> {
                 val playStoreUrl = "http://play.google.com/store/apps/details?id=${BuildConfig.PACKAGE_NAME}"
                 val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(playStoreUrl)
+                    data = playStoreUrl.toUri()
                     setPackage("com.android.vending")
                 }
                 startActivity(context, intent, null)
@@ -78,13 +82,6 @@ internal fun SplashScreen(
     uiState: SplashUiState,
     onAction: (SplashUiAction) -> Unit,
 ) {
-    if (uiState.isLoading) {
-        LoadingWheel(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-        )
-    }
     if (shouldUpdate == true) {
         AppUpdateDialog(
             onDismissRequest = { onAction(SplashUiAction.OnUpdateDismissClick) },
@@ -97,6 +94,13 @@ internal fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
+        )
+    }
+
+    if (uiState.isNetworkErrorDialogVisible) {
+        NetworkErrorDialog(
+            onConfirmClick = { onAction(SplashUiAction.OnConfirmClick) },
+            confirmTextResId = designR.string.confirm,
         )
     }
 }

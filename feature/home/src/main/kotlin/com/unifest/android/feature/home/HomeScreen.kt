@@ -108,67 +108,101 @@ internal fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
-        LazyColumn {
+        HomeContent(
+            homeUiState = homeUiState,
+            onHomeUiAction = onHomeUiAction,
+            onFestivalUiAction = onFestivalUiAction,
+        )
+
+        if (festivalUiState.isFestivalSearchBottomSheetVisible) {
+            FestivalSearchBottomSheet(
+                searchText = festivalUiState.festivalSearchText,
+                searchTextHintRes = designR.string.festival_search_text_field_hint,
+                likedFestivals = festivalUiState.likedFestivals,
+                festivalSearchResults = festivalUiState.festivalSearchResults,
+                isSearchMode = festivalUiState.isSearchMode,
+                isEditMode = festivalUiState.isEditMode,
+                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                onFestivalUiAction = onFestivalUiAction,
+            )
+        }
+
+        if (homeUiState.isStarImageDialogVisible && homeUiState.selectedStar != null) {
+            StarImageDialog(
+                onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
+                star = homeUiState.selectedStar,
+            )
+        }
+    }
+}
+
+@Composable
+internal fun HomeContent(
+    homeUiState: HomeUiState,
+    onHomeUiAction: (HomeUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
+) {
+    LazyColumn {
+        item {
+            Calendar(
+                selectedDate = homeUiState.selectedDate,
+                onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
+                allFestivals = homeUiState.allFestivals,
+                isWeekMode = homeUiState.isWeekMode,
+                onClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
+            )
+        }
+        item {
+            Text(
+                text = DateTimeFormatter.ofPattern("M월 d일")
+                    .format(homeUiState.selectedDate) + stringResource(id = R.string.home_festival_schedule_text),
+                modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = Title3,
+            )
+        }
+        if (homeUiState.todayFestivals.isEmpty()) {
             item {
-                Calendar(
-                    selectedDate = homeUiState.selectedDate,
-                    onDateSelected = { date -> onHomeUiAction(HomeUiAction.OnDateSelected(date)) },
-                    allFestivals = homeUiState.allFestivals,
-                    isWeekMode = homeUiState.isWeekMode,
-                    ocClickWeekMode = { onHomeUiAction(HomeUiAction.OnClickWeekMode) },
-                )
-            }
-            item {
-                Text(
-                    text = DateTimeFormatter.ofPattern("M월 d일")
-                        .format(homeUiState.selectedDate) + stringResource(id = R.string.home_festival_schedule_text),
-                    modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = Title3,
-                )
-            }
-            if (homeUiState.todayFestivals.isEmpty()) {
-                item {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(64.dp),
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_schedule),
-                                contentDescription = "축제 없음",
-                                modifier = Modifier.size(23.dp),
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_empty_festival_text),
-                                color = MaterialTheme.colorScheme.onBackground,
-                                textAlign = TextAlign.Center,
-                                style = Title2,
-                            )
-                            Spacer(modifier = Modifier.height(9.dp))
-                            Text(
-                                text = stringResource(id = R.string.home_empty_festival_schedule_description_text),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                style = Content6,
-                            )
-                        }
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(64.dp),
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_schedule),
+                            contentDescription = "축제 없음",
+                            modifier = Modifier.size(23.dp),
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = stringResource(id = R.string.home_empty_festival_text),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Center,
+                            style = Title2,
+                        )
+                        Spacer(modifier = Modifier.height(9.dp))
+                        Text(
+                            text = stringResource(id = R.string.home_empty_festival_schedule_description_text),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            style = Content6,
+                        )
                     }
                 }
-            } else {
-                itemsIndexed(
-                    items = homeUiState.todayFestivals,
-                    key = { _, festival -> festival.festivalId },
-                ) { scheduleIndex, festival ->
-                    Column {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        FestivalScheduleItem(
-                            festival = festival,
-                            scheduleIndex = scheduleIndex,
+            }
+        } else {
+            itemsIndexed(
+                items = homeUiState.todayFestivals,
+                key = { _, festival -> festival.festivalId },
+            ) { scheduleIndex, festival ->
+                Column {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    FestivalScheduleItem(
+                        festival = festival,
+                        scheduleIndex = scheduleIndex,
 //                            likedFestivals = homeUiState.likedFestivals,
                             selectedDate = homeUiState.selectedDate,
                             isDataReady = homeUiState.isDataReady,
@@ -221,24 +255,6 @@ internal fun HomeScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
-        }
-        if (festivalUiState.isFestivalSearchBottomSheetVisible) {
-            FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isSearchMode = festivalUiState.isSearchMode,
-                isEditMode = festivalUiState.isEditMode,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
-                onFestivalUiAction = onFestivalUiAction,
-            )
-        }
-        if (homeUiState.isStarImageDialogVisible && homeUiState.selectedStar != null) {
-            StarImageDialog(
-                onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
-                star = homeUiState.selectedStar,
-            )
         }
     }
 }

@@ -2,9 +2,9 @@ package com.unifest.android.feature.waiting.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.WaitingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -36,13 +36,13 @@ class WaitingViewModel @Inject constructor(
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCancelNoShowWaitingClick -> setNoShowWaitingCancelDialogWaitingId(action.waitingId)
             is WaitingUiAction.OnCheckBoothDetailClick -> navigateToBoothDetail(action.boothId)
-//            is WaitingUiAction.OnPullToRefresh -> getMyWaitingList(false)
             is WaitingUiAction.OnWaitingCancelDialogCancelClick -> setWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnWaitingCancelDialogConfirmClick -> cancelBoothWaiting()
             is WaitingUiAction.OnNoShowWaitingCancelDialogCancelClick -> setNoShowWaitingCancelDialogVisible(false)
             is WaitingUiAction.OnNoShowWaitingCancelDialogConfirmClick -> cancelBoothNoShowWaiting()
             is WaitingUiAction.OnLookForBoothClick -> navigateToMap()
             is WaitingUiAction.OnRefresh -> getMyWaitingList(true)
+            is WaitingUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
@@ -142,6 +142,14 @@ class WaitingViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getMyWaitingList(false)
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }

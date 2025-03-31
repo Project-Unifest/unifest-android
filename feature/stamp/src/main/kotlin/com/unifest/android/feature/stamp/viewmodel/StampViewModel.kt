@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.StampRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.StampRepository
+import com.unifest.android.core.model.StampFestivalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -22,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StampViewModel @Inject constructor(
     private val stampRepository: StampRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(StampUiState())
     val uiState: StateFlow<StampUiState> = _uiState.asStateFlow()
@@ -30,28 +33,36 @@ class StampViewModel @Inject constructor(
     val uiEvent: Flow<StampUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
-        getStampEnabledBoothList()
+        getStampEnabledFestivals()
+        getRecentLikedFestival()
     }
 
     fun onAction(action: StampUiAction) {
         when (action) {
             is StampUiAction.OnReceiveStampClick -> requestLocationPermission()
-            is StampUiAction.OnRefreshClick -> refresh()
+            is StampUiAction.OnRefreshClick -> refreshCollectedStamps()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
             is StampUiAction.OnDismiss -> setStampBoothDialogVisible(false)
             is StampUiAction.OnStampBoothItemClick -> navigateToBoothDetail(action.boothId)
+            is StampUiAction.OnDropDownMenuClick -> {
+                if (_uiState.value.isDropDownMenuOpened) hideDropDownMenu() else showDropDownMenu()
+            }
+
+            is StampUiAction.OnDropDownMenuDismiss -> hideDropDownMenu()
+            is StampUiAction.OnFestivalSelect -> updateSelectedFestival(action.festival)
+            is StampUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
-    fun getCollectedStampCount(isRefresh: Boolean = false) {
+    fun getCollectedStamps(festivalId: Long, isRefresh: Boolean = false) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             if (isRefresh) delay(1000)
-            stampRepository.getCollectedStampCount()
-                .onSuccess { collectedStampCount ->
+            stampRepository.getCollectedStamps(festivalId)
+                .onSuccess { stampRecordList ->
                     _uiState.update {
-                        it.copy(collectedStampCount = collectedStampCount)
+                        it.copy(collectedStampCount = stampRecordList.size)
                     }
                 }.onFailure { exception ->
                     handleException(exception, this@StampViewModel)
@@ -60,9 +71,22 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getStampEnabledBoothList() {
+    private fun getStampEnabledFestivals() {
         viewModelScope.launch {
-            stampRepository.getStampEnabledBoothList()
+            stampRepository.getStampEnabledFestivals()
+                .onSuccess { stampEnabledFestivalList ->
+                    _uiState.update {
+                        it.copy(stampEnabledFestivalList = stampEnabledFestivalList.toImmutableList())
+                    }
+                }.onFailure { exception ->
+                    handleException(exception, this@StampViewModel)
+                }
+        }
+    }
+
+    fun getStampEnabledBooths(festivalId: Long) {
+        viewModelScope.launch {
+            stampRepository.getStampEnabledBooths(festivalId)
                 .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(
@@ -76,14 +100,25 @@ class StampViewModel @Inject constructor(
         }
     }
 
+    private fun getRecentLikedFestival() {
+        viewModelScope.launch {
+            val likedFestival = likedFestivalRepository.getRecentLikedFestival()
+            _uiState.update {
+                it.copy(
+                    selectedFestival = StampFestivalModel(festivalId = likedFestival.festivalId, name = likedFestival.schoolName),
+                )
+            }
+        }
+    }
+
     private fun setStampBoothDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isStampBoothDialogVisible = flag)
         }
     }
 
-    private fun refresh() {
-        getCollectedStampCount(isRefresh = true)
+    private fun refreshCollectedStamps() {
+        getCollectedStamps(festivalId = _uiState.value.selectedFestival.festivalId, isRefresh = true)
     }
 
     private fun requestLocationPermission() {
@@ -140,6 +175,29 @@ class StampViewModel @Inject constructor(
         }
     }
 
+    private fun showDropDownMenu() {
+        _uiState.update {
+            it.copy(isDropDownMenuOpened = true)
+        }
+    }
+
+    private fun hideDropDownMenu() {
+        _uiState.update {
+            it.copy(isDropDownMenuOpened = false)
+        }
+    }
+
+    private fun updateSelectedFestival(festival: StampFestivalModel) {
+        if (_uiState.value.selectedFestival == festival) return
+
+        _uiState.update {
+            it.copy(
+                selectedFestival = festival,
+                isDropDownMenuOpened = false,
+            )
+        }
+    }
+
     override fun setServerErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isServerErrorDialogVisible = flag)
@@ -149,6 +207,15 @@ class StampViewModel @Inject constructor(
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        getStampEnabledFestivals()
+        getCollectedStamps(_uiState.value.selectedFestival.festivalId)
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }

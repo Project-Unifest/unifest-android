@@ -22,7 +22,7 @@ sealed interface BoothUiAction {
     data object OnPolicyCheckBoxClick : BoothUiAction
     data object OnPrivatePolicyClick : BoothUiAction
     data object OnThirdPartyPolicyClick : BoothUiAction
-    data object OnRunningClick : BoothUiAction
+    data object OnScheduleToggleClick : BoothUiAction
     data object OnMoveClick : BoothUiAction
     data object OnNoShowDialogCancelClick : BoothUiAction
 }

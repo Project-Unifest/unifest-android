@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-internal class SplashNavigatorImpl @Inject constructor() : SplashNavigator {
+internal class DefaultSplashNavigator @Inject constructor() : SplashNavigator {
     override fun navigateFrom(
         activity: Activity,
         withFinish: Boolean,
@@ -30,5 +30,5 @@ internal class SplashNavigatorImpl @Inject constructor() : SplashNavigator {
 internal abstract class SplashNavigatorModule {
     @Singleton
     @Binds
-    abstract fun bindSplashNavigator(splashNavigatorImpl: SplashNavigatorImpl): SplashNavigator
+    abstract fun bindSplashNavigator(defaultSplashNavigator: DefaultSplashNavigator): SplashNavigator
 }

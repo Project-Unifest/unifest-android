@@ -59,22 +59,27 @@ import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
+import com.unifest.android.core.designsystem.component.NetworkErrorDialog
+import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
-import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.DarkGrey200
+import com.unifest.android.core.designsystem.theme.DarkGrey300
 import com.unifest.android.core.designsystem.theme.DarkGrey400
+import com.unifest.android.core.designsystem.theme.DarkGrey700
 import com.unifest.android.core.designsystem.theme.LightGrey100
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.StampCount
-import com.unifest.android.core.designsystem.theme.Title1
+import com.unifest.android.core.designsystem.theme.Title0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.CameraPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
+import com.unifest.android.feature.stamp.component.SchoolsDropDownMenu
 import com.unifest.android.feature.stamp.component.StampBoothBottomSheet
 import com.unifest.android.feature.stamp.component.StampButton
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
+import com.unifest.android.feature.stamp.viewmodel.ErrorType
 import com.unifest.android.feature.stamp.viewmodel.StampUiAction
 import com.unifest.android.feature.stamp.viewmodel.StampUiEvent
 import com.unifest.android.feature.stamp.viewmodel.StampUiState
@@ -116,7 +121,7 @@ internal fun StampRoute(
 
     val qrScanLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.getCollectedStampCount()
+            viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
         }
     }
 
@@ -137,8 +142,11 @@ internal fun StampRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.getCollectedStampCount()
+    LaunchedEffect(uiState.selectedFestival) {
+        if (uiState.selectedFestival.festivalId != 0L) {
+            viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
+            viewModel.getStampEnabledBooths(uiState.selectedFestival.festivalId)
+        }
     }
 
     StampScreen(
@@ -162,24 +170,81 @@ internal fun StampScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(padding),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+        StampContent(
+            uiState = uiState,
+            onAction = onAction,
+        )
+
+        if (uiState.isLoading) {
+            LoadingWheel(modifier = Modifier.fillMaxSize())
+        }
+
+        if (uiState.isPermissionDialogVisible) {
+            PermissionDialog(
+                permissionTextProvider = CameraPermissionTextProvider(),
+                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
+                onDismiss = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
+                navigateToAppSetting = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
+                onConfirm = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
+            )
+        }
+
+        if (uiState.isStampBoothDialogVisible) {
+            StampBoothBottomSheet(
+                schoolName = uiState.selectedFestival.name,
+                stampBoothList = uiState.stampBoothList,
+                onAction = onAction,
+            )
+        }
+
+        if (uiState.isServerErrorDialogVisible) {
+            ServerErrorDialog(
+                onRetryClick = { onAction(StampUiAction.OnRetryClick(ErrorType.SERVER)) },
+            )
+        }
+
+        if (uiState.isNetworkErrorDialogVisible) {
+            NetworkErrorDialog(
+                onRetryClick = { onAction(StampUiAction.OnRetryClick(ErrorType.NETWORK)) },
+            )
+        }
+    }
+}
+
+@Composable
+internal fun StampContent(
+    uiState: StampUiState,
+    onAction: (StampUiAction) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Spacer(modifier = Modifier.width(20.dp))
-                Text(
-                    text = stringResource(id = R.string.stamp_title),
-                    modifier = Modifier.padding(vertical = 18.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = BoothTitle2,
-                )
-            }
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.width(20.dp))
+            Text(
+                text = stringResource(id = R.string.stamp_title),
+                modifier = Modifier.padding(vertical = 18.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = BoothTitle2,
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        SchoolsDropDownMenu(
+            isDropDownMenuOpened = uiState.isDropDownMenuOpened,
+            festivals = uiState.stampEnabledFestivalList,
+            selectedFestival = uiState.selectedFestival,
+            onAction = onAction,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        if (uiState.stampEnabledFestivalList.contains(uiState.selectedFestival)) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -193,19 +258,38 @@ internal fun StampScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Spacer(modifier = Modifier.width(24.dp))
+                        Spacer(modifier = Modifier.width(25.dp))
                         Column {
                             Text(
-                                text = "한국교통대학교",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                style = Title1,
+                                text = buildAnnotatedString {
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                                        append("${uiState.collectedStampCount}")
+                                    }
+                                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                                        append(" / ${uiState.stampBoothList.size}개")
+                                    }
+                                },
+                                style = StampCount,
                             )
                             Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.stamp_collection_status),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = Content1,
-                            )
+                            Row(
+                                modifier = Modifier.clickableSingle {
+                                    onAction(StampUiAction.OnRefreshClick)
+                                },
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.refresh),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    style = Content2,
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
+                                    contentDescription = "refresh icon",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         StampButton(
@@ -216,45 +300,7 @@ internal fun StampScreen(
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
-                    Spacer(modifier = Modifier.height(21.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Spacer(modifier = Modifier.width(24.dp))
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                    append("${uiState.collectedStampCount}")
-                                }
-                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
-                                    append(" / ${uiState.stampBoothList.size} 개")
-                                }
-                            },
-                            style = StampCount,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Row(
-                            modifier = Modifier.clickableSingle {
-                                onAction(StampUiAction.OnRefreshClick)
-                            },
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.refresh),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                style = Content2,
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
-                                contentDescription = "refresh icon",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(24.dp))
-                    }
-                    Spacer(modifier = Modifier.height(44.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier
@@ -279,7 +325,7 @@ internal fun StampScreen(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(54.dp))
+                    Spacer(modifier = Modifier.height(28.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -300,36 +346,39 @@ internal fun StampScreen(
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = "arrow right icon",
+                            contentDescription = "Arrow Right Icon",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Spacer(modifier = Modifier.width(22.dp))
+                        Spacer(modifier = Modifier.width(21.dp))
                     }
-                    Spacer(modifier = Modifier.height(21.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
             }
-        }
-
-        if (uiState.isPermissionDialogVisible) {
-            PermissionDialog(
-                permissionTextProvider = CameraPermissionTextProvider(),
-                isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
-                onDismiss = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.DISMISS)) },
-                navigateToAppSetting = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING)) },
-                onConfirm = { onAction(StampUiAction.OnPermissionDialogButtonClick(PermissionDialogButtonType.CONFIRM)) },
-            )
-        }
-
-        if (uiState.isStampBoothDialogVisible) {
-            StampBoothBottomSheet(
-                schoolName = uiState.schoolName,
-                stampBoothList = uiState.stampBoothList,
-                onAction = onAction,
-            )
-        }
-
-        if (uiState.isLoading) {
-            LoadingWheel(modifier = Modifier.fillMaxSize())
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(454.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surfaceBright,
+                        shape = RoundedCornerShape(10.dp),
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_stamp_not_support),
+                    contentDescription = "Stamp Not Supported Icon",
+                    tint = if (isSystemInDarkTheme()) DarkGrey300 else DarkGrey700,
+                )
+                Spacer(modifier = Modifier.height(26.dp))
+                Text(
+                    text = stringResource(id = R.string.stamp_not_support_school),
+                    color = DarkGrey400,
+                    style = Title0,
+                )
+            }
         }
     }
 }

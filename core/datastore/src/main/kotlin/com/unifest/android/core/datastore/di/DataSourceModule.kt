@@ -1,13 +1,13 @@
 package com.unifest.android.core.datastore.di
 
 import com.unifest.android.core.datastore.OnboardingDataSource
-import com.unifest.android.core.datastore.OnboardingDataSourceImpl
+import com.unifest.android.core.datastore.DefaultOnboardingDataSource
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
-import com.unifest.android.core.datastore.RecentLikedFestivalDataSourceImpl
+import com.unifest.android.core.datastore.DefaultRecentLikedFestivalDataSource
 import com.unifest.android.core.datastore.SettingDataSource
-import com.unifest.android.core.datastore.SettingDataSourceImpl
+import com.unifest.android.core.datastore.DefaultSettingDataSource
 import com.unifest.android.core.datastore.TokenDataSource
-import com.unifest.android.core.datastore.TokenDataSourceImpl
+import com.unifest.android.core.datastore.DefaultTokenDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -19,17 +19,17 @@ import javax.inject.Singleton
 abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindOnboardingDataSource(onboardingDataSourceImpl: OnboardingDataSourceImpl): OnboardingDataSource
+    abstract fun bindOnboardingDataSource(defaultOnboardingDataSource: DefaultOnboardingDataSource): OnboardingDataSource
 
     @Binds
     @Singleton
-    abstract fun bindRecentLikedFestivalDataSource(recentLikedFestivalDataSourceImpl: RecentLikedFestivalDataSourceImpl): RecentLikedFestivalDataSource
+    abstract fun bindRecentLikedFestivalDataSource(defaultRecentLikedFestivalDataSource: DefaultRecentLikedFestivalDataSource): RecentLikedFestivalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindTokenDataSource(tokenDataSourceImpl: TokenDataSourceImpl): TokenDataSource
+    abstract fun bindTokenDataSource(defaultTokenDataSource: DefaultTokenDataSource): TokenDataSource
 
     @Binds
     @Singleton
-    abstract fun bindSettingDataSource(settingDataSourceImpl: SettingDataSourceImpl): SettingDataSource
+    abstract fun bindSettingDataSource(defaultSettingDataSource: DefaultSettingDataSource): SettingDataSource
 }

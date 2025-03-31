@@ -10,5 +10,10 @@ sealed interface WaitingUiAction {
     data object OnNoShowWaitingCancelDialogConfirmClick : WaitingUiAction
     data object OnLookForBoothClick : WaitingUiAction
     data object OnRefresh : WaitingUiAction
-    //    data object OnPullToRefresh : WaitingUiAction
+    data class OnRetryClick(val error: ErrorType) : WaitingUiAction
+}
+
+enum class ErrorType {
+    NETWORK,
+    SERVER,
 }

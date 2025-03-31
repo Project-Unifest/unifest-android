@@ -53,6 +53,6 @@ allprojects {
     }
 }
 
-apply {
-    from("gradle/projectDependencyGraph.gradle")
-}
+// apply {
+//     from("gradle/projectDependencyGraph.gradle")
+// }

@@ -2,9 +2,9 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.MessagingRepository
-import com.unifest.android.core.data.repository.RemoteConfigRepository
+import com.unifest.android.core.data.api.repository.MessagingRepository
+import com.unifest.android.core.data.api.repository.OnboardingRepository
+import com.unifest.android.core.data.api.repository.RemoteConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    // private val onboardingRepository: OnboardingRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
+    private val onboardingRepository: OnboardingRepository,
     private val messagingRepository: MessagingRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel() {
@@ -35,42 +35,52 @@ class SplashViewModel @Inject constructor(
         when (action) {
             is SplashUiAction.OnUpdateClick -> navigateToPlayStore()
             is SplashUiAction.OnUpdateDismissClick -> closeApp()
+            is SplashUiAction.OnConfirmClick -> closeApp()
         }
     }
 
-//    // 학교를 하나만 서비스 하기 때문에 Intro 스킵
-//    fun checkIntroCompletion() {
-//        viewModelScope.launch {
-//            if (onboardingRepository.checkIntroCompletion()) {
-//                _uiEvent.send(SplashUiEvent.NavigateToMain)
-//            } else {
-//                _uiEvent.send(SplashUiEvent.NavigateToIntro)
-//            }
-//        }
-//    }
-
-    private fun setRecentLikedFestival() {
+    fun checkIntroCompletion() {
         viewModelScope.launch {
-            likedFestivalRepository.setRecentLikedFestival("한국교통대학교")
-            likedFestivalRepository.setRecentLikedFestivalId(2L)
-            _uiEvent.send(SplashUiEvent.NavigateToMain)
+            if (onboardingRepository.checkIntroCompletion()) {
+                _uiEvent.send(SplashUiEvent.NavigateToMain)
+            } else {
+                _uiEvent.send(SplashUiEvent.NavigateToIntro)
+            }
         }
     }
 
     @Suppress("TooGenericExceptionCaught")
-    fun refreshFCMToken() {
-        viewModelScope.launch {
-            try {
-                val token = messagingRepository.refreshFCMToken()
-                token?.let {
-                    Timber.d("New FCM token: $it")
-                    messagingRepository.setFCMToken(it)
-                    // 한국교통대학교로 고정
-                    setRecentLikedFestival()
+    suspend fun refreshFCMToken(): Boolean {
+        return try {
+            val fcmToken = messagingRepository.refreshFCMToken()
+            if (fcmToken == null) {
+                Timber.e("FCM token is null")
+                _uiState.update {
+                    it.copy(isNetworkErrorDialogVisible = true)
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "Error getting or saving FCM token")
+                return false
             }
+
+            messagingRepository.registerFCMToken(fcmToken)
+                .fold(
+                    onSuccess = {
+                        messagingRepository.setFCMToken(fcmToken)
+                        true
+                    },
+                    onFailure = { exception ->
+                        Timber.e(exception, "Error registering FCM token")
+                        _uiState.update {
+                            it.copy(isNetworkErrorDialogVisible = true)
+                        }
+                        false
+                    },
+                )
+        } catch (e: Exception) {
+            Timber.e(e, "Error getting or saving FCM token")
+            _uiState.update {
+                it.copy(isNetworkErrorDialogVisible = true)
+            }
+            false
         }
     }
 

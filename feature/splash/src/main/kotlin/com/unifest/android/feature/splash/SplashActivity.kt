@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.navigator.IntroNavigator
 import com.unifest.android.feature.navigator.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
@@ -19,9 +20,9 @@ import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
-internal class SplashActivity : ComponentActivity() {
-//    @Inject
-//    lateinit var introNavigator: IntroNavigator
+class SplashActivity : ComponentActivity() {
+    @Inject
+    lateinit var introNavigator: IntroNavigator
 
     @Inject
     lateinit var mainNavigator: MainNavigator
@@ -56,12 +57,12 @@ internal class SplashActivity : ComponentActivity() {
 
             UnifestTheme {
                 SplashRoute(
-//                    navigateToIntro = {
-//                        introNavigator.navigateFrom(
-//                            activity = this@SplashActivity,
-//                            withFinish = true,
-//                        )
-//                    },
+                    navigateToIntro = {
+                        introNavigator.navigateFrom(
+                            activity = this@SplashActivity,
+                            withFinish = true,
+                        )
+                    },
                     navigateToMain = {
                         if (hasFcmData) {
                             // 앱이 백그라운드 상태일 때, 알림을 수신한 경우
