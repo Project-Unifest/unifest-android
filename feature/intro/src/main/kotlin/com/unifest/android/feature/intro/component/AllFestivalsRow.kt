@@ -2,7 +2,6 @@ package com.unifest.android.feature.intro.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,8 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.feature.intro.R
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Content3
@@ -41,10 +38,12 @@ import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.component.FestivalItem
+import com.unifest.android.feature.intro.R
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun AllFestivalsTabRow(

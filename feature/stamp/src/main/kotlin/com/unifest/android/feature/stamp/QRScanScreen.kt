@@ -37,6 +37,7 @@ import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
 import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
 import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
@@ -168,12 +169,15 @@ private fun QRScanBottomBar(
 @ComponentPreview
 @Composable
 private fun QRScanTopBarPreview() {
-    QRScanTopBar(onAction = {})
+    UnifestTheme {
+        QRScanTopBar(onAction = {})
+    }
 }
-
 
 @ComponentPreview
 @Composable
 private fun QRScanBottomBarPreview() {
-    QRScanBottomBar()
+    UnifestTheme {
+        QRScanBottomBar()
+    }
 }
