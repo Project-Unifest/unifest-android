@@ -3,6 +3,7 @@ package com.unifest.android.core.network.service
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
+import com.unifest.android.core.network.request.LikedFestivalRequest
 import com.unifest.android.core.network.request.RegisterFCMTokenRequest
 import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.request.WaitingRequest
@@ -119,12 +120,14 @@ interface UnifestService {
     @POST("festival/{festival-id}/interest")
     suspend fun registerLikedFestival(
         @Path("festival-id") festivalId: Long,
+        @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
     // 관심 축제 해제
     @DELETE("festival/{festival-id}/interest")
     suspend fun unregisterLikedFestival(
         @Path("festival-id") festivalId: Long,
+        @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
     // 스탬프 조회

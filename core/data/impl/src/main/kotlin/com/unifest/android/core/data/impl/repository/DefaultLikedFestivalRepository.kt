@@ -1,5 +1,7 @@
 package com.unifest.android.core.data.impl.repository
 
+import android.content.Context
+import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.api.repository.LikedFestivalRepository
 import com.unifest.android.core.data.mapper.toEntity
 import com.unifest.android.core.data.mapper.toModel
@@ -8,12 +10,15 @@ import com.unifest.android.core.database.LikedFestivalDao
 import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.core.network.request.LikedFestivalRequest
 import com.unifest.android.core.network.service.UnifestService
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class DefaultLikedFestivalRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val likedFestivalDao: LikedFestivalDao,
     private val recentLikedFestivalDataSource: RecentLikedFestivalDataSource,
     private val service: UnifestService,
@@ -52,11 +57,13 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
 
     override suspend fun registerLikedFestival() = runSuspendCatching {
         val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
-        service.registerLikedFestival(festivalId)
+        val deviceId = getDeviceId(context)
+        service.registerLikedFestival(festivalId, LikedFestivalRequest(deviceId))
     }
 
     override suspend fun unregisterLikedFestival() = runSuspendCatching {
         val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
-        service.unregisterLikedFestival(festivalId)
+        val deviceId = getDeviceId(context)
+        service.unregisterLikedFestival(festivalId, LikedFestivalRequest(deviceId))
     }
 }
