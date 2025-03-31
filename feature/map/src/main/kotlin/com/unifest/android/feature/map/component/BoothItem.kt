@@ -160,7 +160,7 @@ private fun BoothItemPreview() {
 
 @ComponentPreview
 @Composable
-fun RankingBadgePreview() {
+private fun RankingBadgePreview() {
     UnifestTheme {
         RankingBadge(ranking = 1)
     }

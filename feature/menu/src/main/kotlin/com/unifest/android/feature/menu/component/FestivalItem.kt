@@ -81,7 +81,7 @@ internal fun FestivalItem(
 
 @ComponentPreview
 @Composable
-internal fun FestivalItemPreview() {
+private fun FestivalItemPreview() {
     FestivalItem(
         festival = FestivalModel(
             schoolName = "건국대학교",
