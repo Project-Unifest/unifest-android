@@ -130,7 +130,7 @@ internal fun HomeScreen(
         if (homeUiState.isStarImageDialogVisible && homeUiState.selectedStar != null) {
             StarImageDialog(
                 onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
-                star = homeUiState.selectedStar,
+                starInfo = homeUiState.selectedStar,
             )
         }
     }
@@ -203,57 +203,56 @@ internal fun HomeContent(
                     FestivalScheduleItem(
                         festival = festival,
                         scheduleIndex = scheduleIndex,
-//                            likedFestivals = homeUiState.likedFestivals,
-                            selectedDate = homeUiState.selectedDate,
-                            isDataReady = homeUiState.isDataReady,
-//                            isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
-                            onHomeUiAction = onHomeUiAction,
-                        )
-                    }
-                    if (scheduleIndex < homeUiState.todayFestivals.size - 1) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                            color = MaterialTheme.colorScheme.outline,
-                        )
-                    }
+                        // likedFestivals = homeUiState.likedFestivals,
+                        selectedDate = homeUiState.selectedDate,
+                        isDataReady = homeUiState.isDataReady,
+                        // isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
+                        onHomeUiAction = onHomeUiAction,
+                    )
                 }
-            }
-            item {
-                UnifestOutlinedButton(
-                    onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
-                    borderColor = MaterialTheme.colorScheme.secondaryContainer,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.home_add_interest_festival_button),
-                        style = BoothLocation,
+                if (scheduleIndex < homeUiState.todayFestivals.size - 1) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        color = MaterialTheme.colorScheme.outline,
                     )
                 }
             }
-            item {
-                HorizontalDivider(
-                    thickness = 8.dp,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-            }
-            item { Spacer(modifier = Modifier.height(20.dp)) }
-            item {
+        }
+        item {
+            UnifestOutlinedButton(
+                onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+                borderColor = MaterialTheme.colorScheme.secondaryContainer,
+            ) {
                 Text(
-                    text = stringResource(id = R.string.home_incoming_festival_text),
-                    modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = Title3,
+                    text = stringResource(id = R.string.home_add_interest_festival_button),
+                    style = BoothLocation,
                 )
             }
-            if (homeUiState.incomingFestivals.isNotEmpty()) {
-                items(homeUiState.incomingFestivals) { festival ->
-                    IncomingFestivalCard(festival = festival)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+        }
+        item {
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item { Spacer(modifier = Modifier.height(20.dp)) }
+        item {
+            Text(
+                text = stringResource(id = R.string.home_incoming_festival_text),
+                modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = Title3,
+            )
+        }
+        if (homeUiState.incomingFestivals.isNotEmpty()) {
+            items(homeUiState.incomingFestivals) { festival ->
+                IncomingFestivalCard(festival = festival)
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

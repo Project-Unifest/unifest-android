@@ -1,4 +1,4 @@
-package com.unifest.android.core.ui.component
+package com.unifest.android.feature.home.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -11,11 +11,12 @@ import androidx.compose.ui.layout.ContentScale
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.StarInfoModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StarImage(
-    imgUrl: String?,
+    starInfo: StarInfoModel,
     onClick: () -> Unit,
     // onLongClick: () -> Unit,
     // isClicked: Boolean,
@@ -34,7 +35,7 @@ fun StarImage(
         contentAlignment = Alignment.Center,
     ) {
         NetworkImage(
-            imgUrl = imgUrl,
+            imgUrl = starInfo.imgUrl,
             modifier = Modifier.matchParentSize(),
             placeholder = placeholder,
             contentScale = contentScale,
@@ -60,7 +61,11 @@ fun StarImage(
 private fun StarImagePreview() {
     UnifestTheme {
         StarImage(
-            imgUrl = "",
+            starInfo = StarInfoModel(
+                starId = 1L,
+                imgUrl = "",
+                name = "",
+            ),
             onClick = {},
             // label = "",
         )
@@ -72,7 +77,11 @@ private fun StarImagePreview() {
 private fun StarImageClickedPreview() {
     UnifestTheme {
         StarImage(
-            imgUrl = "",
+            starInfo = StarInfoModel(
+                starId = 1L,
+                imgUrl = "",
+                name = "",
+            ),
             onClick = {},
             // onLongClick = {},
             // isClicked = true,

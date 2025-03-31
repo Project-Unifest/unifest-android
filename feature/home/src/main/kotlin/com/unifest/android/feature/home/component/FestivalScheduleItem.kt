@@ -36,9 +36,7 @@ import com.unifest.android.core.designsystem.theme.LightBlueGreen
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.core.ui.component.StarImage
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
-import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import com.unifest.android.core.designsystem.R as designR
@@ -121,7 +119,7 @@ internal fun FestivalScheduleItem(
                         key = { _, starInfo -> starInfo.starId },
                     ) { starIndex, starInfo ->
                         StarImage(
-                            imgUrl = starInfo.imgUrl,
+                            starInfo = starInfo,
                             onClick = {
                                 onHomeUiAction(HomeUiAction.OnStarImageClick(scheduleIndex, starIndex))
                             },
