@@ -14,7 +14,7 @@ gradle-dependency-handler-extensions = "1.1.0"
 google-secrets = "2.0.1"
 google-service = "4.4.2"
 
-kotlin-detekt = "1.23.7"
+kotlin-detekt = "1.23.8"
 kotlin-ktlint-gradle = "11.6.1"
 kotlin-ktlint-source = "0.50.0"
 
