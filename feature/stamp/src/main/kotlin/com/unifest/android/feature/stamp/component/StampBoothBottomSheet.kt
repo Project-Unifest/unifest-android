@@ -128,7 +128,7 @@ internal fun StampBoothBottomSheet(
 
 @ComponentPreview
 @Composable
-fun SchoolSearchBottomSheetPreview() {
+private fun SchoolSearchBottomSheetPreview() {
     UnifestTheme {
         StampBoothBottomSheet(
             schoolName = "",

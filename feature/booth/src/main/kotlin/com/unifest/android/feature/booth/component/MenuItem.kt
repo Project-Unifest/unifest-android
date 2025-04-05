@@ -34,12 +34,13 @@ import com.unifest.android.feature.booth.R
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 
 @Composable
-fun MenuItem(
+internal fun MenuItem(
     menu: MenuModel,
     onAction: (BoothUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+        modifier = modifier.padding(horizontal = 20.dp, vertical = 8.dp),
     ) {
         Box(
             modifier = Modifier
@@ -107,7 +108,7 @@ fun MenuItem(
 
 @ComponentPreview
 @Composable
-fun MenuItemPreview() {
+private fun MenuItemPreview() {
     UnifestTheme {
         MenuItem(
             menu = MenuModel(
@@ -124,7 +125,7 @@ fun MenuItemPreview() {
 
 @ComponentPreview
 @Composable
-fun MenuItemSoldOutPreview() {
+private fun MenuItemSoldOutPreview() {
     UnifestTheme {
         MenuItem(
             menu = MenuModel(

@@ -36,7 +36,7 @@ import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 
 @Composable
-fun BoothBottomBar(
+internal fun BoothBottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
     isWaitingEnable: Boolean,
@@ -102,7 +102,7 @@ fun BoothBottomBar(
 
 @ComponentPreview
 @Composable
-fun BoothBottomBarPreview() {
+private fun BoothBottomBarPreview() {
     UnifestTheme {
         BoothBottomBar(
             bookmarkCount = 12,

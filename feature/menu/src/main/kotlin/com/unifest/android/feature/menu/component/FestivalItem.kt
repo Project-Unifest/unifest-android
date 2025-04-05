@@ -29,7 +29,7 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.menu.viewmodel.MenuUiAction
 
 @Composable
-fun FestivalItem(
+internal fun FestivalItem(
     festival: FestivalModel,
     onMenuUiAction: (MenuUiAction) -> Unit,
 ) {
@@ -81,7 +81,7 @@ fun FestivalItem(
 
 @ComponentPreview
 @Composable
-fun FestivalItemPreview() {
+private fun FestivalItemPreview() {
     FestivalItem(
         festival = FestivalModel(
             schoolName = "건국대학교",

@@ -134,7 +134,7 @@ internal fun BoothDetailRoute(
 }
 
 @Composable
-fun BoothDetailScreen(
+internal fun BoothDetailScreen(
     padding: PaddingValues,
     uiState: BoothUiState,
     snackBarState: SnackbarHostState,
@@ -247,7 +247,7 @@ fun BoothDetailScreen(
 }
 
 @Composable
-fun BoothDetailContent(
+internal fun BoothDetailContent(
     uiState: BoothUiState,
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,

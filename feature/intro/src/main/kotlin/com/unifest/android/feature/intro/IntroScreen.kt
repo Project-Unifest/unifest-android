@@ -70,7 +70,7 @@ internal fun IntroRoute(
 }
 
 @Composable
-fun IntroScreen(
+internal fun IntroScreen(
     uiState: IntroUiState,
     onAction: (IntroUiAction) -> Unit,
 ) {
@@ -106,7 +106,7 @@ fun IntroScreen(
 }
 
 @Composable
-fun IntroContent(
+internal fun IntroContent(
     uiState: IntroUiState,
     onAction: (IntroUiAction) -> Unit,
     innerPadding: PaddingValues,
@@ -192,7 +192,7 @@ fun IntroContent(
 
 @DevicePreview
 @Composable
-fun IntroScreenPreview(
+private fun IntroScreenPreview(
     @PreviewParameter(IntroPreviewParameterProvider::class)
     introUiState: IntroUiState,
 ) {
@@ -206,7 +206,7 @@ fun IntroScreenPreview(
 
 @DevicePreview
 @Composable
-fun IntroScreenEmptyPreview() {
+private fun IntroScreenEmptyPreview() {
     UnifestTheme {
         IntroScreen(
             uiState = IntroUiState(festivals = persistentListOf()),

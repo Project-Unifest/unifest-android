@@ -50,7 +50,7 @@ import java.time.LocalTime
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-fun BoothDescription(
+internal fun BoothDescription(
     name: String,
     warning: String,
     description: String,
@@ -58,6 +58,7 @@ fun BoothDescription(
     isScheduleExpanded: Boolean,
     scheduleList: ImmutableList<ScheduleModel>,
     onAction: (BoothUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val configuration = LocalConfiguration.current
     val maxWidth = remember(configuration) {
@@ -86,7 +87,7 @@ fun BoothDescription(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp)
             .animateContentSize(),

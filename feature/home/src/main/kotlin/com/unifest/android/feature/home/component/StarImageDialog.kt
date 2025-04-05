@@ -1,4 +1,4 @@
-package com.unifest.android.feature.home
+package com.unifest.android.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,9 +30,9 @@ import com.unifest.android.core.model.StarInfoModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StarImageDialog(
+internal fun StarImageDialog(
     onDismissRequest: () -> Unit,
-    star: StarInfoModel,
+    starInfo: StarInfoModel,
     modifier: Modifier = Modifier,
 ) {
     val configuration = LocalConfiguration.current
@@ -57,7 +57,7 @@ fun StarImageDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             NetworkImage(
-                imgUrl = star.imgUrl,
+                imgUrl = starInfo.imgUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .size(dialogSize)
@@ -65,7 +65,7 @@ fun StarImageDialog(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = star.name,
+                text = starInfo.name,
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 style = Title2,
@@ -80,7 +80,7 @@ private fun StarImageDialogPreview() {
     UnifestTheme {
         StarImageDialog(
             onDismissRequest = {},
-            star = StarInfoModel(
+            starInfo = StarInfoModel(
                 starId = 0L,
                 name = "창모",
                 imgUrl = "",

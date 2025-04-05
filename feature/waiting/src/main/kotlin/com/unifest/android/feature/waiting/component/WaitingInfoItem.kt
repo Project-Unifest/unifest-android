@@ -41,7 +41,7 @@ import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-fun WaitingInfoItem(
+internal fun WaitingInfoItem(
     myWaitingModel: MyWaitingModel,
     onWaitingUiAction: (WaitingUiAction) -> Unit,
 ) {
@@ -205,7 +205,7 @@ fun WaitingInfoItem(
 
 @ComponentPreview
 @Composable
-fun WaitingInfoItemPreview() {
+private fun WaitingInfoItemPreview() {
     UnifestTheme {
         WaitingInfoItem(
             myWaitingModel = MyWaitingModel(
@@ -227,7 +227,7 @@ fun WaitingInfoItemPreview() {
 
 @ComponentPreview
 @Composable
-fun WaitingInfoItemPreviewNOSHOW() {
+private fun WaitingInfoItemPreviewNOSHOW() {
     UnifestTheme {
         WaitingInfoItem(
             myWaitingModel = MyWaitingModel(

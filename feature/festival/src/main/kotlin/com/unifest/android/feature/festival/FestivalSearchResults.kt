@@ -48,7 +48,7 @@ import kotlinx.collections.immutable.persistentListOf
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-fun FestivalSearchResults(
+internal fun FestivalSearchResults(
     searchResults: ImmutableList<FestivalModel>,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
@@ -110,7 +110,7 @@ fun FestivalSearchResults(
 }
 
 @Composable
-fun FestivalSearchResultItem(
+internal fun FestivalSearchResultItem(
     festival: FestivalModel,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     likedFestivals: ImmutableList<FestivalModel>,
@@ -195,7 +195,7 @@ fun FestivalSearchResultItem(
 
 @ComponentPreview
 @Composable
-fun FestivalSearchResultsPreview(
+private fun FestivalSearchResultsPreview(
     @PreviewParameter(FestivalPreviewParameterProvider::class)
     festivalUiState: FestivalUiState,
 ) {

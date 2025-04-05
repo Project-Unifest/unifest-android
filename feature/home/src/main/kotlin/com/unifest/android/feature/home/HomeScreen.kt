@@ -48,6 +48,7 @@ import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.home.component.Calendar
 import com.unifest.android.feature.home.component.FestivalScheduleItem
 import com.unifest.android.feature.home.component.IncomingFestivalCard
+import com.unifest.android.feature.home.component.StarImageDialog
 import com.unifest.android.feature.home.preview.HomePreviewParameterProvider
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
@@ -129,7 +130,7 @@ internal fun HomeScreen(
         if (homeUiState.isStarImageDialogVisible && homeUiState.selectedStar != null) {
             StarImageDialog(
                 onDismissRequest = { onHomeUiAction(HomeUiAction.OnStarImageDialogDismiss) },
-                star = homeUiState.selectedStar,
+                starInfo = homeUiState.selectedStar,
             )
         }
     }
@@ -202,10 +203,10 @@ internal fun HomeContent(
                     FestivalScheduleItem(
                         festival = festival,
                         scheduleIndex = scheduleIndex,
-//                            likedFestivals = homeUiState.likedFestivals,
+                        // likedFestivals = homeUiState.likedFestivals,
                         selectedDate = homeUiState.selectedDate,
                         isDataReady = homeUiState.isDataReady,
-                        isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
+                        // isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
                         onHomeUiAction = onHomeUiAction,
                     )
                 }

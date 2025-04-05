@@ -27,7 +27,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun MapTopAppBar(
+internal fun MapTopAppBar(
     title: String,
     boothSearchText: TextFieldValue,
     isOnboardingCompleted: Boolean,
@@ -79,7 +79,7 @@ fun MapTopAppBar(
 
 @ComponentPreview
 @Composable
-fun MapTopAppBarPreview() {
+private fun MapTopAppBarPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",

@@ -51,8 +51,8 @@ class HomeViewModel @Inject constructor(
                 getTodayFestivals(action.date.toString())
             }
             is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
-            is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
-            is HomeUiAction.OnStarImageLongClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
+            // is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
+            is HomeUiAction.OnStarImageClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
             is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
         }
@@ -148,22 +148,23 @@ class HomeViewModel @Inject constructor(
             it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
-    private fun toggleStarImageClicked(scheduleIndex: Int, starIndex: Int, flag: Boolean) {
-        _uiState.update { currentState ->
-            val updatedList = currentState.isStarImageClicked.mapIndexed { index, list ->
-                if (index == scheduleIndex) {
-                    list.toMutableList().apply {
-                        if (starIndex < this.size) {
-                            this[starIndex] = flag
-                        }
-                    }.toImmutableList()
-                } else {
-                    list
-                }
-            }.toImmutableList()
-            currentState.copy(isStarImageClicked = updatedList)
-        }
-    }
+
+//    private fun toggleStarImageClicked(scheduleIndex: Int, starIndex: Int, flag: Boolean) {
+//        _uiState.update { currentState ->
+//            val updatedList = currentState.isStarImageClicked.mapIndexed { index, list ->
+//                if (index == scheduleIndex) {
+//                    list.toMutableList().apply {
+//                        if (starIndex < this.size) {
+//                            this[starIndex] = flag
+//                        }
+//                    }.toImmutableList()
+//                } else {
+//                    list
+//                }
+//            }.toImmutableList()
+//            currentState.copy(isStarImageClicked = updatedList)
+//        }
+//    }
 
     private fun showStarImageDialog(scheduleIndex: Int, starIndex: Int) {
         _uiState.update {

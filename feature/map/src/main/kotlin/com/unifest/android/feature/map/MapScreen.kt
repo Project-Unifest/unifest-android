@@ -376,7 +376,7 @@ internal fun MapScreen(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun MapContent(
+internal fun MapContent(
     uiState: MapUiState,
     cameraPositionState: CameraPositionState,
     rotationState: Float,

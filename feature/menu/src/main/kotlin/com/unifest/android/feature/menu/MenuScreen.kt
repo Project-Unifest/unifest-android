@@ -396,7 +396,7 @@ internal fun MapContent(
 
 @DevicePreview
 @Composable
-fun MenuScreenPreview(
+private fun MenuScreenPreview(
     @PreviewParameter(MenuPreviewParameterProvider::class)
     menuUiState: MenuUiState,
 ) {

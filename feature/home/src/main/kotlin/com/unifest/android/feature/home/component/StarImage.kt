@@ -1,29 +1,26 @@
-package com.unifest.android.core.ui.component
+package com.unifest.android.feature.home.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
-import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.core.model.StarInfoModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StarImage(
-    imgUrl: String?,
+    starInfo: StarInfoModel,
     onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    isClicked: Boolean,
-    label: String,
+    // onLongClick: () -> Unit,
+    // isClicked: Boolean,
+    // label: String,
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     contentScale: ContentScale = ContentScale.Crop,
@@ -32,30 +29,30 @@ fun StarImage(
     Box(
         modifier = modifier
             .combinedClickable(
-                onLongClick = onLongClick,
+                // onLongClick = onLongClick,
                 onClick = onClick,
             ),
         contentAlignment = Alignment.Center,
     ) {
         NetworkImage(
-            imgUrl = imgUrl,
+            imgUrl = starInfo.imgUrl,
             modifier = Modifier.matchParentSize(),
             placeholder = placeholder,
             contentScale = contentScale,
             contentDescription = contentDescription,
         )
-        if (isClicked) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(Color.Black.copy(alpha = 0.6f)),
-            )
-            AutoResizedText(
-                text = label,
-                color = Color.White,
-                style = Content9,
-            )
-        }
+//        if (isClicked) {
+//            Box(
+//                modifier = Modifier
+//                    .matchParentSize()
+//                    .background(Color.Black.copy(alpha = 0.6f)),
+//            )
+//            AutoResizedText(
+//                text = label,
+//                color = Color.White,
+//                style = Content9,
+//            )
+//        }
     }
 }
 
@@ -64,11 +61,13 @@ fun StarImage(
 private fun StarImagePreview() {
     UnifestTheme {
         StarImage(
-            imgUrl = "",
+            starInfo = StarInfoModel(
+                starId = 1L,
+                imgUrl = "",
+                name = "",
+            ),
             onClick = {},
-            onLongClick = {},
-            isClicked = false,
-            label = "",
+            // label = "",
         )
     }
 }
@@ -78,11 +77,15 @@ private fun StarImagePreview() {
 private fun StarImageClickedPreview() {
     UnifestTheme {
         StarImage(
-            imgUrl = "",
+            starInfo = StarInfoModel(
+                starId = 1L,
+                imgUrl = "",
+                name = "",
+            ),
             onClick = {},
-            onLongClick = {},
-            isClicked = true,
-            label = "키스오브라이프",
+            // onLongClick = {},
+            // isClicked = true,
+            // label = "키스오브라이프",
         )
     }
 }
