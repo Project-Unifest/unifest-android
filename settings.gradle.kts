@@ -24,6 +24,7 @@ dependencyResolutionManagement {
 
 include(
     ":app",
+    ":baselineprofile",
 
     ":core:common",
     ":core:data:api",
