@@ -12,6 +12,6 @@ interface LikedFestivalRepository {
     suspend fun deleteLikedFestival(festival: FestivalModel)
     suspend fun getRecentLikedFestival(): FestivalModel
     suspend fun setRecentLikedFestival(festival: FestivalModel)
-    suspend fun registerLikedFestival(): Result<Unit>
-    suspend fun unregisterLikedFestival(): Result<Unit>
+    suspend fun registerLikedFestival(festival: FestivalModel): Result<Unit>
+    suspend fun unregisterLikedFestival(festival: FestivalModel): Result<Unit>
 }

@@ -50,24 +50,10 @@ class HomeViewModel @Inject constructor(
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
             }
-            is HomeUiAction.OnAddAsLikedFestivalClick -> addLikeFestival(action.festivalTodayModel)
             // is HomeUiAction.OnToggleStarImageClick -> toggleStarImageClicked(action.scheduleIndex, action.starIndex, action.flag)
             is HomeUiAction.OnStarImageClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
             is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
-        }
-    }
-
-    private fun addLikeFestival(festival: FestivalTodayModel) {
-        viewModelScope.launch {
-            likedFestivalRepository.registerLikedFestival()
-                .onSuccess {
-                    likedFestivalRepository.insertLikedFestivalAtHome(festival)
-                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_message)))
-                }
-                .onFailure { exception ->
-                    _uiEvent.send(HomeUiEvent.ShowSnackBar(UiText.StringResource(R.string.home_add_interest_festival_saved_failed_message)))
-                }
         }
     }
 

@@ -55,15 +55,13 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
         recentLikedFestivalDataSource.setRecentLikedFestival(festival)
     }
 
-    override suspend fun registerLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
+    override suspend fun registerLikedFestival(festival: FestivalModel) = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.registerLikedFestival(festivalId, LikedFestivalRequest(deviceId))
+        service.registerLikedFestival(festival.festivalId, LikedFestivalRequest(deviceId))
     }
 
-    override suspend fun unregisterLikedFestival() = runSuspendCatching {
-        val festivalId = recentLikedFestivalDataSource.getRecentLikedFestival().festivalId
+    override suspend fun unregisterLikedFestival(festival: FestivalModel) = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.unregisterLikedFestival(festivalId, LikedFestivalRequest(deviceId))
+        service.unregisterLikedFestival(festival.festivalId, LikedFestivalRequest(deviceId))
     }
 }
