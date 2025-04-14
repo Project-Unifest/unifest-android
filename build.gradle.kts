@@ -33,24 +33,26 @@ buildscript {
 }
 
 allprojects {
-    apply {
-        plugin(rootProject.libs.plugins.kotlin.detekt.get().pluginId)
-        plugin(rootProject.libs.plugins.kotlin.ktlint.get().pluginId)
-        plugin(rootProject.libs.plugins.gradle.dependency.handler.extensions.get().pluginId)
-    }
-
-    afterEvaluate {
-        extensions.configure<DetektExtension> {
-            parallel = true
-            buildUponDefaultConfig = true
-            toolVersion = libs.versions.kotlin.detekt.get()
-            config.setFrom(files("$rootDir/detekt-config.yml"))
+    if (project.name != "baselineprofile") {
+        apply {
+            plugin(rootProject.libs.plugins.kotlin.detekt.get().pluginId)
+            plugin(rootProject.libs.plugins.kotlin.ktlint.get().pluginId)
+            plugin(rootProject.libs.plugins.gradle.dependency.handler.extensions.get().pluginId)
         }
 
-        extensions.configure<KtlintExtension> {
-            version.set(rootProject.libs.versions.kotlin.ktlint.source.get())
-            android.set(true)
-            verbose.set(true)
+        afterEvaluate {
+            extensions.configure<DetektExtension> {
+                parallel = true
+                buildUponDefaultConfig = true
+                toolVersion = libs.versions.kotlin.detekt.get()
+                config.setFrom(files("$rootDir/detekt-config.yml"))
+            }
+
+            extensions.configure<KtlintExtension> {
+                version.set(rootProject.libs.versions.kotlin.ktlint.source.get())
+                android.set(true)
+                verbose.set(true)
+            }
         }
     }
 }
