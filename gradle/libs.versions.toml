@@ -26,18 +26,18 @@ kotlinx-collections-immutable = "0.3.8"
 
 android-play-services-location = "21.0.1"
 
-androidx-core = "1.15.0"
+androidx-core = "1.16.0"
 androidx-lifecycle = "2.8.7"
 androidx-splash = "1.0.1"
 androidx-startup = "1.2.0"
 androidx-navigation = "2.8.9"
 androidx-datastore = "1.1.4"
-androidx-room = "2.6.1"
+androidx-room = "2.7.0"
 androidx-activity-compose = "1.10.1"
 androidx-compose = "1.7.4"
-androidx-compose-material3 = "1.3.1"
+androidx-compose-material3 = "1.3.2"
 androidx-hilt-navigation-compose = "1.2.0"
-androidx-test-core = "1.5.0"
+androidx-test-core = "1.6.2"
 
 desugar-jdk-libs = "2.1.5"
 hilt = "2.55"
@@ -70,8 +70,6 @@ uiautomator = "2.3.0"
 benchmarkMacroJunit4 = "1.3.4"
 baselineprofile = "1.3.4"
 profileinstaller = "1.4.1"
-appcompat = "1.6.1"
-material = "1.10.0"
 
 [libraries]
 
@@ -156,8 +154,6 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 
