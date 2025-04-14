@@ -1,13 +1,13 @@
-package com.unifest.android.core.datastore.di
+package com.unifest.android.core.datastore.impl.di
 
-import com.unifest.android.core.datastore.OnboardingDataSource
-import com.unifest.android.core.datastore.DefaultOnboardingDataSource
-import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
-import com.unifest.android.core.datastore.DefaultRecentLikedFestivalDataSource
-import com.unifest.android.core.datastore.SettingDataSource
-import com.unifest.android.core.datastore.DefaultSettingDataSource
-import com.unifest.android.core.datastore.TokenDataSource
-import com.unifest.android.core.datastore.DefaultTokenDataSource
+import com.unifest.android.core.datastore.api.OnboardingDataSource
+import com.unifest.android.core.datastore.api.RecentLikedFestivalDataSource
+import com.unifest.android.core.datastore.api.SettingDataSource
+import com.unifest.android.core.datastore.api.TokenDataSource
+import com.unifest.android.core.datastore.impl.DefaultOnboardingDataSource
+import com.unifest.android.core.datastore.impl.DefaultRecentLikedFestivalDataSource
+import com.unifest.android.core.datastore.impl.DefaultSettingDataSource
+import com.unifest.android.core.datastore.impl.DefaultTokenDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

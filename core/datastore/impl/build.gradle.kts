@@ -1,5 +1,3 @@
-@file:Suppress("INLINE_FROM_HIGHER_PLATFORM")
-
 plugins {
     alias(libs.plugins.unifest.android.library)
     alias(libs.plugins.unifest.android.hilt)
@@ -7,11 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.core.datastore"
+    namespace = "com.unifest.android.core.datastore.api"
 }
 
 dependencies {
     implementations(
+        projects.core.datastore.api,
         projects.core.model,
 
         libs.androidx.datastore.preferences,

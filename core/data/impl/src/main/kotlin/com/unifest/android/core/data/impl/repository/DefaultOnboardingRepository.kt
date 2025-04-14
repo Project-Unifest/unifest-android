@@ -1,7 +1,7 @@
 package com.unifest.android.core.data.impl.repository
 
 import com.unifest.android.core.data.api.repository.OnboardingRepository
-import com.unifest.android.core.datastore.OnboardingDataSource
+import com.unifest.android.core.datastore.api.OnboardingDataSource
 import javax.inject.Inject
 
 internal class DefaultOnboardingRepository @Inject constructor(

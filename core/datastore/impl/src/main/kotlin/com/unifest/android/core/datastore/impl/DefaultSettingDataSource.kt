@@ -1,11 +1,12 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.impl
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import com.unifest.android.core.datastore.di.OnboardingDataStore
-import com.unifest.android.core.datastore.model.SettingsData
+import com.unifest.android.core.datastore.api.SettingDataSource
+import com.unifest.android.core.datastore.impl.di.OnboardingDataStore
+import com.unifest.android.core.datastore.api.model.SettingsData
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

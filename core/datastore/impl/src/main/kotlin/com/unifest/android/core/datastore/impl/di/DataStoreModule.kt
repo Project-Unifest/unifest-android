@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore.di
+package com.unifest.android.core.datastore.impl.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -1,6 +1,6 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.api
 
-import com.unifest.android.core.datastore.model.SettingsData
+import com.unifest.android.core.datastore.api.model.SettingsData
 import kotlinx.coroutines.flow.Flow
 
 interface SettingDataSource {

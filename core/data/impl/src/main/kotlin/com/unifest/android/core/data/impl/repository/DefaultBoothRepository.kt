@@ -5,7 +5,7 @@ import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
-import com.unifest.android.core.datastore.TokenDataSource
+import com.unifest.android.core.datastore.api.TokenDataSource
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
