@@ -1,9 +1,10 @@
 # unifest-android
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.0-blue.svg)](https://kotlinlang.org)
-[![Gradle](https://img.shields.io/badge/gradle-8.7-green.svg)](https://gradle.org/)
-[![Android Studio](https://img.shields.io/badge/Android%20Studio-2024.1.1%20%28Koala%29-green)](https://developer.android.com/studio)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.20-blue.svg)](https://kotlinlang.org)
+[![Gradle](https://img.shields.io/badge/gradle-8.10-green.svg)](https://gradle.org/)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-2024.3.1%20%28Meerkat%29-green)](https://developer.android.com/studio)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
-[![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
+[![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/Project-Unifest/unifest-android?utm_source=oss&utm_medium=github&utm_campaign=Project-Unifest%2Funifest-android&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 <br/>
 
 유니페스 : 대학 축제 지도를 펼쳐라! [PlayStore](https://play.google.com/store/apps/details?id=com.unifest.android)
