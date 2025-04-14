@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.component.LoadingWheel
@@ -95,7 +96,7 @@ internal fun MenuRoute(
         }
     }
 
-    LaunchedEffect(key1 = null) {
+    RememberedEffect(key1 = null) {
         menuViewModel.getLikedBooths()
     }
 

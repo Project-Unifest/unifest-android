@@ -77,6 +77,7 @@ import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
@@ -201,7 +202,7 @@ internal fun MapRoute(
         },
     )
 
-    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.festivalId != 0L) {
             mapViewModel.getAllBooths(mapUiState.festivalInfo.festivalId)
             mapViewModel.getPopularBooths(mapUiState.festivalInfo.festivalId)
@@ -322,7 +323,7 @@ internal fun MapScreen(
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
 
-    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
             cameraPositionState.position = CameraPosition(
                 LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,

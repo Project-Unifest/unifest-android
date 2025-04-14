@@ -54,6 +54,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.clickableSingle
@@ -142,7 +143,7 @@ internal fun StampRoute(
         }
     }
 
-    LaunchedEffect(uiState.selectedFestival) {
+    RememberedEffect(uiState.selectedFestival) {
         if (uiState.selectedFestival.festivalId != 0L) {
             viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
             viewModel.getStampEnabledBooths(uiState.selectedFestival.festivalId)

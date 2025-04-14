@@ -26,6 +26,7 @@ import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.compose.Balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
@@ -79,7 +80,7 @@ fun ToolTip(
         },
     ) { balloonWindow ->
         content()
-        LaunchedEffect(key1 = Unit) {
+        RememberedEffect(key1 = Unit) {
             scope.launch {
                 delay(1000)
                 balloonWindow.awaitAlignEnd()
