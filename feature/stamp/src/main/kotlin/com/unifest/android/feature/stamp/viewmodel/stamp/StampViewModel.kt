@@ -34,7 +34,7 @@ class StampViewModel @Inject constructor(
 
     init {
         getStampEnabledFestivals()
-        getRecentLikedFestival()
+        getRecentLikedFestivalStream()
     }
 
     fun onAction(action: StampUiAction) {
@@ -100,13 +100,17 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getRecentLikedFestival() {
+    private fun getRecentLikedFestivalStream() {
         viewModelScope.launch {
-            val likedFestival = likedFestivalRepository.getRecentLikedFestival()
-            _uiState.update {
-                it.copy(
-                    selectedFestival = StampFestivalModel(festivalId = likedFestival.festivalId, name = likedFestival.schoolName),
-                )
+            likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
+                _uiState.update {
+                    it.copy(
+                        selectedFestival = StampFestivalModel(
+                            festivalId = recentLikedFestival.festivalId,
+                            name = recentLikedFestival.schoolName,
+                        ),
+                    )
+                }
             }
         }
     }

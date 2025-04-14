@@ -47,10 +47,6 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
         likedFestivalDao.deleteLikedFestival(festival.toEntity())
     }
 
-    override suspend fun getRecentLikedFestival(): FestivalModel {
-        return recentLikedFestivalDataSource.getRecentLikedFestival()
-    }
-
     override fun getRecentLikedFestivalStream(): Flow<FestivalModel> =
         recentLikedFestivalDataSource.recentLikedFestivalStream
 

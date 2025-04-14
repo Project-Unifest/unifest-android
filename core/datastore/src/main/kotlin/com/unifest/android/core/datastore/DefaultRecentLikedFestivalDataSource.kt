@@ -9,7 +9,6 @@ import com.unifest.android.core.datastore.di.RecentLikedFestivalDataStore
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -24,26 +23,6 @@ class DefaultRecentLikedFestivalDataSource @Inject constructor(
         private val KEY_RECENT_LIKED_FESTIVAL = stringPreferencesKey("recent_liked_festival")
         private val json = Json { ignoreUnknownKeys = true }
     }
-
-    override suspend fun getRecentLikedFestival(): FestivalModel = dataStore.data
-        .catch { exception ->
-            if (exception is IOException) emit(emptyPreferences())
-            else throw exception
-        }
-        .first()
-        .let { preferences ->
-            val festivalJson = preferences[KEY_RECENT_LIKED_FESTIVAL] ?: ""
-            if (festivalJson.isEmpty()) {
-                FestivalModel()
-            } else {
-                try {
-                    json.decodeFromString<FestivalModel>(festivalJson)
-                } catch (e: SerializationException) {
-                    Timber.e(e, "Failed to deserialize FestivalModel")
-                    FestivalModel()
-                }
-            }
-        }
 
     override val recentLikedFestivalStream: Flow<FestivalModel> = dataStore.data
         .catch { exception ->

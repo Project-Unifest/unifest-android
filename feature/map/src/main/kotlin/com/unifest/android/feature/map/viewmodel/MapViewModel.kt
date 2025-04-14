@@ -59,7 +59,7 @@ class MapViewModel @Inject constructor(
 
     init {
         requestLocationPermission()
-        getRecentLikedFestival()
+        getRecentLikedFestivalStream()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
@@ -86,11 +86,10 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun getRecentLikedFestival() {
+    private fun getRecentLikedFestivalStream() {
         viewModelScope.launch {
-            val recentLikedFestival = likedFestivalRepository.getRecentLikedFestival()
-            _uiState.update {
-                it.copy(festivalInfo = recentLikedFestival)
+            likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
+                _uiState.update { it.copy(festivalInfo = recentLikedFestival) }
             }
         }
     }
