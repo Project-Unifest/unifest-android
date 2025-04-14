@@ -38,9 +38,9 @@ import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
-import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
-import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanUiAction
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanUiEvent
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanViewModel
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable

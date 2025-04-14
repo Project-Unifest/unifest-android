@@ -34,8 +34,8 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.feature.stamp.R
-import com.unifest.android.feature.stamp.viewmodel.StampUiAction
-import com.unifest.android.feature.stamp.viewmodel.StampUiState
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiState
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -79,11 +79,11 @@ import com.unifest.android.feature.stamp.component.SchoolsDropDownMenu
 import com.unifest.android.feature.stamp.component.StampBoothBottomSheet
 import com.unifest.android.feature.stamp.component.StampButton
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
-import com.unifest.android.feature.stamp.viewmodel.ErrorType
-import com.unifest.android.feature.stamp.viewmodel.StampUiAction
-import com.unifest.android.feature.stamp.viewmodel.StampUiEvent
-import com.unifest.android.feature.stamp.viewmodel.StampUiState
-import com.unifest.android.feature.stamp.viewmodel.StampViewModel
+import com.unifest.android.feature.stamp.viewmodel.stamp.ErrorType
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiEvent
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiState
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampViewModel
 
 @Composable
 internal fun StampRoute(

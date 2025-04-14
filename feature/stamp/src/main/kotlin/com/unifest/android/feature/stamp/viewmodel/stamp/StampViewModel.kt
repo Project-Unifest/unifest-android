@@ -1,4 +1,4 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.stamp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

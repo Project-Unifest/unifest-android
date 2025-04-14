@@ -1,4 +1,4 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.qrscan
 
 import com.unifest.android.core.common.UiText
 

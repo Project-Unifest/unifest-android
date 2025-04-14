@@ -1,4 +1,4 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.stamp
 
 sealed interface StampUiEvent {
     data object NavigateBack : StampUiEvent

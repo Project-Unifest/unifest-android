@@ -1,4 +1,4 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.stamp
 
 import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.core.model.StampFestivalModel
