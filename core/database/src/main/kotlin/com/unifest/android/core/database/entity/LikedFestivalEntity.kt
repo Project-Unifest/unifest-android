@@ -41,6 +41,9 @@ data class LikedFestivalEntity(
 
     @ColumnInfo(name = "longitude")
     val longitude: Float? = null,
+
+    @ColumnInfo(name = "created_at")
+    val createdAt: Long = System.currentTimeMillis()
 )
 
 @Serializable
