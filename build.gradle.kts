@@ -32,8 +32,10 @@ buildscript {
     }
 }
 
+val excludeModules: String? by project
+
 allprojects {
-    if (project.name != "baselineprofile") {
+    if (excludeModules?.split(",")?.contains(project.name) != true) {
         apply {
             plugin(rootProject.libs.plugins.kotlin.detekt.get().pluginId)
             plugin(rootProject.libs.plugins.kotlin.ktlint.get().pluginId)

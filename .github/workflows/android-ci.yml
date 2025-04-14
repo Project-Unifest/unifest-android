@@ -51,7 +51,8 @@ jobs:
                 run: echo '${{ secrets.GOOGLE_SERVICES }}' | base64 --d > ./app/google-services.json
 
             -   name: Code style checks
-                run: ./gradlew ktlintCheck detekt -x :baselineprofile:ktlintCheck -x :baselineprofile:detekt
+                run: |
+                    ./gradlew ktlintCheck detekt -PexcludeModules=baselineprofile
 
             -   name: Run build
                 run: ./gradlew buildDebug --stacktrace
