@@ -33,7 +33,6 @@ object DatabaseModule {
             LikedFestivalDatabase::class.java,
             "liked_festival_database",
         )
-        .addMigrations(MIGRATION_1_2)
-        .build()
-
+            .addMigrations(MIGRATION_1_2)
+            .build()
 }

@@ -163,7 +163,7 @@ internal fun FestivalSearchResultItem(
                     .defaultMinSize(
                         minWidth = ButtonDefaults.MinWidth,
                         minHeight = 29.dp,
-                    )
+                    ),
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(designR.drawable.ic_check),

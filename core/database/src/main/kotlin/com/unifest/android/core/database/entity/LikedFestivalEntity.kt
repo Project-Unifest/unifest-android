@@ -43,7 +43,7 @@ data class LikedFestivalEntity(
     val longitude: Float? = null,
 
     @ColumnInfo(name = "created_at")
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
 )
 
 @Serializable

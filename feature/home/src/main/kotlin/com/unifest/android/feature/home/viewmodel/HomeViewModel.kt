@@ -3,12 +3,8 @@ package com.unifest.android.feature.home.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
-import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.FestivalRepository
-import com.unifest.android.core.data.api.repository.LikedFestivalRepository
-import com.unifest.android.core.model.FestivalTodayModel
-import com.unifest.android.feature.home.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -26,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()

@@ -70,7 +70,6 @@ import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 import timber.log.Timber
-import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun MenuRoute(
