@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.unifest.android.core.database.LikedBoothDatabase
 import com.unifest.android.core.database.LikedFestivalDatabase
+import com.unifest.android.core.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +32,8 @@ object DatabaseModule {
             context.applicationContext,
             LikedFestivalDatabase::class.java,
             "liked_festival_database",
-        ).build()
+        )
+        .addMigrations(MIGRATION_1_2)
+        .build()
+
 }

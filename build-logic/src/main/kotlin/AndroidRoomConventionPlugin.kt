@@ -1,5 +1,6 @@
 import androidx.room.gradle.RoomExtension
 import com.unifest.android.convention.Plugins
+import com.unifest.android.convention.androidTestImplementation
 import com.unifest.android.convention.applyPlugins
 import com.unifest.android.convention.implementation
 import com.unifest.android.convention.ksp
@@ -23,6 +24,8 @@ class AndroidRoomConventionPlugin : BuildLogicConventionPlugin(
             implementation(libs.androidx.room.ktx)
             ksp(libs.androidx.room.compiler)
             implementation(libs.kotlinx.serialization.json)
+
+            androidTestImplementation(libs.androidx.room.testing)
         }
     },
 )
