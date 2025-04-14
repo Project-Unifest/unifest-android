@@ -91,6 +91,7 @@ class FestivalViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     handleException(exception, this@FestivalViewModel)
+                    Timber.e(exception)
                 }
         }
     }
@@ -186,13 +187,18 @@ class FestivalViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
+            if (_uiState.value.likedFestivals.size <= 1) {
+                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.not_found_liked_festival)))
+                return@launch
+            }
+
             likedFestivalRepository.unregisterLikedFestival()
                 .onSuccess {
                     likedFestivalRepository.deleteLikedFestival(festival)
                     _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))
                 }
                 .onFailure { exception ->
-                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_failed_message)))
+                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))
                     Timber.e(exception)
                 }
         }

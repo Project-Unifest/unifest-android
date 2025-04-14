@@ -10,5 +10,5 @@
     <string name="liked_festival_saved_failed_message">관심 축제로 저장을 실패했습니다.</string>
     <string name="liked_festival_removed_message">관심 축제에서 삭제했습니다.</string>
     <string name="liked_festival_removed_failed_message">관심 축제에서 삭제를 실패했습니다.</string>
-
+    <string name="not_found_liked_festival">관심축제는 하나 이상 등록해주셔야 합니다.</string>
 </resources>
