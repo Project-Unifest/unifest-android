@@ -51,6 +51,9 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
         return recentLikedFestivalDataSource.getRecentLikedFestival()
     }
 
+    override fun getRecentLikedFestivalStream(): Flow<FestivalModel> =
+        recentLikedFestivalDataSource.recentLikedFestivalStream
+
     override suspend fun setRecentLikedFestival(festival: FestivalModel) {
         recentLikedFestivalDataSource.setRecentLikedFestival(festival)
     }

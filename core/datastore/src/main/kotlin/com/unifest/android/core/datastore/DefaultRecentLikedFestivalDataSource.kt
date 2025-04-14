@@ -7,8 +7,10 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.unifest.android.core.datastore.di.RecentLikedFestivalDataStore
 import com.unifest.android.core.model.FestivalModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -36,6 +38,25 @@ class DefaultRecentLikedFestivalDataSource @Inject constructor(
             } else {
                 try {
                     json.decodeFromString<FestivalModel>(festivalJson)
+                } catch (e: SerializationException) {
+                    Timber.e(e, "Failed to deserialize FestivalModel")
+                    FestivalModel()
+                }
+            }
+        }
+
+    override val recentLikedFestivalStream: Flow<FestivalModel> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences())
+            else throw exception
+        }
+        .map { preferences ->
+            val festivalJson = preferences[KEY_RECENT_LIKED_FESTIVAL] ?: ""
+            if (festivalJson.isEmpty()) {
+                FestivalModel()
+            } else {
+                try {
+                    json.decodeFromString(festivalJson)
                 } catch (e: SerializationException) {
                     Timber.e(e, "Failed to deserialize FestivalModel")
                     FestivalModel()
