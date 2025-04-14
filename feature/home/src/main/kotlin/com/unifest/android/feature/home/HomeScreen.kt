@@ -116,13 +116,7 @@ internal fun HomeScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isSearchMode = festivalUiState.isSearchMode,
-                isEditMode = festivalUiState.isEditMode,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }

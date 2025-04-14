@@ -186,13 +186,7 @@ internal fun MenuScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
-                isSearchMode = festivalUiState.isSearchMode,
-                isEditMode = festivalUiState.isEditMode,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }

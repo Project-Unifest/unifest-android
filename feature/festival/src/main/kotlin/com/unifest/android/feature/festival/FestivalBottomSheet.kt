@@ -1,8 +1,8 @@
 package com.unifest.android.feature.festival
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,35 +27,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.FestivalSearchTextField
 import com.unifest.android.core.designsystem.component.LikedFestivalDeleteDialog
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.ui.component.LikedFestivalsGrid
 import com.unifest.android.feature.festival.preview.FestivalPreviewParameterProvider
 import com.unifest.android.feature.festival.viewmodel.ButtonType
 import com.unifest.android.feature.festival.viewmodel.FestivalUiAction
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
-import kotlinx.collections.immutable.ImmutableList
 import com.unifest.android.core.designsystem.R as designR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FestivalSearchBottomSheet(
-    @StringRes searchTextHintRes: Int,
-    searchText: TextFieldValue,
-    likedFestivals: ImmutableList<FestivalModel>,
-    festivalSearchResults: ImmutableList<FestivalModel>,
-    isSearchMode: Boolean,
-    isLikedFestivalDeleteDialogVisible: Boolean,
+    uiState: FestivalUiState,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    isEditMode: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
 //    val bottomSheetState = rememberFlexibleBottomSheetState(
 //        containSystemBars = true,
@@ -79,7 +72,7 @@ fun FestivalSearchBottomSheet(
         containerColor = MaterialTheme.colorScheme.surface,
         dragHandle = {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
                     .padding(top = 10.dp),
@@ -107,19 +100,19 @@ fun FestivalSearchBottomSheet(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
-                searchText = searchText,
+                searchText = uiState.festivalSearchText,
                 updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
-                searchTextHintRes = searchTextHintRes,
+                searchTextHintRes = designR.string.festival_search_text_field_hint,
                 onSearch = {},
                 clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },
                 setEnableSearchMode = { flag -> onFestivalUiAction(FestivalUiAction.OnEnableSearchMode(flag)) },
-                isSearchMode = isSearchMode,
+                isSearchMode = uiState.isSearchMode,
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
             )
-            if (!isSearchMode) {
+            if (!uiState.isSearchMode) {
                 Spacer(modifier = Modifier.height(39.dp))
                 HorizontalDivider(
                     thickness = 8.dp,
@@ -151,25 +144,26 @@ fun FestivalSearchBottomSheet(
                     }
                 }
                 LikedFestivalsGrid(
-                    selectedFestivals = likedFestivals,
+                    selectedFestivals = uiState.likedFestivals,
                     onFestivalSelected = { festival ->
                         onFestivalUiAction(FestivalUiAction.OnLikedFestivalSelected(festival))
                     },
-                    isEditMode = isEditMode,
+                    isEditMode = uiState.isEditMode,
                     onDeleteLikedFestivalClick = { festival ->
                         onFestivalUiAction(FestivalUiAction.OnDeleteIconClick(festival))
                     },
                 )
             } else {
                 FestivalSearchResults(
-                    searchResults = festivalSearchResults,
+                    searchResults = uiState.festivalSearchResults,
                     onFestivalUiAction = onFestivalUiAction,
-                    likedFestivals = likedFestivals,
+                    likedFestivals = uiState.likedFestivals,
                 )
             }
         }
     }
-    if (isLikedFestivalDeleteDialogVisible) {
+
+    if (uiState.isLikedFestivalDeleteDialogVisible) {
         LikedFestivalDeleteDialog(
             onCancelClick = {
                 onFestivalUiAction(
@@ -193,13 +187,7 @@ private fun SchoolSearchBottomSheetPreview(
 ) {
     UnifestTheme {
         FestivalSearchBottomSheet(
-            searchTextHintRes = designR.string.festival_search_text_field_hint,
-            searchText = TextFieldValue(),
-            likedFestivals = festivalUiState.festivals,
-            festivalSearchResults = festivalUiState.likedFestivals,
-            isSearchMode = false,
-            isEditMode = false,
-            isLikedFestivalDeleteDialogVisible = false,
+            uiState = festivalUiState,
             onFestivalUiAction = {},
         )
     }
