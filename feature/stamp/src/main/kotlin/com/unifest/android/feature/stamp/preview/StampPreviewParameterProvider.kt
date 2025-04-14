@@ -2,7 +2,7 @@ package com.unifest.android.feature.stamp.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.unifest.android.core.model.StampBoothModel
-import com.unifest.android.feature.stamp.viewmodel.StampUiState
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiState
 import kotlinx.collections.immutable.persistentListOf
 
 internal class StampPreviewParameterProvider : PreviewParameterProvider<StampUiState> {

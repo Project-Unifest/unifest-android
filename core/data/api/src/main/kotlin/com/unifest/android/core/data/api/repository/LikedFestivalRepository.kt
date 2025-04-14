@@ -10,8 +10,8 @@ interface LikedFestivalRepository {
     suspend fun insertLikedFestivalAtSearch(festival: FestivalModel)
     suspend fun insertLikedFestivals(festivals: List<FestivalModel>)
     suspend fun deleteLikedFestival(festival: FestivalModel)
-    suspend fun getRecentLikedFestival(): FestivalModel
+    fun getRecentLikedFestivalStream(): Flow<FestivalModel>
     suspend fun setRecentLikedFestival(festival: FestivalModel)
-    suspend fun registerLikedFestival(): Result<Unit>
-    suspend fun unregisterLikedFestival(): Result<Unit>
+    suspend fun registerLikedFestival(festival: FestivalModel): Result<Unit>
+    suspend fun unregisterLikedFestival(festival: FestivalModel): Result<Unit>
 }

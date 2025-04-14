@@ -55,7 +55,6 @@ import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import java.time.format.DateTimeFormatter
-import com.unifest.android.core.designsystem.R as designR
 
 // TODO 이미 관심 축제로 추가된 축제는 관심 축제로 추가하기 버튼이 보이면 안됨
 @Composable
@@ -116,13 +115,7 @@ internal fun HomeScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isSearchMode = festivalUiState.isSearchMode,
-                isEditMode = festivalUiState.isEditMode,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }

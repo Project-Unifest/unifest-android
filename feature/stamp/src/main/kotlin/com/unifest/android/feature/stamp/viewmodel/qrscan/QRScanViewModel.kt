@@ -1,10 +1,10 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.qrscan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.unifest.android.core.common.QRErrorHandlerActions
+import com.unifest.android.core.common.QRScanErrorHandlerActions
 import com.unifest.android.core.common.UiText
-import com.unifest.android.core.common.handleException
+import com.unifest.android.core.common.handleQRScanException
 import com.unifest.android.core.data.api.repository.StampRepository
 import com.unifest.android.feature.stamp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class QRScanViewModel @Inject constructor(
     private val stampRepository: StampRepository,
-) : ViewModel(), QRErrorHandlerActions {
+) : ViewModel(), QRScanErrorHandlerActions {
     private val _uiState = MutableStateFlow(QRScanUiState())
     val uiState: StateFlow<QRScanUiState> = _uiState.asStateFlow()
 
@@ -45,7 +45,7 @@ class QRScanViewModel @Inject constructor(
                     _uiEvent.send(QRScanUiEvent.RegisterStampCompleted)
                 }.onFailure { exception ->
                     Timber.e(exception)
-                    handleException(exception, this@QRScanViewModel)
+                    handleQRScanException(exception, this@QRScanViewModel)
                     _uiEvent.send(QRScanUiEvent.RegisterStampFailed)
                 }
             _uiState.update { it.copy(isLoading = false) }
@@ -70,7 +70,7 @@ class QRScanViewModel @Inject constructor(
             if (boothId != null) {
                 _uiEvent.send(QRScanUiEvent.ScanSuccess(entryCode))
             } else {
-                handleException(NumberFormatException("Invalid QR code: $entryCode"), this@QRScanViewModel)
+                handleQRScanException(NumberFormatException("Invalid QR code: $entryCode"), this@QRScanViewModel)
             }
         }
     }

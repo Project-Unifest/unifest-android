@@ -19,6 +19,6 @@ interface LikedFestivalDao {
     @Delete
     suspend fun deleteLikedFestival(festival: LikedFestivalEntity)
 
-    @Query("SELECT * FROM liked_festival")
+    @Query("SELECT * FROM liked_festival ORDER BY created_at ASC")
     fun getLikedFestivalList(): Flow<List<LikedFestivalEntity>>
 }

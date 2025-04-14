@@ -18,7 +18,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

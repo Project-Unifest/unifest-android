@@ -36,7 +36,7 @@ import com.unifest.android.core.designsystem.theme.StampSchools
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.feature.stamp.R
-import com.unifest.android.feature.stamp.viewmodel.StampUiAction
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

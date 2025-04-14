@@ -9,6 +9,14 @@ plugins {
 
 android {
     namespace = "com.unifest.android.core.database"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -16,5 +24,11 @@ dependencies {
         projects.core.model,
 
         libs.timber,
+    )
+    androidTestImplementations(
+        libs.junit,
+        libs.androidx.junit,
+        libs.androidx.test.core,
+        libs.androidx.test.runner,
     )
 }

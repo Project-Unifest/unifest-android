@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.unifest.android.core.common.extension.noRippleClickable
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -115,7 +114,8 @@ internal fun FestivalSearchResultItem(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     likedFestivals: ImmutableList<FestivalModel>,
 ) {
-    val isFavorite = likedFestivals.any { it.festivalId == festival.festivalId }
+    val isLiked = likedFestivals.any { it.festivalId == festival.festivalId }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,7 +151,7 @@ internal fun FestivalSearchResultItem(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        if (isFavorite) {
+        if (isLiked) {
             UnifestOutlinedButton(
                 onClick = {},
                 cornerRadius = 17.dp,
@@ -163,8 +163,7 @@ internal fun FestivalSearchResultItem(
                     .defaultMinSize(
                         minWidth = ButtonDefaults.MinWidth,
                         minHeight = 29.dp,
-                    )
-                    .noRippleClickable {},
+                    ),
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(designR.drawable.ic_check),

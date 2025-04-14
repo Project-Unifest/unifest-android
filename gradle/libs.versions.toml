@@ -3,8 +3,8 @@
 minSdk = "26"
 targetSdk = "35"
 compileSdk = "35"
-versionCode = "26"
-versionName = "1.2.5"
+versionCode = "27"
+versionName = "1.3.0"
 packageName = "com.unifest.android"
 
 android-gradle-plugin = "8.8.2"
@@ -37,6 +37,7 @@ androidx-activity-compose = "1.10.1"
 androidx-compose = "1.7.4"
 androidx-compose-material3 = "1.3.1"
 androidx-hilt-navigation-compose = "1.2.0"
+androidx-test-core = "1.5.0"
 
 desugar-jdk-libs = "2.1.5"
 hilt = "2.55"
@@ -45,11 +46,11 @@ retrofit = "2.11.0"
 okhttp = "5.0.0-alpha.14"
 coil-compose = "2.7.0"
 timber = "5.0.1"
-firebase-bom = "33.11.0"
+firebase-bom = "33.12.0"
 firebase-crashlytics = "3.0.3"
 firebase-config = "21.6.3"
 ksp = "2.1.20-1.0.32"
-compose-extensions = "1.6.8"
+compose-extensions = "25.1.0"
 compose-stable-marker = "1.0.6"
 # compose-investigator = "1.5.11-0.2.1"
 landscapist = "2.4.7"
@@ -62,10 +63,12 @@ naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
 zxing = "4.3.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.5.1"
-appcompat = "1.7.0"
-material = "1.12.0"
+androidx-junit = "1.2.1"
+espressoCore = "3.6.1"
+uiautomator = "2.3.0"
+benchmarkMacroJunit4 = "1.3.4"
+baselineprofile = "1.3.4"
+profileinstaller = "1.4.1"
 
 [libraries]
 
@@ -110,6 +113,7 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "androidx-room" }
 
 compose-system-ui-controller = { group = "tech.thdev", name = "extensions-compose-system-ui-controller", version.ref = "compose-extensions" }
 compose-keyboard-state = { group = "tech.thdev", name = "extensions-compose-keyboard-state", version.ref = "compose-extensions" }
@@ -126,7 +130,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx"}
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 compose-stable-marker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "compose-stable-marker" }
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
@@ -140,10 +144,13 @@ naver-map-location = { group = "io.github.fornewid", name = "naver-map-location"
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-core" }
 
 [plugins]
 
@@ -180,6 +187,8 @@ unifest-android-hilt = { id = "unifest.android.hilt", version = "unspecified" }
 unifest-android-retrofit = { id = "unifest.android.retrofit", version = "unspecified" }
 unifest-android-room = { id = "unifest.android.room", version = "unspecified" }
 unifest-jvm-kotlin = { id = "unifest.jvm.kotlin", version = "unspecified" }
+android-test = { id = "com.android.test", version.ref = "android-gradle-plugin" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 
 [bundles]
 

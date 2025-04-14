@@ -361,14 +361,8 @@ internal fun MapScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isSearchMode = festivalUiState.isSearchMode,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
-                isEditMode = festivalUiState.isEditMode,
             )
         }
     }

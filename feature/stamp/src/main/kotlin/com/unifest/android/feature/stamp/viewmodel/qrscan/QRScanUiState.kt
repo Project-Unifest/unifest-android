@@ -1,4 +1,4 @@
-package com.unifest.android.feature.stamp.viewmodel
+package com.unifest.android.feature.stamp.viewmodel.qrscan
 
 data class QRScanUiState(
     val isLoading: Boolean = false,
