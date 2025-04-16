@@ -15,7 +15,7 @@ import com.unifest.android.core.network.response.booth.BoothDetailResponse
 import com.unifest.android.core.network.response.booth.LikeBoothResponse
 import com.unifest.android.core.network.response.booth.LikedBoothsResponse
 import com.unifest.android.core.network.response.booth.PopularBoothsResponse
-import com.unifest.android.core.network.response.stamp.CollectedStampCountResponse
+import com.unifest.android.core.network.response.stamp.CollectedStampsResponse
 import com.unifest.android.core.network.response.stamp.StampBoothsResponse
 import com.unifest.android.core.network.response.stamp.StampFestivalsResponse
 import com.unifest.android.core.network.response.waiting.CheckPinValidationResponse
@@ -135,7 +135,7 @@ interface UnifestService {
     suspend fun getCollectedStamps(
         @Query("deviceId") token: String,
         @Query("festivalId") festivalId: Long,
-    ): CollectedStampCountResponse
+    ): CollectedStampsResponse
 
     // 스탬프 추가
     @POST("stamps")

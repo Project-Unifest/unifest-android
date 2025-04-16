@@ -22,18 +22,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,6 +62,7 @@ import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
@@ -315,14 +317,41 @@ internal fun StampContent(
                             key = { index -> uiState.stampBoothList[index].id },
                         ) { index ->
                             Box {
-                                Image(
-                                    painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
-                                    else painterResource(id = R.drawable.ic_unchecked_stamp),
-                                    contentDescription = "stamp image",
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(10.dp)),
-                                )
+                                if (index < uiState.collectedStampCount) {
+                                    if (uiState.stampEnabledFestivalList[0].defaultImgUrl.isNotEmpty()) {
+                                        NetworkImage(
+                                            imgUrl = uiState.stampEnabledFestivalList[0].defaultImgUrl,
+                                            contentDescription = "Stamp Default Image",
+                                            modifier = Modifier
+                                                .size(62.dp)
+                                                .clip(CircleShape),
+                                            painterResource(id = R.drawable.ic_unchecked_stamp),
+                                        )
+                                    } else {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_unchecked_stamp),
+                                            contentDescription = "Stamp Default Image",
+                                            modifier = Modifier.size(62.dp)
+                                        )
+                                    }
+                                } else {
+                                    if (uiState.stampEnabledFestivalList[0].usedImgUrl.isNotEmpty()) {
+                                        NetworkImage(
+                                            imgUrl = uiState.stampEnabledFestivalList[0].usedImgUrl,
+                                            contentDescription = "Stamp Used Image",
+                                            modifier = Modifier
+                                                .size(62.dp)
+                                                .clip(CircleShape),
+                                            placeholder = painterResource(id = R.drawable.ic_checked_stamp),
+                                        )
+                                    } else {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_checked_stamp),
+                                            contentDescription = "Stamp Used Image",
+                                            modifier = Modifier.size(62.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

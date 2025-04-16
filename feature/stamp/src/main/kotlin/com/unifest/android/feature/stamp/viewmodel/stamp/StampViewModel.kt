@@ -108,6 +108,8 @@ class StampViewModel @Inject constructor(
                         selectedFestival = StampFestivalModel(
                             festivalId = recentLikedFestival.festivalId,
                             name = recentLikedFestival.schoolName,
+                            defaultImgUrl = "",
+                            usedImgUrl = "",
                         ),
                     )
                 }

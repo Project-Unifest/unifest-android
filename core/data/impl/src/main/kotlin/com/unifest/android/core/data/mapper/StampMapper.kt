@@ -29,6 +29,7 @@ internal fun StampRecord.toModel(): StampRecordModel {
     return StampRecordModel(
         stampRecordId = stampRecordId,
         boothId = boothId,
+        festivalId = festivalId,
         deviceId = deviceId,
     )
 }
@@ -37,5 +38,7 @@ internal fun StampFestival.toModel(): StampFestivalModel {
     return StampFestivalModel(
         festivalId = festivalId,
         name = name,
+        defaultImgUrl = defaultImgUrl,
+        usedImgUrl = usedImgUrl,
     )
 }

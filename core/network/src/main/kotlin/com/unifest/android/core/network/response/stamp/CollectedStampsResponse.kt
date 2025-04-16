@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CollectedStampCountResponse(
+data class CollectedStampsResponse(
     @SerialName("code")
     val code: String,
     @SerialName("message")
@@ -17,8 +17,10 @@ data class CollectedStampCountResponse(
 data class StampRecord(
     @SerialName("stampRecordId")
     val stampRecordId: Long,
-    @SerialName("stampInfoId")
+    @SerialName("boothId")
     val boothId: Long,
+    @SerialName("festivalId")
+    val festivalId: Long,
     @SerialName("deviceId")
     val deviceId: String,
 )
