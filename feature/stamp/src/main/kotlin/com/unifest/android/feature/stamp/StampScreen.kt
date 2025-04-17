@@ -317,40 +317,31 @@ internal fun StampContent(
                             key = { index -> uiState.stampBoothList[index].id },
                         ) { index ->
                             Box {
-                                if (index < uiState.collectedStampCount) {
-                                    if (uiState.stampEnabledFestivalList[0].defaultImgUrl.isNotEmpty()) {
-                                        NetworkImage(
-                                            imgUrl = uiState.stampEnabledFestivalList[0].defaultImgUrl,
-                                            contentDescription = "Stamp Default Image",
-                                            modifier = Modifier
-                                                .size(62.dp)
-                                                .clip(CircleShape),
-                                            painterResource(id = R.drawable.ic_unchecked_stamp),
-                                        )
-                                    } else {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_unchecked_stamp),
-                                            contentDescription = "Stamp Default Image",
-                                            modifier = Modifier.size(62.dp)
-                                        )
-                                    }
+                                val isCollected = index < uiState.collectedStampCount
+                                val imgUrl = if (isCollected) uiState.stampEnabledFestivalList[0].usedImgUrl
+                                else uiState.stampEnabledFestivalList[0].defaultImgUrl
+
+                                val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
+                                else R.drawable.ic_unchecked_stamp
+
+                                val contentDescription = if (isCollected) "Stamp Used Image"
+                                else "Stamp Default Image"
+
+                                if (imgUrl.isNotEmpty()) {
+                                    NetworkImage(
+                                        imgUrl = imgUrl,
+                                        contentDescription = contentDescription,
+                                        modifier = Modifier
+                                            .size(62.dp)
+                                            .clip(CircleShape),
+                                        placeholder = painterResource(id = fallbackResourceId),
+                                    )
                                 } else {
-                                    if (uiState.stampEnabledFestivalList[0].usedImgUrl.isNotEmpty()) {
-                                        NetworkImage(
-                                            imgUrl = uiState.stampEnabledFestivalList[0].usedImgUrl,
-                                            contentDescription = "Stamp Used Image",
-                                            modifier = Modifier
-                                                .size(62.dp)
-                                                .clip(CircleShape),
-                                            placeholder = painterResource(id = R.drawable.ic_checked_stamp),
-                                        )
-                                    } else {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_checked_stamp),
-                                            contentDescription = "Stamp Used Image",
-                                            modifier = Modifier.size(62.dp)
-                                        )
-                                    }
+                                    Image(
+                                        painter = painterResource(id = fallbackResourceId),
+                                        contentDescription = contentDescription,
+                                        modifier = Modifier.size(62.dp)
+                                    )
                                 }
                             }
                         }
