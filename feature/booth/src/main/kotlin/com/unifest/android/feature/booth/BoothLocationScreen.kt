@@ -66,13 +66,15 @@ internal fun BoothLocationScreen(
                 isLogoClickEnabled = false,
             ),
         ) {
-            PolygonOverlay(
-                coords = uiState.outerCords,
-                color = Color.Gray.copy(alpha = 0.3f),
-                outlineColor = Color.Gray,
-                outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
-            )
+            uiState.innerPolylines.forEach { innerPolyline ->
+                PolygonOverlay(
+                    coords = uiState.outerPolygon,
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    outlineColor = Color.Gray,
+                    outlineWidth = 1.dp,
+                    holes = persistentListOf(innerPolyline),
+                )
+            }
             Marker(
                 state = rememberMarkerState(
                     position = LatLng(

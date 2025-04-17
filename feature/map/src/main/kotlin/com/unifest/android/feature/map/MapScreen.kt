@@ -79,6 +79,7 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.SANGMYUNG_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
@@ -101,14 +102,10 @@ import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.model.ItemData
 import com.unifest.android.feature.map.preview.MapPreviewParameterProvider
 import com.unifest.android.feature.map.viewmodel.ErrorType
-import com.unifest.android.feature.map.viewmodel.KONKUK_UNIVERSITY_POLYLINE
-import com.unifest.android.feature.map.viewmodel.KOREA_UNIVERSITY_POLYLINE
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
-import com.unifest.android.feature.map.viewmodel.SANGMYUNG_UNIVERSITY_POLYLINE
-import kotlinx.collections.immutable.persistentListOf
 import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
