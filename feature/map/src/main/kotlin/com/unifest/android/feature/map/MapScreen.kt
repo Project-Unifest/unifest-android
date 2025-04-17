@@ -37,7 +37,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -102,10 +101,13 @@ import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.model.ItemData
 import com.unifest.android.feature.map.preview.MapPreviewParameterProvider
 import com.unifest.android.feature.map.viewmodel.ErrorType
+import com.unifest.android.feature.map.viewmodel.KONKUK_UNIVERSITY_POLYLINE
+import com.unifest.android.feature.map.viewmodel.KOREA_UNIVERSITY_POLYLINE
 import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import com.unifest.android.feature.map.viewmodel.SANGMYUNG_UNIVERSITY_POLYLINE
 import kotlinx.collections.immutable.persistentListOf
 import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
@@ -396,12 +398,46 @@ internal fun MapContent(
             ),
             locationSource = rememberFusedLocationSource(),
         ) {
+            uiState.innerPolylines.forEach { innerPolyline ->
+                PolygonOverlay(
+                    coords = uiState.outerPolygon,
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    outlineColor = Color.Gray,
+                    outlineWidth = 1.dp,
+                    holes = listOf(innerPolyline),
+                )
+            }
+
+//            PolygonOverlay(
+//                coords = uiState.outerPolygon,
+//                color = Color.Gray.copy(alpha = 0.3f),
+//                outlineColor = Color.Gray,
+//                outlineWidth = 1.dp,
+//                holes = listOf(KONKUK_UNIVERSITY_POLYLINE),
+//            )
+//
+//            PolygonOverlay(
+//                coords = uiState.outerPolygon,
+//                color = Color.Gray.copy(alpha = 0.3f),
+//                outlineColor = Color.Gray,
+//                outlineWidth = 1.dp,
+//                holes = listOf(KOREA_UNIVERSITY_POLYLINE),
+//            )
+//
+//            PolygonOverlay(
+//                coords = uiState.outerPolygon,
+//                color = Color.Gray.copy(alpha = 0.3f),
+//                outlineColor = Color.Gray,
+//                outlineWidth = 1.dp,
+//                holes = listOf(KOREA_UNIVERSITY_POLYLINE),
+//            )
+
             PolygonOverlay(
-                coords = uiState.outerCords,
+                coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
+                holes = listOf(SANGMYUNG_UNIVERSITY_POLYLINE),
             )
 
             if (isClusteringEnabled) {
