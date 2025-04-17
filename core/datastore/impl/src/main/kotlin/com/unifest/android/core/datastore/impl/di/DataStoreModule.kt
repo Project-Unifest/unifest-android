@@ -42,7 +42,7 @@ internal object DataStoreModule {
     @Provides
     internal fun provideTokenDataStore(@ApplicationContext context: Context) = context.tokenDataStore
 
-    @TokenDataStore
+    @SettingDataStore
     @Singleton
     @Provides
     internal fun provideSettingDataStore(@ApplicationContext context: Context) = context.settingDataStore
