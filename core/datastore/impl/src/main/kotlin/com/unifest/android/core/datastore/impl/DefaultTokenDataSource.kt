@@ -6,14 +6,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.unifest.android.core.datastore.api.TokenDataSource
-import com.unifest.android.core.datastore.impl.di.OnboardingDataStore
+import com.unifest.android.core.datastore.impl.di.TokenDataStore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import java.io.IOException
 import javax.inject.Inject
 
 class DefaultTokenDataSource @Inject constructor(
-    @OnboardingDataStore private val dataStore: DataStore<Preferences>,
+    @TokenDataStore private val dataStore: DataStore<Preferences>,
 ) : TokenDataSource {
     private companion object {
         private val KEY_FCM_TOKEN = stringPreferencesKey("fcm_token")

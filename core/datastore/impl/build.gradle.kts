@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.core.datastore.api"
+    namespace = "com.unifest.android.core.datastore.impl"
 }
 
 dependencies {

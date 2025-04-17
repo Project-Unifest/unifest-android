@@ -83,7 +83,8 @@ internal fun BoothBottomBar(
                     containerColor = if (isWaitingEnable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
-                        text = if (isWaitingEnable) stringResource(R.string.booth_waiting_button) else stringResource(R.string.booth_waiting_button_invalid),
+                        text = if (isWaitingEnable) stringResource(R.string.booth_waiting_button)
+                        else stringResource(R.string.booth_waiting_button_invalid),
                         style = Title4,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onPrimary,

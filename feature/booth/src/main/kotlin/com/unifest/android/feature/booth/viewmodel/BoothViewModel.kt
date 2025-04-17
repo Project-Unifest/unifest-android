@@ -85,8 +85,14 @@ class BoothViewModel @Inject constructor(
                     val matchingBooth = _uiState.value.myWaitingList.find { it.boothId == currentBoothId }
                     when {
                         matchingBooth?.status == "NOSHOW" -> setNoShowDialogVisible(true)
-                        matchingBooth != null -> _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
-                        _uiState.value.myWaitingList.size >= 3 -> _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
+                        matchingBooth != null -> _uiEvent.send(
+                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)),
+                        )
+
+                        _uiState.value.myWaitingList.size >= 3 -> _uiEvent.send(
+                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)),
+                        )
+
                         else -> setPinCheckDialogVisible(true)
                     }
                 }
