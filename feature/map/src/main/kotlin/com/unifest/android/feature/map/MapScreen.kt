@@ -79,7 +79,6 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
-import com.unifest.android.core.common.SANGMYUNG_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
@@ -395,46 +394,12 @@ internal fun MapContent(
             ),
             locationSource = rememberFusedLocationSource(),
         ) {
-            uiState.innerPolylines.forEach { innerPolyline ->
-                PolygonOverlay(
-                    coords = uiState.outerPolygon,
-                    color = Color.Gray.copy(alpha = 0.3f),
-                    outlineColor = Color.Gray,
-                    outlineWidth = 1.dp,
-                    holes = listOf(innerPolyline),
-                )
-            }
-
-//            PolygonOverlay(
-//                coords = uiState.outerPolygon,
-//                color = Color.Gray.copy(alpha = 0.3f),
-//                outlineColor = Color.Gray,
-//                outlineWidth = 1.dp,
-//                holes = listOf(KONKUK_UNIVERSITY_POLYLINE),
-//            )
-//
-//            PolygonOverlay(
-//                coords = uiState.outerPolygon,
-//                color = Color.Gray.copy(alpha = 0.3f),
-//                outlineColor = Color.Gray,
-//                outlineWidth = 1.dp,
-//                holes = listOf(KOREA_UNIVERSITY_POLYLINE),
-//            )
-//
-//            PolygonOverlay(
-//                coords = uiState.outerPolygon,
-//                color = Color.Gray.copy(alpha = 0.3f),
-//                outlineColor = Color.Gray,
-//                outlineWidth = 1.dp,
-//                holes = listOf(KOREA_UNIVERSITY_POLYLINE),
-//            )
-
             PolygonOverlay(
                 coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = listOf(SANGMYUNG_UNIVERSITY_POLYLINE),
+                holes = uiState.innerPolylines,
             )
 
             if (isClusteringEnabled) {

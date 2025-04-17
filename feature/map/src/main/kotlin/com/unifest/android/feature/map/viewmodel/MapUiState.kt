@@ -2,6 +2,7 @@ package com.unifest.android.feature.map.viewmodel
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.naver.maps.geometry.LatLng
+import com.unifest.android.core.common.HANKYONG_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.KONKUK_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE
 import com.unifest.android.core.common.KOREA_UNIVERSITY_POLYLINE
@@ -34,7 +35,11 @@ data class MapUiState(
         LatLng(30.0, 100.0),
         LatLng(30.0, 150.0),
     ),
-    val innerPolylines: List<List<LatLng>> = persistentListOf(
-        KONKUK_UNIVERSITY_POLYLINE, KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE, KOREA_UNIVERSITY_POLYLINE, SANGMYUNG_UNIVERSITY_POLYLINE,
+    val innerPolylines: ImmutableList<ImmutableList<LatLng>> = persistentListOf(
+        KONKUK_UNIVERSITY_POLYLINE,
+        HANKYONG_UNIVERSITY_POLYLINE,
+        KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE,
+        KOREA_UNIVERSITY_POLYLINE,
+        SANGMYUNG_UNIVERSITY_POLYLINE,
     ),
 )
