@@ -21,10 +21,10 @@ android {
 
 dependencies {
     implementations(
-        projects.core.data.api,
         projects.core.common,
+        projects.core.data.api,
         projects.core.database,
-        projects.core.datastore,
+        projects.core.datastore.api,
         projects.core.model,
         projects.core.network,
 

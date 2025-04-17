@@ -36,8 +36,6 @@ android {
 
 dependencies {
     implementations(
-        projects.core.datastore,
-
         libs.timber,
     )
 }

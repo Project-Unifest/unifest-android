@@ -29,7 +29,6 @@ import com.unifest.android.feature.booth.component.BoothLocationAppBar
 import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun BoothLocationRoute(
@@ -67,12 +66,13 @@ internal fun BoothLocationScreen(
             ),
         ) {
             PolygonOverlay(
-                coords = uiState.outerCords,
+                coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
+                holes = uiState.innerPolylines,
             )
+
             Marker(
                 state = rememberMarkerState(
                     position = LatLng(

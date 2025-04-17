@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore.di
+package com.unifest.android.core.datastore.impl.di
 
 import javax.inject.Qualifier
 

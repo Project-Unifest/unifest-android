@@ -72,6 +72,7 @@
 - [Balloon](https://github.com/skydoves/Balloon)
 - [Calendar](https://github.com/kizitonwose/Calendar)
 - [Zxing](https://github.com/journeyapps/zxing-android-embedded)
+- [compose-effects](https://github.com/skydoves/compose-effects)
 
 #### Test & Code analysis
 

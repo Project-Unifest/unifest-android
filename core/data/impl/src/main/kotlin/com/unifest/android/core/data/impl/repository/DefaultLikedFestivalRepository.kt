@@ -7,7 +7,7 @@ import com.unifest.android.core.data.mapper.toEntity
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.database.LikedFestivalDao
-import com.unifest.android.core.datastore.RecentLikedFestivalDataSource
+import com.unifest.android.core.datastore.api.RecentLikedFestivalDataSource
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.network.request.LikedFestivalRequest

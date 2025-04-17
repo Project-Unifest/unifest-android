@@ -1,7 +1,7 @@
 package com.unifest.android.core.data.impl.repository
 
 import com.unifest.android.core.data.api.repository.SettingRepository
-import com.unifest.android.core.datastore.SettingDataSource
+import com.unifest.android.core.datastore.api.SettingDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

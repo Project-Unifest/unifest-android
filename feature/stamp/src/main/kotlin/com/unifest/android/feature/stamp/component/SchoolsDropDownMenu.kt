@@ -141,13 +141,13 @@ private fun SchoolsDropDownMenuPreview() {
         SchoolsDropDownMenu(
             isDropDownMenuOpened = true,
             festivals = persistentListOf(
-                StampFestivalModel(1, "서울시립대학교"),
-                StampFestivalModel(2, "한국교통대학교"),
-                StampFestivalModel(3, "한양대학교"),
-                StampFestivalModel(4, "고려대학교"),
-                StampFestivalModel(5, "홍익대학교"),
+                StampFestivalModel(1, "서울시립대학교", "", ""),
+                StampFestivalModel(2, "한국교통대학교", "", ""),
+                StampFestivalModel(3, "한양대학교", "", ""),
+                StampFestivalModel(4, "고려대학교", "", ""),
+                StampFestivalModel(5, "홍익대학교", "", ""),
             ),
-            selectedFestival = StampFestivalModel(1, "서울시립대학교"),
+            selectedFestival = StampFestivalModel(1, "서울시립대학교", "", ""),
             onAction = {},
             modifier = Modifier
                 .fillMaxWidth()

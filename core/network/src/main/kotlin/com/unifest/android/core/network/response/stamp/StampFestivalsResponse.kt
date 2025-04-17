@@ -19,4 +19,8 @@ data class StampFestival(
     val festivalId: Long,
     @SerialName("name")
     val name: String,
+    @SerialName("defaultImgUrl")
+    val defaultImgUrl: String,
+    @SerialName("usedImgUrl")
+    val usedImgUrl: String,
 )

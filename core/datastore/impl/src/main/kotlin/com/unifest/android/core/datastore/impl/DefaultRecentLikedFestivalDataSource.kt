@@ -1,11 +1,12 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.impl
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.unifest.android.core.datastore.di.RecentLikedFestivalDataStore
+import com.unifest.android.core.datastore.api.RecentLikedFestivalDataSource
+import com.unifest.android.core.datastore.impl.di.RecentLikedFestivalDataStore
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

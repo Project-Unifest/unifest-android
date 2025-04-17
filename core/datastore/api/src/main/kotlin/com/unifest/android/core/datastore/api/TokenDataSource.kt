@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.api
 
 interface TokenDataSource {
     suspend fun getFCMToken(): String

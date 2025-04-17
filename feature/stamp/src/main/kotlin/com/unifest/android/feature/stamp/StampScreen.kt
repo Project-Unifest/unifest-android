@@ -22,18 +22,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +55,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
+import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
@@ -142,7 +145,7 @@ internal fun StampRoute(
         }
     }
 
-    LaunchedEffect(uiState.selectedFestival) {
+    RememberedEffect(uiState.selectedFestival) {
         if (uiState.selectedFestival.festivalId != 0L) {
             viewModel.getCollectedStamps(uiState.selectedFestival.festivalId)
             viewModel.getStampEnabledBooths(uiState.selectedFestival.festivalId)
@@ -314,14 +317,32 @@ internal fun StampContent(
                             key = { index -> uiState.stampBoothList[index].id },
                         ) { index ->
                             Box {
-                                Image(
-                                    painter = if (index < uiState.collectedStampCount) painterResource(id = R.drawable.ic_checked_stamp)
-                                    else painterResource(id = R.drawable.ic_unchecked_stamp),
-                                    contentDescription = "stamp image",
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(10.dp)),
-                                )
+                                val isCollected = index < uiState.collectedStampCount
+                                val imgUrl = if (isCollected) uiState.stampEnabledFestivalList[0].usedImgUrl
+                                else uiState.stampEnabledFestivalList[0].defaultImgUrl
+
+                                val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
+                                else R.drawable.ic_unchecked_stamp
+
+                                val contentDescription = if (isCollected) "Stamp Used Image"
+                                else "Stamp Default Image"
+
+                                if (imgUrl.isNotEmpty()) {
+                                    NetworkImage(
+                                        imgUrl = imgUrl,
+                                        contentDescription = contentDescription,
+                                        modifier = Modifier
+                                            .size(62.dp)
+                                            .clip(CircleShape),
+                                        placeholder = painterResource(id = fallbackResourceId),
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(id = fallbackResourceId),
+                                        contentDescription = contentDescription,
+                                        modifier = Modifier.size(62.dp),
+                                    )
+                                }
                             }
                         }
                     }

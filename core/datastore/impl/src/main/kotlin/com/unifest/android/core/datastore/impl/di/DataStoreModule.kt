@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore.di
+package com.unifest.android.core.datastore.impl.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -42,7 +42,7 @@ internal object DataStoreModule {
     @Provides
     internal fun provideTokenDataStore(@ApplicationContext context: Context) = context.tokenDataStore
 
-    @TokenDataStore
+    @SettingDataStore
     @Singleton
     @Provides
     internal fun provideSettingDataStore(@ApplicationContext context: Context) = context.settingDataStore

@@ -24,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +36,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R
 import com.unifest.android.core.designsystem.theme.BoothLocation
@@ -148,7 +148,7 @@ fun FestivalSearchTextField(
     cornerShape: RoundedCornerShape = RoundedCornerShape(67.dp),
     borderStroke: BorderStroke = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.secondaryContainer),
 ) {
-    LaunchedEffect(key1 = searchText.text) {
+    RememberedEffect(key1 = searchText.text) {
         setEnableSearchMode(searchText.text.isNotEmpty())
     }
 

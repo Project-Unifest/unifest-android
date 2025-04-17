@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.api
 
 interface OnboardingDataSource {
     suspend fun checkIntroCompletion(): Boolean

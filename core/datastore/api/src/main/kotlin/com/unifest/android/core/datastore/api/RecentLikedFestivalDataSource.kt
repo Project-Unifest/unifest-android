@@ -1,4 +1,4 @@
-package com.unifest.android.core.datastore
+package com.unifest.android.core.datastore.api
 
 import com.unifest.android.core.model.FestivalModel
 import kotlinx.coroutines.flow.Flow

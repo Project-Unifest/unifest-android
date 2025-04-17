@@ -6,7 +6,7 @@ import com.unifest.android.core.data.api.repository.MessagingRepository
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
-import com.unifest.android.core.datastore.TokenDataSource
+import com.unifest.android.core.datastore.api.TokenDataSource
 import com.unifest.android.core.network.request.RegisterFCMTokenRequest
 import com.unifest.android.core.network.service.UnifestService
 import dagger.hilt.android.qualifiers.ApplicationContext

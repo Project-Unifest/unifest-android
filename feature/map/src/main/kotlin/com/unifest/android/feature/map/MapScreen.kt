@@ -37,7 +37,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,6 +76,7 @@ import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
@@ -105,7 +105,6 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
-import kotlinx.collections.immutable.persistentListOf
 import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
@@ -201,7 +200,7 @@ internal fun MapRoute(
         },
     )
 
-    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.festivalId != 0L) {
             mapViewModel.getAllBooths(mapUiState.festivalInfo.festivalId)
             mapViewModel.getPopularBooths(mapUiState.festivalInfo.festivalId)
@@ -322,7 +321,7 @@ internal fun MapScreen(
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
 
-    LaunchedEffect(key1 = mapUiState.festivalInfo) {
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
             cameraPositionState.position = CameraPosition(
                 LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,
@@ -396,11 +395,11 @@ internal fun MapContent(
             locationSource = rememberFusedLocationSource(),
         ) {
             PolygonOverlay(
-                coords = uiState.outerCords,
+                coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
+                holes = uiState.innerPolylines,
             )
 
             if (isClusteringEnabled) {
