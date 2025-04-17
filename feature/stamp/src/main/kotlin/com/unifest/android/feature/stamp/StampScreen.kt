@@ -340,7 +340,7 @@ internal fun StampContent(
                                     Image(
                                         painter = painterResource(id = fallbackResourceId),
                                         contentDescription = contentDescription,
-                                        modifier = Modifier.size(62.dp)
+                                        modifier = Modifier.size(62.dp),
                                     )
                                 }
                             }
