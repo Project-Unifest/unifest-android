@@ -36,7 +36,7 @@ import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 
 @Composable
-fun BoothBottomBar(
+internal fun BoothBottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
     isWaitingEnable: Boolean,
@@ -64,11 +64,9 @@ fun BoothBottomBar(
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(if (isBookmarked) designR.drawable.ic_bookmarked else designR.drawable.ic_bookmark),
-                        contentDescription = if (isBookmarked) "북마크됨" else "북마크하기",
+                        contentDescription = if (isBookmarked) "Bookmarked" else "Bookmark",
                         tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.clickableSingle {
-                            onAction(BoothUiAction.OnToggleBookmark)
-                        },
+                        modifier = Modifier.clickableSingle { onAction(BoothUiAction.OnToggleBookmark) },
                     )
                     Text(
                         text = "$bookmarkCount",
@@ -85,11 +83,8 @@ fun BoothBottomBar(
                     containerColor = if (isWaitingEnable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                 ) {
                     Text(
-                        text = if (isWaitingEnable) stringResource(
-                            id = R.string.booth_waiting_button,
-                        ) else stringResource(
-                            id = R.string.booth_waiting_button_invalid,
-                        ),
+                        text = if (isWaitingEnable) stringResource(R.string.booth_waiting_button)
+                        else stringResource(R.string.booth_waiting_button_invalid),
                         style = Title4,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -102,7 +97,7 @@ fun BoothBottomBar(
 
 @ComponentPreview
 @Composable
-fun BoothBottomBarPreview() {
+private fun BoothBottomBarPreview() {
     UnifestTheme {
         BoothBottomBar(
             bookmarkCount = 12,

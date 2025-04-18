@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,19 +29,22 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.QRDescription
 import com.unifest.android.core.designsystem.theme.Title0
-import com.unifest.android.feature.stamp.viewmodel.QRScanUiAction
-import com.unifest.android.feature.stamp.viewmodel.QRScanUiEvent
-import com.unifest.android.feature.stamp.viewmodel.QRScanViewModel
+import com.unifest.android.core.designsystem.theme.UnifestTheme
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanUiAction
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanUiEvent
+import com.unifest.android.feature.stamp.viewmodel.qrscan.QRScanViewModel
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-fun QRScanScreen(
+internal fun QRScanScreen(
     barcodeView: DecoratedBarcodeView,
     popBackStack: () -> Unit,
     complete: () -> Unit,
@@ -52,7 +54,7 @@ fun QRScanScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(barcodeView) {
+    RememberedEffect(barcodeView) {
         barcodeView.resume()
     }
 
@@ -70,7 +72,7 @@ fun QRScanScreen(
 
     UnifestScaffold(
         topBar = {
-            QRTopBar(onAction = onAction)
+            QRScanTopBar(onAction = onAction)
         },
         bottomBar = {
             QRScanBottomBar()
@@ -103,7 +105,7 @@ fun QRScanScreen(
 }
 
 @Composable
-private fun QRTopBar(
+private fun QRScanTopBar(
     onAction: (QRScanUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -161,5 +163,21 @@ private fun QRScanBottomBar(
             )
             Spacer(modifier = Modifier.height(110.dp))
         }
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun QRScanTopBarPreview() {
+    UnifestTheme {
+        QRScanTopBar(onAction = {})
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun QRScanBottomBarPreview() {
+    UnifestTheme {
+        QRScanBottomBar()
     }
 }

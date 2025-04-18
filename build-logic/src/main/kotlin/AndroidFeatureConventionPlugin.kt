@@ -13,6 +13,7 @@ internal class AndroidFeatureConventionPlugin : BuildLogicConventionPlugin(
         )
 
         dependencies {
+            implementation(project(path = ":core:data:api"))
             implementation(project(path = ":core:common"))
             implementation(project(path = ":core:designsystem"))
             implementation(project(path = ":core:model"))
@@ -21,6 +22,7 @@ internal class AndroidFeatureConventionPlugin : BuildLogicConventionPlugin(
 
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.hilt.navigation.compose)
+            implementation(libs.compose.effects)
             implementation(libs.bundles.androidx.lifecycle)
         }
     },

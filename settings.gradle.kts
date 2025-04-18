@@ -24,11 +24,14 @@ dependencyResolutionManagement {
 
 include(
     ":app",
+    ":baselineprofile",
 
     ":core:common",
-    ":core:data",
+    ":core:data:api",
+    ":core:data:impl",
     ":core:database",
-    ":core:datastore",
+    ":core:datastore:api",
+    ":core:datastore:impl",
     ":core:designsystem",
     ":core:model",
     ":core:navigation",

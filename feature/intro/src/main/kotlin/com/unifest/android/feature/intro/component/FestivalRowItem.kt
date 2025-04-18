@@ -34,7 +34,7 @@ import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 
 @Composable
-fun FestivalRowItem(
+internal fun FestivalRowItem(
     festival: FestivalModel,
     onAction: (IntroUiAction) -> Unit,
 ) {

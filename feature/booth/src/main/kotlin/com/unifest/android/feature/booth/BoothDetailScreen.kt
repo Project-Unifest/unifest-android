@@ -63,6 +63,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import com.unifest.android.feature.booth.viewmodel.ErrorType
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
@@ -72,7 +73,7 @@ private const val SnackBarDuration = 1000L
 @Composable
 internal fun BoothDetailRoute(
     padding: PaddingValues,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
     navigateToBoothLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
@@ -101,7 +102,7 @@ internal fun BoothDetailRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is BoothUiEvent.NavigateBack -> onBackClick()
+            is BoothUiEvent.NavigateBack -> popBackStack()
             is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
             is BoothUiEvent.NavigateToWaiting -> navigateToWaiting()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
@@ -133,7 +134,7 @@ internal fun BoothDetailRoute(
 }
 
 @Composable
-fun BoothDetailScreen(
+internal fun BoothDetailScreen(
     padding: PaddingValues,
     uiState: BoothUiState,
     snackBarState: SnackbarHostState,
@@ -246,7 +247,7 @@ fun BoothDetailScreen(
 }
 
 @Composable
-fun BoothDetailContent(
+internal fun BoothDetailContent(
     uiState: BoothUiState,
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -271,9 +272,8 @@ fun BoothDetailContent(
                 warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
                 location = uiState.boothDetailInfo.location,
-                isRunning = uiState.isRunning,
-                openTime = uiState.boothDetailInfo.openTime,
-                closeTime = uiState.boothDetailInfo.closeTime,
+                isScheduleExpanded = uiState.isScheduleExpanded,
+                scheduleList = uiState.boothDetailInfo.scheduleList.toImmutableList(),
                 onAction = onAction,
             )
         }

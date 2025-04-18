@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.unifest.android.firebase)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.google.secrets)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -61,11 +63,15 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.profileinstaller)
+    "baselineProfile"(project(":baselineprofile"))
     implementations(
         projects.core.common,
-        projects.core.data,
+        projects.core.data.api,
+        projects.core.data.impl,
         projects.core.database,
-        projects.core.datastore,
+        projects.core.datastore.api,
+        projects.core.datastore.impl,
         projects.core.designsystem,
         projects.core.model,
         projects.core.navigation,
@@ -88,6 +94,7 @@ dependencies {
         libs.androidx.activity.compose,
         libs.androidx.startup,
         libs.timber,
+        libs.coil.compose,
     )
 }
 

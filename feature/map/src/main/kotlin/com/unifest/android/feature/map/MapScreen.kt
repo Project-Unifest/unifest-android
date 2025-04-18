@@ -37,7 +37,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,15 +68,15 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.overlay.Align
-import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
@@ -106,7 +105,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
-import kotlinx.collections.immutable.persistentListOf
+import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
 val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -201,9 +200,11 @@ internal fun MapRoute(
         },
     )
 
-    LaunchedEffect(key1 = Unit) {
-        mapViewModel.getAllBooths()
-        mapViewModel.getPopularBooths()
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
+        if (mapUiState.festivalInfo.festivalId != 0L) {
+            mapViewModel.getAllBooths(mapUiState.festivalInfo.festivalId)
+            mapViewModel.getPopularBooths(mapUiState.festivalInfo.festivalId)
+        }
     }
 
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
@@ -316,11 +317,17 @@ internal fun MapScreen(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition(LatLng(36.970898, 127.871726), 15.2)
-    }
+    val cameraPositionState = rememberCameraPositionState()
     val rotationState by animateFloatAsState(targetValue = if (mapUiState.isPopularMode) 180f else 0f)
     val pagerState = rememberPagerState(pageCount = { mapUiState.selectedBoothList.size })
+
+    RememberedEffect(key1 = mapUiState.festivalInfo) {
+        if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
+            cameraPositionState.position = CameraPosition(
+                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -353,22 +360,16 @@ internal fun MapScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isSearchMode = festivalUiState.isSearchMode,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
-                isEditMode = festivalUiState.isEditMode,
             )
         }
     }
 }
 
-@OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun MapContent(
+internal fun MapContent(
     uiState: MapUiState,
     cameraPositionState: CameraPositionState,
     rotationState: Float,
@@ -394,11 +395,11 @@ fun MapContent(
             locationSource = rememberFusedLocationSource(),
         ) {
             PolygonOverlay(
-                coords = uiState.outerCords,
+                coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
+                holes = uiState.innerPolylines,
             )
 
             if (isClusteringEnabled) {
@@ -416,23 +417,25 @@ fun MapContent(
                                     70.0
                                 }
                             }
-                            .distanceStrategy(object : DistanceStrategy {
-                                private val defaultDistanceStrategy = DefaultDistanceStrategy()
+                            .distanceStrategy(
+                                object : DistanceStrategy {
+                                    private val defaultDistanceStrategy = DefaultDistanceStrategy()
 
-                                override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
-                                    return if (zoom <= 9) {
-                                        -1.0
-                                    } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
-                                        if (zoom <= 11) {
+                                    override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
+                                        return if (zoom <= 9) {
                                             -1.0
+                                        } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
+                                            if (zoom <= 11) {
+                                                -1.0
+                                            } else {
+                                                defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                            }
                                         } else {
-                                            defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                            10000.0
                                         }
-                                    } else {
-                                        10000.0
                                     }
-                                }
-                            })
+                                },
+                            )
                             .tagMergeStrategy { cluster ->
                                 if (cluster.maxZoom <= 9) {
                                     null
@@ -440,13 +443,15 @@ fun MapContent(
                                     ItemData("", (cluster.children.first().tag as ItemData).category)
                                 }
                             }
-                            .markerManager(object : DefaultMarkerManager() {
-                                override fun createMarker() = super.createMarker().apply {
-                                    subCaptionTextSize = 10f
-                                    subCaptionColor = android.graphics.Color.WHITE
-                                    subCaptionHaloColor = android.graphics.Color.TRANSPARENT
-                                }
-                            })
+                            .markerManager(
+                                object : DefaultMarkerManager() {
+                                    override fun createMarker() = super.createMarker().apply {
+                                        subCaptionTextSize = 10f
+                                        subCaptionColor = android.graphics.Color.WHITE
+                                        subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                                    }
+                                },
+                            )
                             .clusterMarkerUpdater { info, marker ->
                                 val size = info.size
                                 marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
@@ -501,7 +506,7 @@ fun MapContent(
             } else {
                 uiState.filteredBoothList.forEach { booth ->
                     ComposeMarker(
-                        state = MarkerState(position = LatLng(booth.latitude, booth.longitude)),
+                        state = rememberMarkerState(position = LatLng(booth.latitude, booth.longitude)),
                         icon = MarkerCategory.fromString(booth.category).getMarkerIcon(booth.isSelected),
                         onClick = {
                             onMapUiAction(MapUiAction.OnSingleBoothMarkerClick(booth))

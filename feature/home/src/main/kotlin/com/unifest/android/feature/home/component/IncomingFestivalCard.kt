@@ -35,7 +35,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 
 @Composable
-fun IncomingFestivalCard(
+internal fun IncomingFestivalCard(
     festival: FestivalModel,
     modifier: Modifier = Modifier,
 ) {
@@ -97,7 +97,7 @@ fun IncomingFestivalCard(
 
 @ComponentPreview
 @Composable
-fun IncomingFestivalCardPreview() {
+private fun IncomingFestivalCardPreview() {
     UnifestTheme {
         IncomingFestivalCard(
             festival = FestivalModel(

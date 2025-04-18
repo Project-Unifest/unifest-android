@@ -16,6 +16,8 @@ plugins {
     alias(libs.plugins.google.service) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.baselineprofile) apply false
     // alias(libs.plugins.compose.investigator) apply false
 }
 
@@ -30,29 +32,33 @@ buildscript {
     }
 }
 
+val excludeModules: String? by project
+
 allprojects {
-    apply {
-        plugin(rootProject.libs.plugins.kotlin.detekt.get().pluginId)
-        plugin(rootProject.libs.plugins.kotlin.ktlint.get().pluginId)
-        plugin(rootProject.libs.plugins.gradle.dependency.handler.extensions.get().pluginId)
-    }
-
-    afterEvaluate {
-        extensions.configure<DetektExtension> {
-            parallel = true
-            buildUponDefaultConfig = true
-            toolVersion = libs.versions.kotlin.detekt.get()
-            config.setFrom(files("$rootDir/detekt-config.yml"))
+    if (excludeModules?.split(",")?.contains(project.name) != true) {
+        apply {
+            plugin(rootProject.libs.plugins.kotlin.detekt.get().pluginId)
+            plugin(rootProject.libs.plugins.kotlin.ktlint.get().pluginId)
+            plugin(rootProject.libs.plugins.gradle.dependency.handler.extensions.get().pluginId)
         }
 
-        extensions.configure<KtlintExtension> {
-            version.set(rootProject.libs.versions.kotlin.ktlint.source.get())
-            android.set(true)
-            verbose.set(true)
+        afterEvaluate {
+            extensions.configure<DetektExtension> {
+                parallel = true
+                buildUponDefaultConfig = true
+                toolVersion = libs.versions.kotlin.detekt.get()
+                config.setFrom(files("$rootDir/detekt-config.yml"))
+            }
+
+            extensions.configure<KtlintExtension> {
+                version.set(rootProject.libs.versions.kotlin.ktlint.source.get())
+                android.set(true)
+                verbose.set(true)
+            }
         }
     }
 }
 
-apply {
-    from("gradle/projectDependencyGraph.gradle")
-}
+// apply {
+//     from("gradle/projectDependencyGraph.gradle")
+// }

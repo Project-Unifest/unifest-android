@@ -16,9 +16,12 @@ dependencies {
     implementations(
         projects.core.model,
 
+        libs.kotlinx.collections.immutable,
+
         libs.androidx.hilt.navigation.compose,
 
         libs.timber,
         libs.bundles.androidx.lifecycle,
+        libs.bundles.naver.map.compose,
     )
 }

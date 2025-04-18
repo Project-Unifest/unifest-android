@@ -34,13 +34,13 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.feature.stamp.R
-import com.unifest.android.feature.stamp.viewmodel.StampUiAction
-import com.unifest.android.feature.stamp.viewmodel.StampUiState
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
+import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiState
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StampBoothBottomSheet(
+internal fun StampBoothBottomSheet(
     schoolName: String,
     stampBoothList: ImmutableList<StampBoothModel>,
     onAction: (StampUiAction) -> Unit,
@@ -74,7 +74,7 @@ fun StampBoothBottomSheet(
                 )
             }
         },
-        windowInsets = WindowInsets(top = 0),
+        contentWindowInsets = { WindowInsets(top = 0) },
         modifier = Modifier
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.surface)
@@ -128,7 +128,7 @@ fun StampBoothBottomSheet(
 
 @ComponentPreview
 @Composable
-fun SchoolSearchBottomSheetPreview() {
+private fun SchoolSearchBottomSheetPreview() {
     UnifestTheme {
         StampBoothBottomSheet(
             schoolName = "",

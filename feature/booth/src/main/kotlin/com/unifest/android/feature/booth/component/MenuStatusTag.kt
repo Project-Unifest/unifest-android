@@ -21,7 +21,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.R
 
 @Composable
-fun Tag(
+internal fun Tag(
     modifier: Modifier = Modifier,
     menuStatus: String = "",
 ) {
@@ -89,7 +89,7 @@ fun Tag(
 
 @ComponentPreview
 @Composable
-fun TagPreview() {
+private fun TagPreview() {
     UnifestTheme {
         Tag(menuStatus = "10개 미만 남음")
     }

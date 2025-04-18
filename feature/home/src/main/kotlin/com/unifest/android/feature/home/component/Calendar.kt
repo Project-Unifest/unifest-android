@@ -79,19 +79,20 @@ import java.time.LocalDate
 import java.time.Month
 
 @Composable
-fun Calendar(
+internal fun Calendar(
     selectedDate: LocalDate,
     onDateSelected: (LocalDate) -> Unit,
     adjacentMonths: Long = 500,
     allFestivals: ImmutableList<FestivalModel>,
     isWeekMode: Boolean = false,
-    ocClickWeekMode: () -> Unit,
+    onClickWeekMode: () -> Unit,
 ) {
     val currentDate = remember { LocalDate.now() }
     val currentYearMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentYearMonth.minusMonths(adjacentMonths) }
     val endMonth = remember(currentDate) { currentYearMonth.plusMonths(adjacentMonths) }
     val daysOfWeek = remember { daysOfWeek() }
+
     Box(
         modifier = Modifier.shadow(4.dp, RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp)),
     ) {
@@ -155,14 +156,14 @@ fun Calendar(
 
             ModeToggleButton(
                 isWeekMode = isWeekMode,
-                onModeChange = { ocClickWeekMode() },
+                onModeChange = { onClickWeekMode() },
             )
         }
     }
 }
 
 @Composable
-fun ModeToggleButton(
+private fun ModeToggleButton(
     modifier: Modifier = Modifier,
     isWeekMode: Boolean,
     onModeChange: (Boolean) -> Unit,
@@ -220,7 +221,7 @@ private fun CalendarNavigationIcon(
 }
 
 @Composable
-fun MonthAndWeekCalendarTitle(
+private fun MonthAndWeekCalendarTitle(
     isWeekMode: Boolean,
     monthState: CalendarState,
     weekState: WeekCalendarState,
@@ -263,7 +264,7 @@ fun MonthAndWeekCalendarTitle(
 
 // 실제로 달력의 상단에 현재 월을 표시하고, 이전/다음 월로 이동할 수 있는 화살표 아이콘을 제공하는 UI 컴포넌트
 @Composable
-fun SimpleCalendarTitle(
+private fun SimpleCalendarTitle(
     currentMonth: Month,
     currentYear: Int,
     goToPrevious: () -> Unit,
@@ -309,7 +310,7 @@ fun SimpleCalendarTitle(
 }
 
 @Composable
-fun ColorCircleWithText(color: Color, text: String) {
+private fun ColorCircleWithText(color: Color, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 4.dp),
@@ -332,7 +333,7 @@ fun ColorCircleWithText(color: Color, text: String) {
 }
 
 @Composable
-fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
+private fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -350,7 +351,7 @@ fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
 }
 
 @Composable
-fun Day(
+private fun Day(
     day: LocalDate,
     isSelected: Boolean,
     isSelectable: Boolean,
@@ -417,14 +418,14 @@ fun Day(
 
 @ComponentPreview
 @Composable
-fun CalendarPreview() {
+private fun CalendarPreview() {
     UnifestTheme {
         Calendar(
             selectedDate = LocalDate.now(),
             onDateSelected = {},
             allFestivals = persistentListOf(),
             isWeekMode = false,
-            ocClickWeekMode = {},
+            onClickWeekMode = {},
         )
     }
 }

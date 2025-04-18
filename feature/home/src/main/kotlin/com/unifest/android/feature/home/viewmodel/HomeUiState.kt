@@ -18,7 +18,6 @@ data class HomeUiState(
     val selectedDate: LocalDate = LocalDate.now(),
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
-    val showAddToFavoritesButton: Boolean = false,
     val isStarImageClicked: ImmutableList<ImmutableList<Boolean>> = persistentListOf(persistentListOf()),
     val isWeekMode: Boolean = false,
     val isDataReady: Boolean = true,

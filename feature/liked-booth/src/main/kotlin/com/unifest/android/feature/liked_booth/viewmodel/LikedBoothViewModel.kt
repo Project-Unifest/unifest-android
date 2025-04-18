@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
+import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.api.repository.LikedBoothRepository
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.designsystem.R as designR
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -7,16 +7,16 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.common.utils.matchesSearchText
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.designsystem.R as designR
+import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.festival.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +40,8 @@ class FestivalViewModel @Inject constructor(
     private val _uiEvent = Channel<FestivalUiEvent>()
     val uiEvent: Flow<FestivalUiEvent> = _uiEvent.receiveAsFlow()
 
+    private var addLikedFestivalJob: Job? = null
+
     init {
         getAllFestivals()
         checkFestivalOnboardingCompletion()
@@ -56,7 +58,7 @@ class FestivalViewModel @Inject constructor(
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
             is FestivalUiAction.OnLikedFestivalSelected -> {
                 completeFestivalOnboarding()
-                setRecentLikedFestival(action.festival.schoolName)
+                setRecentLikedFestival(action.festival)
             }
 
             is FestivalUiAction.OnAddClick -> addLikeFestival(action.festival)
@@ -92,6 +94,7 @@ class FestivalViewModel @Inject constructor(
                 }
                 .onFailure { exception ->
                     handleException(exception, this@FestivalViewModel)
+                    Timber.e(exception)
                 }
         }
     }
@@ -122,29 +125,34 @@ class FestivalViewModel @Inject constructor(
         }
     }
 
-    private fun setRecentLikedFestival(schoolName: String) {
+    private fun setRecentLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            if (schoolName == "한국교통대학교") {
-                // likedFestivalRepository.setRecentLikedFestival(schoolName)
-                setFestivalSearchBottomSheetVisible(false)
-                _uiEvent.send(FestivalUiEvent.NavigateBack)
-            } else {
-                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
-            }
+            likedFestivalRepository.setRecentLikedFestival(festival)
+            setFestivalSearchBottomSheetVisible(false)
+            _uiEvent.send(FestivalUiEvent.NavigateBack)
         }
     }
 
     private fun addLikeFestival(festival: FestivalModel) {
-        viewModelScope.launch {
-            likedFestivalRepository.registerLikedFestival()
-                .onSuccess {
-                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
-                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_message)))
-                }
-                .onFailure { exception ->
-                    _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
-                    Timber.e(exception)
-                }
+        if (addLikedFestivalJob != null && addLikedFestivalJob?.isActive == true) {
+            Timber.d("addLikedFestivalJob is Active")
+            return
+        }
+
+        addLikedFestivalJob = viewModelScope.launch {
+            try {
+                likedFestivalRepository.registerLikedFestival(festival)
+                    .onSuccess {
+                        likedFestivalRepository.insertLikedFestivalAtSearch(festival)
+                        _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_message)))
+                    }
+                    .onFailure { exception ->
+                        _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_saved_failed_message)))
+                        Timber.e(exception)
+                    }
+            } finally {
+                addLikedFestivalJob = null
+            }
         }
     }
 
@@ -191,7 +199,12 @@ class FestivalViewModel @Inject constructor(
 
     private fun deleteLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            likedFestivalRepository.unregisterLikedFestival()
+            if (_uiState.value.likedFestivals.size <= 1) {
+                _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.not_found_liked_festival)))
+                return@launch
+            }
+
+            likedFestivalRepository.unregisterLikedFestival(festival)
                 .onSuccess {
                     likedFestivalRepository.deleteLikedFestival(festival)
                     _uiEvent.send(FestivalUiEvent.ShowToast(UiText.StringResource(R.string.liked_festival_removed_message)))

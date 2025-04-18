@@ -24,7 +24,7 @@ import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.feature.menu.R
 
 @Composable
-fun MenuItem(
+internal fun MenuItem(
     icon: ImageVector,
     title: String,
     onClick: () -> Unit,
@@ -59,6 +59,10 @@ fun MenuItem(
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.primary,
                     checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    checkedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    uncheckedThumbColor = MaterialTheme.colorScheme.primary,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    uncheckedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
                 ),
             )
         }

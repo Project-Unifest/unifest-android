@@ -4,20 +4,23 @@ import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.request.LikedFestivalRequest
+import com.unifest.android.core.network.request.RegisterFCMTokenRequest
 import com.unifest.android.core.network.request.RegisterStampRequest
 import com.unifest.android.core.network.request.WaitingRequest
-import com.unifest.android.core.network.response.booth.AllBoothsResponse
-import com.unifest.android.core.network.response.booth.BoothDetailResponse
-import com.unifest.android.core.network.response.CheckPinValidationResponse
+import com.unifest.android.core.network.response.FCMTokenResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
+import com.unifest.android.core.network.response.booth.AllBoothsResponse
+import com.unifest.android.core.network.response.booth.BoothDetailResponse
 import com.unifest.android.core.network.response.booth.LikeBoothResponse
 import com.unifest.android.core.network.response.booth.LikedBoothsResponse
-import com.unifest.android.core.network.response.MyWaitingResponse
 import com.unifest.android.core.network.response.booth.PopularBoothsResponse
-import com.unifest.android.core.network.response.CollectedStampCountResponse
-import com.unifest.android.core.network.response.WaitingResponse
-import com.unifest.android.core.network.response.booth.StampBoothsResponse
+import com.unifest.android.core.network.response.stamp.CollectedStampsResponse
+import com.unifest.android.core.network.response.stamp.StampBoothsResponse
+import com.unifest.android.core.network.response.stamp.StampFestivalsResponse
+import com.unifest.android.core.network.response.waiting.CheckPinValidationResponse
+import com.unifest.android.core.network.response.waiting.MyWaitingResponse
+import com.unifest.android.core.network.response.waiting.WaitingResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -53,7 +56,7 @@ interface UnifestService {
         @Query("date") date: String,
     ): FestivalTodayResponse
 
-    // 상위 5개 부스 확인
+    // 상위 5개 부스 조회
     @GET("api/booths")
     suspend fun getPopularBooths(
         @Query("festivalId") festivalId: Long,
@@ -114,22 +117,25 @@ interface UnifestService {
     ): WaitingResponse
 
     // 관심 축제 등록
-    @POST("megaphone/subscribe")
+    @POST("festival/{festival-id}/interest")
     suspend fun registerLikedFestival(
+        @Path("festival-id") festivalId: Long,
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
     // 관심 축제 해제
-    @HTTP(method = "DELETE", path = "megaphone/subscribe", hasBody = true)
+    @HTTP(method = "DELETE", path = "festival/{festival-id}/interest", hasBody = true)
     suspend fun unregisterLikedFestival(
+        @Path("festival-id") festivalId: Long,
         @Body likedFestivalRequest: LikedFestivalRequest,
     )
 
-    // 스탬프 조화
+    // 스탬프 조회
     @GET("stamps")
-    suspend fun getCollectedStampCount(
-        @Query("token") token: String,
-    ): CollectedStampCountResponse
+    suspend fun getCollectedStamps(
+        @Query("deviceId") token: String,
+        @Query("festivalId") festivalId: Long,
+    ): CollectedStampsResponse
 
     // 스탬프 추가
     @POST("stamps")
@@ -137,9 +143,19 @@ interface UnifestService {
         @Body registerStampRequest: RegisterStampRequest,
     )
 
-    // 스탬프 기능 활성화된 부스 확인
+    // 스탬프 기능 활성화된 부스 조회
     @GET("stamps/{festival-id}")
-    suspend fun getStampEnabledBoothList(
+    suspend fun getStampEnabledBooths(
         @Path("festival-id") festivalId: Long,
     ): StampBoothsResponse
+
+    // 스탬프 기능 지원하는 축제 목록 조회
+    @GET("stamps/festivals")
+    suspend fun getStampEnabledFestivals(): StampFestivalsResponse
+
+    // FCM 토큰 등록
+    @PUT("fcm-token")
+    suspend fun registerFCMToken(
+        @Body registerFCMTokenRequest: RegisterFCMTokenRequest,
+    ): FCMTokenResponse
 }

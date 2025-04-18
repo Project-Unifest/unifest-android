@@ -2,15 +2,14 @@ package com.unifest.android.feature.menu.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.api.repository.LikedBoothRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.SettingRepository
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.SettingRepository
-import com.unifest.android.core.designsystem.R as designR
+import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.LikedBoothModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -25,10 +24,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.unifest.android.core.designsystem.R as designR
 
 @HiltViewModel
 class MenuViewModel @Inject constructor(
-    private val festivalRepository: FestivalRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
@@ -44,13 +43,11 @@ class MenuViewModel @Inject constructor(
 
     init {
         observeLikedFestivals()
-        // observeLikedBooth()
-        getAllFestivals()
     }
 
     fun onMenuUiAction(action: MenuUiAction) {
         when (action) {
-            is MenuUiAction.OnLikedFestivalItemClick -> setRecentLikedFestival(action.schoolName)
+            is MenuUiAction.OnLikedFestivalItemClick -> setRecentLikedFestival(action.festival)
             is MenuUiAction.OnLikedBoothItemClick -> navigateToBoothDetail(action.boothId)
             is MenuUiAction.OnToggleBookmark -> deleteLikedBooth(action.booth)
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
@@ -73,22 +70,9 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-    private fun getAllFestivals() {
-        viewModelScope.launch {
-            festivalRepository.getAllFestivals()
-                .onSuccess { festivals ->
-                    _uiState.update {
-                        it.copy(festivals = festivals.toImmutableList())
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@MenuViewModel)
-                }
-        }
-    }
-
     fun getLikedBooths() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             likedBoothRepository.getLikedBooths()
                 .onSuccess { likedBooths ->
                     _uiState.update {
@@ -99,20 +83,9 @@ class MenuViewModel @Inject constructor(
                 }.onFailure { exception ->
                     handleException(exception, this@MenuViewModel)
                 }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
-
-//    private fun observeLikedBooth() {
-//        viewModelScope.launch {
-//            likedBoothRepository.getLikedBoothList().collect { likedBoothList ->
-//                _uiState.update {
-//                    it.copy(
-//                        likedBooths = likedBoothList.toImmutableList(),
-//                    )
-//                }
-//            }
-//        }
-//    }
 
     private fun updateIsClusteringEnabled(checked: Boolean) {
         viewModelScope.launch {
@@ -158,20 +131,6 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-//    private fun deleteLikedBooth(booth: BoothDetailModel) {
-//        viewModelScope.launch {
-//            boothRepository.likeBooth(booth.id)
-//                .onSuccess {
-//                    updateLikedBooth(booth)
-//                    delay(500)
-//                    likedBoothRepository.deleteLikedBooth(booth)
-//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_message)))
-//                }.onFailure {
-//                    _uiEvent.send(MenuUiEvent.ShowSnackBar(UiText.StringResource(R.string.liked_booth_removed_failed_message)))
-//                }
-//        }
-//    }
-
     private fun updateLikedBooth(booth: LikedBoothModel) {
         _uiState.update {
             it.copy(
@@ -187,18 +146,10 @@ class MenuViewModel @Inject constructor(
         }
     }
 
-//    private suspend fun updateLikedBooth(booth: BoothDetailModel) {
-//        likedBoothRepository.updateLikedBooth(booth.copy(isLiked = false))
-//    }
-
-    private fun setRecentLikedFestival(schoolName: String) {
+    private fun setRecentLikedFestival(festival: FestivalModel) {
         viewModelScope.launch {
-            if (schoolName == "한국교통대학교") {
-                // likedFestivalRepository.setRecentLikedFestival(schoolName)
-                _uiEvent.send(MenuUiEvent.NavigateBack)
-            } else {
-                _uiEvent.send(MenuUiEvent.ShowToast(UiText.StringResource(designR.string.interest_festival_snack_bar)))
-            }
+            likedFestivalRepository.setRecentLikedFestival(festival)
+            _uiEvent.send(MenuUiEvent.NavigateBack)
         }
     }
 

@@ -2,8 +2,6 @@ package com.unifest.android.core.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.unifest.android.core.network.BuildConfig
-import com.unifest.android.core.network.UnifestApi
-import com.unifest.android.core.network.UnifestClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,7 +44,6 @@ internal object NetworkModule {
         }
     }
 
-    @UnifestClient
     @Singleton
     @Provides
     internal fun provideUnifestOkHttpClient(
@@ -60,11 +57,10 @@ internal object NetworkModule {
             .build()
     }
 
-    @UnifestApi
     @Singleton
     @Provides
     internal fun provideUnifestApiRetrofit(
-        @UnifestClient okHttpClient: OkHttpClient,
+        okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.SERVER_BASE_URL)

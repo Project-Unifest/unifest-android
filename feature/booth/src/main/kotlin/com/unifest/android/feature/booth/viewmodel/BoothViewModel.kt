@@ -7,10 +7,9 @@ import androidx.navigation.toRoute
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.LikedBoothRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.WaitingRepository
+import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.api.repository.LikedBoothRepository
+import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.booth.R
@@ -32,7 +31,6 @@ import com.unifest.android.core.designsystem.R as designR
 class BoothViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
-    private val likedFestivalRepository: LikedFestivalRepository,
     private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
@@ -70,7 +68,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnPolicyCheckBoxClick -> privacyConsentClick()
             is BoothUiAction.OnPrivatePolicyClick -> navigateToPrivatePolicy()
             is BoothUiAction.OnThirdPartyPolicyClick -> navigateToThirdPartyPolicy()
-            is BoothUiAction.OnRunningClick -> expandRunningTime()
+            is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
         }
@@ -85,37 +83,17 @@ class BoothViewModel @Inject constructor(
                     }
                     val currentBoothId = _uiState.value.boothDetailInfo.id
                     val matchingBooth = _uiState.value.myWaitingList.find { it.boothId == currentBoothId }
-
                     when {
-                        matchingBooth?.status == "NOSHOW" -> {
-                            setNoShowDialogVisible(true)
-                        }
+                        matchingBooth?.status == "NOSHOW" -> setNoShowDialogVisible(true)
+                        matchingBooth != null -> _uiEvent.send(
+                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)),
+                        )
 
-                        matchingBooth != null -> {
-                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)))
-                        }
+                        _uiState.value.myWaitingList.size >= 3 -> _uiEvent.send(
+                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)),
+                        )
 
-                        _uiState.value.myWaitingList.size >= 3 -> {
-                            _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)))
-                        }
-
-                        else -> {
-                            setPinCheckDialogVisible(true)
-                        }
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
-                }
-        }
-    }
-
-    private fun getMyWaitingList() {
-        viewModelScope.launch {
-            waitingRepository.getMyWaitingList()
-                .onSuccess { waitingLists ->
-                    _uiState.update {
-                        it.copy(myWaitingList = waitingLists.toImmutableList())
+                        else -> setPinCheckDialogVisible(true)
                     }
                 }
                 .onFailure { exception ->
@@ -204,9 +182,9 @@ class BoothViewModel @Inject constructor(
         }
     }
 
-    private fun expandRunningTime() {
+    private fun toggleScheduleExpanded() {
         _uiState.update {
-            it.copy(isRunning = !it.isRunning)
+            it.copy(isScheduleExpanded = !it.isScheduleExpanded)
         }
     }
 
@@ -214,12 +192,6 @@ class BoothViewModel @Inject constructor(
         val currentBookmarkFlag = _uiState.value.isLiked
         val newBookmarkFlag = !currentBookmarkFlag
         viewModelScope.launch {
-            if (currentBookmarkFlag) {
-                unregisterLikedFestival()
-            } else {
-                registerLikedFestival()
-            }
-
             boothRepository.likeBooth(boothId)
                 .onSuccess {
                     _uiState.update {
@@ -244,26 +216,6 @@ class BoothViewModel @Inject constructor(
                     } else {
                         _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                     }
-                }
-        }
-    }
-
-    private fun registerLikedFestival() {
-        viewModelScope.launch {
-            likedFestivalRepository.registerLikedFestival()
-                .onSuccess {}
-                .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
-                }
-        }
-    }
-
-    private fun unregisterLikedFestival() {
-        viewModelScope.launch {
-            likedFestivalRepository.unregisterLikedFestival()
-                .onSuccess {}
-                .onFailure {
-                    _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                 }
         }
     }

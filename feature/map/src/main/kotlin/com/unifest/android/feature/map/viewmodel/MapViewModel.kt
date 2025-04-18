@@ -8,12 +8,11 @@ import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.data.repository.BoothRepository
-import com.unifest.android.core.data.repository.FestivalRepository
-import com.unifest.android.core.data.repository.LikedFestivalRepository
-import com.unifest.android.core.data.repository.OnboardingRepository
-import com.unifest.android.core.data.repository.SettingRepository
-import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
+import com.unifest.android.core.data.api.repository.OnboardingRepository
+import com.unifest.android.core.data.api.repository.SettingRepository
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.mapper.toMapModel
 import com.unifest.android.feature.map.model.BoothMapModel
@@ -37,7 +36,7 @@ class MapViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
     private val boothRepository: BoothRepository,
     private val likedFestivalRepository: LikedFestivalRepository,
-    private val settingRepository: SettingRepository,
+    settingRepository: SettingRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(MapUiState())
     val uiState: StateFlow<MapUiState> = _uiState.asStateFlow()
@@ -60,7 +59,7 @@ class MapViewModel @Inject constructor(
 
     init {
         requestLocationPermission()
-        searchSchoolName()
+        getRecentLikedFestivalStream()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
@@ -84,6 +83,14 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+        }
+    }
+
+    private fun getRecentLikedFestivalStream() {
+        viewModelScope.launch {
+            likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
+                _uiState.update { it.copy(festivalInfo = recentLikedFestival) }
+            }
         }
     }
 
@@ -123,7 +130,7 @@ class MapViewModel @Inject constructor(
     }
 
     private fun dismissDialog() {
-        permissionDialogQueue.removeFirst()
+        permissionDialogQueue.removeAt(0)
     }
 
     private fun filterBoothsByType(chipList: List<String>) {
@@ -150,37 +157,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun searchSchoolName() {
+    fun getPopularBooths(festivalId: Long) {
         viewModelScope.launch {
-            festivalRepository.searchSchool("한국교통대학교")
-                .onSuccess { festivals ->
-                    if (festivals.isNotEmpty()) {
-                        _uiState.update {
-                            it.copy(festivalInfo = festivals[0])
-                        }
-                        addLikeFestival(festivals[0])
-                    }
-                }
-                .onFailure { exception ->
-                    handleException(exception, this@MapViewModel)
-                }
-        }
-    }
-    private fun addLikeFestival(festival: FestivalModel) {
-        viewModelScope.launch {
-            likedFestivalRepository.registerLikedFestival()
-                .onSuccess {
-                    likedFestivalRepository.insertLikedFestivalAtSearch(festival)
-                }
-                .onFailure { exception ->
-                    Timber.e(exception)
-                }
-        }
-    }
-
-    fun getPopularBooths() {
-        viewModelScope.launch {
-            boothRepository.getPopularBooths(2)
+            boothRepository.getPopularBooths(festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(popularBoothList = booths.toImmutableList())
@@ -198,9 +177,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun getAllBooths() {
+    fun getAllBooths(festivalId: Long) {
         viewModelScope.launch {
-            boothRepository.getAllBooths(2)
+            boothRepository.getAllBooths(festivalId)
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
@@ -240,8 +219,8 @@ class MapViewModel @Inject constructor(
     }
 
     private fun refresh(error: ErrorType) {
-        searchSchoolName()
-        getPopularBooths()
+        getAllBooths(_uiState.value.festivalInfo.festivalId)
+        getPopularBooths(_uiState.value.festivalInfo.festivalId)
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)
@@ -282,7 +261,7 @@ class MapViewModel @Inject constructor(
     private fun setEnablePopularMode() {
         if (_uiState.value.isBoothSelectionMode) {
             viewModelScope.launch {
-                boothRepository.getPopularBooths(festivalId = 2)
+                boothRepository.getPopularBooths(_uiState.value.festivalInfo.festivalId)
                     .onSuccess { booths ->
                         _uiState.update { currentState ->
                             currentState.copy(
@@ -403,10 +382,10 @@ class MapViewModel @Inject constructor(
 
     private fun String.toEnglishCategory(): String {
         return when (this) {
-            "체험" -> "BAR"
-            "푸드트럭" -> "FOOD"
-            "교내" -> "EVENT"
-            "교외" -> "NORMAL"
+            "주점" -> "BAR"
+            "먹거리" -> "FOOD"
+            "이벤트" -> "EVENT"
+            "일반" -> "NORMAL"
             "의무실" -> "MEDICAL"
             "화장실" -> "TOILET"
             else -> ""

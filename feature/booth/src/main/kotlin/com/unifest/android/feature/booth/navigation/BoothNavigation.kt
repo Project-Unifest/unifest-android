@@ -36,7 +36,7 @@ fun NavGraphBuilder.boothNavGraph(
             val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(
                 padding = padding,
-                onBackClick = popBackStack,
+                popBackStack = popBackStack,
                 navigateToBoothLocation = navigateToBoothLocation,
                 navigateToWaiting = navigateToWaiting,
                 viewModel = viewModel,
@@ -45,7 +45,7 @@ fun NavGraphBuilder.boothNavGraph(
         composable<Route.Booth.BoothLocation> { navBackStackEntry ->
             val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothLocationRoute(
-                onBackClick = popBackStack,
+                popBackStack = popBackStack,
                 viewModel = viewModel,
             )
         }

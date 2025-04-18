@@ -15,13 +15,13 @@ private val jsonRule = Json {
     isLenient = true
 }
 
-interface QRErrorHandlerActions {
+interface QRScanErrorHandlerActions {
     fun setServerErrorDialogVisible(flag: Boolean)
     fun setNetworkErrorDialogVisible(flag: Boolean)
     fun showErrorMessage(message: UiText)
 }
 
-fun handleException(exception: Throwable, actions: QRErrorHandlerActions) {
+fun handleQRScanException(exception: Throwable, actions: QRScanErrorHandlerActions) {
     when (exception) {
         is HttpException -> {
             handleHttpException(exception, actions)
@@ -46,7 +46,7 @@ fun handleException(exception: Throwable, actions: QRErrorHandlerActions) {
     }
 }
 
-private fun handleHttpException(exception: HttpException, actions: QRErrorHandlerActions) {
+private fun handleHttpException(exception: HttpException, actions: QRScanErrorHandlerActions) {
     when (exception.code()) {
         in 400..499 -> {
             val errorBody = exception.response()?.errorBody()?.string()

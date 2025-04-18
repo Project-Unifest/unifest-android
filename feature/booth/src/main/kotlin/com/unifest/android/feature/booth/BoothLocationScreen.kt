@@ -18,10 +18,10 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
-import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberMarkerState
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
@@ -29,30 +29,29 @@ import com.unifest.android.feature.booth.component.BoothLocationAppBar
 import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun BoothLocationRoute(
-    onBackClick: () -> Unit,
+internal fun BoothLocationRoute(
+    popBackStack: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     BoothLocationScreen(
         uiState = uiState,
-        onBackClick = onBackClick,
+        popBackStack = popBackStack,
     )
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-fun BoothLocationScreen(
+internal fun BoothLocationScreen(
     uiState: BoothUiState,
-    onBackClick: () -> Unit,
+    popBackStack: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition(LatLng(36.970898, 127.871726), 15.2)
+            position = CameraPosition(LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble()), 15.2)
         }
         NaverMap(
             cameraPositionState = cameraPositionState,
@@ -67,21 +66,27 @@ fun BoothLocationScreen(
             ),
         ) {
             PolygonOverlay(
-                coords = uiState.outerCords,
+                coords = uiState.outerPolygon,
                 color = Color.Gray.copy(alpha = 0.3f),
                 outlineColor = Color.Gray,
                 outlineWidth = 1.dp,
-                holes = persistentListOf(uiState.innerHole),
+                holes = uiState.innerPolylines,
             )
+
             Marker(
-                state = MarkerState(position = LatLng(uiState.boothDetailInfo.latitude.toDouble(), uiState.boothDetailInfo.longitude.toDouble())),
+                state = rememberMarkerState(
+                    position = LatLng(
+                        uiState.boothDetailInfo.latitude.toDouble(),
+                        uiState.boothDetailInfo.longitude.toDouble(),
+                    ),
+                ),
                 icon = MarkerCategory.fromString(uiState.boothDetailInfo.category).getMarkerIcon(false),
                 onClick = { true },
             )
         }
 
         BoothLocationAppBar(
-            onBackClick = onBackClick,
+            onBackClick = popBackStack,
             boothName = uiState.boothDetailInfo.name,
             boothLocation = uiState.boothDetailInfo.location,
             modifier = Modifier.align(Alignment.TopCenter),
@@ -91,14 +96,14 @@ fun BoothLocationScreen(
 
 @DevicePreview
 @Composable
-fun BoothLocationScreenPreview(
+private fun BoothLocationScreenPreview(
     @PreviewParameter(BoothDetailPreviewParameterProvider::class)
     boothUiState: BoothUiState,
 ) {
     UnifestTheme {
         BoothLocationScreen(
             uiState = boothUiState,
-            onBackClick = {},
+            popBackStack = {},
         )
     }
 }

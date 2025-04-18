@@ -4,7 +4,6 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,8 +42,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.component.TopAppBarNavigationType
@@ -70,7 +70,6 @@ import com.unifest.android.feature.menu.viewmodel.MenuUiEvent
 import com.unifest.android.feature.menu.viewmodel.MenuUiState
 import com.unifest.android.feature.menu.viewmodel.MenuViewModel
 import timber.log.Timber
-import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun MenuRoute(
@@ -84,19 +83,19 @@ internal fun MenuRoute(
 ) {
     val menuUiState by menuViewModel.uiState.collectAsStateWithLifecycle()
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
-    val isClusteringEnabled by menuViewModel.isClusteringEnabled.collectAsStateWithLifecycle(true)
+    val isClusteringEnabled by menuViewModel.isClusteringEnabled.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val appVersion = remember {
         try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "Unknown"
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.tag("AppVersion").e(e, "Failed to get package info")
             "Unknown"
         }
     }
 
-    LaunchedEffect(key1 = null) {
+    RememberedEffect(key1 = null) {
         menuViewModel.getLikedBooths()
     }
 
@@ -131,16 +130,15 @@ internal fun MenuRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MenuScreen(
+internal fun MenuScreen(
     padding: PaddingValues,
     menuUiState: MenuUiState,
     festivalUiState: FestivalUiState,
     appVersion: String,
     onMenuUiAction: (MenuUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
-    isClusteringEnabled: Boolean,
+    isClusteringEnabled: Boolean?,
 ) {
     Box(
         modifier = Modifier
@@ -160,196 +158,19 @@ fun MenuScreen(
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
             )
-            LazyColumn {
-                item { Spacer(modifier = Modifier.height(5.dp)) }
-                item {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(top = 10.dp, start = 20.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.menu_my_liked_festival),
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = Title3,
-                        )
-                        TextButton(
-                            onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
-                            modifier = Modifier.padding(end = 8.dp),
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.menu_add),
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                style = Content7,
-                                textDecoration = TextDecoration.Underline,
-                            )
-                        }
-                    }
-                }
-                item {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(4),
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .height(if (menuUiState.likedFestivals.isEmpty()) 0.dp else ((menuUiState.likedFestivals.size / 5 + 1) * 140).dp),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        items(
-                            menuUiState.likedFestivals.size,
-                            key = { index -> menuUiState.likedFestivals[index].festivalId },
-                        ) { index ->
-                            FestivalItem(
-                                festival = menuUiState.likedFestivals[index],
-                                onMenuUiAction = onMenuUiAction,
-                            )
-                        }
-                    }
-                }
-                item {
-                    HorizontalDivider(
-                        thickness = 8.dp,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                item {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(start = 20.dp, top = 10.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.menu_liked_booth),
-                            color = MaterialTheme.colorScheme.onBackground,
-                            fontWeight = FontWeight.Bold,
-                            style = Title3,
-                        )
-                        TextButton(
-                            onClick = { onMenuUiAction(MenuUiAction.OnShowMoreClick) },
-                            modifier = Modifier.padding(end = 8.dp),
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.menu_watch_more),
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                style = Content7,
-                                textDecoration = TextDecoration.Underline,
-                            )
-                        }
-                    }
-                }
-                if (menuUiState.likedBooths.isEmpty()) {
-                    item {
-                        EmptyLikedBoothItem(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(248.dp),
-                        )
-                    }
-                } else {
-                    itemsIndexed(
-                        items = menuUiState.likedBooths.take(3),
-                        key = { _, booth -> booth.id },
-                    ) { index, booth ->
-                        Modifier
-                            .clickable {
-                                onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
-                            }
-                        LikedBoothItem(
-                            booth = booth,
-                            index = index,
-                            totalCount = menuUiState.likedBooths.size,
-                            deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
-//                            modifier = Modifier.animateItem(
-//                                fadeInSpec = null,
-//                                fadeOutSpec = null,
-//                                placementSpec = tween(
-//                                    durationMillis = 500,
-//                                    easing = LinearOutSlowInEasing,
-//                                ),
-//                            ),
-                            modifier = Modifier.animateItemPlacement(
-                                animationSpec = tween(
-                                    durationMillis = 500,
-                                    easing = LinearOutSlowInEasing,
-                                ),
-                            ),
-                        )
-                    }
-                }
-                item {
-                    HorizontalDivider(
-                        thickness = 8.dp,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                item {
-                    MenuItem(
-                        icon = ImageVector.vectorResource(R.drawable.ic_clustering),
-                        title = stringResource(R.string.clustering),
-                        onClick = {},
-                        isToggleMenuItem = true,
-                        checked = isClusteringEnabled,
-                        onCheckedChange = { isChecked ->
-                            onMenuUiAction(MenuUiAction.OnToggleClustering(isChecked))
-                        },
-                    )
-                }
-                item {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                item {
-                    MenuItem(
-                        icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
-                        title = stringResource(id = R.string.menu_questions),
-                        onClick = { onMenuUiAction(MenuUiAction.OnContactClick) },
-                    )
-                }
-                item {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                item {
-                    MenuItem(
-                        icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
-                        title = stringResource(id = R.string.menu_admin_mode),
-                        onClick = {
-                            onMenuUiAction(MenuUiAction.OnAdministratorModeClick)
-                        },
-                    )
-                }
-                item {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
-                }
-                item {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 13.dp),
-                    ) {
-                        Text(
-                            text = "UniFest v$appVersion",
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                        )
-                    }
-                }
-            }
+            MapContent(
+                menuUiState = menuUiState,
+                appVersion = appVersion,
+                onMenuUiAction = onMenuUiAction,
+                onFestivalUiAction = onFestivalUiAction,
+                isClusteringEnabled = isClusteringEnabled,
+            )
         }
+
+        if (menuUiState.isLoading || isClusteringEnabled == null) {
+            LoadingWheel(modifier = Modifier.fillMaxSize())
+        }
+
         if (menuUiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
                 onRetryClick = { onMenuUiAction(MenuUiAction.OnRetryClick(ErrorType.SERVER)) },
@@ -364,22 +185,211 @@ fun MenuScreen(
 
         if (festivalUiState.isFestivalSearchBottomSheetVisible) {
             FestivalSearchBottomSheet(
-                searchText = festivalUiState.festivalSearchText,
-                searchTextHintRes = designR.string.festival_search_text_field_hint,
-                likedFestivals = festivalUiState.likedFestivals,
-                festivalSearchResults = festivalUiState.festivalSearchResults,
-                isLikedFestivalDeleteDialogVisible = festivalUiState.isLikedFestivalDeleteDialogVisible,
-                isSearchMode = festivalUiState.isSearchMode,
-                isEditMode = festivalUiState.isEditMode,
+                uiState = festivalUiState,
                 onFestivalUiAction = onFestivalUiAction,
             )
         }
     }
 }
 
+@Composable
+internal fun MapContent(
+    menuUiState: MenuUiState,
+    appVersion: String,
+    onMenuUiAction: (MenuUiAction) -> Unit,
+    onFestivalUiAction: (FestivalUiAction) -> Unit,
+    isClusteringEnabled: Boolean?,
+) {
+    LazyColumn {
+        item { Spacer(modifier = Modifier.height(5.dp)) }
+        item {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(top = 10.dp, start = 20.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.menu_my_liked_festival),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+                TextButton(
+                    onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
+                    modifier = Modifier.padding(end = 8.dp),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.menu_add),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        style = Content7,
+                        textDecoration = TextDecoration.Underline,
+                    )
+                }
+            }
+        }
+        item {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(4),
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .height(if (menuUiState.likedFestivals.isEmpty()) 0.dp else ((menuUiState.likedFestivals.size / 5 + 1) * 140).dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(
+                    menuUiState.likedFestivals.size,
+                    key = { index -> menuUiState.likedFestivals[index].festivalId },
+                ) { index ->
+                    FestivalItem(
+                        festival = menuUiState.likedFestivals[index],
+                        onMenuUiAction = onMenuUiAction,
+                    )
+                }
+            }
+        }
+        item {
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(start = 20.dp, top = 10.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.menu_liked_booth),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Bold,
+                    style = Title3,
+                )
+                TextButton(
+                    onClick = { onMenuUiAction(MenuUiAction.OnShowMoreClick) },
+                    modifier = Modifier.padding(end = 8.dp),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.menu_watch_more),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        style = Content7,
+                        textDecoration = TextDecoration.Underline,
+                    )
+                }
+            }
+        }
+        if (menuUiState.likedBooths.isEmpty()) {
+            item {
+                EmptyLikedBoothItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(248.dp),
+                )
+            }
+        } else {
+            itemsIndexed(
+                items = menuUiState.likedBooths.take(3),
+                key = { _, booth -> booth.id },
+            ) { index, booth ->
+                Modifier
+                    .clickable {
+                        onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
+                    }
+                LikedBoothItem(
+                    booth = booth,
+                    index = index,
+                    totalCount = menuUiState.likedBooths.size,
+                    deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = null,
+                        fadeOutSpec = null,
+                        placementSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing,
+                        ),
+                    ),
+                )
+            }
+        }
+        item {
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            if (isClusteringEnabled != null) {
+                MenuItem(
+                    icon = ImageVector.vectorResource(R.drawable.ic_clustering),
+                    title = stringResource(R.string.clustering),
+                    onClick = {},
+                    isToggleMenuItem = true,
+                    checked = isClusteringEnabled,
+                    onCheckedChange = { isChecked ->
+                        onMenuUiAction(MenuUiAction.OnToggleClustering(isChecked))
+                    },
+                )
+            }
+        }
+        item {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            MenuItem(
+                icon = ImageVector.vectorResource(R.drawable.ic_inquiry),
+                title = stringResource(id = R.string.menu_questions),
+                onClick = { onMenuUiAction(MenuUiAction.OnContactClick) },
+            )
+        }
+        item {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            MenuItem(
+                icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
+                title = stringResource(id = R.string.menu_admin_mode),
+                onClick = {
+                    onMenuUiAction(MenuUiAction.OnAdministratorModeClick)
+                },
+            )
+        }
+        item {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 13.dp),
+            ) {
+                Text(
+                    text = "UniFest v$appVersion",
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+            }
+        }
+    }
+}
+
 @DevicePreview
 @Composable
-fun MenuScreenPreview(
+private fun MenuScreenPreview(
     @PreviewParameter(MenuPreviewParameterProvider::class)
     menuUiState: MenuUiState,
 ) {
