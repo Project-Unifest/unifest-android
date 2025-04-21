@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.model.WaitingStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -51,7 +52,11 @@ class WaitingViewModel @Inject constructor(
             waitingRepository.getMyWaitingList()
                 .onSuccess { waitingLists ->
                     _uiState.update {
-                        it.copy(myWaitingList = waitingLists.toImmutableList())
+                        it.copy(
+                            myWaitingList = waitingLists.filter {
+                                it.waitingStatus != WaitingStatus.COMPLETED
+                            }.toImmutableList(),
+                        )
                     }
                 }
                 .onFailure { exception ->

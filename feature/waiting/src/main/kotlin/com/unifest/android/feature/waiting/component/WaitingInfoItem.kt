@@ -36,6 +36,7 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber
 import com.unifest.android.core.designsystem.theme.WaitingNumber2
 import com.unifest.android.core.designsystem.theme.WaitingNumber5
 import com.unifest.android.core.model.MyWaitingModel
+import com.unifest.android.core.model.WaitingStatus
 import com.unifest.android.feature.waiting.R
 import com.unifest.android.feature.waiting.viewmodel.WaitingUiAction
 import com.unifest.android.core.designsystem.R as designR
@@ -50,7 +51,7 @@ internal fun WaitingInfoItem(
             .fillMaxWidth()
             .shadow(elevation = 8.dp, shape = RoundedCornerShape(8.dp))
             .background(
-                color = if (myWaitingModel.status != "NOSHOW") {
+                color = if (myWaitingModel.waitingStatus != WaitingStatus.NOSHOW) {
                     MaterialTheme.colorScheme.surfaceBright
                 } else {
                     MaterialTheme.colorScheme.surfaceContainerHigh
@@ -61,7 +62,7 @@ internal fun WaitingInfoItem(
         Column(
             modifier = Modifier
                 .then(
-                    if (myWaitingModel.status != "NOSHOW") {
+                    if (myWaitingModel.waitingStatus != WaitingStatus.NOSHOW) {
                         Modifier.background(MaterialTheme.colorScheme.surfaceBright)
                     } else {
                         Modifier
@@ -103,21 +104,17 @@ internal fun WaitingInfoItem(
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     Text(
-                        text = when (myWaitingModel.status) {
-                            "NOSHOW" -> stringResource(id = R.string.waiting_no_show)
-                            "CALLED" -> stringResource(id = R.string.waiting_my_turn)
+                        text = when (myWaitingModel.waitingStatus) {
+                            WaitingStatus.NOSHOW -> stringResource(id = R.string.waiting_no_show)
+                            WaitingStatus.CALLED -> stringResource(id = R.string.waiting_my_turn)
                             else -> myWaitingModel.waitingOrder.toString()
                         },
-                        style = if (myWaitingModel.status == "CALLED") WaitingNumber5 else WaitingNumber,
-                        color = if (myWaitingModel.status == "NOSHOW") {
-                            LightPrimary700
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        },
+                        style = if (myWaitingModel.waitingStatus == WaitingStatus.CALLED) WaitingNumber5 else WaitingNumber,
+                        color = if (myWaitingModel.waitingStatus == WaitingStatus.NOSHOW) LightPrimary700 else MaterialTheme.colorScheme.primary,
                         modifier = Modifier.alignByBaseline(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    if (myWaitingModel.status != "CALLED" && myWaitingModel.status != "NOSHOW") {
+                    if (myWaitingModel.waitingStatus != WaitingStatus.CALLED && myWaitingModel.waitingStatus != WaitingStatus.NOSHOW) {
                         Text(
                             text = stringResource(id = R.string.waiting_nth),
                             fontSize = 18.sp,
@@ -167,7 +164,7 @@ internal fun WaitingInfoItem(
             ) {
                 UnifestButton(
                     onClick = {
-                        if (myWaitingModel.status == "NOSHOW") {
+                        if (myWaitingModel.waitingStatus == WaitingStatus.NOSHOW) {
                             onWaitingUiAction(WaitingUiAction.OnCancelNoShowWaitingClick(myWaitingModel.waitingId))
                         } else {
                             onWaitingUiAction(WaitingUiAction.OnCancelWaitingClick(myWaitingModel.waitingId))
@@ -177,7 +174,7 @@ internal fun WaitingInfoItem(
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
-                        text = if (myWaitingModel.status == "NOSHOW") {
+                        text = if (myWaitingModel.waitingStatus == WaitingStatus.NOSHOW) {
                             stringResource(id = R.string.waiting_no_show_description)
                         } else {
                             stringResource(id = R.string.waiting_cancel_waiting)
@@ -216,7 +213,7 @@ private fun WaitingInfoItemPreview() {
                 deviceId = "1234567890",
                 createdAt = "2024-05-23",
                 updatedAt = "2024-05-23",
-                status = "waiting",
+                status = "WAITING",
                 waitingOrder = 1L,
                 boothName = "부스 이름",
             ),

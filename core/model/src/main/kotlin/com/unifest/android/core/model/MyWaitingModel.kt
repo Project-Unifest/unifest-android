@@ -14,4 +14,22 @@ data class MyWaitingModel(
     val status: String = "",
     val waitingOrder: Long = 0L,
     val boothName: String = "",
-)
+) {
+    val waitingStatus: WaitingStatus
+        get() = WaitingStatus.fromString(status)
+}
+
+@Stable
+enum class WaitingStatus(val value: String) {
+    WAITING("WAITING"),    // 웨이팅 중
+    CALLED("CALLED"),      // 호출됨
+    COMPLETED("COMPLETED"), // 완료됨
+    NOSHOW("NOSHOW"),      // 노쇼
+    UNKNOWN("UNKNOWN");    // 알 수 없는 상태
+
+    companion object {
+        fun fromString(value: String): WaitingStatus {
+            return entries.find { it.value == value } ?: UNKNOWN
+        }
+    }
+}
