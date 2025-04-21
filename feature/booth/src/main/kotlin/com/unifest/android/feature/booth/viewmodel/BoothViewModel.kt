@@ -11,6 +11,7 @@ import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.api.repository.LikedBoothRepository
 import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.WaitingStatus
 import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.booth.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -84,7 +85,7 @@ class BoothViewModel @Inject constructor(
                     val currentBoothId = _uiState.value.boothDetailInfo.id
                     val matchingBooth = _uiState.value.myWaitingList.find { it.boothId == currentBoothId }
                     when {
-                        matchingBooth?.status == "NOSHOW" -> setNoShowDialogVisible(true)
+                        matchingBooth?.waitingStatus == WaitingStatus.NOSHOW -> setNoShowDialogVisible(true)
                         matchingBooth != null -> _uiEvent.send(
                             BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)),
                         )
