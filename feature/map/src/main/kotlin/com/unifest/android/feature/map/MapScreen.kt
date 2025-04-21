@@ -80,6 +80,7 @@ import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.extension.checkLocationPermission
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -138,7 +139,7 @@ internal fun MapRoute(
     val dialogQueue = mapViewModel.permissionDialogQueue
 
     var isLocationPermissionGranted by remember {
-        mutableStateOf(checkLocationPermission(activity))
+        mutableStateOf(activity.checkLocationPermission())
     }
 
     var isNotificationPermissionGranted by remember {
@@ -157,7 +158,7 @@ internal fun MapRoute(
             permissionsToRequest.forEach { permission ->
                 when (permission) {
                     Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                        isLocationPermissionGranted = checkLocationPermission(activity)
+                        isLocationPermissionGranted = activity.checkLocationPermission()
                     }
 
                     Manifest.permission.POST_NOTIFICATIONS -> {
@@ -178,7 +179,7 @@ internal fun MapRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isLocationPermissionGranted = checkLocationPermission(activity)
+            isLocationPermissionGranted = activity.checkLocationPermission()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 isNotificationPermissionGranted =
                     activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -299,11 +300,6 @@ internal fun MapRoute(
         onFestivalUiAction = festivalViewModel::onFestivalUiAction,
         isClusteringEnabled = isClusteringEnabled,
     )
-}
-
-private fun checkLocationPermission(activity: Activity): Boolean {
-    return activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-        activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
 @ExperimentalNaverMapApi
