@@ -185,7 +185,7 @@ internal fun BoothDescription(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
-                text = stringResource(id = R.string.booth_check_locaiton),
+                text = stringResource(id = R.string.booth_check_location),
                 style = Title5,
             )
         }
