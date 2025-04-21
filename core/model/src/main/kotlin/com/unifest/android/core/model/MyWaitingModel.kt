@@ -21,7 +21,7 @@ data class MyWaitingModel(
 
 @Stable
 enum class WaitingStatus(val value: String) {
-    WAITING("WAITING"),    // 웨이팅 중
+    RESERVED("RESERVED"),    // 예약됨
     CALLED("CALLED"),      // 호출됨
     COMPLETED("COMPLETED"), // 완료됨
     NOSHOW("NOSHOW"),      // 노쇼

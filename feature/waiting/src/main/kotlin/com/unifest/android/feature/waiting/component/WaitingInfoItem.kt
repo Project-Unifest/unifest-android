@@ -213,7 +213,7 @@ private fun WaitingInfoItemPreview() {
                 deviceId = "1234567890",
                 createdAt = "2024-05-23",
                 updatedAt = "2024-05-23",
-                status = "WAITING",
+                status = "RESERVED",
                 waitingOrder = 1L,
                 boothName = "부스 이름",
             ),
