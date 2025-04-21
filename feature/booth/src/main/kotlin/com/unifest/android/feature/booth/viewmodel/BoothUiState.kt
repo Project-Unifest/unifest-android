@@ -36,7 +36,8 @@ data class BoothUiState(
     val privacyConsentChecked: Boolean = false,
     val isScheduleExpanded: Boolean = false,
     val myWaitingList: ImmutableList<MyWaitingModel> = persistentListOf(),
-    val isPermissionDialogVisible: Boolean = false,
+    val isLocationPermissionDialogVisible: Boolean = false,
+    val isNotificationPermissionDialogVisible: Boolean = false,
     val outerPolygon: ImmutableList<LatLng> = persistentListOf(
         LatLng(50.0, 150.0),
         LatLng(50.0, 100.0),
