@@ -27,10 +27,6 @@ class WaitingViewModel @Inject constructor(
     private val _uiEvent = Channel<WaitingUiEvent>()
     val uiEvent: Flow<WaitingUiEvent> = _uiEvent.receiveAsFlow()
 
-    init {
-        getMyWaitingList(isRefresh = false)
-    }
-
     fun onWaitingUiAction(action: WaitingUiAction) {
         when (action) {
             is WaitingUiAction.OnCancelWaitingClick -> setWaitingCancelDialogWaitingId(action.waitingId)
