@@ -20,4 +20,5 @@ data class FestivalUiState(
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
     val isFestivalOnboardingCompleted: Boolean = false,
+    val isNotificationPermissionDialogVisible: Boolean = false,
 )

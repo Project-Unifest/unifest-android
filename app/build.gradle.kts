@@ -16,6 +16,13 @@ android {
     namespace = "com.unifest.android"
 
     signingConfigs {
+        getByName("debug") {
+            storeFile = file("$rootDir/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+
         create("release") {
             val propertiesFile = rootProject.file("keystore.properties")
             val properties = Properties()

@@ -48,7 +48,10 @@ jobs:
                     echo '${{ secrets.KEYSTORE_PROPERTIES }}' >> ./keystore.properties
 
             -   name: Generate google-services.json
-                run: echo '${{ secrets.GOOGLE_SERVICES }}' | base64 --d > ./app/google-services.json
+                run: echo '${{ secrets.GOOGLE_SERVICES }}' | base64 -d > ./app/google-services.json
+
+            -   name: Generate debug.keystore
+                run: echo '${{ secrets.DEBUG_KEYSTORE }}' | base64 -d > ./debug.keystore
 
             -   name: Code style checks
                 run: |
