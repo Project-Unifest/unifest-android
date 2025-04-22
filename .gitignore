@@ -47,6 +47,7 @@ app/.idea/
 
 # Keystore files
 keystore.properties
+debug.keystore
 /release
 *.jks
 
