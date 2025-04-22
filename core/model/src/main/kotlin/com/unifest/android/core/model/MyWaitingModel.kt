@@ -21,11 +21,21 @@ data class MyWaitingModel(
 
 @Stable
 enum class WaitingStatus(val value: String) {
-    RESERVED("RESERVED"),    // 예약됨
-    CALLED("CALLED"),      // 호출됨
-    COMPLETED("COMPLETED"), // 완료됨
-    NOSHOW("NOSHOW"),      // 노쇼
-    UNKNOWN("UNKNOWN");    // 알 수 없는 상태
+    // 예약됨
+    RESERVED("RESERVED"),
+
+    // 호출됨
+    CALLED("CALLED"),
+
+    // 완료됨
+    COMPLETED("COMPLETED"),
+
+    // 노쇼
+    NOSHOW("NOSHOW"),
+
+    // 알 수 없는 상태
+    UNKNOWN("UNKNOWN"),
+    ;
 
     companion object {
         fun fromString(value: String): WaitingStatus {
