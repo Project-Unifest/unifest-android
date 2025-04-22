@@ -39,7 +39,7 @@ class StampViewModel @Inject constructor(
 
     fun onAction(action: StampUiAction) {
         when (action) {
-            is StampUiAction.OnReceiveStampClick -> requestLocationPermission()
+            is StampUiAction.OnReceiveStampClick -> requestCameraPermission()
             is StampUiAction.OnRefreshClick -> refreshCollectedStamps()
             is StampUiAction.OnFindStampBoothClick -> setStampBoothDialogVisible(true)
             is StampUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType)
@@ -127,7 +127,7 @@ class StampViewModel @Inject constructor(
         getCollectedStamps(festivalId = _uiState.value.selectedFestival.festivalId, isRefresh = true)
     }
 
-    private fun requestLocationPermission() {
+    private fun requestCameraPermission() {
         viewModelScope.launch {
             _uiEvent.send(StampUiEvent.RequestCameraPermission)
         }

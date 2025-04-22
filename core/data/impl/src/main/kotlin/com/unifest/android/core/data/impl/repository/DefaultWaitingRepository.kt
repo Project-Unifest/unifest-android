@@ -18,18 +18,13 @@ class DefaultWaitingRepository @Inject constructor(
     private val firebaseMessaging: FirebaseMessaging,
 ) : WaitingRepository {
     override suspend fun getMyWaitingList() = runSuspendCatching {
-        service.getMyWaitingList(
-            deviceId = getDeviceId(context),
-        ).data?.map { it.toModel() } ?: emptyList()
+        val deviceId = getDeviceId(context)
+        service.getMyWaitingList(deviceId = deviceId).data?.map { it.toModel() } ?: emptyList()
     }
 
     override suspend fun cancelBoothWaiting(waitingId: Long): Result<Unit> = runSuspendCatching {
-        service.cancelBoothWaiting(
-            WaitingRequest(
-                waitingId = waitingId,
-                deviceId = getDeviceId(context),
-            ),
-        ).data.toModel()
+        val deviceId = getDeviceId(context)
+        service.cancelBoothWaiting(WaitingRequest(waitingId = waitingId, deviceId = deviceId)).data.toModel()
     }
 
     override suspend fun registerFCMTopic(waitingId: String) {
