@@ -456,9 +456,7 @@ class BoothViewModel @Inject constructor(
 
     private fun dismissDialog(permission: String?) {
         when (permission) {
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                -> setLocationPermissionDialogVisible(false)
-
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(false)
             Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(false)
         }
     }

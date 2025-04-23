@@ -82,11 +82,13 @@ internal fun BoothBottomBar(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
-                    onClick = { if (activity.checkNotificationPermission()) {
-                        onAction(BoothUiAction.OnWaitingButtonClick)
-                    } else {
-                        onAction(BoothUiAction.OnRequestNotificationPermission)
-                    }},
+                    onClick = {
+                        if (activity.checkNotificationPermission()) {
+                            onAction(BoothUiAction.OnWaitingButtonClick)
+                        } else {
+                            onAction(BoothUiAction.OnRequestNotificationPermission)
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
                     enabled = isWaitingEnable,

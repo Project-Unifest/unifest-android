@@ -26,8 +26,8 @@ sealed interface BoothUiAction {
     data object OnScheduleToggleClick : BoothUiAction
     data object OnMoveClick : BoothUiAction
     data object OnNoShowDialogCancelClick : BoothUiAction
-    data object OnRequestLocationPermission: BoothUiAction
-    data object OnRequestNotificationPermission: BoothUiAction
+    data object OnRequestLocationPermission : BoothUiAction
+    data object OnRequestNotificationPermission : BoothUiAction
     data class OnPermissionDialogButtonClick(
         val buttonType: PermissionDialogButtonType,
         val permission: String? = null,
