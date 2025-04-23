@@ -75,8 +75,8 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
-            is BoothUiAction.OnRequestLocationPermission -> requestLocationPermission()
-            is BoothUiAction.OnRequestNotificationPermission -> requestNotificationPermission()
+            is BoothUiAction.OnRequestLocationPermission -> setLocationPermissionDialogVisible(true)
+            is BoothUiAction.OnRequestNotificationPermission -> setNotificationPermissionDialogVisible(true)
             is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
     }
@@ -398,20 +398,6 @@ class BoothViewModel @Inject constructor(
     private fun setConfirmDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isConfirmDialogVisible = flag)
-        }
-    }
-
-    private fun requestLocationPermission() {
-        viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.RequestPermission(Manifest.permission.ACCESS_FINE_LOCATION))
-        }
-    }
-
-    private fun requestNotificationPermission() {
-        viewModelScope.launch {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                _uiEvent.send(BoothUiEvent.RequestPermission(Manifest.permission.POST_NOTIFICATIONS))
-            }
         }
     }
 

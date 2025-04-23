@@ -224,12 +224,12 @@ internal fun BoothDetailRoute(
     if (uiState.isLocationPermissionDialogVisible) {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
-            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
+            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION),
             onDismiss = {
                 viewModel.onAction(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.DISMISS,
-                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
                     ),
                 )
             },
@@ -237,7 +237,7 @@ internal fun BoothDetailRoute(
                 viewModel.onAction(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
-                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
                     ),
                 )
             },
@@ -245,7 +245,7 @@ internal fun BoothDetailRoute(
                 viewModel.onAction(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.CONFIRM,
-                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
                     ),
                 )
             },
