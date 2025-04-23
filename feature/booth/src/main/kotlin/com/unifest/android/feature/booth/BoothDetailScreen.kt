@@ -1,6 +1,14 @@
 package com.unifest.android.feature.booth
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -21,8 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,9 +45,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
+import com.unifest.android.core.common.PermissionDialogButtonType
+import com.unifest.android.core.common.extension.checkLocationPermission
+import com.unifest.android.core.common.extension.checkNotificationPermission
 import com.unifest.android.core.common.extension.findActivity
-import com.unifest.android.core.common.extension.navigateToAppSetting
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -50,7 +61,10 @@ import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.NoShowAlertDialog
+import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
+import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.core.ui.component.WaitingConfirmDialog
 import com.unifest.android.core.ui.component.WaitingDialog
 import com.unifest.android.core.ui.component.WaitingPinDialog
@@ -67,6 +81,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import com.unifest.android.core.designsystem.R as designR
+
+val locationPermissions = arrayOf(
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_FINE_LOCATION,
+)
 
 private const val SnackBarDuration = 1000L
 
@@ -87,6 +107,9 @@ internal fun BoothDetailRoute(
     val uriHandler = LocalUriHandler.current
     val activity = context.findActivity()
 
+    var isLocationPermissionGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
+    var isNotificationPermissionGranted by remember { mutableStateOf(activity.checkNotificationPermission()) }
+
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
             color = Color.Transparent,
@@ -100,6 +123,61 @@ internal fun BoothDetailRoute(
         }
     }
 
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { perms ->
+            locationPermissions.forEach { permission ->
+                val isGranted = perms[permission] == true
+                when (permission) {
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                        isLocationPermissionGranted = activity.checkLocationPermission()
+                        viewModel.onPermissionResult(
+                            permission = permission,
+                            isGranted = isGranted,
+                        )
+                    }
+                }
+            }
+        },
+    )
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            isNotificationPermissionGranted = isGranted
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                viewModel.onPermissionResult(Manifest.permission.POST_NOTIFICATIONS, isGranted)
+            }
+        },
+    )
+
+    val settingsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            // 설정에서 돌아왔을 때 권한 상태를 다시 확인
+            isLocationPermissionGranted = activity.checkLocationPermission()
+            isNotificationPermissionGranted = activity.checkNotificationPermission()
+
+            viewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+                isGranted = isLocationPermissionGranted,
+            )
+
+            viewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = isLocationPermissionGranted,
+            )
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                viewModel.onPermissionResult(
+                    permission = Manifest.permission.POST_NOTIFICATIONS,
+                    isGranted = isNotificationPermissionGranted,
+                )
+            }
+        },
+    )
+
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is BoothUiEvent.NavigateBack -> popBackStack()
@@ -107,6 +185,13 @@ internal fun BoothDetailRoute(
             is BoothUiEvent.NavigateToWaiting -> navigateToWaiting()
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
             is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
+            is BoothUiEvent.NavigateToAppSetting -> {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", activity.packageName, null)
+                }
+                settingsLauncher.launch(intent)
+            }
+
             is BoothUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {
@@ -121,8 +206,82 @@ internal fun BoothDetailRoute(
             }
 
             is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
-            is BoothUiEvent.NavigateToAppSetting -> activity.navigateToAppSetting()
+            is BoothUiEvent.RequestPermission -> {
+                when (event.permission) {
+                    Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
+                        locationPermissionLauncher.launch(locationPermissions)
+                    }
+
+                    Manifest.permission.POST_NOTIFICATIONS -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    if (uiState.isLocationPermissionDialogVisible) {
+        PermissionDialog(
+            permissionTextProvider = LocationPermissionTextProvider(),
+            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
+            onDismiss = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.DISMISS,
+                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    ),
+                )
+            },
+            navigateToAppSetting = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
+                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    ),
+                )
+            },
+            onConfirm = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.CONFIRM,
+                        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    ),
+                )
+            },
+        )
+    }
+
+    if (uiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        PermissionDialog(
+            permissionTextProvider = NotificationPermissionTextProvider(),
+            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
+            onDismiss = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.DISMISS,
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                    ),
+                )
+            },
+            navigateToAppSetting = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                    ),
+                )
+            },
+            onConfirm = {
+                viewModel.onAction(
+                    BoothUiAction.OnPermissionDialogButtonClick(
+                        buttonType = PermissionDialogButtonType.CONFIRM,
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                    ),
+                )
+            },
+        )
     }
 
     BoothDetailScreen(

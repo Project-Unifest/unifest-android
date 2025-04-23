@@ -80,6 +80,7 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.checkLocationPermission
+import com.unifest.android.core.common.extension.checkNotificationPermission
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -142,13 +143,7 @@ internal fun MapRoute(
     }
 
     var isNotificationPermissionGranted by remember {
-        mutableStateOf(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-            } else {
-                true
-            },
-        )
+        mutableStateOf(activity.checkNotificationPermission())
     }
 
     val permissionResultLauncher = rememberLauncherForActivityResult(
@@ -179,18 +174,18 @@ internal fun MapRoute(
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
             isLocationPermissionGranted = activity.checkLocationPermission()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                isNotificationPermissionGranted =
-                    activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-            }
-            mapViewModel.onPermissionResult(
-                permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = isLocationPermissionGranted,
-            )
+            isNotificationPermissionGranted = activity.checkNotificationPermission()
+
             mapViewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_COARSE_LOCATION,
                 isGranted = isLocationPermissionGranted,
             )
+
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = isLocationPermissionGranted,
+            )
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 mapViewModel.onPermissionResult(
                     permission = Manifest.permission.POST_NOTIFICATIONS,
