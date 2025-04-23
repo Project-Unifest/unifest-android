@@ -58,13 +58,13 @@ class MapViewModel @Inject constructor(
     }
 
     init {
-        requestLocationPermission()
+        requestPermissions()
         getRecentLikedFestivalStream()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
 
-    private fun requestLocationPermission() {
+    private fun requestPermissions() {
         viewModelScope.launch {
             _uiEvent.send(MapUiEvent.RequestPermissions)
         }
