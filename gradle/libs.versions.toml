@@ -3,8 +3,8 @@
 minSdk = "26"
 targetSdk = "35"
 compileSdk = "35"
-versionCode = "28"
-versionName = "1.3.1"
+versionCode = "29"
+versionName = "1.3.2"
 packageName = "com.unifest.android"
 
 android-gradle-plugin = "8.8.2"
@@ -58,6 +58,7 @@ balloon = "1.6.12"
 calendar-compose = "2.6.2"
 flexible-bottomsheet = "0.1.5"
 compose-effects = "0.1.1"
+compose-unstyled = "1.25.0"
 
 naver-map-compose = "1.7.1"
 naver-map-location = "21.0.1"
@@ -145,6 +146,7 @@ naver-map-location = { group = "io.github.fornewid", name = "naver-map-location"
 tedclustering-naver = { group = "io.github.ParkSangGwon", name = "tedclustering-naver", version.ref = "tedclustering-naver" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 compose-effects = { group = "com.github.skydoves", name = "compose-effects", version.ref = "compose-effects" }
+compose-unstyled = { group = "com.composables", name = "core", version.ref = "compose-unstyled" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }

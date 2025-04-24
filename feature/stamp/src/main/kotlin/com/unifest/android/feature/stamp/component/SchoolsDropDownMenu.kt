@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.composables.core.ScrollArea
+import com.composables.core.Thumb
+import com.composables.core.VerticalScrollbar
+import com.composables.core.rememberScrollAreaState
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.StampSchools
@@ -48,6 +54,9 @@ internal fun SchoolsDropDownMenu(
     onAction: (StampUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val lazyListState = rememberLazyListState()
+    val state = rememberScrollAreaState(lazyListState)
+
     val offsetInPx = with(LocalDensity.current) { 64.dp.toPx() }
 
     Column(modifier = modifier) {
@@ -100,32 +109,55 @@ internal fun SchoolsDropDownMenu(
                     shape = RoundedCornerShape(8.dp),
                     shadowElevation = 4.dp,
                 ) {
-                    LazyColumn(
+                    ScrollArea(
+                        state = state,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(if (festivals.isEmpty()) 0.dp else (festivals.size * 48).dp)
-                            .heightIn(max = 240.dp),
+                            .background(color = MaterialTheme.colorScheme.inverseSurface)
+                            .padding(end = 9.dp),
                     ) {
-                        items(
-                            items = festivals,
-                            key = { it.festivalId },
-                        ) { school ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable(
-                                        onClick = { onAction(StampUiAction.OnFestivalSelect(school)) },
+                        LazyColumn(
+                            state = lazyListState,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(if (festivals.isEmpty()) 0.dp else (festivals.size * 48).dp)
+                                .heightIn(max = 240.dp),
+                            contentPadding = PaddingValues(vertical = 5.dp),
+                        ) {
+                            items(
+                                items = festivals,
+                                key = { it.festivalId },
+                            ) { school ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable(
+                                            onClick = { onAction(StampUiAction.OnFestivalSelect(school)) },
+                                        )
+                                        .background(color = MaterialTheme.colorScheme.inverseSurface)
+                                        .padding(horizontal = 25.dp, vertical = 12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = school.name,
+                                        style = StampSchools,
+                                        color = MaterialTheme.colorScheme.inverseOnSurface,
                                     )
-                                    .background(color = MaterialTheme.colorScheme.inverseSurface)
-                                    .padding(horizontal = 25.dp, vertical = 15.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    text = school.name,
-                                    style = StampSchools,
-                                    color = MaterialTheme.colorScheme.inverseOnSurface,
-                                )
+                                }
                             }
+                        }
+                        VerticalScrollbar(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .height(if (festivals.isEmpty()) 0.dp else (festivals.size * 48).dp)
+                                .heightIn(max = 240.dp)
+                                .width(7.dp),
+                        ) {
+                            Thumb(
+                                modifier = Modifier
+                                    .padding(vertical = 9.dp)
+                                    .clip(RoundedCornerShape(7.dp))
+                                    .background(MaterialTheme.colorScheme.surfaceContainerLow),
+                            )
                         }
                     }
                 }
