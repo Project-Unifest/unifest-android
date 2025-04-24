@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,7 +37,7 @@ class StampViewModel @Inject constructor(
 
     init {
         getStampEnabledFestivals()
-        getRecentLikedFestivalStream()
+        observeSelectedFestival()
     }
 
     fun onAction(action: StampUiAction) {
@@ -100,12 +103,22 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getRecentLikedFestivalStream() {
+    private fun observeSelectedFestival() {
         viewModelScope.launch {
-            likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
-                _uiState.update {
-                    it.copy(
-                        selectedFestival = StampFestivalModel(
+            val stampEnabledFestivalsFlow = _uiState
+                .map { it.stampEnabledFestivalList }
+                .distinctUntilChanged()
+
+            combine(
+                likedFestivalRepository.getRecentLikedFestivalStream(),
+                stampEnabledFestivalsFlow,
+            ) { recentLikedFestival, stampEnabledFestivals ->
+                val matchingFestival = stampEnabledFestivals.find { it.festivalId == recentLikedFestival.festivalId }
+                Pair(recentLikedFestival, matchingFestival)
+            }.collect { (recentLikedFestival, matchingFestival) ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        selectedFestival = matchingFestival ?: StampFestivalModel(
                             festivalId = recentLikedFestival.festivalId,
                             name = recentLikedFestival.schoolName,
                             defaultImgUrl = "",

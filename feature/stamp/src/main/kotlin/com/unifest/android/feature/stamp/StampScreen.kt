@@ -8,7 +8,6 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,13 +21,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -41,11 +38,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -62,7 +57,6 @@ import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
-import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
@@ -81,6 +75,7 @@ import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.stamp.component.SchoolsDropDownMenu
 import com.unifest.android.feature.stamp.component.StampBoothBottomSheet
 import com.unifest.android.feature.stamp.component.StampButton
+import com.unifest.android.feature.stamp.component.StampItem
 import com.unifest.android.feature.stamp.preview.StampPreviewParameterProvider
 import com.unifest.android.feature.stamp.viewmodel.stamp.ErrorType
 import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
@@ -316,34 +311,11 @@ internal fun StampContent(
                             count = uiState.stampBoothList.size,
                             key = { index -> uiState.stampBoothList[index].id },
                         ) { index ->
-                            Box {
-                                val isCollected = index < uiState.collectedStampCount
-                                val imgUrl = if (isCollected) uiState.stampEnabledFestivalList[0].usedImgUrl
-                                else uiState.stampEnabledFestivalList[0].defaultImgUrl
-
-                                val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
-                                else R.drawable.ic_unchecked_stamp
-
-                                val contentDescription = if (isCollected) "Stamp Used Image"
-                                else "Stamp Default Image"
-
-                                if (imgUrl.isNotEmpty()) {
-                                    NetworkImage(
-                                        imgUrl = imgUrl,
-                                        contentDescription = contentDescription,
-                                        modifier = Modifier
-                                            .size(62.dp)
-                                            .clip(CircleShape),
-                                        placeholder = painterResource(id = fallbackResourceId),
-                                    )
-                                } else {
-                                    Image(
-                                        painter = painterResource(id = fallbackResourceId),
-                                        contentDescription = contentDescription,
-                                        modifier = Modifier.size(62.dp),
-                                    )
-                                }
-                            }
+                            StampItem(
+                                collectedStampCount = uiState.collectedStampCount,
+                                selectedFestival = uiState.selectedFestival,
+                                index = index,
+                            )
                         }
                     }
                     Spacer(modifier = Modifier.height(28.dp))

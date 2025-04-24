@@ -18,5 +18,6 @@ dependencies {
         libs.coil.compose,
         libs.zxing.android.embedded,
         libs.timber,
+        libs.compose.unstyled,
     )
 }
