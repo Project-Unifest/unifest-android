@@ -313,7 +313,6 @@ internal fun StampContent(
                         ) { index ->
                             StampItem(
                                 collectedStampCount = uiState.collectedStampCount,
-                                stampEnabledFestivalList = uiState.stampEnabledFestivalList,
                                 selectedFestival = uiState.selectedFestival,
                                 index = index,
                             )

@@ -103,9 +103,13 @@ class StampViewModel @Inject constructor(
     private fun getRecentLikedFestivalStream() {
         viewModelScope.launch {
             likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
-                _uiState.update {
-                    it.copy(
-                        selectedFestival = StampFestivalModel(
+                _uiState.update { currentState ->
+                    val matchingFestival = currentState.stampEnabledFestivalList.find {
+                        it.festivalId == recentLikedFestival.festivalId
+                    }
+
+                    currentState.copy(
+                        selectedFestival = matchingFestival ?: StampFestivalModel(
                             festivalId = recentLikedFestival.festivalId,
                             name = recentLikedFestival.schoolName,
                             defaultImgUrl = "",

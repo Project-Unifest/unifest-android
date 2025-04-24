@@ -14,13 +14,10 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.feature.stamp.R
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun StampItem(
     collectedStampCount: Int,
-    stampEnabledFestivalList: ImmutableList<StampFestivalModel>,
     selectedFestival: StampFestivalModel,
     index: Int,
     modifier: Modifier = Modifier,
@@ -28,11 +25,8 @@ internal fun StampItem(
     Box(
         modifier = modifier,
     ) {
-        // TODO index 0 고정이 맞나?
         val isCollected = index < collectedStampCount
-        val imgUrl = if (isCollected) stampEnabledFestivalList[0].usedImgUrl
-        else stampEnabledFestivalList[0].defaultImgUrl
-
+        val imgUrl = if (isCollected) selectedFestival.usedImgUrl else selectedFestival.defaultImgUrl
         val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
         else R.drawable.ic_unchecked_stamp
 
@@ -61,20 +55,15 @@ internal fun StampItem(
 @ComponentPreview
 @Composable
 private fun StampItemPreview() {
-    val mockStampFestivalModel = StampFestivalModel(
-        festivalId = 1,
-        name = "축제",
-        defaultImgUrl = "",
-        usedImgUrl = "",
-    )
-
-    val mockStampEnabledFestivalList = persistentListOf(mockStampFestivalModel)
-
     UnifestTheme {
         StampItem(
             collectedStampCount = 10,
-            stampEnabledFestivalList = mockStampEnabledFestivalList,
-            selectedFestival = mockStampFestivalModel,
+            selectedFestival = StampFestivalModel(
+                festivalId = 1,
+                name = "축제",
+                defaultImgUrl = "",
+                usedImgUrl = "",
+            ),
             index = 1,
         )
     }
