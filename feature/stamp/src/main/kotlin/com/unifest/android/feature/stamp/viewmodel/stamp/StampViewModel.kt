@@ -16,9 +16,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +38,7 @@ class StampViewModel @Inject constructor(
 
     init {
         getStampEnabledFestivals()
-        getRecentLikedFestivalStream()
+        observeSelectedFestival()
     }
 
     fun onAction(action: StampUiAction) {
@@ -100,14 +104,30 @@ class StampViewModel @Inject constructor(
         }
     }
 
-    private fun getRecentLikedFestivalStream() {
+    private fun observeSelectedFestival() {
         viewModelScope.launch {
-            likedFestivalRepository.getRecentLikedFestivalStream().collect { recentLikedFestival ->
-                _uiState.update { currentState ->
-                    val matchingFestival = currentState.stampEnabledFestivalList.find {
-                        it.festivalId == recentLikedFestival.festivalId
-                    }
+            val stampEnabledFestivalsFlow = _uiState
+                .map { it.stampEnabledFestivalList }
+                .distinctUntilChanged()
 
+            combine(
+                likedFestivalRepository.getRecentLikedFestivalStream(),
+                stampEnabledFestivalsFlow,
+            ) { recentLikedFestival, stampEnabledFestivals ->
+                val matchingFestival = stampEnabledFestivals.find {
+                    it.festivalId == recentLikedFestival.festivalId
+                }
+
+                if (matchingFestival != null) {
+                    Timber.d("매칭된 축제 찾음 - ID: ${matchingFestival.festivalId}, 이름: ${matchingFestival.name}")
+                    Timber.d("이미지 URL - 기본: ${matchingFestival.defaultImgUrl}, 사용됨: ${matchingFestival.usedImgUrl}")
+                } else {
+                    Timber.d("최근 좋아한 축제(ID: ${recentLikedFestival.festivalId})와 일치하는 스탬프 활성화 축제 없음")
+                }
+
+                Pair(recentLikedFestival, matchingFestival)
+            }.collect { (recentLikedFestival, matchingFestival) ->
+                _uiState.update { currentState ->
                     currentState.copy(
                         selectedFestival = matchingFestival ?: StampFestivalModel(
                             festivalId = recentLikedFestival.festivalId,
