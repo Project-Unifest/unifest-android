@@ -114,17 +114,7 @@ class StampViewModel @Inject constructor(
                 likedFestivalRepository.getRecentLikedFestivalStream(),
                 stampEnabledFestivalsFlow,
             ) { recentLikedFestival, stampEnabledFestivals ->
-                val matchingFestival = stampEnabledFestivals.find {
-                    it.festivalId == recentLikedFestival.festivalId
-                }
-
-                if (matchingFestival != null) {
-                    Timber.d("매칭된 축제 찾음 - ID: ${matchingFestival.festivalId}, 이름: ${matchingFestival.name}")
-                    Timber.d("이미지 URL - 기본: ${matchingFestival.defaultImgUrl}, 사용됨: ${matchingFestival.usedImgUrl}")
-                } else {
-                    Timber.d("최근 좋아한 축제(ID: ${recentLikedFestival.festivalId})와 일치하는 스탬프 활성화 축제 없음")
-                }
-
+                val matchingFestival = stampEnabledFestivals.find { it.festivalId == recentLikedFestival.festivalId }
                 Pair(recentLikedFestival, matchingFestival)
             }.collect { (recentLikedFestival, matchingFestival) ->
                 _uiState.update { currentState ->
