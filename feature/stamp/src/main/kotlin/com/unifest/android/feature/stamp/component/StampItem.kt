@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -30,8 +31,8 @@ internal fun StampItem(
         val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
         else R.drawable.ic_unchecked_stamp
 
-        val contentDescription = if (isCollected) "Stamp Used Image"
-        else "Stamp Default Image"
+        val contentDescription = if (isCollected) stringResource(R.string.stamp_used_image)
+        else stringResource(R.string.stamp_default_image)
 
         if (imgUrl.isNotEmpty()) {
             NetworkImage(
