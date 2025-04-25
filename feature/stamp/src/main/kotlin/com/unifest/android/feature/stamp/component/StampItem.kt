@@ -61,7 +61,7 @@ private fun StampItemPreview() {
             collectedStampCount = 10,
             selectedFestival = StampFestivalModel(
                 festivalId = 1,
-                name = "축제",
+                schoolName = "축제",
                 defaultImgUrl = "",
                 usedImgUrl = "",
             ),
