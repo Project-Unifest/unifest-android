@@ -21,6 +21,7 @@ import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.theme.UnifestTheme
@@ -65,6 +66,7 @@ internal fun BoothLocationScreen(
                 isLogoClickEnabled = false,
                 isLocationButtonEnabled = true,
             ),
+            locationSource = rememberFusedLocationSource(),
         ) {
             PolygonOverlay(
                 coords = uiState.outerPolygon,
