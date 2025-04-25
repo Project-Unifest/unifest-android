@@ -377,9 +377,10 @@ internal fun MapContent(
                 isNightModeEnabled = isSystemInDarkTheme(),
             ),
             uiSettings = MapUiSettings(
-                isZoomControlEnabled = false,
+                isZoomControlEnabled = true,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
+                isLocationButtonEnabled = true,
             ),
             locationSource = rememberFusedLocationSource(),
         ) {

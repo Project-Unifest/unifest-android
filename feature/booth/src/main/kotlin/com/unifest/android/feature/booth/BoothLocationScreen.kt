@@ -60,9 +60,10 @@ internal fun BoothLocationScreen(
                 isNightModeEnabled = isSystemInDarkTheme(),
             ),
             uiSettings = MapUiSettings(
-                isZoomControlEnabled = false,
+                isZoomControlEnabled = true,
                 isScaleBarEnabled = false,
                 isLogoClickEnabled = false,
+                isLocationButtonEnabled = true,
             ),
         ) {
             PolygonOverlay(
