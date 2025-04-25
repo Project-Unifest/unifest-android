@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
@@ -58,6 +59,7 @@ internal fun BoothLocationScreen(
             cameraPositionState = cameraPositionState,
             modifier = Modifier.fillMaxSize(),
             properties = MapProperties(
+                locationTrackingMode = LocationTrackingMode.NoFollow,
                 isNightModeEnabled = isSystemInDarkTheme(),
             ),
             uiSettings = MapUiSettings(
