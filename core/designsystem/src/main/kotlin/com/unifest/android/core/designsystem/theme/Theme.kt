@@ -69,6 +69,8 @@ private val LightColorScheme = lightColorScheme(
     surfaceContainer = Color.White,
     // 높은 대비의 표면 컨테이너, 중요 정보나 액션을 담는 컨테이너
     surfaceContainerHigh = LightPrimary50,
+    // 낮은 대비의 표면 컨테이너, 부차적인 정보나 배경 요소에 사용
+    surfaceContainerLow = DarkGrey700,
     // 역전된 표면 색상, 어두운 배경 위 밝은 요소를 위해 사용
     inverseSurface = LightGrey100,
     // inverseSurface 위의 텍스트나 밝은 강조에 사용
@@ -105,6 +107,7 @@ private val DarkColorScheme = darkColorScheme(
     surfaceBright = DarkGrey200,
     surfaceContainer = DarkGrey100,
     surfaceContainerHigh = DarkGrey300,
+    surfaceContainerLow = DarkGrey400,
     inverseSurface = DarkGrey300,
     inverseOnSurface = LightGrey100,
 )
