@@ -75,7 +75,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
-            is BoothUiAction.OnRequestLocationPermission -> setLocationPermissionDialogVisible(true)
+            is BoothUiAction.OnRequestLocationPermission -> navigateToBoothLocation()
             is BoothUiAction.OnRequestNotificationPermission -> setNotificationPermissionDialogVisible(true)
             is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
@@ -405,13 +405,19 @@ class BoothViewModel @Inject constructor(
         viewModelScope.launch {
             when (permission) {
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                    if (isGranted) {
-                        navigateToBoothLocation()
+                    if (!isGranted) {
+                        setLocationPermissionDialogVisible(true)
+                    } else {
+                        setLocationPermissionDialogVisible(false)
                     }
                 }
 
                 Manifest.permission.POST_NOTIFICATIONS -> {
-                    checkMyWaitingListNumbers()
+                    if (!isGranted) {
+                        setNotificationPermissionDialogVisible(true)
+                    } else {
+                        checkMyWaitingListNumbers()
+                    }
                 }
             }
         }
@@ -447,15 +453,15 @@ class BoothViewModel @Inject constructor(
         }
     }
 
-    private fun setLocationPermissionDialogVisible(flag: Boolean) {
-        _uiState.update {
-            it.copy(isLocationPermissionDialogVisible = flag)
-        }
-    }
-
     private fun setNotificationPermissionDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNotificationPermissionDialogVisible = flag)
+        }
+    }
+
+    private fun setLocationPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLocationPermissionDialogVisible = flag)
         }
     }
 

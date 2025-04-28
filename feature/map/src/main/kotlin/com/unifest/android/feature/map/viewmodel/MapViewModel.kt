@@ -1,6 +1,6 @@
 package com.unifest.android.feature.map.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
+import android.Manifest
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -46,27 +46,32 @@ class MapViewModel @Inject constructor(
 
     val isClusteringEnabled = settingRepository.flowIsClusteringEnabled()
 
-    val permissionDialogQueue = mutableStateListOf<String>()
-
     fun onPermissionResult(
         permission: String,
         isGranted: Boolean,
     ) {
-        if (!isGranted && !permissionDialogQueue.contains(permission)) {
-            permissionDialogQueue.add(permission)
+        if (!isGranted) {
+            when (permission) {
+                Manifest.permission.POST_NOTIFICATIONS -> {
+                    _uiState.update { it.copy(isNotificationPermissionDialogVisible = true) }
+                }
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                    _uiState.update { it.copy(isLocationPermissionDialogVisible = true) }
+                }
+            }
         }
     }
 
     init {
-        requestPermissions()
+        requestNotificationPermission()
         getRecentLikedFestivalStream()
         getAllFestivals()
         checkMapOnboardingCompletion()
     }
 
-    private fun requestPermissions() {
+    private fun requestNotificationPermission() {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestPermissions)
+            _uiEvent.send(MapUiEvent.RequestNotificationPermission)
         }
     }
 
@@ -111,7 +116,7 @@ class MapViewModel @Inject constructor(
     private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String?) {
         when (buttonType) {
             PermissionDialogButtonType.DISMISS -> {
-                dismissDialog()
+                dismissDialog(permission)
             }
 
             PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
@@ -121,16 +126,31 @@ class MapViewModel @Inject constructor(
             }
 
             PermissionDialogButtonType.CONFIRM -> {
-                dismissDialog()
+                dismissDialog(permission)
                 viewModelScope.launch {
-                    _uiEvent.send(MapUiEvent.RequestPermission(permission!!))
+                    _uiEvent.send(MapUiEvent.RequestNotificationPermission)
                 }
             }
         }
     }
 
-    private fun dismissDialog() {
-        permissionDialogQueue.removeAt(0)
+    private fun dismissDialog(permission: String?) {
+        when (permission) {
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(false)
+            Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(false)
+        }
+    }
+
+    private fun setNotificationPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNotificationPermissionDialogVisible = flag)
+        }
+    }
+
+    private fun setLocationPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLocationPermissionDialogVisible = flag)
+        }
     }
 
     private fun filterBoothsByType(chipList: List<String>) {

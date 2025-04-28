@@ -45,7 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
-import com.unifest.android.core.common.extension.checkLocationPermission
 import com.unifest.android.core.common.extension.checkNotificationPermission
 import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
@@ -60,7 +59,6 @@ import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.NoShowAlertDialog
 import com.unifest.android.core.ui.component.NotificationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
@@ -82,11 +80,6 @@ import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import com.unifest.android.core.designsystem.R as designR
 
-val locationPermissions = arrayOf(
-    Manifest.permission.ACCESS_COARSE_LOCATION,
-    Manifest.permission.ACCESS_FINE_LOCATION,
-)
-
 private const val SnackBarDuration = 1000L
 
 @Composable
@@ -106,7 +99,6 @@ internal fun BoothDetailRoute(
     val uriHandler = LocalUriHandler.current
     val activity = context.findActivity()
 
-    var isLocationPermissionGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
     var isNotificationPermissionGranted by remember { mutableStateOf(activity.checkNotificationPermission()) }
 
     DisposableEffect(systemUiController) {
@@ -121,24 +113,6 @@ internal fun BoothDetailRoute(
             )
         }
     }
-
-    val locationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { perms ->
-            locationPermissions.forEach { permission ->
-                val isGranted = perms[permission] == true
-                when (permission) {
-                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                        isLocationPermissionGranted = activity.checkLocationPermission()
-                        viewModel.onPermissionResult(
-                            permission = permission,
-                            isGranted = isGranted,
-                        )
-                    }
-                }
-            }
-        },
-    )
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -155,18 +129,7 @@ internal fun BoothDetailRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isLocationPermissionGranted = activity.checkLocationPermission()
             isNotificationPermissionGranted = activity.checkNotificationPermission()
-
-            viewModel.onPermissionResult(
-                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-                isGranted = isLocationPermissionGranted,
-            )
-
-            viewModel.onPermissionResult(
-                permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = isLocationPermissionGranted,
-            )
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 viewModel.onPermissionResult(
@@ -207,10 +170,6 @@ internal fun BoothDetailRoute(
             is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
             is BoothUiEvent.RequestPermission -> {
                 when (event.permission) {
-                    Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
-                        locationPermissionLauncher.launch(locationPermissions)
-                    }
-
                     Manifest.permission.POST_NOTIFICATIONS -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -221,38 +180,7 @@ internal fun BoothDetailRoute(
         }
     }
 
-    if (uiState.isLocationPermissionDialogVisible) {
-        PermissionDialog(
-            permissionTextProvider = LocationPermissionTextProvider(),
-            isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION),
-            onDismiss = {
-                viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
-                        buttonType = PermissionDialogButtonType.DISMISS,
-                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-                    ),
-                )
-            },
-            navigateToAppSetting = {
-                viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
-                        buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
-                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-                    ),
-                )
-            },
-            onConfirm = {
-                viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
-                        buttonType = PermissionDialogButtonType.CONFIRM,
-                        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-                    ),
-                )
-            },
-        )
-    }
-
-    if (uiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    if (uiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
         PermissionDialog(
             permissionTextProvider = NotificationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),

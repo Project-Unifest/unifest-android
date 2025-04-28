@@ -63,8 +63,6 @@ internal fun BoothDescription(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val activity = context.findActivity()
     val configuration = LocalConfiguration.current
     val maxWidth = remember(configuration) {
         val screenWidth = configuration.screenWidthDp.dp - 40.dp
@@ -187,11 +185,7 @@ internal fun BoothDescription(
         Spacer(modifier = Modifier.height(16.dp))
         UnifestOutlinedButton(
             onClick = {
-                if (activity.checkLocationPermission()) {
-                    onAction(BoothUiAction.OnCheckLocationClick)
-                } else {
-                    onAction(BoothUiAction.OnRequestLocationPermission)
-                }
+                onAction(BoothUiAction.OnCheckLocationClick)
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
