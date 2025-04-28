@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.viewmodel
 
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.model.MenuModel
 
 sealed interface BoothUiAction {
@@ -25,6 +26,12 @@ sealed interface BoothUiAction {
     data object OnScheduleToggleClick : BoothUiAction
     data object OnMoveClick : BoothUiAction
     data object OnNoShowDialogCancelClick : BoothUiAction
+    data object OnRequestLocationPermission : BoothUiAction
+    data object OnRequestNotificationPermission : BoothUiAction
+    data class OnPermissionDialogButtonClick(
+        val buttonType: PermissionDialogButtonType,
+        val permission: String,
+    ) : BoothUiAction
 }
 
 enum class ErrorType {

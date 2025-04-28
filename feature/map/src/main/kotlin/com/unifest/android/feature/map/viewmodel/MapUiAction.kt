@@ -17,7 +17,7 @@ sealed interface MapUiAction {
     data class OnRetryClick(val error: ErrorType) : MapUiAction
     data class OnPermissionDialogButtonClick(
         val buttonType: PermissionDialogButtonType,
-        val permission: String? = null,
+        val permission: String,
     ) : MapUiAction
 
     data class OnBoothTypeChipClick(val chipName: String) : MapUiAction

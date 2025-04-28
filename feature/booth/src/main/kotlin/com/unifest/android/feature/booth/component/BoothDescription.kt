@@ -181,7 +181,9 @@ internal fun BoothDescription(
         }
         Spacer(modifier = Modifier.height(16.dp))
         UnifestOutlinedButton(
-            onClick = { onAction(BoothUiAction.OnCheckLocationClick) },
+            onClick = {
+                onAction(BoothUiAction.OnCheckLocationClick)
+            },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
