@@ -20,12 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.unifest.android.core.common.extension.checkNotificationPermission
 import com.unifest.android.core.common.extension.clickableSingle
+import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
@@ -43,6 +46,9 @@ internal fun BoothBottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val activity = context.findActivity()
+
     Surface(
         modifier = modifier.height(116.dp),
         shadowElevation = 32.dp,
@@ -76,7 +82,13 @@ internal fun BoothBottomBar(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
-                    onClick = { onAction(BoothUiAction.OnWaitingButtonClick) },
+                    onClick = {
+                        if (activity.checkNotificationPermission()) {
+                            onAction(BoothUiAction.OnWaitingButtonClick)
+                        } else {
+                            onAction(BoothUiAction.OnRequestNotificationPermission)
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(vertical = 15.dp),
                     enabled = isWaitingEnable,

@@ -1,10 +1,12 @@
 package com.unifest.android.feature.booth.viewmodel
 
+import android.Manifest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.BoothRepository
@@ -72,6 +74,9 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
+            is BoothUiAction.OnRequestLocationPermission -> navigateToBoothLocation()
+            is BoothUiAction.OnRequestNotificationPermission -> setNotificationPermissionDialogVisible(true)
+            is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
     }
 
@@ -392,6 +397,70 @@ class BoothViewModel @Inject constructor(
     private fun setConfirmDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isConfirmDialogVisible = flag)
+        }
+    }
+
+    fun onPermissionResult(permission: String, isGranted: Boolean) {
+        viewModelScope.launch {
+            when (permission) {
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                    if (!isGranted) {
+                        setLocationPermissionDialogVisible(true)
+                    } else {
+                        setLocationPermissionDialogVisible(false)
+                    }
+                }
+
+                Manifest.permission.POST_NOTIFICATIONS -> {
+                    if (!isGranted) {
+                        setNotificationPermissionDialogVisible(true)
+                    } else {
+                        checkMyWaitingListNumbers()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String) {
+        when (buttonType) {
+            PermissionDialogButtonType.DISMISS -> {
+                dismissDialog(permission)
+            }
+
+            PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
+                viewModelScope.launch {
+                    _uiEvent.send(BoothUiEvent.NavigateToAppSetting)
+                }
+            }
+
+            PermissionDialogButtonType.CONFIRM -> {
+                dismissDialog(permission)
+                viewModelScope.launch {
+                    if (permission != null) {
+                        _uiEvent.send(BoothUiEvent.RequestPermission(permission))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun dismissDialog(permission: String) {
+        when (permission) {
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(false)
+            Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(false)
+        }
+    }
+
+    private fun setNotificationPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNotificationPermissionDialogVisible = flag)
+        }
+    }
+
+    private fun setLocationPermissionDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isLocationPermissionDialogVisible = flag)
         }
     }
 

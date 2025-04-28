@@ -189,7 +189,7 @@ internal fun StampScreen(
 
         if (uiState.isStampBoothDialogVisible) {
             StampBoothBottomSheet(
-                schoolName = uiState.selectedFestival.name,
+                schoolName = uiState.selectedFestival.schoolName,
                 stampBoothList = uiState.stampBoothList,
                 onAction = onAction,
             )

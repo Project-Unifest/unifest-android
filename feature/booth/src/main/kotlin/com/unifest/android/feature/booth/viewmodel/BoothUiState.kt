@@ -36,15 +36,15 @@ data class BoothUiState(
     val privacyConsentChecked: Boolean = false,
     val isScheduleExpanded: Boolean = false,
     val myWaitingList: ImmutableList<MyWaitingModel> = persistentListOf(),
-    val isLocationPermissionDialogVisible: Boolean = false,
     val isNotificationPermissionDialogVisible: Boolean = false,
+    val isLocationPermissionDialogVisible: Boolean = false,
     val outerPolygon: ImmutableList<LatLng> = persistentListOf(
         LatLng(50.0, 150.0),
         LatLng(50.0, 100.0),
         LatLng(30.0, 100.0),
         LatLng(30.0, 150.0),
     ),
-    val innerPolylines: ImmutableList<ImmutableList<LatLng>> = persistentListOf(
+    val innerPolyLines: ImmutableList<ImmutableList<LatLng>> = persistentListOf(
         KONKUK_UNIVERSITY_POLYLINE,
         HANKYONG_UNIVERSITY_POLYLINE,
         KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE,

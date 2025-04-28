@@ -78,7 +78,7 @@ internal fun SchoolsDropDownMenu(
         ) {
             Spacer(modifier = Modifier.width(25.dp))
             Text(
-                text = selectedFestival.name,
+                text = selectedFestival.schoolName,
                 modifier = Modifier.weight(1f),
                 color = MaterialTheme.colorScheme.onBackground,
                 maxLines = 1,
@@ -138,7 +138,7 @@ internal fun SchoolsDropDownMenu(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        text = school.name,
+                                        text = school.schoolName,
                                         style = StampSchools,
                                         color = MaterialTheme.colorScheme.inverseOnSurface,
                                     )

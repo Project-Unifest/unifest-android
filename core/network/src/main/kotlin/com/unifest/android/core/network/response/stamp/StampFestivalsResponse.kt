@@ -17,8 +17,8 @@ data class StampFestivalsResponse(
 data class StampFestival(
     @SerialName("festivalId")
     val festivalId: Long,
-    @SerialName("name")
-    val name: String,
+    @SerialName("schoolName")
+    val schoolName: String,
     @SerialName("defaultImgUrl")
     val defaultImgUrl: String,
     @SerialName("usedImgUrl")

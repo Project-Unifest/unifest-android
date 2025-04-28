@@ -37,7 +37,7 @@ internal fun StampRecord.toModel(): StampRecordModel {
 internal fun StampFestival.toModel(): StampFestivalModel {
     return StampFestivalModel(
         festivalId = festivalId,
-        name = name,
+        schoolName = schoolName,
         defaultImgUrl = defaultImgUrl,
         usedImgUrl = usedImgUrl,
     )

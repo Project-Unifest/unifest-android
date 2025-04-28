@@ -120,7 +120,7 @@ class StampViewModel @Inject constructor(
                     currentState.copy(
                         selectedFestival = matchingFestival ?: StampFestivalModel(
                             festivalId = recentLikedFestival.festivalId,
-                            name = recentLikedFestival.schoolName,
+                            schoolName = recentLikedFestival.schoolName,
                             defaultImgUrl = "",
                             usedImgUrl = "",
                         ),
