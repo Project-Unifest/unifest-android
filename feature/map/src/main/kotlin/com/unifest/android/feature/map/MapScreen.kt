@@ -35,10 +35,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -105,6 +107,7 @@ import com.unifest.android.feature.map.viewmodel.MapUiAction
 import com.unifest.android.feature.map.viewmodel.MapUiEvent
 import com.unifest.android.feature.map.viewmodel.MapUiState
 import com.unifest.android.feature.map.viewmodel.MapViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
@@ -129,6 +132,32 @@ internal fun MapRoute(
 
     var isLocationPermissionGranted by remember {
         mutableStateOf(activity.checkLocationPermission())
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { activity.checkLocationPermission() }
+            .distinctUntilChanged()
+            .collect { isGranted ->
+                isLocationPermissionGranted = isGranted
+                mapViewModel.onPermissionResult(
+                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    isGranted = isGranted,
+                )
+            }
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { activity.checkNotificationPermission() }
+            .distinctUntilChanged()
+            .collect { isGranted ->
+                isNotificationPermissionGranted = isGranted
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mapViewModel.onPermissionResult(
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                        isGranted = isGranted,
+                    )
+                }
+            }
     }
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(

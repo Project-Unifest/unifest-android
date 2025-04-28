@@ -27,11 +27,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -76,6 +78,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import com.unifest.android.feature.booth.viewmodel.ErrorType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
 import com.unifest.android.core.designsystem.R as designR
@@ -112,6 +115,20 @@ internal fun BoothDetailRoute(
                 darkIcons = !isDarkTheme,
             )
         }
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { activity.checkNotificationPermission() }
+            .distinctUntilChanged()
+            .collect { isGranted ->
+                isNotificationPermissionGranted = isGranted
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    viewModel.onPermissionResult(
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                        isGranted = isGranted,
+                    )
+                }
+            }
     }
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(

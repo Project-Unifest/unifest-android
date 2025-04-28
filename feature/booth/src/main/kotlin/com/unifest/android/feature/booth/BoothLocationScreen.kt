@@ -10,10 +10,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,6 +51,7 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 internal fun BoothLocationRoute(
@@ -59,6 +62,18 @@ internal fun BoothLocationRoute(
     val context = LocalContext.current
     val activity = context.findActivity()
     var isLocationPermissionGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { activity.checkLocationPermission() }
+            .distinctUntilChanged()
+            .collect { isGranted ->
+                isLocationPermissionGranted = isGranted
+                viewModel.onPermissionResult(
+                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    isGranted = isGranted,
+                )
+            }
+    }
 
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),

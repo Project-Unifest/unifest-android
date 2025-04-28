@@ -50,13 +50,18 @@ class MapViewModel @Inject constructor(
         permission: String,
         isGranted: Boolean,
     ) {
-        if (!isGranted) {
+        if (isGranted) {
             when (permission) {
-                Manifest.permission.POST_NOTIFICATIONS -> {
-                    _uiState.update { it.copy(isNotificationPermissionDialogVisible = true) }
+                Manifest.permission.POST_NOTIFICATIONS -> _uiState.update { it.copy(isNotificationPermissionDialogVisible = false) }
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> _uiState.update {
+                    it.copy(isLocationPermissionDialogVisible = false)
                 }
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                    _uiState.update { it.copy(isLocationPermissionDialogVisible = true) }
+            }
+        } else {
+            when (permission) {
+                Manifest.permission.POST_NOTIFICATIONS -> _uiState.update { it.copy(isNotificationPermissionDialogVisible = true) }
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> _uiState.update {
+                    it.copy(isLocationPermissionDialogVisible = true)
                 }
             }
         }
