@@ -81,6 +81,7 @@ internal fun BoothLocationRoute(
                 }
                 settingsLauncher.launch(intent)
             }
+
             else -> {}
         }
     }
@@ -94,7 +95,7 @@ internal fun BoothLocationRoute(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.DISMISS,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    )
+                    ),
                 )
             },
             navigateToAppSetting = {
@@ -102,7 +103,7 @@ internal fun BoothLocationRoute(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    )
+                    ),
                 )
             },
             onConfirm = {
@@ -110,7 +111,7 @@ internal fun BoothLocationRoute(
                     BoothUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.CONFIRM,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    )
+                    ),
                 )
             },
         )

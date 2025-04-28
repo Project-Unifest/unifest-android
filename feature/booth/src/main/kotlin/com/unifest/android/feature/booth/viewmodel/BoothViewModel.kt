@@ -1,7 +1,6 @@
 package com.unifest.android.feature.booth.viewmodel
 
 import android.Manifest
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
