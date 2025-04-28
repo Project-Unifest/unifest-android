@@ -30,7 +30,7 @@ sealed interface BoothUiAction {
     data object OnRequestNotificationPermission : BoothUiAction
     data class OnPermissionDialogButtonClick(
         val buttonType: PermissionDialogButtonType,
-        val permission: String? = null,
+        val permission: String,
     ) : BoothUiAction
 }
 

@@ -113,7 +113,7 @@ class MapViewModel @Inject constructor(
         filterBoothsByType(_uiState.value.selectedBoothTypeChips)
     }
 
-    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String?) {
+    private fun handlePermissionDialogButtonClick(buttonType: PermissionDialogButtonType, permission: String) {
         when (buttonType) {
             PermissionDialogButtonType.DISMISS -> {
                 dismissDialog(permission)
@@ -134,7 +134,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun dismissDialog(permission: String?) {
+    private fun dismissDialog(permission: String) {
         when (permission) {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(false)
             Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(false)
