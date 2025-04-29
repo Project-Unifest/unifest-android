@@ -139,10 +139,6 @@ internal fun MapRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionGranted = isGranted
-                mapViewModel.onPermissionResult(
-                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    isGranted = isGranted,
-                )
             }
     }
 
@@ -151,12 +147,6 @@ internal fun MapRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    mapViewModel.onPermissionResult(
-                        permission = Manifest.permission.POST_NOTIFICATIONS,
-                        isGranted = isGranted,
-                    )
-                }
             }
     }
 
@@ -373,7 +363,7 @@ internal fun MapContent(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
-    val context = LocalContext.current
+    // val context = LocalContext.current
 
     Box {
         NaverMap(

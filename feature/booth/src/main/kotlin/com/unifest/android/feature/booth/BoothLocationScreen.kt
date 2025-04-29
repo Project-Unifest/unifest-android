@@ -68,10 +68,6 @@ internal fun BoothLocationRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionGranted = isGranted
-                viewModel.onPermissionResult(
-                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    isGranted = isGranted,
-                )
             }
     }
 

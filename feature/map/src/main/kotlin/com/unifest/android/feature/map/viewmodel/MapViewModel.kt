@@ -46,6 +46,35 @@ class MapViewModel @Inject constructor(
 
     val isClusteringEnabled = settingRepository.flowIsClusteringEnabled()
 
+    init {
+        requestNotificationPermission()
+        getRecentLikedFestivalStream()
+        getAllFestivals()
+        checkMapOnboardingCompletion()
+    }
+
+    fun onMapUiAction(action: MapUiAction) {
+        when (action) {
+            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
+            is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
+            is MapUiAction.OnSearch -> searchBooth()
+            is MapUiAction.OnTooltipClick -> completeMapOnboarding()
+            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
+            is MapUiAction.OnSingleBoothMarkerClick -> updateSelectedSingleBooth(action.booth)
+            is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
+            is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
+            is MapUiAction.OnRetryClick -> refresh(action.error)
+            is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
+            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.RequestNotificationPermission)
+        }
+    }
+
     fun onPermissionResult(
         permission: String,
         isGranted: Boolean,
@@ -64,35 +93,6 @@ class MapViewModel @Inject constructor(
                     it.copy(isLocationPermissionDialogVisible = true)
                 }
             }
-        }
-    }
-
-    init {
-        requestNotificationPermission()
-        getRecentLikedFestivalStream()
-        getAllFestivals()
-        checkMapOnboardingCompletion()
-    }
-
-    private fun requestNotificationPermission() {
-        viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestNotificationPermission)
-        }
-    }
-
-    fun onMapUiAction(action: MapUiAction) {
-        when (action) {
-            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
-            is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
-            is MapUiAction.OnSearch -> searchBooth()
-            is MapUiAction.OnTooltipClick -> completeMapOnboarding()
-            is MapUiAction.OnBoothMarkerClick -> updateSelectedBoothList(action.booths)
-            is MapUiAction.OnSingleBoothMarkerClick -> updateSelectedSingleBooth(action.booth)
-            is MapUiAction.OnTogglePopularBooth -> setEnablePopularMode()
-            is MapUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
-            is MapUiAction.OnRetryClick -> refresh(action.error)
-            is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
-            is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
     }
 

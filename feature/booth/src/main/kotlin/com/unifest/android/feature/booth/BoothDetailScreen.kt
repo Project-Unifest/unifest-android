@@ -122,12 +122,6 @@ internal fun BoothDetailRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    viewModel.onPermissionResult(
-                        permission = Manifest.permission.POST_NOTIFICATIONS,
-                        isGranted = isGranted,
-                    )
-                }
             }
     }
 
