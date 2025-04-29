@@ -6,5 +6,5 @@ sealed interface MapUiEvent {
     data object NavigateToAppSetting : MapUiEvent
     data class NavigateToBoothDetail(val boothId: Long) : MapUiEvent
     data class ShowSnackBar(val message: UiText) : MapUiEvent
-    data object RequestNotificationPermission : MapUiEvent
+    data object RequestPermissions : MapUiEvent
 }

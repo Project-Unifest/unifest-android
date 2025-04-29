@@ -163,10 +163,27 @@ internal fun MapRoute(
         },
     )
 
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            isLocationPermissionGranted = locationGranted
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = locationGranted,
+            )
+
+            // 위치 권한 요청 이후 알림 권한 요청
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        },
+    )
+
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
-            // 설정에서 돌아왔을 때 권한 상태를 다시 확인
             isNotificationPermissionGranted = activity.checkNotificationPermission()
             isLocationPermissionGranted = activity.checkLocationPermission()
 
@@ -193,10 +210,13 @@ internal fun MapRoute(
 
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
         when (event) {
-            is MapUiEvent.RequestNotificationPermission -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
+            is MapUiEvent.RequestPermissions -> {
+                val permissions = mutableListOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+
+                locationPermissionLauncher.launch(permissions.toTypedArray())
             }
 
             is MapUiEvent.NavigateToAppSetting -> {

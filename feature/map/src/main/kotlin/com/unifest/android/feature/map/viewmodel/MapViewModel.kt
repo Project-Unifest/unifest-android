@@ -47,7 +47,7 @@ class MapViewModel @Inject constructor(
     val isClusteringEnabled = settingRepository.flowIsClusteringEnabled()
 
     init {
-        requestNotificationPermission()
+        requestPermissions()
         getRecentLikedFestivalStream()
         getAllFestivals()
         checkMapOnboardingCompletion()
@@ -69,9 +69,9 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun requestNotificationPermission() {
+    private fun requestPermissions() {
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.RequestNotificationPermission)
+            _uiEvent.send(MapUiEvent.RequestPermissions)
         }
     }
 
@@ -81,17 +81,13 @@ class MapViewModel @Inject constructor(
     ) {
         if (isGranted) {
             when (permission) {
-                Manifest.permission.POST_NOTIFICATIONS -> _uiState.update { it.copy(isNotificationPermissionDialogVisible = false) }
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> _uiState.update {
-                    it.copy(isLocationPermissionDialogVisible = false)
-                }
+                Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(false)
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(false)
             }
         } else {
             when (permission) {
-                Manifest.permission.POST_NOTIFICATIONS -> _uiState.update { it.copy(isNotificationPermissionDialogVisible = true) }
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> _uiState.update {
-                    it.copy(isLocationPermissionDialogVisible = true)
-                }
+                Manifest.permission.POST_NOTIFICATIONS -> setNotificationPermissionDialogVisible(true)
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> setLocationPermissionDialogVisible(true)
             }
         }
     }
@@ -133,7 +129,7 @@ class MapViewModel @Inject constructor(
             PermissionDialogButtonType.CONFIRM -> {
                 dismissDialog(permission)
                 viewModelScope.launch {
-                    _uiEvent.send(MapUiEvent.RequestNotificationPermission)
+                    _uiEvent.send(MapUiEvent.RequestPermissions)
                 }
             }
         }
