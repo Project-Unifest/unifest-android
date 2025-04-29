@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+// TODO 서버 에러 분기 처리, 알림 권한 스플래시 화면으로 옮겨보기
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
