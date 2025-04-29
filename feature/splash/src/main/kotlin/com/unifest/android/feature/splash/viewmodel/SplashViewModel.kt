@@ -2,6 +2,8 @@ package com.unifest.android.feature.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.MessagingRepository
 import com.unifest.android.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.data.api.repository.RemoteConfigRepository
@@ -17,13 +19,13 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-// TODO 서버 에러 분기 처리, 알림 권한 스플래시 화면으로 옮겨보기
+// TODO 알림 권한 스플래시 화면으로 옮겨보기
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
     private val messagingRepository: MessagingRepository,
     remoteConfigRepository: RemoteConfigRepository,
-) : ViewModel() {
+) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(SplashUiState())
     val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
 
@@ -54,6 +56,7 @@ class SplashViewModel @Inject constructor(
     suspend fun refreshFCMToken(): Boolean {
         return try {
             val fcmToken = messagingRepository.refreshFCMToken()
+
             if (fcmToken == null) {
                 Timber.e("FCM token is null")
                 _uiState.update {
@@ -62,25 +65,24 @@ class SplashViewModel @Inject constructor(
                 return false
             }
 
+            Timber.d("FCMToken: $fcmToken")
+
             messagingRepository.registerFCMToken(fcmToken)
+                // Boolean 값 반환을 위해 fold 연산자 사용
                 .fold(
                     onSuccess = {
                         messagingRepository.setFCMToken(fcmToken)
                         true
                     },
                     onFailure = { exception ->
-                        Timber.e(exception, "Error registering FCM token")
-                        _uiState.update {
-                            it.copy(isNetworkErrorDialogVisible = true)
-                        }
+                        Timber.e(exception, "Error registering FCMToken")
+                        handleException(exception, this@SplashViewModel)
                         false
                     },
                 )
-        } catch (e: Exception) {
-            Timber.e(e, "Error getting or saving FCM token")
-            _uiState.update {
-                it.copy(isNetworkErrorDialogVisible = true)
-            }
+        } catch (exception: Exception) {
+            Timber.e(exception, "Error getting or saving FCMToken")
+            handleException(exception, this@SplashViewModel)
             false
         }
     }
@@ -94,6 +96,18 @@ class SplashViewModel @Inject constructor(
     private fun closeApp() {
         viewModelScope.launch {
             _uiEvent.send(SplashUiEvent.CloseApp)
+        }
+    }
+
+    override fun setServerErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isServerErrorDialogVisible = flag)
+        }
+    }
+
+    override fun setNetworkErrorDialogVisible(flag: Boolean) {
+        _uiState.update {
+            it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
 }
