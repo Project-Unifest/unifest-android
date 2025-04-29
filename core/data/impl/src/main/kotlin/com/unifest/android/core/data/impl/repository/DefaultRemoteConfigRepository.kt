@@ -29,8 +29,8 @@ internal class DefaultRemoteConfigRepository @Inject constructor(
          */
         fun checkMinVersion(currentVersion: String, minVersion: String): Boolean {
             Timber.d("checkMinVersion: current: $currentVersion, min: $minVersion")
-            if (!Regex("""^\d+\.\d+(\.\d+)?$""").matches(currentVersion)) return false
-            if (!Regex("""^\d+\.\d+(\.\d+)?$""").matches(minVersion)) return false
+            if (!Regex("""^\d+\.\d+\.\d+$""").matches(currentVersion)) return false
+            if (!Regex("""^\d+\.\d+\.\d+$""").matches(minVersion)) return false
 
             val current = currentVersion.split('.').map { it.toInt() }
             val min = minVersion.split('.').map { it.toInt() }
