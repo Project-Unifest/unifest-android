@@ -47,7 +47,7 @@ jobs:
             -   name: Extract Version Name from libs.versions.toml
                 run: |
                     set -euo pipefail
-                    VERSION=$(grep -oP '(?<=versionName\s*=\s*")[^"]+(?=")' gradle/libs.versions.toml)
+                    VERSION=$(grep "versionName" gradle/libs.versions.toml | sed -E 's/.*versionName\s*=\s*"([^"]+)".*/\1/')
                     if [[ -z "$VERSION" ]]; then
                       echo "Error: toml에서 versionName 값을 추출하지 못했습니다." >&2
                       exit 1
