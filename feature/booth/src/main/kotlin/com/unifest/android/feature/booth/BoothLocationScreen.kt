@@ -61,13 +61,13 @@ internal fun BoothLocationRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context.findActivity()
-    var isLocationPermissionGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
+    var isLocationPermissionsGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
 
     LaunchedEffect(Unit) {
         snapshotFlow { activity.checkLocationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isLocationPermissionGranted = isGranted
+                isLocationPermissionsGranted = isGranted
                 viewModel.onPermissionResult(
                     permission = Manifest.permission.ACCESS_FINE_LOCATION,
                     isGranted = isGranted,
@@ -79,10 +79,10 @@ internal fun BoothLocationRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isLocationPermissionGranted = activity.checkLocationPermission()
+            isLocationPermissionsGranted = activity.checkLocationPermission()
             viewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = isLocationPermissionGranted,
+                isGranted = isLocationPermissionsGranted,
             )
         },
     )
@@ -101,7 +101,7 @@ internal fun BoothLocationRoute(
         }
     }
 
-    if (uiState.isLocationPermissionDialogVisible && !isLocationPermissionGranted) {
+    if (uiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted) {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),

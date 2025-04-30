@@ -130,7 +130,7 @@ internal fun MapRoute(
         mutableStateOf(activity.checkNotificationPermission())
     }
 
-    var isLocationPermissionGranted by remember {
+    var isLocationPermissionsGranted by remember {
         mutableStateOf(activity.checkLocationPermission())
     }
 
@@ -138,7 +138,11 @@ internal fun MapRoute(
         snapshotFlow { activity.checkLocationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isLocationPermissionGranted = isGranted
+                isLocationPermissionsGranted = isGranted
+                mapViewModel.onPermissionResult(
+                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                    isGranted = isGranted,
+                )
             }
     }
 
@@ -147,6 +151,12 @@ internal fun MapRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mapViewModel.onPermissionResult(
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                        isGranted = isGranted,
+                    )
+                }
             }
     }
 
@@ -168,7 +178,7 @@ internal fun MapRoute(
         onResult = { permissions ->
             val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-            isLocationPermissionGranted = locationGranted
+            isLocationPermissionsGranted = locationGranted
             mapViewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_FINE_LOCATION,
                 isGranted = locationGranted,
@@ -185,7 +195,7 @@ internal fun MapRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             isNotificationPermissionGranted = activity.checkNotificationPermission()
-            isLocationPermissionGranted = activity.checkLocationPermission()
+            isLocationPermissionsGranted = activity.checkLocationPermission()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 mapViewModel.onPermissionResult(
@@ -196,7 +206,7 @@ internal fun MapRoute(
 
             mapViewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = isLocationPermissionGranted,
+                isGranted = isLocationPermissionsGranted,
             )
         },
     )
@@ -270,7 +280,7 @@ internal fun MapRoute(
         )
     }
 
-    if (mapUiState.isLocationPermissionDialogVisible && !isLocationPermissionGranted) {
+    if (mapUiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted) {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
