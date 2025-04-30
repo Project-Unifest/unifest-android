@@ -111,6 +111,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import com.naver.maps.map.compose.Marker as ComposeMarker
 import com.unifest.android.core.designsystem.R as designR
 
+val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.POST_NOTIFICATIONS,
+    )
+} else {
+    arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+    )
+}
+
 @OptIn(ExperimentalNaverMapApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun MapRoute(
@@ -139,10 +152,6 @@ internal fun MapRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionsGranted = isGranted
-                mapViewModel.onPermissionResult(
-                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    isGranted = isGranted,
-                )
             }
     }
 
@@ -151,42 +160,28 @@ internal fun MapRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    mapViewModel.onPermissionResult(
-                        permission = Manifest.permission.POST_NOTIFICATIONS,
-                        isGranted = isGranted,
-                    )
-                }
             }
     }
 
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                isNotificationPermissionGranted = isGranted
-                mapViewModel.onPermissionResult(
-                    permission = Manifest.permission.POST_NOTIFICATIONS,
-                    isGranted = isGranted,
-                )
-            }
-        },
-    )
-
-    val locationPermissionLauncher = rememberLauncherForActivityResult(
+    val permissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = { permissions ->
-            val locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-            isLocationPermissionsGranted = locationGranted
-            mapViewModel.onPermissionResult(
-                permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = locationGranted,
-            )
+            permissionsToRequest.forEach { permission ->
+                when (permission) {
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                        isLocationPermissionsGranted = permissions[permission] == true
+                    }
 
-            // 위치 권한 요청 이후 알림 권한 요청
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
-                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    Manifest.permission.POST_NOTIFICATIONS -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            isNotificationPermissionGranted = permissions[permission] == true
+                        }
+                    }
+                }
+                mapViewModel.onPermissionResult(
+                    permission = permission,
+                    isGranted = permissions[permission] == true,
+                )
             }
         },
     )
@@ -197,17 +192,22 @@ internal fun MapRoute(
             isNotificationPermissionGranted = activity.checkNotificationPermission()
             isLocationPermissionsGranted = activity.checkLocationPermission()
 
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+                isGranted = isLocationPermissionsGranted,
+            )
+
+            mapViewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_FINE_LOCATION,
+                isGranted = isLocationPermissionsGranted,
+            )
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 mapViewModel.onPermissionResult(
                     permission = Manifest.permission.POST_NOTIFICATIONS,
                     isGranted = isNotificationPermissionGranted,
                 )
             }
-
-            mapViewModel.onPermissionResult(
-                permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                isGranted = isLocationPermissionsGranted,
-            )
         },
     )
 
@@ -221,12 +221,7 @@ internal fun MapRoute(
     ObserveAsEvents(flow = mapViewModel.uiEvent) { event ->
         when (event) {
             is MapUiEvent.RequestPermissions -> {
-                val permissions = mutableListOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                )
-
-                locationPermissionLauncher.launch(permissions.toTypedArray())
+                permissionResultLauncher.launch(permissionsToRequest)
             }
 
             is MapUiEvent.NavigateToAppSetting -> {
