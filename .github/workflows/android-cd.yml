@@ -46,9 +46,14 @@ jobs:
 
             -   name: Extract Version Name from libs.versions.toml
                 run: |
-                    VERSION=$(grep -P 'versionName\s*=\s*"([^"]+)"' gradle/libs.versions.toml | grep -oP '(?<=").*(?=")')
-                    echo "version=v$VERSION" >> $GITHUB_OUTPUT
-                    echo "Version extracted from toml: v$VERSION"
+                    set -euo pipefail
+                    VERSION=$(grep -oP '(?<=versionName\s*=\s*")[^"]+(?=")' gradle/libs.versions.toml)
+                    if [[ -z "$VERSION" ]]; then
+                      echo "Error: toml에서 versionName 값을 추출하지 못했습니다." >&2
+                      exit 1
+                    fi
+                    echo "version=v${VERSION}" >> "$GITHUB_OUTPUT"
+                    echo "Version extracted from toml: v${VERSION}"
                 id: extract_version
 
             -   name: Build Debug APK
