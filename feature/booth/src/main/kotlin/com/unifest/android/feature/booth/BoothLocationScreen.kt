@@ -53,6 +53,8 @@ import com.unifest.android.feature.booth.viewmodel.BoothUiState
 import com.unifest.android.feature.booth.viewmodel.BoothViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+
 @Composable
 internal fun BoothLocationRoute(
     popBackStack: () -> Unit,
@@ -64,22 +66,46 @@ internal fun BoothLocationRoute(
     var isLocationPermissionsGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
 
     LaunchedEffect(Unit) {
+        viewModel.requestLocationPermission()
+    }
+
+    LaunchedEffect(Unit) {
         snapshotFlow { activity.checkLocationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionsGranted = isGranted
-                viewModel.onPermissionResult(
-                    permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                    isGranted = isGranted,
-                )
             }
     }
+
+    val locationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissions ->
+            permissionsToRequest.forEach { permission ->
+                when (permission) {
+                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+                        isLocationPermissionsGranted = permissions[permission] == true
+                    }
+                }
+
+                viewModel.onPermissionResult(
+                    permission = permission,
+                    isGranted = permissions[permission] == true,
+                )
+            }
+        },
+    )
 
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
             isLocationPermissionsGranted = activity.checkLocationPermission()
+
+            viewModel.onPermissionResult(
+                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+                isGranted = isLocationPermissionsGranted,
+            )
+
             viewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_FINE_LOCATION,
                 isGranted = isLocationPermissionsGranted,
@@ -95,6 +121,10 @@ internal fun BoothLocationRoute(
                     data = Uri.fromParts("package", activity.packageName, null)
                 }
                 settingsLauncher.launch(intent)
+            }
+
+            is BoothUiEvent.RequestPermission -> {
+                locationPermissionLauncher.launch(permissionsToRequest)
             }
 
             else -> {}

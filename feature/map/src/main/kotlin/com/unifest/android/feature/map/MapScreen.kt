@@ -178,6 +178,7 @@ internal fun MapRoute(
                         }
                     }
                 }
+
                 mapViewModel.onPermissionResult(
                     permission = permission,
                     isGranted = permissions[permission] == true,

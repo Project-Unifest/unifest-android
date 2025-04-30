@@ -88,7 +88,7 @@ class MapViewModel @Inject constructor(
                 }
             }
 
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
                 if (isGranted) {
                     setLocationPermissionDialogVisible(false)
                 } else {
