@@ -45,7 +45,6 @@ import com.unifest.android.core.designsystem.R as designR
 internal fun FestivalScheduleItem(
     festival: FestivalTodayModel,
     scheduleIndex: Int,
-//    likedFestivals: ImmutableList<FestivalModel>,
     selectedDate: LocalDate,
     // isStarImageClicked: ImmutableList<Boolean>,
     isDataReady: Boolean,
@@ -137,23 +136,6 @@ internal fun FestivalScheduleItem(
                 }
             }
         }
-//        if (!likedFestivals.any { it.festivalId == festival.festivalId }) {
-//            UnifestOutlinedButton(
-//                onClick = {
-//                    onHomeUiAction(HomeUiAction.OnAddAsLikedFestivalClick(festival))
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(48.dp)
-//                    .padding(top = 16.dp, start = 20.dp, end = 20.dp),
-//                contentPadding = PaddingValues(6.dp),
-//            ) {
-//                Text(
-//                    text = stringResource(id = R.string.home_add_interest_festival_in_item_button),
-//                    style = BoothLocation,
-//                )
-//            }
-//        }
     }
 }
 

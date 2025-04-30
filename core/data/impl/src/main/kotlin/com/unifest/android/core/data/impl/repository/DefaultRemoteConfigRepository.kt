@@ -29,14 +29,20 @@ internal class DefaultRemoteConfigRepository @Inject constructor(
          */
         fun checkMinVersion(currentVersion: String, minVersion: String): Boolean {
             Timber.d("checkMinVersion: current: $currentVersion, min: $minVersion")
-            if (!Regex("""^\d+\.\d+(\.\d+)?$""").matches(currentVersion)) return false
-            if (!Regex("""^\d+\.\d+(\.\d+)?$""").matches(minVersion)) return false
+            if (!Regex("""^\d+\.\d+\.\d+$""").matches(currentVersion)) return false
+            if (!Regex("""^\d+\.\d+\.\d+$""").matches(minVersion)) return false
 
-            return currentVersion.split('.').map(String::toInt).let {
-                val min = minVersion.split('.').map(String::toInt)
-                !KotlinVersion(it[0], it[1], it.getOrNull(2) ?: 0)
-                    .isAtLeast(min[0], min[1], min.getOrNull(2) ?: 0)
-            }
+            val current = currentVersion.split('.').map { it.toInt() }
+            val min = minVersion.split('.').map { it.toInt() }
+
+            // 메이저 버전 비교
+            if (current[0] != min[0]) return current[0] < min[0]
+
+            // 마이너 버전 비교
+            if (current[1] != min[1]) return current[1] < min[1]
+
+            // 패치 버전 비교
+            return current[2] < min[2]
         }
     }
 }

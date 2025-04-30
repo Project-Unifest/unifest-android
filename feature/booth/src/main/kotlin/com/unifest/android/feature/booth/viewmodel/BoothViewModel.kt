@@ -80,6 +80,12 @@ class BoothViewModel @Inject constructor(
         }
     }
 
+    fun requestLocationPermission() {
+        viewModelScope.launch {
+            _uiEvent.send(BoothUiEvent.RequestPermission)
+        }
+    }
+
     private fun checkMyWaitingListNumbers() {
         viewModelScope.launch {
             waitingRepository.getMyWaitingList()
@@ -401,22 +407,21 @@ class BoothViewModel @Inject constructor(
     }
 
     fun onPermissionResult(permission: String, isGranted: Boolean) {
-        viewModelScope.launch {
-            when (permission) {
-                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION -> {
-                    if (!isGranted) {
-                        setLocationPermissionDialogVisible(true)
-                    } else {
-                        setLocationPermissionDialogVisible(false)
-                    }
+        when (permission) {
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION -> {
+                if (isGranted) {
+                    setLocationPermissionDialogVisible(false)
+                } else {
+                    setLocationPermissionDialogVisible(true)
                 }
+            }
 
-                Manifest.permission.POST_NOTIFICATIONS -> {
-                    if (!isGranted) {
-                        setNotificationPermissionDialogVisible(true)
-                    } else {
-                        checkMyWaitingListNumbers()
-                    }
+            Manifest.permission.POST_NOTIFICATIONS -> {
+                if (isGranted) {
+                    setNotificationPermissionDialogVisible(false)
+                    checkMyWaitingListNumbers()
+                } else {
+                    setNotificationPermissionDialogVisible(true)
                 }
             }
         }
@@ -437,9 +442,7 @@ class BoothViewModel @Inject constructor(
             PermissionDialogButtonType.CONFIRM -> {
                 dismissDialog(permission)
                 viewModelScope.launch {
-                    if (permission != null) {
-                        _uiEvent.send(BoothUiEvent.RequestPermission(permission))
-                    }
+                    _uiEvent.send(BoothUiEvent.RequestPermission)
                 }
             }
         }

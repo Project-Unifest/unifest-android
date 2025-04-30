@@ -122,12 +122,6 @@ internal fun BoothDetailRoute(
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    viewModel.onPermissionResult(
-                        permission = Manifest.permission.POST_NOTIFICATIONS,
-                        isGranted = isGranted,
-                    )
-                }
             }
     }
 
@@ -186,12 +180,8 @@ internal fun BoothDetailRoute(
 
             is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
             is BoothUiEvent.RequestPermission -> {
-                when (event.permission) {
-                    Manifest.permission.POST_NOTIFICATIONS -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        }
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         }

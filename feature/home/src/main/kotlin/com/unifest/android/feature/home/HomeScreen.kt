@@ -56,7 +56,6 @@ import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
 import java.time.format.DateTimeFormatter
 
-// TODO 이미 관심 축제로 추가된 축제는 관심 축제로 추가하기 버튼이 보이면 안됨
 @Composable
 internal fun HomeRoute(
     padding: PaddingValues,
@@ -196,7 +195,6 @@ internal fun HomeContent(
                     FestivalScheduleItem(
                         festival = festival,
                         scheduleIndex = scheduleIndex,
-                        // likedFestivals = homeUiState.likedFestivals,
                         selectedDate = homeUiState.selectedDate,
                         isDataReady = homeUiState.isDataReady,
                         // isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
