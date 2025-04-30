@@ -44,8 +44,16 @@ jobs:
             -   name: Generate debug.keystore
                 run: echo '${{ secrets.DEBUG_KEYSTORE }}' | base64 -d > ./debug.keystore
 
-            -   name: Extract Version Name
-                run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release v\K[0-9]+\.[0-9]+\.[0-9]+')"
+            -   name: Extract Version Name from libs.versions.toml
+                run: |
+                    set -euo pipefail
+                    VERSION=$(grep "versionName" gradle/libs.versions.toml | sed -E 's/.*versionName\s*=\s*"([^"]+)".*/\1/')
+                    if [[ -z "$VERSION" ]]; then
+                      echo "Error: toml에서 versionName 값을 추출하지 못했습니다." >&2
+                      exit 1
+                    fi
+                    echo "version=v${VERSION}" >> "$GITHUB_OUTPUT"
+                    echo "Version extracted from toml: v${VERSION}"
                 id: extract_version
 
             -   name: Build Debug APK
