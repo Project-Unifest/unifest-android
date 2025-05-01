@@ -296,16 +296,16 @@ internal fun MapContent(
                 items = menuUiState.likedBooths.take(3),
                 key = { _, booth -> booth.id },
             ) { index, booth ->
-                Modifier
-                    .clickable {
-                        onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
-                    }
                 LikedBoothItem(
                     booth = booth,
                     index = index,
                     totalCount = menuUiState.likedBooths.size,
                     deleteLikedBooth = { onMenuUiAction(MenuUiAction.OnToggleBookmark(booth)) },
-                    modifier = Modifier.animateItem(
+                    modifier = Modifier
+                        .clickable {
+                            onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
+                        }
+                        .animateItem(
                         fadeInSpec = null,
                         fadeOutSpec = null,
                         placementSpec = tween(
