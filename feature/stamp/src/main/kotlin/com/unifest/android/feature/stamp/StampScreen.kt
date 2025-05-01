@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -54,7 +55,6 @@ import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.clickableSingle
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
@@ -92,11 +92,11 @@ internal fun StampRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val activity = context.findActivity()
+    val activity = LocalActivity.current
 
     var isCameraPermissionGranted by remember {
         mutableStateOf(
-            activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED,
+            activity?.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED,
         )
     }
 
@@ -112,7 +112,7 @@ internal fun StampRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isCameraPermissionGranted = activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+            isCameraPermissionGranted = activity?.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
             viewModel.onPermissionResult(isCameraPermissionGranted)
         },
     )
@@ -129,11 +129,13 @@ internal fun StampRoute(
             is StampUiEvent.NavigateToQRScan -> qrScanLauncher.launch(Intent(context, QRScanActivity::class.java))
             is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
             is StampUiEvent.NavigateToAppSetting -> {
-                val intent = Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", activity.packageName, null),
-                )
-                settingsLauncher.launch(intent)
+                if (activity != null) {
+                    val intent = Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", activity.packageName, null),
+                    )
+                    settingsLauncher.launch(intent)
+                }
             }
 
             is StampUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
@@ -160,7 +162,7 @@ internal fun StampScreen(
     uiState: StampUiState,
     onAction: (StampUiAction) -> Unit,
 ) {
-    val activity = LocalContext.current.findActivity()
+    val activity = LocalActivity.current
 
     Box(
         modifier = Modifier
@@ -177,7 +179,7 @@ internal fun StampScreen(
             LoadingWheel(modifier = Modifier.fillMaxSize())
         }
 
-        if (uiState.isPermissionDialogVisible) {
+        if (uiState.isPermissionDialogVisible && activity != null) {
             PermissionDialog(
                 permissionTextProvider = CameraPermissionTextProvider(),
                 isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
