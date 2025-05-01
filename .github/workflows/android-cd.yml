@@ -60,10 +60,10 @@ jobs:
 
             -   name: Generate Firebase Release Note
                 id: firebase_release_note
+                env:
+                    PR_TITLE: ${{ github.event.pull_request.title }}
                 run: |
-                    # PR 제목 가져오기
-                    PR_TITLE="${{ github.event.pull_request.title }}"
-
+                    # PR_TITLE은 env에서 안전하게 전달됩니다.
                     # 가장 최근 태그 찾기 (현재 버전 이전의 태그)
                     LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
@@ -71,15 +71,15 @@ jobs:
                     echo "" >> firebase_release_note.txt
 
                     if [ -n "$LATEST_TAG" ]; then
-                        echo "### 이전 버전($LATEST_TAG)부터의 변경사항:" >> firebase_release_note.txt
-                        # 최근 태그부터 현재까지의 커밋만 가져옵니다
-                        git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges >> firebase_release_note.txt
+                       echo "### 이전 버전($LATEST_TAG)부터의 변경사항:" >> firebase_release_note.txt
+                       # 최근 태그부터 현재까지의 커밋만 가져옵니다
+                       git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges >> firebase_release_note.txt
                     else
-                        echo "### 커밋 내역:" >> firebase_release_note.txt
-                        # 태그가 없는 경우 최근 10개 커밋만 표시
-                        git log --pretty=format:"- %h %s (%an)" --no-merges -n 10 >> firebase_release_note.txt
-                        echo "" >> firebase_release_note.txt
-                        echo "(이전 릴리스 태그가 없어 최근 10개 커밋만 표시합니다)" >> firebase_release_note.txt
+                       echo "### 커밋 내역:" >> firebase_release_note.txt
+                       # 태그가 없는 경우 최근 10개 커밋만 표시
+                       git log --pretty=format:"- %h %s (%an)" --no-merges -n 10 >> firebase_release_note.txt
+                       echo "" >> firebase_release_note.txt
+                       echo "(이전 릴리스 태그가 없어 최근 10개 커밋만 표시합니다)" >> firebase_release_note.txt
                     fi
 
             -   name: Build Debug APK
