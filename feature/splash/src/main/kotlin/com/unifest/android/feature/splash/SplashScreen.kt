@@ -1,6 +1,7 @@
 package com.unifest.android.feature.splash
 
 import android.content.Intent
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +15,6 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.AppUpdateDialog
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -33,7 +33,7 @@ internal fun SplashRoute(
     val shouldUpdate by viewModel.shouldUpdate.collectAsStateWithLifecycle(null)
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val activity = context.findActivity()
+    val activity = LocalActivity.current
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
@@ -64,7 +64,7 @@ internal fun SplashRoute(
             }
 
             is SplashUiEvent.CloseApp -> {
-                activity.finish()
+                activity?.finishAffinity()
             }
         }
     }

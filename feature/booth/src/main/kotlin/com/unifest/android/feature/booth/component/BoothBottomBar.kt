@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.component
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,15 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.common.extension.checkNotificationPermission
 import com.unifest.android.core.common.extension.clickableSingle
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth.R
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun BoothBottomBar(
@@ -46,8 +45,7 @@ internal fun BoothBottomBar(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val activity = context.findActivity()
+    val activity = LocalActivity.current
 
     Surface(
         modifier = modifier.height(116.dp),
@@ -83,7 +81,7 @@ internal fun BoothBottomBar(
                 Spacer(modifier = Modifier.width(18.dp))
                 UnifestButton(
                     onClick = {
-                        if (activity.checkNotificationPermission()) {
+                        if (activity?.checkNotificationPermission() == true) {
                             onAction(BoothUiAction.OnWaitingButtonClick)
                         } else {
                             onAction(BoothUiAction.OnRequestNotificationPermission)
