@@ -68,10 +68,12 @@ internal fun BoothLocationRoute(
     }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity?.checkLocationPermission() ?: false }
+        snapshotFlow { activity?.checkLocationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isLocationPermissionsGranted = isGranted
+                if (isGranted != null) {
+                    isLocationPermissionsGranted = isGranted
+                }
             }
     }
 

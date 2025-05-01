@@ -143,18 +143,22 @@ internal fun MapRoute(
     var isLocationPermissionsGranted by remember { mutableStateOf(activity?.checkLocationPermission() ?: false) }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity?.checkLocationPermission() ?: false }
+        snapshotFlow { activity?.checkLocationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isLocationPermissionsGranted = isGranted
+                if (isGranted != null) {
+                    isLocationPermissionsGranted = isGranted
+                }
             }
     }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity?.checkNotificationPermission() ?: false }
+        snapshotFlow { activity?.checkNotificationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isNotificationPermissionGranted = isGranted
+                if (isGranted != null) {
+                    isNotificationPermissionGranted = isGranted
+                }
             }
     }
 
