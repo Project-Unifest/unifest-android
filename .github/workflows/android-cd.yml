@@ -58,8 +58,8 @@ jobs:
                     echo "Version extracted from toml: v${VERSION}"
                 id: extract_version
 
-            -   name: Generate Release Notes
-                id: release_notes
+            -   name: Generate Firebase Release Note
+                id: firebase_release_note
                 run: |
                     # PR 제목 가져오기
                     PR_TITLE="${{ github.event.pull_request.title }}"
@@ -67,29 +67,20 @@ jobs:
                     # 가장 최근 태그 찾기 (현재 버전 이전의 태그)
                     LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
-                    echo "## 🚀 변경사항: ${PR_TITLE}" > release_notes.txt
-                    echo "" >> release_notes.txt
+                    echo "## 🚀 변경사항: ${PR_TITLE}" > firebase_release_note.txt
+                    echo "" >> firebase_release_note.txt
 
                     if [ -n "$LATEST_TAG" ]; then
-                        echo "### 이전 버전($LATEST_TAG)부터의 변경사항:" >> release_notes.txt
+                        echo "### 이전 버전($LATEST_TAG)부터의 변경사항:" >> firebase_release_note.txt
                         # 최근 태그부터 현재까지의 커밋만 가져옵니다
-                        git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges >> release_notes.txt
+                        git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges >> firebase_release_note.txt
                     else
-                        echo "### 커밋 내역:" >> release_notes.txt
+                        echo "### 커밋 내역:" >> firebase_release_note.txt
                         # 태그가 없는 경우 최근 10개 커밋만 표시
-                        git log --pretty=format:"- %h %s (%an)" --no-merges -n 10 >> release_notes.txt
-                        echo "" >> release_notes.txt
-                        echo "(이전 릴리스 태그가 없어 최근 10개 커밋만 표시합니다)" >> release_notes.txt
+                        git log --pretty=format:"- %h %s (%an)" --no-merges -n 10 >> firebase_release_note.txt
+                        echo "" >> firebase_release_note.txt
+                        echo "(이전 릴리스 태그가 없어 최근 10개 커밋만 표시합니다)" >> firebase_release_note.txt
                     fi
-
-                    # 릴리스 노트 내용을 출력으로 저장
-                    NOTES=$(cat release_notes.txt)
-                    echo "notes<<EOF" >> $GITHUB_OUTPUT
-                    echo "$NOTES" >> $GITHUB_OUTPUT
-                    echo "EOF" >> $GITHUB_OUTPUT
-
-                    # 파이어베이스용 릴리스 노트 파일 생성
-                    cat release_notes.txt > firebase_notes.txt
 
             -   name: Build Debug APK
                 run: |
@@ -107,7 +98,7 @@ jobs:
                 with:
                     tag_name: ${{ steps.extract_version.outputs.version }}
                     release_name: ${{ steps.extract_version.outputs.version }}
-                    body: ${{ steps.release_notes.outputs.notes }}
+                    generate_release_notes: true  # GitHub의 자동 릴리스 노트 사용
 
             -   name: Upload artifact to Firebase App Distribution
                 uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -116,4 +107,4 @@ jobs:
                     serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                     groups: testers
                     file: app/build/outputs/apk/debug/app-debug.apk
-                    releaseNotes: file:firebase_notes.txt
+                    releaseNotes: file:firebase_release_note.txt  # 파이어베이스용 커스텀 릴리스 노트
