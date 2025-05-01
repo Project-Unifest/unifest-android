@@ -306,13 +306,13 @@ internal fun MapContent(
                             onMenuUiAction(MenuUiAction.OnLikedBoothItemClick(booth.id))
                         }
                         .animateItem(
-                        fadeInSpec = null,
-                        fadeOutSpec = null,
-                        placementSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing,
+                            fadeInSpec = null,
+                            fadeOutSpec = null,
+                            placementSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing,
+                            ),
                         ),
-                    ),
                 )
             }
         }

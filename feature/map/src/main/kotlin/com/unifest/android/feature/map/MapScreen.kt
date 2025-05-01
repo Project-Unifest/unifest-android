@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -82,7 +83,6 @@ import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.extension.checkLocationPermission
 import com.unifest.android.core.common.extension.checkNotificationPermission
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
@@ -137,18 +137,13 @@ internal fun MapRoute(
     val festivalUiState by festivalViewModel.uiState.collectAsStateWithLifecycle()
     val isClusteringEnabled by mapViewModel.isClusteringEnabled.collectAsStateWithLifecycle(true)
     val context = LocalContext.current
-    val activity = context.findActivity()
+    val activity = LocalActivity.current
 
-    var isNotificationPermissionGranted by remember {
-        mutableStateOf(activity.checkNotificationPermission())
-    }
-
-    var isLocationPermissionsGranted by remember {
-        mutableStateOf(activity.checkLocationPermission())
-    }
+    var isNotificationPermissionGranted by remember { mutableStateOf(activity?.checkNotificationPermission() ?: false) }
+    var isLocationPermissionsGranted by remember { mutableStateOf(activity?.checkLocationPermission() ?: false) }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity.checkLocationPermission() }
+        snapshotFlow { activity?.checkLocationPermission() ?: false }
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionsGranted = isGranted
@@ -156,7 +151,7 @@ internal fun MapRoute(
     }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity.checkNotificationPermission() }
+        snapshotFlow { activity?.checkNotificationPermission() ?: false }
             .distinctUntilChanged()
             .collect { isGranted ->
                 isNotificationPermissionGranted = isGranted
@@ -190,8 +185,8 @@ internal fun MapRoute(
     val settingsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
-            isNotificationPermissionGranted = activity.checkNotificationPermission()
-            isLocationPermissionsGranted = activity.checkLocationPermission()
+            isNotificationPermissionGranted = activity?.checkNotificationPermission() ?: false
+            isLocationPermissionsGranted = activity?.checkLocationPermission() ?: false
 
             mapViewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -226,10 +221,12 @@ internal fun MapRoute(
             }
 
             is MapUiEvent.NavigateToAppSetting -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
+                if (activity != null) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", activity.packageName, null)
+                    }
+                    settingsLauncher.launch(intent)
                 }
-                settingsLauncher.launch(intent)
             }
 
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
@@ -245,7 +242,9 @@ internal fun MapRoute(
         }
     }
 
-    if (mapUiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
+    if (mapUiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+        !isNotificationPermissionGranted && activity != null
+    ) {
         PermissionDialog(
             permissionTextProvider = NotificationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
@@ -276,7 +275,7 @@ internal fun MapRoute(
         )
     }
 
-    if (mapUiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted) {
+    if (mapUiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted && activity != null) {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),

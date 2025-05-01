@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -19,7 +20,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,7 +39,6 @@ import com.naver.maps.map.compose.rememberMarkerState
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.checkLocationPermission
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.MarkerCategory
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
@@ -61,16 +60,15 @@ internal fun BoothLocationRoute(
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val activity = context.findActivity()
-    var isLocationPermissionsGranted by remember { mutableStateOf(activity.checkLocationPermission()) }
+    val activity = LocalActivity.current
+    var isLocationPermissionsGranted by remember { mutableStateOf(activity?.checkLocationPermission() ?: false) }
 
     LaunchedEffect(Unit) {
         viewModel.requestLocationPermission()
     }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity.checkLocationPermission() }
+        snapshotFlow { activity?.checkLocationPermission() ?: false }
             .distinctUntilChanged()
             .collect { isGranted ->
                 isLocationPermissionsGranted = isGranted
@@ -99,7 +97,7 @@ internal fun BoothLocationRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isLocationPermissionsGranted = activity.checkLocationPermission()
+            isLocationPermissionsGranted = activity?.checkLocationPermission() ?: false
 
             viewModel.onPermissionResult(
                 permission = Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -117,10 +115,12 @@ internal fun BoothLocationRoute(
         when (event) {
             is BoothUiEvent.NavigateBack -> popBackStack()
             is BoothUiEvent.NavigateToAppSetting -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
+                if (activity != null) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", activity.packageName, null)
+                    }
+                    settingsLauncher.launch(intent)
                 }
-                settingsLauncher.launch(intent)
             }
 
             is BoothUiEvent.RequestPermission -> {
@@ -131,7 +131,7 @@ internal fun BoothLocationRoute(
         }
     }
 
-    if (uiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted) {
+    if (uiState.isLocationPermissionDialogVisible && !isLocationPermissionsGranted && activity != null) {
         PermissionDialog(
             permissionTextProvider = LocationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),

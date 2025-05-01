@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -48,7 +49,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.checkNotificationPermission
-import com.unifest.android.core.common.extension.findActivity
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -100,9 +100,9 @@ internal fun BoothDetailRoute(
     val snackBarState = remember { SnackbarHostState() }
     val isDarkTheme = isSystemInDarkTheme()
     val uriHandler = LocalUriHandler.current
-    val activity = context.findActivity()
+    val activity = LocalActivity.current
 
-    var isNotificationPermissionGranted by remember { mutableStateOf(activity.checkNotificationPermission()) }
+    var isNotificationPermissionGranted by remember { mutableStateOf(activity?.checkNotificationPermission() ?: false) }
 
     DisposableEffect(systemUiController) {
         systemUiController.setStatusBarColor(
@@ -118,10 +118,12 @@ internal fun BoothDetailRoute(
     }
 
     LaunchedEffect(Unit) {
-        snapshotFlow { activity.checkNotificationPermission() }
+        snapshotFlow { activity?.checkNotificationPermission() }
             .distinctUntilChanged()
             .collect { isGranted ->
-                isNotificationPermissionGranted = isGranted
+                if (isGranted != null) {
+                    isNotificationPermissionGranted = isGranted
+                }
             }
     }
 
@@ -140,7 +142,7 @@ internal fun BoothDetailRoute(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             // 설정에서 돌아왔을 때 권한 상태를 다시 확인
-            isNotificationPermissionGranted = activity.checkNotificationPermission()
+            isNotificationPermissionGranted = activity?.checkNotificationPermission() ?: false
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 viewModel.onPermissionResult(
@@ -159,10 +161,12 @@ internal fun BoothDetailRoute(
             is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
             is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
             is BoothUiEvent.NavigateToAppSetting -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
+                if (activity != null) {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", activity.packageName, null)
+                    }
+                    settingsLauncher.launch(intent)
                 }
-                settingsLauncher.launch(intent)
             }
 
             is BoothUiEvent.ShowSnackBar -> {
@@ -187,7 +191,7 @@ internal fun BoothDetailRoute(
         }
     }
 
-    if (uiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted) {
+    if (uiState.isNotificationPermissionDialogVisible && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isNotificationPermissionGranted && activity != null) {
         PermissionDialog(
             permissionTextProvider = NotificationPermissionTextProvider(),
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
