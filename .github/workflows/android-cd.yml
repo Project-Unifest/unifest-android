@@ -17,7 +17,8 @@ jobs:
             -   name: Checkout
                 uses: actions/checkout@v4
                 with:
-                    fetch-depth: 0  # 최근 태그를 확인하기 위해 필요합니다
+                    # 최근 태그를 확인하기 위해 필요
+                    fetch-depth: 0
 
             -   name: Set up JDK 17
                 uses: actions/setup-java@v4
@@ -63,24 +64,29 @@ jobs:
                 env:
                     PR_TITLE: ${{ github.event.pull_request.title }}
                 run: |
-                    # PR_TITLE은 env에서 안전하게 전달됩니다.
+                    # PR_TITLE은 env에서 안전하게 전달됨
                     # 가장 최근 태그 찾기 (현재 버전 이전의 태그)
                     LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
-                    echo "## 🚀 변경사항: ${PR_TITLE}" > firebase_release_note.txt
-                    echo "" >> firebase_release_note.txt
+                    # 릴리스 노트 내용 생성
+                    NOTES="## 🚀 변경사항: ${PR_TITLE}\n\n"
 
                     if [ -n "$LATEST_TAG" ]; then
-                       echo "### 이전 버전($LATEST_TAG)부터의 변경사항:" >> firebase_release_note.txt
-                       # 최근 태그부터 현재까지의 커밋만 가져옵니다
-                       git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges >> firebase_release_note.txt
+                        NOTES="${NOTES}### 이전 버전($LATEST_TAG)부터의 변경사항:\n"
+                        # 최근 태그부터 현재까지의 커밋만 가져옴
+                        COMMITS=$(git log --pretty=format:"- %h %s (%an)" ${LATEST_TAG}..HEAD --no-merges)
+                        NOTES="${NOTES}${COMMITS}"
                     else
-                       echo "### 커밋 내역:" >> firebase_release_note.txt
-                       # 태그가 없는 경우 최근 10개 커밋만 표시
-                       git log --pretty=format:"- %h %s (%an)" --no-merges -n 10 >> firebase_release_note.txt
-                       echo "" >> firebase_release_note.txt
-                       echo "(이전 릴리스 태그가 없어 최근 10개 커밋만 표시합니다)" >> firebase_release_note.txt
+                        NOTES="${NOTES}### 커밋 내역:\n"
+                        # 태그가 없는 경우 최근 10개 커밋만 표시
+                        COMMITS=$(git log --pretty=format:"- %h %s (%an)" --no-merges -n 10)
+                        NOTES="${NOTES}${COMMITS}\n\n(이전 릴리스 태그가 없어 최근 10개 커밋만 표시)"
                     fi
+
+                    # 환경 변수로 저장
+                    echo "notes<<EOF" >> $GITHUB_OUTPUT
+                    echo -e "$NOTES" >> $GITHUB_OUTPUT
+                    echo "EOF" >> $GITHUB_OUTPUT
 
             -   name: Build Debug APK
                 run: |
@@ -98,7 +104,7 @@ jobs:
                 with:
                     tag_name: ${{ steps.extract_version.outputs.version }}
                     release_name: ${{ steps.extract_version.outputs.version }}
-                    generate_release_notes: true  # GitHub의 자동 릴리스 노트 사용
+                    generate_release_notes: true
 
             -   name: Upload artifact to Firebase App Distribution
                 uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -107,4 +113,4 @@ jobs:
                     serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                     groups: testers
                     file: app/build/outputs/apk/debug/app-debug.apk
-                    releaseNotes: file:firebase_release_note.txt  # 파이어베이스용 커스텀 릴리스 노트
+                    releaseNotes: ${{ steps.firebase_release_note.outputs.notes }}
