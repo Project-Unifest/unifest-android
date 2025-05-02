@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -130,6 +131,7 @@ internal fun FestivalScheduleItem(
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape),
+                            placeholder = painterResource(id = designR.drawable.ic_unchecked_stamp),
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
