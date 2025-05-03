@@ -5,6 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,8 @@ fun StarImage(
     contentScale: ContentScale = ContentScale.Crop,
     contentDescription: String? = null,
 ) {
+    var isStarImageLoadError by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .combinedClickable(
@@ -43,6 +49,7 @@ fun StarImage(
             placeholder = placeholder,
             contentScale = contentScale,
             contentDescription = contentDescription,
+            onError = { isError -> isStarImageLoadError = isError },
         )
 //        if (isClicked) {
 //            Box(
@@ -56,16 +63,18 @@ fun StarImage(
 //                style = Content9,
 //            )
 //        }
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.6f)),
-        )
-        AutoResizedText(
-            text = starInfo.name,
-            color = Color.White,
-            style = Content9,
-        )
+        if (starInfo.name.isEmpty() || isStarImageLoadError) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+            )
+            AutoResizedText(
+                text = starInfo.name,
+                color = Color.White,
+                style = Content9,
+            )
+        }
     }
 }
 
