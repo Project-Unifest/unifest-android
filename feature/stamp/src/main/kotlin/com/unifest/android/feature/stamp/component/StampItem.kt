@@ -15,7 +15,6 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StampFestivalModel
 import com.unifest.android.feature.stamp.R
-import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun StampItem(
@@ -30,7 +29,7 @@ internal fun StampItem(
         val isCollected = index < collectedStampCount
         val imgUrl = if (isCollected) selectedFestival.usedImgUrl else selectedFestival.defaultImgUrl
         val fallbackResourceId = if (isCollected) R.drawable.ic_checked_stamp
-        else designR.drawable.ic_unchecked_stamp
+        else R.drawable.ic_unchecked_stamp
 
         val contentDescription = if (isCollected) stringResource(R.string.stamp_used_image)
         else stringResource(R.string.stamp_default_image)

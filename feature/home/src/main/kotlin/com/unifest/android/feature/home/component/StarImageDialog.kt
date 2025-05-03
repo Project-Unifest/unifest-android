@@ -64,7 +64,7 @@ internal fun StarImageDialog(
                 modifier = Modifier
                     .size(dialogSize)
                     .clip(CircleShape),
-                placeholder = painterResource(designR.drawable.ic_unchecked_stamp),
+                placeholder = painterResource(designR.drawable.ic_star_placeholder),
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(

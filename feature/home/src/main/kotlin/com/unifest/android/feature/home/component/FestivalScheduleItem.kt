@@ -127,11 +127,10 @@ internal fun FestivalScheduleItem(
 //                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
 //                            },
 //                            isClicked = isStarImageClicked[starIndex],
-//                            label = starInfo.name,
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape),
-                            placeholder = painterResource(id = designR.drawable.ic_unchecked_stamp),
+                            placeholder = painterResource(id = designR.drawable.ic_star_placeholder),
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
