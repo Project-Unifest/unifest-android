@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil.CoilImage
+import com.skydoves.landscapist.coil.CoilImageState
 import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.placeholder.placeholder.PlaceholderPlugin
 import com.unifest.android.core.designsystem.ComponentPreview
@@ -23,6 +24,7 @@ fun NetworkImage(
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     contentScale: ContentScale = ContentScale.Crop,
+    onError: (Boolean) -> Unit = {},
 ) {
     if (LocalInspectionMode.current) {
         Image(
@@ -43,6 +45,11 @@ fun NetworkImage(
                 alignment = Alignment.Center,
                 contentDescription = contentDescription,
             ),
+            onImageStateChanged = { state ->
+                if (state is CoilImageState.Failure) {
+                    onError(true)
+                }
+            },
         )
     }
 }
