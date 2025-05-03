@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -27,6 +28,7 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StarInfoModel
+import com.unifest.android.core.designsystem.R as designR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +64,7 @@ internal fun StarImageDialog(
                 modifier = Modifier
                     .size(dialogSize)
                     .clip(CircleShape),
+                placeholder = painterResource(designR.drawable.ic_star_placeholder),
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
