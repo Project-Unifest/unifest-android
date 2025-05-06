@@ -338,7 +338,7 @@ internal fun MapScreen(
     RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
             cameraPositionState.position = CameraPosition(
-                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,
+                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.7,
             )
         }
     }
@@ -479,6 +479,8 @@ internal fun MapContent(
                             .leafMarkerUpdater { info, marker ->
                                 marker.icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
                                     .getMarkerIcon((info.key as BoothMapModel).isSelected)
+                                marker.captionText = ""
+                                marker.subCaptionText = ""
                                 marker.onClickListener = Overlay.OnClickListener {
                                     onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
                                     true
