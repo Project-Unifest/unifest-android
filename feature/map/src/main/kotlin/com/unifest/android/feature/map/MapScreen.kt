@@ -338,7 +338,7 @@ internal fun MapScreen(
     RememberedEffect(key1 = mapUiState.festivalInfo) {
         if (mapUiState.festivalInfo.latitude != 0.0F && mapUiState.festivalInfo.longitude != 0.0F) {
             cameraPositionState.position = CameraPosition(
-                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.2,
+                LatLng(mapUiState.festivalInfo.latitude.toDouble(), mapUiState.festivalInfo.longitude.toDouble()), 15.7,
             )
         }
     }
