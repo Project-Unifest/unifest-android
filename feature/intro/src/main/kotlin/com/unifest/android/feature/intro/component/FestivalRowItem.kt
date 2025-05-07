@@ -67,9 +67,10 @@ internal fun FestivalRowItem(
                         .clip(CircleShape),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
+                AutoResizedText(
                     text = festival.schoolName,
                     color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -81,7 +82,7 @@ internal fun FestivalRowItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
+                    text = "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )

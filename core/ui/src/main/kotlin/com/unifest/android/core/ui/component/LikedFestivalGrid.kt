@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
@@ -128,14 +129,14 @@ fun FestivalItem(
                     placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
+                AutoResizedText(
                     text = festival.schoolName,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
+                AutoResizedText(
                     text = festival.festivalName,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
@@ -143,7 +144,7 @@ fun FestivalItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
+                    text = "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = Content3,
                 )
