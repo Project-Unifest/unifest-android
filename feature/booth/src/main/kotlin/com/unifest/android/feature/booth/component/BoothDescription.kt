@@ -198,7 +198,23 @@ internal fun BoothDescription(
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionPreview() {
+private fun BoothDescriptionNoSchedulePreview() {
+    UnifestTheme {
+        BoothDescription(
+            name = "공대주점",
+            warning = "누구나 환영",
+            description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
+            location = "공학관",
+            isScheduleExpanded = false,
+            scheduleList = persistentListOf(),
+            onAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun BoothDescriptionClosedPreview() {
     UnifestTheme {
         BoothDescription(
             name = "공대주점",
@@ -227,7 +243,7 @@ private fun BoothDescriptionPreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionNoSchedulePreview() {
+private fun BoothDescriptionOpenPreview() {
     UnifestTheme {
         BoothDescription(
             name = "공대주점",
@@ -235,7 +251,49 @@ private fun BoothDescriptionNoSchedulePreview() {
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
             location = "공학관",
             isScheduleExpanded = false,
-            scheduleList = persistentListOf(),
+            scheduleList = persistentListOf(
+                ScheduleModel(
+                    id = 14,
+                    date = "2025-05-07",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+                ScheduleModel(
+                    id = 15,
+                    date = "2025-05-08",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+            ),
+            onAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun BoothDescriptionOpenDropdownExpandedPreview() {
+    UnifestTheme {
+        BoothDescription(
+            name = "공대주점",
+            warning = "누구나 환영",
+            description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
+            location = "공학관",
+            isScheduleExpanded = true,
+            scheduleList = persistentListOf(
+                ScheduleModel(
+                    id = 14,
+                    date = "2025-05-07",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+                ScheduleModel(
+                    id = 15,
+                    date = "2025-05-08",
+                    openTime = "10:00:00",
+                    closeTime = "18:00:00",
+                ),
+            ),
             onAction = {},
         )
     }
