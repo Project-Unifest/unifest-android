@@ -116,49 +116,51 @@ internal fun BoothDescription(
             color = MaterialTheme.colorScheme.onSecondary,
             style = Content2.copy(lineHeight = 18.sp),
         )
-        Spacer(modifier = Modifier.height(22.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
-                contentDescription = "location icon",
-                tint = Color.Unspecified,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = if (isBoothRunning) stringResource(id = R.string.booth_is_running)
-                else stringResource(id = R.string.booth_is_closed),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = BoothLocation,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
-                contentDescription = "Arrow Down",
-                tint = Color.Unspecified,
-            )
-        }
-        AnimatedVisibility(visible = isScheduleExpanded) {
-            LazyColumn(
+        if (scheduleList.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(22.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .height((23 * scheduleList.size).dp)
-                    .padding(start = 24.dp),
-                contentPadding = PaddingValues(vertical = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(7.dp),
+                    .padding(top = 8.dp)
+                    .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
             ) {
-                items(
-                    items = scheduleList,
-                    key = { it.id },
-                ) { schedule ->
-                    Text(
-                        text = schedule.toFormattedString(),
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = BoothLocation,
-                    )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
+                    contentDescription = "location icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isBoothRunning) stringResource(id = R.string.booth_is_running)
+                    else stringResource(id = R.string.booth_is_closed),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = BoothLocation,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
+                    contentDescription = "Arrow Down",
+                    tint = Color.Unspecified,
+                )
+            }
+            AnimatedVisibility(visible = isScheduleExpanded) {
+                LazyColumn(
+                    modifier = Modifier
+                        .height((23 * scheduleList.size).dp)
+                        .padding(start = 24.dp),
+                    contentPadding = PaddingValues(vertical = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(7.dp),
+                ) {
+                    items(
+                        items = scheduleList,
+                        key = { it.id },
+                    ) { schedule ->
+                        Text(
+                            text = schedule.toFormattedString(),
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = BoothLocation,
+                        )
+                    }
                 }
             }
         }
@@ -218,6 +220,22 @@ private fun BoothDescriptionPreview() {
                     closeTime = "18:00:00",
                 ),
             ),
+            onAction = {},
+        )
+    }
+}
+
+@ComponentPreview
+@Composable
+private fun BoothDescriptionNoSchedulePreview() {
+    UnifestTheme {
+        BoothDescription(
+            name = "공대주점",
+            warning = "누구나 환영",
+            description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
+            location = "공학관",
+            isScheduleExpanded = false,
+            scheduleList = persistentListOf(),
             onAction = {},
         )
     }
