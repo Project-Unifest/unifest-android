@@ -21,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content3
@@ -37,14 +39,13 @@ import com.unifest.android.feature.intro.viewmodel.IntroUiAction
 internal fun FestivalRowItem(
     festival: FestivalModel,
     onAction: (IntroUiAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        modifier = Modifier
-            .height(130.dp)
-            .width(120.dp),
+        modifier = modifier.width(120.dp),
     ) {
         Box(
             modifier = Modifier.clickable {
@@ -72,9 +73,10 @@ internal fun FestivalRowItem(
                     style = Content2,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
+                AutoResizedText(
                     text = festival.festivalName,
                     color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center,
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -99,7 +101,7 @@ private fun FestivalRowItemPreview() {
                 "https://picsum.photos/36",
                 "서울대학교",
                 "서울",
-                "설대축제",
+                "설대축제설대축제설대축제설대축제",
                 "2024-04-21",
                 "2024-04-23",
                 126.957f,
