@@ -1,5 +1,6 @@
 package com.unifest.android.core.designsystem.component
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.isUnspecified
+import com.unifest.android.core.designsystem.ComponentPreview
+import com.unifest.android.core.designsystem.theme.Content4
+import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @Composable
 fun AutoResizedText(
@@ -56,4 +60,17 @@ fun AutoResizedText(
         },
         style = resizedTextStyle,
     )
+}
+
+@ComponentPreview
+@Composable
+private fun AutoResizedTextPreview() {
+    UnifestTheme {
+        AutoResizedText(
+            text = "Hello World Hello World Hello World",
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
+            style = Content4,
+        )
+    }
 }
