@@ -17,7 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
 import com.unifest.android.core.common.utils.toLocalDate
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.AutoResizedText
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
@@ -39,6 +37,7 @@ import com.unifest.android.core.designsystem.theme.Content3
 import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun FestivalItem(
@@ -95,9 +94,10 @@ fun FestivalItem(
                     style = Content4,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
+                AutoResizedText(
                     text = "${festival.beginDate.toLocalDate().formatToString()} - ${festival.endDate.toLocalDate().formatToString()}",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
                     style = Content3,
                 )
             }
