@@ -468,22 +468,25 @@ internal fun MapContent(
                                 },
                             )
                             .clusterMarkerUpdater { info, marker ->
-                                val size = info.size
-                                marker.icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
-                                marker.captionText = size.toString()
-                                marker.setCaptionAligns(Align.Center)
-                                marker.captionColor = android.graphics.Color.WHITE
-                                marker.captionHaloColor = android.graphics.Color.TRANSPARENT
-                                marker.onClickListener = DefaultClusterOnClickListener(info)
+                                marker.apply {
+                                    icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
+                                    captionText = info.size.toString()
+                                    setCaptionAligns(Align.Center)
+                                    captionColor = android.graphics.Color.WHITE
+                                    captionHaloColor = android.graphics.Color.TRANSPARENT
+                                    onClickListener = DefaultClusterOnClickListener(info)
+                                }
                             }
                             .leafMarkerUpdater { info, marker ->
-                                marker.icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
-                                    .getMarkerIcon((info.key as BoothMapModel).isSelected)
-                                marker.captionText = ""
-                                marker.subCaptionText = ""
-                                marker.onClickListener = Overlay.OnClickListener {
-                                    onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
-                                    true
+                                marker.apply {
+                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
+                                        .getMarkerIcon((info.key as BoothMapModel).isSelected)
+                                    captionText = ""
+                                    subCaptionText = ""
+                                    onClickListener = Overlay.OnClickListener {
+                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
+                                        true
+                                    }
                                 }
                             }
                             .build()
