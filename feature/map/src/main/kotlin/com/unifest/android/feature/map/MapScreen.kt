@@ -1,10 +1,18 @@
 package com.unifest.android.feature.map
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.PointF
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.view.Gravity
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -53,6 +61,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
@@ -73,7 +82,6 @@ import com.naver.maps.map.compose.PolygonOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
-import com.naver.maps.map.overlay.Align
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.skydoves.compose.effects.RememberedEffect
@@ -390,7 +398,11 @@ internal fun MapContent(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
+    val context = LocalContext.current
+
     Box {
+        val (selectedClusterCategory, setSelectedClusterCategory) = remember { mutableStateOf<String?>(null) }
+
         NaverMap(
             cameraPositionState = cameraPositionState,
             properties = MapProperties(
@@ -415,102 +427,148 @@ internal fun MapContent(
 
             if (isClusteringEnabled) {
                 var clusterManager by remember { mutableStateOf<Clusterer<BoothMapModel>?>(null) }
-                DisposableMapEffect(uiState.filteredBoothList) { map ->
-                    if (clusterManager == null) {
-                        clusterManager = Clusterer.ComplexBuilder<BoothMapModel>()
-                            .minClusteringZoom(9)
-                            .maxClusteringZoom(16)
-                            .maxScreenDistance(200.0)
-                            .thresholdStrategy { zoom ->
-                                if (zoom <= 11) {
-                                    0.0
-                                } else {
-                                    70.0
+                val boothIds = uiState.filteredBoothList.map { it.id }
+                DisposableMapEffect(boothIds, selectedClusterCategory) { map ->
+                    clusterManager = null
+                    clusterManager = Clusterer.ComplexBuilder<BoothMapModel>()
+                        .minClusteringZoom(9)
+                        .maxClusteringZoom(16)
+                        .maxScreenDistance(200.0)
+                        .thresholdStrategy { zoom -> if (zoom <= 11) 0.0 else 70.0 }
+                        .distanceStrategy(object : DistanceStrategy {
+                            private val defaultDistanceStrategy = DefaultDistanceStrategy()
+                            override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
+                                val model1 = when (val tag = node1.tag) {
+                                    is BoothMapModel -> tag
+                                    is List<*> -> tag.firstOrNull() as? BoothMapModel
+                                    else -> null
+                                }
+                                val model2 = when (val tag = node2.tag) {
+                                    is BoothMapModel -> tag
+                                    is List<*> -> tag.firstOrNull() as? BoothMapModel
+                                    else -> null
+                                }
+                                if (model1 == null || model2 == null) return -1.0
+                                return if (zoom <= 9) -1.0
+                                else if (model1.category == model2.category) {
+                                    if (zoom <= 11) -1.0 else defaultDistanceStrategy.getDistance(zoom, node1, node2)
+                                } else 10000.0
+                            }
+                        })
+                        .tagMergeStrategy { cluster ->
+                            val booths = cluster.children.flatMap { child ->
+                                when (val tag = child.tag) {
+                                    is BoothMapModel -> listOf(tag)
+                                    is List<*> -> tag.filterIsInstance<BoothMapModel>()
+                                    is Pair<*, *> -> (tag as? Pair<List<BoothMapModel>, String?>)?.first ?: emptyList()
+                                    else -> emptyList()
                                 }
                             }
-                            .distanceStrategy(
-                                object : DistanceStrategy {
-                                    private val defaultDistanceStrategy = DefaultDistanceStrategy()
+                            val uniqueCategories = booths.map { it.category }.distinct()
+                            val clusterCategory = uniqueCategories.singleOrNull()
+                            Pair(booths, clusterCategory)
+                        }
+                        .markerManager(object : DefaultMarkerManager() {
+                            override fun createMarker() = super.createMarker().apply {
+                                subCaptionTextSize = 10f
+                                subCaptionColor = android.graphics.Color.WHITE
+                                subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                            }
+                        })
+                        .clusterMarkerUpdater { info, marker ->
+                            val tag = info.tag
+                            val (booths, cat) = when (tag) {
+                                is Pair<*, *> -> (tag.first as? List<BoothMapModel>).orEmpty() to (tag.second as? String)
+                                is List<*> -> tag.filterIsInstance<BoothMapModel>() to null
+                                else -> emptyList<BoothMapModel>() to null
+                            }
+                            if (info.size == 1) {
+                                val booth = booths.firstOrNull()
+                                if (booth != null) {
+                                    val iconRes = getMarkerIconResource(booth.category, false)
+                                    val markerView = makeClusterMarkerView(context, iconRes, 1, badgeVisible = false)
+                                    markerView.measure(
+                                        View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.width, View.MeasureSpec.EXACTLY),
+                                        View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.height, View.MeasureSpec.EXACTLY),
+                                    )
+                                    markerView.layout(0, 0, markerView.measuredWidth, markerView.measuredHeight)
+                                    val bitmap = createBitmap(markerView.width, markerView.height)
+                                    val canvas = Canvas(bitmap)
+                                    markerView.draw(canvas)
+                                    marker.icon = OverlayImage.fromBitmap(bitmap)
+                                    marker.anchor = PointF(1.0f, 0.0f)
+                                    marker.captionText = ""
+                                    marker.subCaptionText = ""
+                                    marker.captionColor = android.graphics.Color.TRANSPARENT
+                                    marker.captionHaloColor = android.graphics.Color.TRANSPARENT
+                                    marker.subCaptionColor = android.graphics.Color.TRANSPARENT
+                                    marker.subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                                    marker.onClickListener = Overlay.OnClickListener {
+                                        onMapUiAction(MapUiAction.OnSingleBoothMarkerClick(booth))
+                                        true
+                                    }
+                                    return@clusterMarkerUpdater
+                                }
+                            }
+                            val isSelected = (cat != null && cat == selectedClusterCategory)
+                            val iconRes = cat?.let { getMarkerIconResource(it, isSelected) } ?: designR.drawable.ic_cluster
+                            val markerView = makeClusterMarkerView(context, iconRes, info.size, badgeVisible = true)
+                            markerView.measure(
+                                View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.width, View.MeasureSpec.EXACTLY),
+                                View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.height, View.MeasureSpec.EXACTLY),
+                            )
+                            markerView.layout(0, 0, markerView.measuredWidth, markerView.measuredHeight)
+                            val bitmap = createBitmap(markerView.width, markerView.height)
+                            val canvas = Canvas(bitmap)
+                            markerView.draw(canvas)
+                            marker.icon = OverlayImage.fromBitmap(bitmap)
+                            marker.anchor = PointF(1.0f, 0.0f)
+                            marker.captionText = ""
+                            marker.subCaptionText = ""
+                            marker.captionColor = android.graphics.Color.TRANSPARENT
+                            marker.captionHaloColor = android.graphics.Color.TRANSPARENT
+                            marker.subCaptionColor = android.graphics.Color.TRANSPARENT
+                            marker.subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                            marker.onClickListener = Overlay.OnClickListener {
+                                setSelectedClusterCategory(cat)
+                                onMapUiAction(MapUiAction.OnBoothMarkerClick(booths))
+                                true
+                            }
+                        }
+                        .leafMarkerUpdater { info, marker ->
+                            marker.apply {
+                                val booth = info.key as BoothMapModel
+                                val iconRes = getMarkerIconResource(booth.category, false)
+                                val markerView = makeClusterMarkerView(context, iconRes, 1, badgeVisible = false)
+                                markerView.measure(
+                                    View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.width, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(markerView.layoutParams.height, View.MeasureSpec.EXACTLY),
+                                )
+                                markerView.layout(0, 0, markerView.measuredWidth, markerView.measuredHeight)
+                                val bitmap = createBitmap(markerView.width, markerView.height)
+                                val canvas = Canvas(bitmap)
+                                markerView.draw(canvas)
+                                icon = OverlayImage.fromBitmap(bitmap)
+                                captionText = ""
+                                subCaptionText = ""
+                                captionColor = android.graphics.Color.TRANSPARENT
+                                captionHaloColor = android.graphics.Color.TRANSPARENT
+                                subCaptionColor = android.graphics.Color.TRANSPARENT
+                                subCaptionHaloColor = android.graphics.Color.TRANSPARENT
+                                onClickListener = Overlay.OnClickListener {
+                                    onMapUiAction(MapUiAction.OnSingleBoothMarkerClick(booth))
+                                    true
+                                }
+                            }
+                        }
+                        .build()
+                        .apply { this.map = map }
 
-                                    override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
-                                        val model1 = when (val tag = node1.tag) {
-                                            is BoothMapModel -> tag
-                                            is List<*> -> tag.firstOrNull() as? BoothMapModel
-                                            else -> null
-                                        }
-                                        val model2 = when (val tag = node2.tag) {
-                                            is BoothMapModel -> tag
-                                            is List<*> -> tag.firstOrNull() as? BoothMapModel
-                                            else -> null
-                                        }
-                                        if (model1 == null || model2 == null) {
-                                            return -1.0
-                                        }
-                                        return if (zoom <= 9) {
-                                            -1.0
-                                        } else if (model1.category == model2.category) {
-                                            if (zoom <= 11) {
-                                                -1.0
-                                            } else {
-                                                defaultDistanceStrategy.getDistance(zoom, node1, node2)
-                                            }
-                                        } else {
-                                            10000.0
-                                        }
-                                    }
-                                },
-                            )
-                            .tagMergeStrategy { cluster ->
-                                cluster.children.flatMap { child ->
-                                    when (val tag = child.tag) {
-                                        is BoothMapModel -> listOf(tag)
-                                        is List<*> -> tag.filterIsInstance<BoothMapModel>()
-                                        else -> emptyList()
-                                    }
-                                }
-                            }
-                            .markerManager(
-                                object : DefaultMarkerManager() {
-                                    override fun createMarker() = super.createMarker().apply {
-                                        subCaptionTextSize = 10f
-                                        subCaptionColor = android.graphics.Color.WHITE
-                                        subCaptionHaloColor = android.graphics.Color.TRANSPARENT
-                                    }
-                                },
-                            )
-                            .clusterMarkerUpdater { info, marker ->
-                                marker.apply {
-                                    icon = OverlayImage.fromResource(designR.drawable.ic_cluster)
-                                    captionText = info.size.toString()
-                                    setCaptionAligns(Align.Center)
-                                    captionColor = android.graphics.Color.WHITE
-                                    captionHaloColor = android.graphics.Color.TRANSPARENT
-                                    val booths = (info.tag as? List<BoothMapModel>) ?: emptyList()
-                                    onClickListener = Overlay.OnClickListener {
-                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(booths))
-                                        true
-                                    }
-                                }
-                            }
-                            .leafMarkerUpdater { info, marker ->
-                                marker.apply {
-                                    icon = MarkerCategory.fromString((info.key as BoothMapModel).category)
-                                        .getMarkerIcon((info.key as BoothMapModel).isSelected)
-                                    captionText = ""
-                                    subCaptionText = ""
-                                    onClickListener = Overlay.OnClickListener {
-                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(info.key as BoothMapModel)))
-                                        true
-                                    }
-                                }
-                            }
-                            .build()
-                            .apply { this.map = map }
-                    }
                     val boothListMap = uiState.filteredBoothList.associateWith { it }
                     clusterManager?.addAll(boothListMap)
                     onDispose {
                         clusterManager?.clear()
+                        clusterManager = null
                     }
                 }
             } else {
@@ -617,4 +675,44 @@ private fun MapScreenPreview(
             isClusteringEnabled = true,
         )
     }
+}
+
+fun getMarkerIconResource(category: String, isSelected: Boolean): Int {
+    return when (MarkerCategory.fromString(category)) {
+        MarkerCategory.BAR -> if (isSelected) designR.drawable.ic_marker_bar_selected else designR.drawable.ic_marker_bar
+        MarkerCategory.FOOD -> if (isSelected) designR.drawable.ic_marker_food_selected else designR.drawable.ic_marker_food
+        MarkerCategory.EVENT -> if (isSelected) designR.drawable.ic_marker_event_selected else designR.drawable.ic_marker_event
+        MarkerCategory.NORMAL -> if (isSelected) designR.drawable.ic_marker_normal_selected else designR.drawable.ic_marker_normal
+        MarkerCategory.MEDICAL -> if (isSelected) designR.drawable.ic_marker_medical_selected else designR.drawable.ic_marker_medical
+        MarkerCategory.TOILET -> if (isSelected) designR.drawable.ic_marker_toilet_selected else designR.drawable.ic_marker_toilet
+    }
+}
+
+fun makeClusterMarkerView(context: Context, iconRes: Int, count: Int, badgeVisible: Boolean = true): View {
+    val sizePx = (context.resources.displayMetrics.density * 44).toInt()
+    val badgeSizePx = (context.resources.displayMetrics.density * 21).toInt()
+
+    val frame = FrameLayout(context).apply {
+        layoutParams = FrameLayout.LayoutParams(sizePx, sizePx)
+        setBackgroundResource(iconRes)
+    }
+    if (badgeVisible) {
+        val badge = FrameLayout(context).apply {
+            layoutParams = FrameLayout.LayoutParams(badgeSizePx, badgeSizePx, Gravity.END or Gravity.TOP)
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.OVAL
+                setColor(android.graphics.Color.BLACK)
+            }
+        }
+        val text = TextView(context).apply {
+            text = count.toString()
+            setTextColor(android.graphics.Color.WHITE)
+            gravity = Gravity.CENTER
+            textSize = 13f
+            layoutParams = FrameLayout.LayoutParams(badgeSizePx, badgeSizePx)
+        }
+        badge.addView(text)
+        frame.addView(badge)
+    }
+    return frame
 }
