@@ -14,15 +14,3 @@ internal fun BoothModel.toMapModel() =
         latitude = latitude.toDouble(),
         longitude = longitude.toDouble(),
     )
-
-internal fun BoothMapModel.toModel() =
-    BoothModel(
-        id = id,
-        name = name,
-        category = category,
-        description = description,
-        thumbnail = thumbnail,
-        location = location,
-        latitude = latitude.toFloat(),
-        longitude = longitude.toFloat(),
-    )
