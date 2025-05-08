@@ -58,7 +58,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.clustering.Clusterer
-import com.naver.maps.map.clustering.DefaultClusterOnClickListener
 import com.naver.maps.map.clustering.DefaultDistanceStrategy
 import com.naver.maps.map.clustering.DefaultMarkerManager
 import com.naver.maps.map.clustering.DistanceStrategy
@@ -100,7 +99,6 @@ import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.map.component.BoothItem
 import com.unifest.android.feature.map.component.MapTopAppBar
 import com.unifest.android.feature.map.model.BoothMapModel
-import com.unifest.android.feature.map.model.ItemData
 import com.unifest.android.feature.map.preview.MapPreviewParameterProvider
 import com.unifest.android.feature.map.viewmodel.ErrorType
 import com.unifest.android.feature.map.viewmodel.MapUiAction
@@ -392,8 +390,6 @@ internal fun MapContent(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     isClusteringEnabled: Boolean,
 ) {
-    // val context = LocalContext.current
-
     Box {
         NaverMap(
             cameraPositionState = cameraPositionState,
@@ -437,9 +433,22 @@ internal fun MapContent(
                                     private val defaultDistanceStrategy = DefaultDistanceStrategy()
 
                                     override fun getDistance(zoom: Int, node1: Node, node2: Node): Double {
+                                        val model1 = when (val tag = node1.tag) {
+                                            is BoothMapModel -> tag
+                                            is List<*> -> tag.firstOrNull() as? BoothMapModel
+                                            else -> null
+                                        }
+                                        val model2 = when (val tag = node2.tag) {
+                                            is BoothMapModel -> tag
+                                            is List<*> -> tag.firstOrNull() as? BoothMapModel
+                                            else -> null
+                                        }
+                                        if (model1 == null || model2 == null) {
+                                            return -1.0
+                                        }
                                         return if (zoom <= 9) {
                                             -1.0
-                                        } else if ((node1.tag as ItemData).category == (node2.tag as ItemData).category) {
+                                        } else if (model1.category == model2.category) {
                                             if (zoom <= 11) {
                                                 -1.0
                                             } else {
@@ -452,10 +461,12 @@ internal fun MapContent(
                                 },
                             )
                             .tagMergeStrategy { cluster ->
-                                if (cluster.maxZoom <= 9) {
-                                    null
-                                } else {
-                                    ItemData("", (cluster.children.first().tag as ItemData).category)
+                                cluster.children.flatMap { child ->
+                                    when (val tag = child.tag) {
+                                        is BoothMapModel -> listOf(tag)
+                                        is List<*> -> tag.filterIsInstance<BoothMapModel>()
+                                        else -> emptyList()
+                                    }
                                 }
                             }
                             .markerManager(
@@ -474,7 +485,11 @@ internal fun MapContent(
                                     setCaptionAligns(Align.Center)
                                     captionColor = android.graphics.Color.WHITE
                                     captionHaloColor = android.graphics.Color.TRANSPARENT
-                                    onClickListener = DefaultClusterOnClickListener(info)
+                                    val booths = (info.tag as? List<BoothMapModel>) ?: emptyList()
+                                    onClickListener = Overlay.OnClickListener {
+                                        onMapUiAction(MapUiAction.OnBoothMarkerClick(booths))
+                                        true
+                                    }
                                 }
                             }
                             .leafMarkerUpdater { info, marker ->
@@ -492,37 +507,12 @@ internal fun MapContent(
                             .build()
                             .apply { this.map = map }
                     }
-                    val boothListMap = uiState.filteredBoothList.associateWith { booth -> ItemData(booth.name, booth.category) }
+                    val boothListMap = uiState.filteredBoothList.associateWith { it }
                     clusterManager?.addAll(boothListMap)
                     onDispose {
                         clusterManager?.clear()
                     }
                 }
-
-//                var clusterManager by remember { mutableStateOf<TedNaverClustering<BoothMapModel>?>(null) }
-//                DisposableMapEffect(uiState.filteredBoothList) { map ->
-//                    if (clusterManager == null) {
-//                        clusterManager = TedNaverClustering.with<BoothMapModel>(context, map)
-//                            .clusterClickListener { booths ->
-//                                onMapUiAction(MapUiAction.OnBoothMarkerClick(booths.items.toList()))
-//                            }
-//                            .customMarker {
-//                                Marker().apply {
-//                                    icon = MarkerCategory.fromString(it.category).getMarkerIcon(it.isSelected)
-//                                }
-//                            }
-//                            .markerClickListener { booth ->
-//                                onMapUiAction(MapUiAction.OnBoothMarkerClick(listOf(booth)))
-//                            }
-//                            // 마커를 클릭 했을 경우 마커의 위치로 카메라 이동 비활성화
-//                            .clickToCenter(false)
-//                            .make()
-//                    }
-//                    clusterManager?.addItems(uiState.filteredBoothList)
-//                    onDispose {
-//                        clusterManager?.clearItems()
-//                    }
-//                }
             } else {
                 uiState.filteredBoothList.forEach { booth ->
                     ComposeMarker(
