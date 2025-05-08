@@ -1,11 +1,8 @@
 package com.unifest.android.feature.map.model
 
-import android.os.Parcelable
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.clustering.ClusteringKey
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class BoothMapModel(
     val id: Long = 0L,
     val name: String = "",
@@ -16,7 +13,7 @@ data class BoothMapModel(
     val latitude: Double = 0.toDouble(),
     val longitude: Double = 0.toDouble(),
     val isSelected: Boolean = false,
-) : Parcelable, ClusteringKey {
+) : ClusteringKey {
     override fun getPosition(): LatLng {
         return LatLng(latitude, longitude)
     }
