@@ -58,7 +58,7 @@ internal class QRScanActivity : ComponentActivity() {
             UnifestTheme {
                 QRScanScreen(
                     barcodeView = barcodeView,
-                    festivalId =festivalId,
+                    festivalId = festivalId,
                     popBackStack = {
                         setResult(RESULT_CANCELED)
                         finish()
