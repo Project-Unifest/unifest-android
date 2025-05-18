@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RegisterStampRequest(
-    @SerialName("token")
-    val token: String,
+    @SerialName("deviceId")
+    val deviceId: String,
     @SerialName("boothId")
     val boothId: Long,
+    @SerialName("festivalId")
+    val festivalId: Long,
 )
