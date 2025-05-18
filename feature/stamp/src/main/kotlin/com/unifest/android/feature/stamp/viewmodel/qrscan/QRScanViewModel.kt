@@ -32,14 +32,13 @@ class QRScanViewModel @Inject constructor(
     fun onAction(action: QRScanUiAction) {
         when (action) {
             is QRScanUiAction.OnBackClick -> navigateBack()
-            is QRScanUiAction.OnQRCodeScanned -> registerStamp(action.boothId)
         }
     }
 
-    fun registerStamp(boothId: Long) {
+    fun registerStamp(boothId: Long, festivalId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            stampRepository.registerStamp(boothId)
+            stampRepository.registerStamp(boothId, festivalId)
                 .onSuccess {
                     _uiEvent.send(QRScanUiEvent.ShowToast(UiText.StringResource(R.string.stamp_register_completed)))
                     _uiEvent.send(QRScanUiEvent.RegisterStampCompleted)
