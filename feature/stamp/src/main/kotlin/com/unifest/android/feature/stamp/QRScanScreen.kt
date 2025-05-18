@@ -46,6 +46,7 @@ import com.unifest.android.core.designsystem.R as designR
 @Composable
 internal fun QRScanScreen(
     barcodeView: DecoratedBarcodeView,
+    festivalId: Long,
     popBackStack: () -> Unit,
     complete: () -> Unit,
     onAction: (QRScanUiAction) -> Unit,
@@ -63,7 +64,7 @@ internal fun QRScanScreen(
             is QRScanUiEvent.NavigateBack -> popBackStack()
             is QRScanUiEvent.RegisterStampCompleted -> complete()
             is QRScanUiEvent.RegisterStampFailed -> popBackStack()
-            is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong())
+            is QRScanUiEvent.ScanSuccess -> viewModel.registerStamp(event.entryCode.toLong(), festivalId)
             is QRScanUiEvent.ShowToast -> {
                 Toast.makeText(context, event.text.asString(context), Toast.LENGTH_SHORT).show()
             }

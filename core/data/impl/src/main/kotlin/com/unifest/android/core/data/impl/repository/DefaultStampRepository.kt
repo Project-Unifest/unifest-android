@@ -23,9 +23,15 @@ internal class DefaultStampRepository @Inject constructor(
         service.getStampEnabledBooths(festivalId).data.map { it.toModel() }
     }
 
-    override suspend fun registerStamp(boothId: Long) = runSuspendCatching {
+    override suspend fun registerStamp(boothId: Long, festivalId: Long) = runSuspendCatching {
         val deviceId = getDeviceId(context)
-        service.registerStamp(RegisterStampRequest(token = deviceId, boothId = boothId))
+        service.registerStamp(
+            RegisterStampRequest(
+                deviceId = deviceId,
+                boothId = boothId,
+                festivalId = festivalId,
+            ),
+        )
     }
 
     override suspend fun getStampEnabledFestivals() = runSuspendCatching {

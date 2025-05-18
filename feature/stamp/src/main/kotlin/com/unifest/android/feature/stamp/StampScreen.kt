@@ -126,7 +126,13 @@ internal fun StampRoute(
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
             is StampUiEvent.NavigateBack -> popBackStack()
-            is StampUiEvent.NavigateToQRScan -> qrScanLauncher.launch(Intent(context, QRScanActivity::class.java))
+            is StampUiEvent.NavigateToQRScan -> {
+                val intent = Intent(context, QRScanActivity::class.java).apply {
+                    putExtra("festivalId", uiState.selectedFestival.festivalId)
+                }
+                qrScanLauncher.launch(intent)
+            }
+
             is StampUiEvent.RequestCameraPermission -> permissionResultLauncher.launch(Manifest.permission.CAMERA)
             is StampUiEvent.NavigateToAppSetting -> {
                 if (activity != null) {
@@ -249,7 +255,7 @@ internal fun StampContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(horizontal = 20.dp)
+                    .padding(start = 20.dp, end = 20.dp, bottom = 32.dp)
                     .background(color = if (isSystemInDarkTheme()) DarkGrey200 else LightGrey100, shape = RoundedCornerShape(10.dp)),
             ) {
                 Column {
