@@ -107,8 +107,8 @@ internal fun LikedBoothScreen(
                             .clickable {
                                 onAction(LikedBoothUiAction.OnLikedBoothItemClick(booth.id))
                             }
-                            .animateItemPlacement(
-                                animationSpec = tween(
+                            .animateItem(
+                                placementSpec = tween(
                                     durationMillis = 500,
                                     easing = LinearOutSlowInEasing,
                                 ),
