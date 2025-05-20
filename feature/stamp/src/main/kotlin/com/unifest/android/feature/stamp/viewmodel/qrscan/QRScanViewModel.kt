@@ -1,5 +1,6 @@
 package com.unifest.android.feature.stamp.viewmodel.qrscan
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.QRScanErrorHandlerActions
@@ -22,7 +23,15 @@ import javax.inject.Inject
 @HiltViewModel
 class QRScanViewModel @Inject constructor(
     private val stampRepository: StampRepository,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel(), QRScanErrorHandlerActions {
+    companion object {
+        private const val FESTIVAL_ID = "festivalId"
+    }
+
+    private val festivalId: Long =
+        requireNotNull(savedStateHandle.get<Long>(FESTIVAL_ID)) { "festivalId is required" }
+
     private val _uiState = MutableStateFlow(QRScanUiState())
     val uiState: StateFlow<QRScanUiState> = _uiState.asStateFlow()
 
@@ -35,7 +44,7 @@ class QRScanViewModel @Inject constructor(
         }
     }
 
-    fun registerStamp(boothId: Long, festivalId: Long) {
+    fun registerStamp(boothId: Long) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             stampRepository.registerStamp(boothId, festivalId)

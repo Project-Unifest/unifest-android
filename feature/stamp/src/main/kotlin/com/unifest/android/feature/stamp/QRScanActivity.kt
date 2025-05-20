@@ -54,13 +54,10 @@ internal class QRScanActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        val festivalId = intent.getLongExtra("festivalId", 0L)
-
         setContent {
             UnifestTheme {
                 QRScanScreen(
                     barcodeView = barcodeView,
-                    festivalId = festivalId,
                     popBackStack = {
                         setResult(RESULT_CANCELED)
                         finish()
