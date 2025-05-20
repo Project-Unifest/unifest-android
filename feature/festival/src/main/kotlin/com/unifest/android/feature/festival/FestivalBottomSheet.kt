@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,18 +49,7 @@ fun FestivalSearchBottomSheet(
     onFestivalUiAction: (FestivalUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-//    val bottomSheetState = rememberFlexibleBottomSheetState(
-//        containSystemBars = true,
-//        flexibleSheetSize = FlexibleSheetSize(
-//            intermediatelyExpanded = 1.0f,
-//        ),
-//        isModal = true,
-//        skipSlightlyExpanded = true,
-//    )
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-        // confirmValueChange = { it != SheetValue.Hidden },
-    )
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = {
@@ -88,6 +78,7 @@ fun FestivalSearchBottomSheet(
         contentWindowInsets = { WindowInsets(top = 0) },
         modifier = Modifier
             .fillMaxHeight()
+            .statusBarsPadding()
             .padding(top = 18.dp),
     ) {
         Column(

@@ -2,6 +2,7 @@ package com.unifest.android.feature.stamp.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,10 +20,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,9 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.Content1
+import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title1
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.model.StampBoothModel
 import com.unifest.android.feature.stamp.R
 import com.unifest.android.feature.stamp.viewmodel.stamp.StampUiAction
@@ -45,24 +47,28 @@ internal fun StampBoothBottomSheet(
     stampBoothList: ImmutableList<StampBoothModel>,
     onAction: (StampUiAction) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-        confirmValueChange = { it != SheetValue.Hidden },
-    )
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val interactionSource = remember { MutableInteractionSource() }
 
     ModalBottomSheet(
         onDismissRequest = {
             onAction(StampUiAction.OnDismiss)
         },
         sheetState = bottomSheetState,
-        shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
+        sheetGesturesEnabled = false,
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         containerColor = MaterialTheme.colorScheme.surface,
         dragHandle = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(top = 10.dp),
+                    .padding(vertical = 12.dp)
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = {},
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 HorizontalDivider(
@@ -77,8 +83,10 @@ internal fun StampBoothBottomSheet(
         contentWindowInsets = { WindowInsets(top = 0) },
         modifier = Modifier
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 18.dp),
+            .statusBarsPadding()
+            .padding(top = 18.dp)
+            .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
+            .background(MaterialTheme.colorScheme.surface),
     ) {
         LazyColumn(
             modifier = Modifier

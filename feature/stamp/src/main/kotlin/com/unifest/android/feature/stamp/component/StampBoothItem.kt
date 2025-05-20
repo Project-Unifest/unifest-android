@@ -39,7 +39,7 @@ internal fun StampBoothItem(
 ) {
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(16.dp))

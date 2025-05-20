@@ -21,9 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -255,7 +252,7 @@ fun WaitingDialog(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     CircularOutlineButton(
-                        icon = Icons.Default.Remove,
+                        icon = ImageVector.vectorResource(id = designR.drawable.ic_minus),
                         contentDescription = "Minus Button",
                         onClick = onWaitingMinusClick,
                     )
@@ -267,7 +264,7 @@ fun WaitingDialog(
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     CircularOutlineButton(
-                        icon = Icons.Default.Add,
+                        icon = ImageVector.vectorResource(id = designR.drawable.ic_plus),
                         contentDescription = "Plus Button",
                         onClick = onWaitingPlusClick,
                     )
