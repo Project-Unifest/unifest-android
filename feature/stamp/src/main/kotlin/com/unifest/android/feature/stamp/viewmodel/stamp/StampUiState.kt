@@ -10,7 +10,6 @@ data class StampUiState(
     val stampEnabledFestivalList: ImmutableList<StampFestivalModel> = persistentListOf(),
     val selectedFestival: StampFestivalModel = StampFestivalModel(0, "", "", ""),
     val collectedStampCount: Int = 0,
-    val enabledStampCount: Int = 0,
     val stampBoothList: ImmutableList<StampBoothModel> = persistentListOf(),
     val isStampBoothDialogVisible: Boolean = false,
     val isPermissionDialogVisible: Boolean = false,

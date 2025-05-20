@@ -46,8 +46,8 @@ fun LikedFestivalsGrid(
                     },
                     isEditMode = isEditMode,
                     setLikedFestivalDeleteDialogVisible = onDeleteLikedFestivalClick,
-                    modifier = Modifier.animateItemPlacement(
-                        animationSpec = tween(
+                    modifier = Modifier.animateItem(
+                        placementSpec = tween(
                             durationMillis = 500,
                             easing = LinearOutSlowInEasing,
                         ),

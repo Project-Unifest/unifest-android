@@ -93,7 +93,6 @@ class StampViewModel @Inject constructor(
                 .onSuccess { stampEnabledBoothList ->
                     _uiState.update {
                         it.copy(
-                            enabledStampCount = stampEnabledBoothList.size,
                             stampBoothList = stampEnabledBoothList.toImmutableList(),
                         )
                     }
