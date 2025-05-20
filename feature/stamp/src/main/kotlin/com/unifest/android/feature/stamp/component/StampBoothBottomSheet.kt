@@ -106,32 +106,17 @@ internal fun StampBoothBottomSheet(
                     modifier = Modifier.padding(horizontal = 30.dp),
                 ) {
                     Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = schoolName,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = Content1,
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = stringResource(id = R.string.stamp_booth),
-                                color = MaterialTheme.colorScheme.onBackground,
-                                style = Title1,
-                            )
-                        }
-                        Icon(
-                            painter = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
-                            contentDescription = "닫기",
-                            modifier = Modifier.clickable {
-                                onAction(StampUiAction.OnDismiss)
-                            },
-                            tint = MaterialTheme.colorScheme.onSurface,
-                        )
-                    }
+                    Text(
+                        text = schoolName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = Content1,
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = stringResource(id = R.string.stamp_booth),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = Title1,
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = "총 ${stampBoothList.size}개",
