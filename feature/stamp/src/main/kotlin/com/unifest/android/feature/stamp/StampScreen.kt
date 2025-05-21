@@ -199,6 +199,7 @@ internal fun StampScreen(
             StampBoothBottomSheet(
                 schoolName = uiState.selectedFestival.schoolName,
                 stampBoothList = uiState.stampBoothList,
+                stampEnabledBoothList = uiState.stampEnabledBoothList,
                 onAction = onAction,
             )
         }

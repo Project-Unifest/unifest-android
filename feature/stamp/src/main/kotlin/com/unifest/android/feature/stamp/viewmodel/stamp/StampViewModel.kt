@@ -90,10 +90,11 @@ class StampViewModel @Inject constructor(
     fun getStampEnabledBooths(festivalId: Long) {
         viewModelScope.launch {
             stampRepository.getStampEnabledBooths(festivalId)
-                .onSuccess { stampEnabledBoothList ->
+                .onSuccess { stampBoothList ->
                     _uiState.update {
                         it.copy(
-                            stampBoothList = stampEnabledBoothList.toImmutableList(),
+                            stampBoothList = stampBoothList.toImmutableList(),
+                            stampEnabledBoothList = stampBoothList.filter { stampBooth -> stampBooth.enabled }.toImmutableList(),
                         )
                     }
                 }.onFailure { exception ->
