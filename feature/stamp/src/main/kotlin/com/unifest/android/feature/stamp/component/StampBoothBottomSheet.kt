@@ -45,6 +45,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun StampBoothBottomSheet(
     schoolName: String,
     stampBoothList: ImmutableList<StampBoothModel>,
+    stampEnabledBoothList: ImmutableList<StampBoothModel>,
     onAction: (StampUiAction) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -120,13 +121,13 @@ internal fun StampBoothBottomSheet(
                 }
             }
             items(
-                count = stampBoothList.size,
-                key = { index -> stampBoothList[index].id },
+                count = stampEnabledBoothList.size,
+                key = { index -> stampEnabledBoothList[index].id },
             ) { index ->
                 StampBoothItem(
-                    stampBooth = stampBoothList[index],
+                    stampBooth = stampEnabledBoothList[index],
                     modifier = Modifier.clickable {
-                        onAction(StampUiAction.OnStampBoothItemClick(stampBoothList[index].id))
+                        onAction(StampUiAction.OnStampBoothItemClick(stampEnabledBoothList[index].id))
                     },
                 )
             }
@@ -141,6 +142,7 @@ private fun SchoolSearchBottomSheetPreview() {
         StampBoothBottomSheet(
             schoolName = "",
             stampBoothList = StampUiState().stampBoothList,
+            stampEnabledBoothList = StampUiState().stampEnabledBoothList,
             onAction = {},
         )
     }
