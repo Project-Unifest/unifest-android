@@ -21,17 +21,6 @@ plugins {
     // alias(libs.plugins.compose.investigator) apply false
 }
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath(libs.gradle.kotlin)
-    }
-}
-
 val excludeModules: String? by project
 
 allprojects {

@@ -1,5 +1,8 @@
 package com.unifest.android.core.model
 
+import androidx.compose.runtime.Stable
+
+@Stable
 data class BoothModel(
     val id: Long = 0L,
     val name: String = "",
