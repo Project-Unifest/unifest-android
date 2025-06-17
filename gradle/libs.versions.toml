@@ -3,8 +3,8 @@
 minSdk = "26"
 targetSdk = "35"
 compileSdk = "35"
-versionCode = "43"
-versionName = "1.4.4"
+versionCode = "44"
+versionName = "1.5.0"
 packageName = "com.unifest.android"
 
 android-gradle-plugin = "8.8.2"
@@ -60,7 +60,7 @@ flexible-bottomsheet = "0.1.5"
 compose-effects = "0.1.1"
 compose-unstyled = "1.25.0"
 
-naver-map-compose = "1.7.1"
+naver-map-compose = "1.8.2"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
 zxing = "4.3.0"
@@ -79,7 +79,6 @@ gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin",
 gradle-androidx-room = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 compose-compiler-extension = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin-core" }
 
-kotlin-ktlint = { group = "com.pinterest", name = "ktlint", version.ref = "kotlin-ktlint-source" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
