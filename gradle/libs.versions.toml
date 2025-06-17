@@ -60,7 +60,7 @@ flexible-bottomsheet = "0.1.5"
 compose-effects = "0.1.1"
 compose-unstyled = "1.25.0"
 
-naver-map-compose = "1.7.1"
+naver-map-compose = "1.8.2"
 naver-map-location = "21.0.1"
 tedclustering-naver = "1.0.2"
 zxing = "4.3.0"
