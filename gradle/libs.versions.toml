@@ -37,7 +37,7 @@ androidx-activity-compose = "1.10.1"
 androidx-compose = "1.7.4"
 androidx-compose-material3 = "1.4.0-alpha15"
 androidx-hilt-navigation-compose = "1.2.0"
-androidx-test-core = "1.6.1"
+androidx-test-core = "1.6.2"
 
 desugar-jdk-libs = "2.1.5"
 hilt = "2.55"
