@@ -347,6 +347,7 @@ fun WaitingDialog(
             UnifestButton(
                 onClick = onDialogWaitingButtonClick,
                 containerColor = if (isPrivacyClicked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                // TODO enabled validation 추가
                 enabled = isPrivacyClicked,
                 modifier = Modifier
                     .fillMaxWidth()
