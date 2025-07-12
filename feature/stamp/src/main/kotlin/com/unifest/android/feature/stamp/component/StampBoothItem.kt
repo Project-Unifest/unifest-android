@@ -45,7 +45,7 @@ internal fun StampBoothItem(
         Spacer(modifier = Modifier.height(16.dp))
         Row {
             NetworkImage(
-                imgUrl = stampBooth.thumbnail,
+                imgUrl = stampBooth.thumbnail ?: "",
                 contentDescription = "Stamp Booth Thumbnail",
                 modifier = Modifier
                     .size(86.dp)
