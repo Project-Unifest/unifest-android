@@ -58,7 +58,8 @@ enum class MenuStatus(val value: String) {
     UNDER_50("UNDER_50"),
     UNDER_10("UNDER_10"),
     SOLD_OUT("SOLD_OUT"),
-    NO_DATA("NO_DATA");
+    NO_DATA("NO_DATA"),
+    ;
 
     companion object {
         fun fromString(value: String?): MenuStatus {

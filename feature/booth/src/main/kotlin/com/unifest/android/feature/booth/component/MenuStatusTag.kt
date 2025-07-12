@@ -77,7 +77,7 @@ internal fun Tag(
                 )
             }
 
-            MenuStatus.NO_DATA  -> {
+            MenuStatus.NO_DATA -> {
                 Text(
                     text = stringResource(id = R.string.no_menu_status),
                     style = Content7,
