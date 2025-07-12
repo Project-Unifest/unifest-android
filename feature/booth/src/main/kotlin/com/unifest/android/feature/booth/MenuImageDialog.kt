@@ -28,6 +28,7 @@ import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MenuStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +94,7 @@ private fun MenuImageDialogPreview() {
                 name = "모둠 사시미",
                 price = 45000,
                 imgUrl = "",
-                status = "10개 미만 남음",
+                status = MenuStatus.UNDER_10,
             ),
         )
     }
