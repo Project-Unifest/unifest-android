@@ -1,8 +1,8 @@
 package com.unifest.android.core.common.extension
 
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -21,6 +21,7 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
     }
 }
 
+// https://developer.android.com/develop/ui/compose/touch-input/user-interactions/migrate-indication-ripple?hl=ko
 fun Modifier.clickableSingle(
     enabled: Boolean = true,
     onClickLabel: String? = null,
@@ -41,7 +42,7 @@ fun Modifier.clickableSingle(
         onClickLabel = onClickLabel,
         onClick = { multipleEventsCutter.processEvent { onClick() } },
         role = role,
-        indication = LocalIndication.current,
+        indication = ripple(),
         interactionSource = remember { MutableInteractionSource() },
     )
 }
