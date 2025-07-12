@@ -66,8 +66,10 @@ internal fun BoothDescription(
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
     val maxWidth = remember(windowInfo) {
-        val screenWidth = with(density) { windowInfo.containerSize.width.toDp() } - 40.dp
-        screenWidth * (2 / 3f)
+        with(density) {
+            val screenWidth = windowInfo.containerSize.width.toDp() - 40.dp
+            screenWidth * (2 / 3f)
+        }
     }
 
     // TODO Composable 밖에서 계산

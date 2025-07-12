@@ -40,9 +40,11 @@ internal fun MenuImageDialog(
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
     val dialogSize = remember(windowInfo) {
-        val screenWidth = with(density) { windowInfo.containerSize.width.toDp() }
-        val screenHeight = with(density) { windowInfo.containerSize.height.toDp() }
-        min(screenWidth, screenHeight) - 36.dp
+        with(density) {
+            val screenWidth = windowInfo.containerSize.width.toDp()
+            val screenHeight = windowInfo.containerSize.height.toDp()
+            min(screenWidth, screenHeight) - 36.dp
+        }
     }
 
     BasicAlertDialog(
