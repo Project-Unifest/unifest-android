@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,10 +38,11 @@ internal fun StarImageDialog(
     starInfo: StarInfoModel,
     modifier: Modifier = Modifier,
 ) {
+    val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
     val dialogSize = remember(windowInfo) {
-        val screenWidth = windowInfo.containerSize.width.dp
-        val screenHeight = windowInfo.containerSize.height.dp
+        val screenWidth = with(density) { windowInfo.containerSize.width.toDp() }
+        val screenHeight = with(density) { windowInfo.containerSize.height.toDp() }
         min(screenWidth, screenHeight) - 128.dp
     }
 
