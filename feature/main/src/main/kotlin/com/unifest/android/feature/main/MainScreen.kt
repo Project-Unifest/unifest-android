@@ -2,6 +2,7 @@ package com.unifest.android.feature.main
 
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.fillMaxSize
@@ -132,7 +133,7 @@ internal fun MainScreen(
 
 @Composable
 private fun HandleNewIntent(navigator: MainNavController) {
-    val activity = LocalContext.current as ComponentActivity
+    val activity = LocalActivity.current as ComponentActivity
     DisposableEffect(Unit) {
         val onNewIntentConsumer = Consumer<Intent> { intent ->
             Timber.d("onNewIntent -> $intent")

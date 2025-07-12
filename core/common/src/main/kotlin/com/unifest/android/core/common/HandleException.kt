@@ -14,7 +14,7 @@ interface ErrorHandlerActions {
 fun handleException(exception: Throwable, actions: ErrorHandlerActions) {
     when (exception) {
         is HttpException -> {
-            if (exception.code() in 500..511) {
+            if (exception.code() in 500..599) {
                 actions.setServerErrorDialogVisible(true)
             } else {
                 Timber.e(exception)

@@ -123,10 +123,7 @@ internal fun FestivalScheduleItem(
                             onClick = {
                                 onHomeUiAction(HomeUiAction.OnStarImageClick(scheduleIndex, starIndex))
                             },
-//                            onLongClick = {
-//                                onHomeUiAction(HomeUiAction.OnStarImageLongClick(scheduleIndex, starIndex))
-//                            },
-//                            isClicked = isStarImageClicked[starIndex],
+                            contentDescription = "Star Image",
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape),

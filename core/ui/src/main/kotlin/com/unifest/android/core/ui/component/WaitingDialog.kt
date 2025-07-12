@@ -28,6 +28,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -194,6 +197,14 @@ fun WaitingDialog(
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
 ) {
+    val isButtonEnabled by remember {
+        derivedStateOf {
+            isPrivacyClicked &&
+                phoneNumber.matches(Regex("^\\d{10,11}$")) &&
+                partySize in 1..10
+        }
+    }
+
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -346,8 +357,9 @@ fun WaitingDialog(
             Spacer(modifier = Modifier.height(11.dp))
             UnifestButton(
                 onClick = onDialogWaitingButtonClick,
-                containerColor = if (isPrivacyClicked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                enabled = isPrivacyClicked,
+                containerColor = if (isButtonEnabled) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.surfaceVariant,
+                enabled = isButtonEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
