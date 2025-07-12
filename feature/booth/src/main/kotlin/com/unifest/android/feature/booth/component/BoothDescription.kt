@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -62,12 +63,13 @@ internal fun BoothDescription(
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
-    val maxWidth = remember(configuration) {
-        val screenWidth = configuration.screenWidthDp.dp - 40.dp
+    val windowInfo = LocalWindowInfo.current
+    val maxWidth = remember(windowInfo) {
+        val screenWidth = windowInfo.containerSize.width.dp - 40.dp
         screenWidth * (2 / 3f)
     }
 
+    // TODO Composable 밖에서 계산
     // 현재 시간과 날짜 가져오기
     val koreaZoneId = ZoneId.of("Asia/Seoul")
     val currentDateTime = ZonedDateTime.now(koreaZoneId)
