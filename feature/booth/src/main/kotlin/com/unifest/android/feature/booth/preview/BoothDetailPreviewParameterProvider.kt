@@ -3,6 +3,7 @@ package com.unifest.android.feature.booth.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MenuStatus
 import com.unifest.android.feature.booth.viewmodel.BoothUiState
 
 internal class BoothDetailPreviewParameterProvider : PreviewParameterProvider<BoothUiState> {
@@ -18,10 +19,10 @@ internal class BoothDetailPreviewParameterProvider : PreviewParameterProvider<Bo
                 latitude = 37.54224856023523f,
                 longitude = 127.07605430700158f,
                 menus = listOf(
-                    MenuModel(1L, "모둠 사시미", 45000, "", "10개 미만 남음"),
-                    MenuModel(2L, "모둠 사시미", 45000, "", "품절"),
-                    MenuModel(3L, "모둠 사시미", 45000, "", "50개 미만 남음"),
-                    MenuModel(4L, "모둠 사시미", 45000, "", "품절임막 5개 미만 남음"),
+                    MenuModel(1L, "모둠 사시미", 45000, "", MenuStatus.ENOUGH),
+                    MenuModel(2L, "모둠 사시미", 45000, "", MenuStatus.UNDER_10),
+                    MenuModel(3L, "모둠 사시미", 45000, "", MenuStatus.UNDER_50),
+                    MenuModel(4L, "모둠 사시미", 45000, "", MenuStatus.SOLD_OUT),
                 ),
             ),
         ),

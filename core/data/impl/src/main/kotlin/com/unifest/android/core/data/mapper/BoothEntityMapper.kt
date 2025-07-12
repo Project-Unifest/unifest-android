@@ -4,6 +4,7 @@ import com.unifest.android.core.database.entity.LikedBoothEntity
 import com.unifest.android.core.database.entity.MenuEntity
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MenuStatus
 
 internal fun LikedBoothEntity.toModel(): BoothDetailModel {
     return BoothDetailModel(
@@ -26,7 +27,7 @@ internal fun MenuEntity.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl,
-        status = status,
+        status = MenuStatus.fromString(status),
     )
 }
 

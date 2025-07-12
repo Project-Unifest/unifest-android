@@ -4,6 +4,7 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MenuStatus
 import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.core.model.WaitingModel
 import com.unifest.android.core.network.response.booth.Booth
@@ -46,7 +47,7 @@ internal fun Menu.toModel(): MenuModel {
         name = name,
         price = price,
         imgUrl = imgUrl ?: "",
-        status = status ?: "",
+        status = MenuStatus.fromString(status),
     )
 }
 
