@@ -26,8 +26,11 @@ sealed interface MainTabRoute : Route {
     @Serializable
     data object Map : MainTabRoute
 
+//    @Serializable
+//    data object Stamp : MainTabRoute
+
     @Serializable
-    data object Stamp : MainTabRoute
+    data object Booth : MainTabRoute
 
     @Serializable
     data object Menu : MainTabRoute

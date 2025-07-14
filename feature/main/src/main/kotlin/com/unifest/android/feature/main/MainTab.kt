@@ -32,12 +32,19 @@ internal enum class MainTab(
         label = "지도",
         route = MainTabRoute.Map,
     ),
-    STAMP(
-        iconResId = R.drawable.ic_stamp,
-        selectedIconResId = R.drawable.ic_selected_stamp,
-        contentDescription = "Stamp Icon",
-        label = "스탬프",
-        route = MainTabRoute.Stamp,
+//    STAMP(
+//        iconResId = R.drawable.ic_stamp,
+//        selectedIconResId = R.drawable.ic_selected_stamp,
+//        contentDescription = "Stamp Icon",
+//        label = "스탬프",
+//        route = MainTabRoute.Stamp,
+//    ),
+    BOOTH(
+        iconResId = R.drawable.ic_booth,
+        selectedIconResId = R.drawable.ic_selected_booth,
+        contentDescription = "Booth Icon",
+        label = "부스",
+        route = MainTabRoute.Booth,
     ),
     MENU(
         iconResId = R.drawable.ic_menu,
