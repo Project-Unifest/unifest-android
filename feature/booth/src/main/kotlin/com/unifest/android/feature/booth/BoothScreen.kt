@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 internal fun BoothRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToBoothDetail: (Long) -> Unit,
 ) {
 
 }
