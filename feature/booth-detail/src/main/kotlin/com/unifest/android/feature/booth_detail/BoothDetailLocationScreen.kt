@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth
+package com.unifest.android.feature.booth_detail
 
 import android.Manifest
 import android.content.Intent
@@ -44,18 +44,18 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
-import com.unifest.android.feature.booth.component.BoothLocationAppBar
-import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
-import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
-import com.unifest.android.feature.booth.viewmodel.BoothUiState
-import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.component.BoothDetailLocationAppBar
+import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
+import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 @Composable
-internal fun BoothLocationRoute(
+internal fun BoothDetailLocationRoute(
     popBackStack: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
@@ -115,8 +115,8 @@ internal fun BoothLocationRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is BoothUiEvent.NavigateBack -> popBackStack()
-            is BoothUiEvent.NavigateToAppSetting -> {
+            is BoothDetailUiEvent.NavigateBack -> popBackStack()
+            is BoothDetailUiEvent.NavigateToAppSetting -> {
                 if (activity != null) {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", activity.packageName, null)
@@ -125,7 +125,7 @@ internal fun BoothLocationRoute(
                 }
             }
 
-            is BoothUiEvent.RequestPermission -> {
+            is BoothDetailUiEvent.RequestPermission -> {
                 locationPermissionLauncher.launch(permissionsToRequest)
             }
 
@@ -164,7 +164,7 @@ internal fun BoothLocationRoute(
         )
     }
 
-    BoothLocationScreen(
+    BoothDetailLocationScreen(
         uiState = uiState,
         onAction = viewModel::onAction,
     )
@@ -172,8 +172,8 @@ internal fun BoothLocationRoute(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-internal fun BoothLocationScreen(
-    uiState: BoothUiState,
+internal fun BoothDetailLocationScreen(
+    uiState: BoothDetailUiState,
     onAction: (BoothUiAction) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -215,7 +215,7 @@ internal fun BoothLocationScreen(
             )
         }
 
-        BoothLocationAppBar(
+        BoothDetailLocationAppBar(
             onBackClick = { onAction(BoothUiAction.OnBackClick) },
             boothName = uiState.boothDetailInfo.name,
             boothLocation = uiState.boothDetailInfo.location,
@@ -226,13 +226,13 @@ internal fun BoothLocationScreen(
 
 @DevicePreview
 @Composable
-private fun BoothLocationScreenPreview(
+private fun BoothDetailLocationScreenPreview(
     @PreviewParameter(BoothDetailPreviewParameterProvider::class)
-    boothUiState: BoothUiState,
+    boothDetailUiState: BoothDetailUiState,
 ) {
     UnifestTheme {
-        BoothLocationScreen(
-            uiState = boothUiState,
+        BoothDetailLocationScreen(
+            uiState = boothDetailUiState,
             onAction = {},
         )
     }

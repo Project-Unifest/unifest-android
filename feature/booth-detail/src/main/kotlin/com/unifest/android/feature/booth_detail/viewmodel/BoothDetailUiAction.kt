@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.viewmodel
+package com.unifest.android.feature.booth_detail.viewmodel
 
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.model.MenuModel

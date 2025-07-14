@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth
+package com.unifest.android.feature.booth_detail
 
 import android.Manifest
 import android.content.Intent
@@ -67,15 +67,15 @@ import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.core.ui.component.WaitingConfirmDialog
 import com.unifest.android.core.ui.component.WaitingDialog
 import com.unifest.android.core.ui.component.WaitingPinDialog
-import com.unifest.android.feature.booth.component.BoothBottomBar
-import com.unifest.android.feature.booth.component.BoothDescription
-import com.unifest.android.feature.booth.component.MenuItem
-import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
-import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
-import com.unifest.android.feature.booth.viewmodel.BoothUiState
-import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import com.unifest.android.feature.booth.viewmodel.ErrorType
+import com.unifest.android.feature.booth_detail.component.BoothDetailBottomBar
+import com.unifest.android.feature.booth_detail.component.BoothDetailDescription
+import com.unifest.android.feature.booth_detail.component.MenuItem
+import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
+import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.viewmodel.ErrorType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -89,7 +89,7 @@ private const val SnackBarDuration = 1000L
 internal fun BoothDetailRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
-    navigateToBoothLocation: () -> Unit,
+    navigateToBoothDetailLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
     viewModel: BoothViewModel = hiltViewModel(),
 ) {
@@ -155,12 +155,12 @@ internal fun BoothDetailRoute(
 
     ObserveAsEvents(flow = viewModel.uiEvent) { event ->
         when (event) {
-            is BoothUiEvent.NavigateBack -> popBackStack()
-            is BoothUiEvent.NavigateToBoothLocation -> navigateToBoothLocation()
-            is BoothUiEvent.NavigateToWaiting -> navigateToWaiting()
-            is BoothUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
-            is BoothUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
-            is BoothUiEvent.NavigateToAppSetting -> {
+            is BoothDetailUiEvent.NavigateBack -> popBackStack()
+            is BoothDetailUiEvent.NavigateToBoothDetailLocation -> navigateToBoothDetailLocation()
+            is BoothDetailUiEvent.NavigateToWaiting -> navigateToWaiting()
+            is BoothDetailUiEvent.NavigateToPrivatePolicy -> uriHandler.openUri(BuildConfig.UNIFEST_PRIVATE_POLICY_URL)
+            is BoothDetailUiEvent.NavigateToThirdPartyPolicy -> uriHandler.openUri(BuildConfig.UNIFEST_THIRD_PARTY_POLICY_URL)
+            is BoothDetailUiEvent.NavigateToAppSetting -> {
                 if (activity != null) {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", activity.packageName, null)
@@ -169,7 +169,7 @@ internal fun BoothDetailRoute(
                 }
             }
 
-            is BoothUiEvent.ShowSnackBar -> {
+            is BoothDetailUiEvent.ShowSnackBar -> {
                 scope.launch {
                     val job = launch {
                         snackBarState.showSnackbar(
@@ -182,8 +182,8 @@ internal fun BoothDetailRoute(
                 }
             }
 
-            is BoothUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
-            is BoothUiEvent.RequestPermission -> {
+            is BoothDetailUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
+            is BoothDetailUiEvent.RequestPermission -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
@@ -233,7 +233,7 @@ internal fun BoothDetailRoute(
 @Composable
 internal fun BoothDetailScreen(
     padding: PaddingValues,
-    uiState: BoothUiState,
+    uiState: BoothDetailUiState,
     snackBarState: SnackbarHostState,
     onAction: (BoothUiAction) -> Unit,
 ) {
@@ -256,7 +256,7 @@ internal fun BoothDetailScreen(
                 .align(Alignment.TopCenter)
                 .padding(padding),
         )
-        BoothBottomBar(
+        BoothDetailBottomBar(
             isBookmarked = uiState.isLiked,
             bookmarkCount = uiState.boothDetailInfo.likes,
             isWaitingEnable = uiState.boothDetailInfo.waitingEnabled,
@@ -345,7 +345,7 @@ internal fun BoothDetailScreen(
 
 @Composable
 internal fun BoothDetailContent(
-    uiState: BoothUiState,
+    uiState: BoothDetailUiState,
     onAction: (BoothUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -364,7 +364,7 @@ internal fun BoothDetailContent(
         }
         item { Spacer(modifier = Modifier.height(30.dp)) }
         item {
-            BoothDescription(
+            BoothDetailDescription(
                 name = uiState.boothDetailInfo.name,
                 warning = uiState.boothDetailInfo.warning,
                 description = uiState.boothDetailInfo.description,
@@ -423,12 +423,12 @@ internal fun BoothDetailContent(
 @Composable
 private fun BoothScreenPreview(
     @PreviewParameter(BoothDetailPreviewParameterProvider::class)
-    boothUiState: BoothUiState,
+    boothDetailUiState: BoothDetailUiState,
 ) {
     UnifestTheme {
         BoothDetailScreen(
             padding = PaddingValues(),
-            uiState = boothUiState,
+            uiState = boothDetailUiState,
             snackBarState = SnackbarHostState(),
             onAction = {},
         )

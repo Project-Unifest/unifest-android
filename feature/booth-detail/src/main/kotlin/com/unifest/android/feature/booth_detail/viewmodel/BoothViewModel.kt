@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.viewmodel
+package com.unifest.android.feature.booth_detail.viewmodel
 
 import android.Manifest
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +15,7 @@ import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.WaitingStatus
 import com.unifest.android.core.navigation.Route
-import com.unifest.android.feature.booth.R
+import com.unifest.android.feature.booth_detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -37,13 +37,13 @@ class BoothViewModel @Inject constructor(
     private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
-    private val boothId = savedStateHandle.toRoute<Route.Booth.BoothDetail>().boothId
+    private val boothId = savedStateHandle.toRoute<Route.BoothDetail.BoothDetail>().boothId
 
-    private val _uiState = MutableStateFlow(BoothUiState())
-    val uiState: StateFlow<BoothUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(BoothDetailUiState())
+    val uiState: StateFlow<BoothDetailUiState> = _uiState.asStateFlow()
 
-    private val _uiEvent = Channel<BoothUiEvent>()
-    val uiEvent: Flow<BoothUiEvent> = _uiEvent.receiveAsFlow()
+    private val _uiEvent = Channel<BoothDetailUiEvent>()
+    val uiEvent: Flow<BoothDetailUiEvent> = _uiEvent.receiveAsFlow()
 
     init {
         getBoothDetail()
@@ -53,7 +53,7 @@ class BoothViewModel @Inject constructor(
     fun onAction(action: BoothUiAction) {
         when (action) {
             is BoothUiAction.OnBackClick -> navigateBack()
-            is BoothUiAction.OnCheckLocationClick -> navigateToBoothLocation()
+            is BoothUiAction.OnCheckLocationClick -> navigateToBoothDetailLocation()
             is BoothUiAction.OnToggleBookmark -> toggleBookmark()
             is BoothUiAction.OnRetryClick -> refresh(action.error)
             is BoothUiAction.OnMenuImageClick -> showMenuImageDialog(action.menu)
@@ -74,7 +74,7 @@ class BoothViewModel @Inject constructor(
             is BoothUiAction.OnScheduleToggleClick -> toggleScheduleExpanded()
             is BoothUiAction.OnMoveClick -> navigateToWaiting()
             is BoothUiAction.OnNoShowDialogCancelClick -> setNoShowDialogVisible(false)
-            is BoothUiAction.OnRequestLocationPermission -> navigateToBoothLocation()
+            is BoothUiAction.OnRequestLocationPermission -> navigateToBoothDetailLocation()
             is BoothUiAction.OnRequestNotificationPermission -> setNotificationPermissionDialogVisible(true)
             is BoothUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
         }
@@ -82,7 +82,7 @@ class BoothViewModel @Inject constructor(
 
     fun requestLocationPermission() {
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.RequestPermission)
+            _uiEvent.send(BoothDetailUiEvent.RequestPermission)
         }
     }
 
@@ -98,11 +98,11 @@ class BoothViewModel @Inject constructor(
                     when {
                         matchingBooth?.waitingStatus == WaitingStatus.NOSHOW -> setNoShowDialogVisible(true)
                         matchingBooth != null -> _uiEvent.send(
-                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)),
+                            BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_already_exists)),
                         )
 
                         _uiState.value.myWaitingList.size >= 3 -> _uiEvent.send(
-                            BoothUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)),
+                            BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(R.string.booth_waiting_full)),
                         )
 
                         else -> setPinCheckDialogVisible(true)
@@ -177,20 +177,20 @@ class BoothViewModel @Inject constructor(
 
     private fun navigateBack() {
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.NavigateBack)
+            _uiEvent.send(BoothDetailUiEvent.NavigateBack)
         }
     }
 
-    private fun navigateToBoothLocation() {
+    private fun navigateToBoothDetailLocation() {
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.NavigateToBoothLocation)
+            _uiEvent.send(BoothDetailUiEvent.NavigateToBoothDetailLocation)
         }
     }
 
     private fun navigateToWaiting() {
         setNoShowDialogVisible(false)
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.NavigateToWaiting)
+            _uiEvent.send(BoothDetailUiEvent.NavigateToWaiting)
         }
     }
 
@@ -216,17 +216,17 @@ class BoothViewModel @Inject constructor(
                     }
                     if (currentBookmarkFlag) {
                         likedBoothRepository.deleteLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
+                        _uiEvent.send(BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_message)))
                     } else {
                         likedBoothRepository.insertLikedBooth(_uiState.value.boothDetailInfo)
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_message)))
+                        _uiEvent.send(BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_message)))
                     }
                 }
                 .onFailure {
                     if (currentBookmarkFlag) {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
+                        _uiEvent.send(BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_removed_failed_message)))
                     } else {
-                        _uiEvent.send(BoothUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
+                        _uiEvent.send(BoothDetailUiEvent.ShowSnackBar(UiText.StringResource(designR.string.liked_booth_saved_failed_message)))
                     }
                 }
         }
@@ -268,7 +268,7 @@ class BoothViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch {
-                _uiEvent.send(BoothUiEvent.ShowToast(UiText.StringResource(R.string.booth_empty_waiting)))
+                _uiEvent.send(BoothDetailUiEvent.ShowToast(UiText.StringResource(R.string.booth_empty_waiting)))
             }
         }
     }
@@ -372,13 +372,13 @@ class BoothViewModel @Inject constructor(
 
     private fun navigateToPrivatePolicy() {
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.NavigateToPrivatePolicy)
+            _uiEvent.send(BoothDetailUiEvent.NavigateToPrivatePolicy)
         }
     }
 
     private fun navigateToThirdPartyPolicy() {
         viewModelScope.launch {
-            _uiEvent.send(BoothUiEvent.NavigateToThirdPartyPolicy)
+            _uiEvent.send(BoothDetailUiEvent.NavigateToThirdPartyPolicy)
         }
     }
 
@@ -435,14 +435,14 @@ class BoothViewModel @Inject constructor(
 
             PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING -> {
                 viewModelScope.launch {
-                    _uiEvent.send(BoothUiEvent.NavigateToAppSetting)
+                    _uiEvent.send(BoothDetailUiEvent.NavigateToAppSetting)
                 }
             }
 
             PermissionDialogButtonType.CONFIRM -> {
                 dismissDialog(permission)
                 viewModelScope.launch {
-                    _uiEvent.send(BoothUiEvent.RequestPermission)
+                    _uiEvent.send(BoothDetailUiEvent.RequestPermission)
                 }
             }
         }

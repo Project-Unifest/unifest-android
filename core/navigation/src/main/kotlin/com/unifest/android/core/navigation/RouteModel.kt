@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface Route {
     @Serializable
-    data object Booth {
+    data object BoothDetail {
         @Serializable
         data class BoothDetail(val boothId: Long) : Route
 

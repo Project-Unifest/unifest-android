@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.unifest.android.feature.booth"
+    namespace = "com.unifest.android.feature.booth_detail"
 
     buildFeatures {
         buildConfig = true

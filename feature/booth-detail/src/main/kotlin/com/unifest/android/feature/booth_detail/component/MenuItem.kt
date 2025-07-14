@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,8 +31,8 @@ import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.MenuStatus
-import com.unifest.android.feature.booth.R
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.R
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
 
 @Composable
 internal fun MenuItem(

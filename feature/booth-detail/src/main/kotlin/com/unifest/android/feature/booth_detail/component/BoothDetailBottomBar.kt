@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
@@ -33,12 +33,12 @@ import com.unifest.android.core.designsystem.component.UnifestButton
 import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.booth.R
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.R
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-internal fun BoothBottomBar(
+internal fun BoothDetailBottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
     isWaitingEnable: Boolean,
@@ -107,9 +107,9 @@ internal fun BoothBottomBar(
 
 @ComponentPreview
 @Composable
-private fun BoothBottomBarPreview() {
+private fun BoothDetailBottomBarPreview() {
     UnifestTheme {
-        BoothBottomBar(
+        BoothDetailBottomBar(
             bookmarkCount = 12,
             isBookmarked = true,
             isWaitingEnable = true,

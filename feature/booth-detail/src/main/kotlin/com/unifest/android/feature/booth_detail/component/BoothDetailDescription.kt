@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -42,8 +42,8 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.ScheduleModel
-import com.unifest.android.feature.booth.R
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.R
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
@@ -53,7 +53,7 @@ import java.time.ZonedDateTime
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-internal fun BoothDescription(
+internal fun BoothDetailDescription(
     name: String,
     warning: String,
     description: String,
@@ -224,9 +224,9 @@ internal fun BoothDescription(
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionNoSchedulePreview() {
+private fun BoothDetailDescriptionNoSchedulePreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -240,9 +240,9 @@ private fun BoothDescriptionNoSchedulePreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionClosedPreview() {
+private fun BoothDetailDescriptionClosedPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -269,9 +269,9 @@ private fun BoothDescriptionClosedPreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionOpenPreview() {
+private fun BoothDetailDescriptionOpenPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -298,9 +298,9 @@ private fun BoothDescriptionOpenPreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionOpenDropdownExpandedPreview() {
+private fun BoothDetailDescriptionOpenDropdownExpandedPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",

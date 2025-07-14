@@ -21,7 +21,7 @@ import androidx.navigation.compose.NavHost
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
-import com.unifest.android.feature.booth.navigation.boothNavGraph
+import com.unifest.android.feature.booth_detail.navigation.boothDetailNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.main.component.MainBottomBar
@@ -97,11 +97,11 @@ internal fun MainScreen(
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
             )
-            boothNavGraph(
+            boothDetailNavGraph(
                 padding = innerPadding,
                 navController = navigator.navController,
                 popBackStack = navigator::popBackStackIfNotMap,
-                navigateToBoothLocation = navigator::navigateToBoothLocation,
+                navigateToBoothDetailLocation = navigator::navigateToBoothDetailLocation,
                 navigateToWaiting = navigator::navigateToWaiting,
             )
             waitingNavGraph(
