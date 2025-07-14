@@ -1,10 +1,10 @@
-package com.unifest.android.feature.booth.preview
+package com.unifest.android.feature.booth_detail.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.MenuStatus
-import com.unifest.android.feature.booth.viewmodel.BoothUiState
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiState
 
 internal class BoothDetailPreviewParameterProvider : PreviewParameterProvider<BoothUiState> {
     override val values = sequenceOf(

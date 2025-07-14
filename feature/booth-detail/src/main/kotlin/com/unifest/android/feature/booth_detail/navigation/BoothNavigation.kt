@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.navigation
+package com.unifest.android.feature.booth_detail.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.unifest.android.core.common.extension.sharedViewModel
 import com.unifest.android.core.navigation.Route
-import com.unifest.android.feature.booth.BoothDetailRoute
-import com.unifest.android.feature.booth.BoothLocationRoute
-import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.BoothDetailRoute
+import com.unifest.android.feature.booth_detail.BoothLocationRoute
+import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
 
 fun NavController.navigateToBoothDetail(
     boothId: Long,

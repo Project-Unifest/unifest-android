@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth
+package com.unifest.android.feature.booth_detail
 
 import android.Manifest
 import android.content.Intent
@@ -67,15 +67,15 @@ import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.core.ui.component.WaitingConfirmDialog
 import com.unifest.android.core.ui.component.WaitingDialog
 import com.unifest.android.core.ui.component.WaitingPinDialog
-import com.unifest.android.feature.booth.component.BoothBottomBar
-import com.unifest.android.feature.booth.component.BoothDescription
-import com.unifest.android.feature.booth.component.MenuItem
-import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
-import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
-import com.unifest.android.feature.booth.viewmodel.BoothUiState
-import com.unifest.android.feature.booth.viewmodel.BoothViewModel
-import com.unifest.android.feature.booth.viewmodel.ErrorType
+import com.unifest.android.feature.booth_detail.component.BoothBottomBar
+import com.unifest.android.feature.booth_detail.component.BoothDescription
+import com.unifest.android.feature.booth_detail.component.MenuItem
+import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiEvent
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiState
+import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.viewmodel.ErrorType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged

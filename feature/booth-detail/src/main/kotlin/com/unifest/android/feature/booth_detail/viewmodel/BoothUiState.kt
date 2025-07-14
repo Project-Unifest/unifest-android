@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.viewmodel
+package com.unifest.android.feature.booth_detail.viewmodel
 
 import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.common.HANKYONG_UNIVERSITY_POLYLINE

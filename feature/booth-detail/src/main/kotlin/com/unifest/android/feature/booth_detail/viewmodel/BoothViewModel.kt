@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.viewmodel
+package com.unifest.android.feature.booth_detail.viewmodel
 
 import android.Manifest
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +15,7 @@ import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.WaitingStatus
 import com.unifest.android.core.navigation.Route
-import com.unifest.android.feature.booth.R
+import com.unifest.android.feature.booth_detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel

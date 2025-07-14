@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth
+package com.unifest.android.feature.booth_detail
 
 import android.Manifest
 import android.content.Intent
@@ -44,12 +44,12 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
-import com.unifest.android.feature.booth.component.BoothLocationAppBar
-import com.unifest.android.feature.booth.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
-import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
-import com.unifest.android.feature.booth.viewmodel.BoothUiState
-import com.unifest.android.feature.booth.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.component.BoothLocationAppBar
+import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiEvent
+import com.unifest.android.feature.booth_detail.viewmodel.BoothUiState
+import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)

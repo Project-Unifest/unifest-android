@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

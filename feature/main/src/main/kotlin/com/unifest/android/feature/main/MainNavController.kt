@@ -12,8 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.core.navigation.Route
-import com.unifest.android.feature.booth.navigation.navigateToBoothDetail
-import com.unifest.android.feature.booth.navigation.navigateToBoothLocation
+import com.unifest.android.feature.booth_detail.navigation.navigateToBoothDetail
+import com.unifest.android.feature.booth_detail.navigation.navigateToBoothLocation
 import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.navigateToMap
