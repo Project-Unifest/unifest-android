@@ -39,6 +39,7 @@ internal enum class MainTab(
 //        label = "스탬프",
 //        route = MainTabRoute.Stamp,
 //    ),
+
     BOOTH(
         iconResId = R.drawable.ic_booth,
         selectedIconResId = R.drawable.ic_selected_booth,

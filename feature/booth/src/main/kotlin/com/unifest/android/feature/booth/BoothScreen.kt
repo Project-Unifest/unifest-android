@@ -9,5 +9,7 @@ internal fun BoothRoute(
     popBackStack: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
 ) {
-
+    padding
+    popBackStack
+    navigateToBoothDetail
 }
