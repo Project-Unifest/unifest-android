@@ -85,7 +85,7 @@ dependencies {
         projects.core.network,
         projects.core.ui,
 
-        projects.feature.booth,
+        projects.feature.boothDetail,
         projects.feature.festival,
         projects.feature.home,
         projects.feature.intro,

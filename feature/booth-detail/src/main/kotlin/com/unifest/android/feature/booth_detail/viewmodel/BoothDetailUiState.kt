@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.viewmodel
+package com.unifest.android.feature.booth_detail.viewmodel
 
 import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.common.HANKYONG_UNIVERSITY_POLYLINE
@@ -13,7 +13,7 @@ import com.unifest.android.core.model.MyWaitingModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-data class BoothUiState(
+data class BoothDetailUiState(
     val isLoading: Boolean = false,
     val boothDetailInfo: BoothDetailModel = BoothDetailModel(),
     val likedBooths: ImmutableList<LikedBoothModel> = persistentListOf(),

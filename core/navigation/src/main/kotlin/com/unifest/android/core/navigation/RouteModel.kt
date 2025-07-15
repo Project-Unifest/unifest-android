@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface Route {
     @Serializable
-    data object Booth {
+    data object BoothDetail {
         @Serializable
         data class BoothDetail(val boothId: Long) : Route
 
@@ -26,8 +26,11 @@ sealed interface MainTabRoute : Route {
     @Serializable
     data object Map : MainTabRoute
 
+//    @Serializable
+//    data object Stamp : MainTabRoute
+
     @Serializable
-    data object Stamp : MainTabRoute
+    data object Booth : MainTabRoute
 
     @Serializable
     data object Menu : MainTabRoute

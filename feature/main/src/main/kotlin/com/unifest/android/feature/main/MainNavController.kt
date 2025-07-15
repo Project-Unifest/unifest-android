@@ -12,13 +12,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.core.navigation.Route
-import com.unifest.android.feature.booth.navigation.navigateToBoothDetail
-import com.unifest.android.feature.booth.navigation.navigateToBoothLocation
+import com.unifest.android.feature.booth.navigation.navigateToBooth
+import com.unifest.android.feature.booth_detail.navigation.navigateToBoothDetail
+import com.unifest.android.feature.booth_detail.navigation.navigateToBoothDetailLocation
 import com.unifest.android.feature.home.navigation.navigateToHome
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
-import com.unifest.android.feature.stamp.navigation.navigateToStamp
 import com.unifest.android.feature.waiting.navigation.navigateToWaiting
 
 internal class MainNavController(
@@ -48,7 +48,8 @@ internal class MainNavController(
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.WAITING -> navController.navigateToWaiting(navOptions)
             MainTab.MAP -> navController.navigateToMap(navOptions)
-            MainTab.STAMP -> navController.navigateToStamp(navOptions)
+//            MainTab.STAMP -> navController.navigateToStamp(navOptions)
+            MainTab.BOOTH -> navController.navigateToBooth(navOptions)
             MainTab.MENU -> navController.navigateToMenu(navOptions)
         }
     }
@@ -57,8 +58,8 @@ internal class MainNavController(
         navController.navigateToBoothDetail(boothId)
     }
 
-    fun navigateToBoothLocation() {
-        navController.navigateToBoothLocation()
+    fun navigateToBoothDetailLocation() {
+        navController.navigateToBoothDetailLocation()
     }
 
     fun navigateToLikedBooth() {

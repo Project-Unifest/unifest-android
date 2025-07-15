@@ -22,12 +22,12 @@ import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.component.UnifestScaffold
 import com.unifest.android.core.designsystem.component.UnifestSnackBar
 import com.unifest.android.feature.booth.navigation.boothNavGraph
+import com.unifest.android.feature.booth_detail.navigation.boothDetailNavGraph
 import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.main.component.MainBottomBar
 import com.unifest.android.feature.map.navigation.mapNavGraph
 import com.unifest.android.feature.menu.navigation.menuNavGraph
-import com.unifest.android.feature.stamp.navigation.stampNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -97,11 +97,11 @@ internal fun MainScreen(
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
             )
-            boothNavGraph(
+            boothDetailNavGraph(
                 padding = innerPadding,
                 navController = navigator.navController,
                 popBackStack = navigator::popBackStackIfNotMap,
-                navigateToBoothLocation = navigator::navigateToBoothLocation,
+                navigateToBoothDetailLocation = navigator::navigateToBoothDetailLocation,
                 navigateToWaiting = navigator::navigateToWaiting,
             )
             waitingNavGraph(
@@ -116,16 +116,21 @@ internal fun MainScreen(
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
             )
-            stampNavGraph(
-                padding = innerPadding,
-                popBackStack = navigator::popBackStackIfNotMap,
-                navigateToBoothDetail = navigator::navigateToBoothDetail,
-            )
+//            stampNavGraph(
+//                padding = innerPadding,
+//                popBackStack = navigator::popBackStackIfNotMap,
+//                navigateToBoothDetail = navigator::navigateToBoothDetail,
+//            )
             likedBoothNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
                 onShowSnackBar = onShowSnackBar,
+            )
+            boothNavGraph(
+                padding = innerPadding,
+                popBackStack = navigator::popBackStackIfNotMap,
+                navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
         }
     }

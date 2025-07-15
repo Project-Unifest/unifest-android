@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +30,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun BoothLocationAppBar(
+internal fun BoothDetailLocationAppBar(
     onBackClick: () -> Unit,
     boothName: String,
     boothLocation: String,
@@ -83,9 +83,9 @@ internal fun BoothLocationAppBar(
 
 @ComponentPreview
 @Composable
-private fun BoothLocationAppBarPreview() {
+private fun BoothDetailLocationAppBarPreview() {
     UnifestTheme {
-        BoothLocationAppBar(
+        BoothDetailLocationAppBar(
             onBackClick = {},
             boothName = "컴공 주점",
             boothLocation = "청심대 앞",
