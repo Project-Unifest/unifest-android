@@ -1,16 +1,16 @@
 package com.unifest.android.feature.booth_detail.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.unifest.android.core.common.extension.sharedViewModel
 import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.booth_detail.BoothDetailRoute
 import com.unifest.android.feature.booth_detail.BoothDetailLocationRoute
-import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailViewModel
 
 fun NavController.navigateToBoothDetail(
     boothId: Long,
@@ -24,29 +24,27 @@ fun NavController.navigateToBoothDetailLocation() {
 
 fun NavGraphBuilder.boothDetailNavGraph(
     padding: PaddingValues,
-    navController: NavHostController,
     popBackStack: () -> Unit,
     navigateToBoothDetailLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
+    getBackStackViewModel: @Composable (NavBackStackEntry) -> BoothDetailViewModel,
 ) {
     navigation<Route.BoothDetail>(
         startDestination = Route.BoothDetail.BoothDetail::class,
     ) {
         composable<Route.BoothDetail.BoothDetail> { navBackStackEntry ->
-            val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailRoute(
                 padding = padding,
                 popBackStack = popBackStack,
                 navigateToBoothDetailLocation = navigateToBoothDetailLocation,
                 navigateToWaiting = navigateToWaiting,
-                viewModel = viewModel,
+                viewModel = getBackStackViewModel(navBackStackEntry),
             )
         }
         composable<Route.BoothDetail.BoothLocation> { navBackStackEntry ->
-            val viewModel = navBackStackEntry.sharedViewModel<BoothViewModel>(navController)
             BoothDetailLocationRoute(
                 popBackStack = popBackStack,
-                viewModel = viewModel,
+                viewModel = getBackStackViewModel(navBackStackEntry),
             )
         }
     }

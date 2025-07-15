@@ -49,7 +49,7 @@ import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParame
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
-import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -57,7 +57,7 @@ val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, M
 @Composable
 internal fun BoothDetailLocationRoute(
     popBackStack: () -> Unit,
-    viewModel: BoothViewModel = hiltViewModel(),
+    viewModel: BoothDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val activity = LocalActivity.current
