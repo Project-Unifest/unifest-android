@@ -27,7 +27,7 @@ fun NavGraphBuilder.boothDetailNavGraph(
     popBackStack: () -> Unit,
     navigateToBoothDetailLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
-    getBackStackViewModel: @Composable (NavBackStackEntry) -> BoothDetailViewModel
+    getBackStackViewModel: @Composable (NavBackStackEntry) -> BoothDetailViewModel,
 ) {
     navigation<Route.BoothDetail>(
         startDestination = Route.BoothDetail.BoothDetail::class,
