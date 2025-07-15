@@ -34,7 +34,7 @@ import com.unifest.android.core.designsystem.theme.BoothCaution
 import com.unifest.android.core.designsystem.theme.Title4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.booth_detail.R
-import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
@@ -42,7 +42,7 @@ internal fun BoothDetailBottomBar(
     bookmarkCount: Int,
     isBookmarked: Boolean,
     isWaitingEnable: Boolean,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val activity = LocalActivity.current
@@ -70,7 +70,7 @@ internal fun BoothDetailBottomBar(
                         imageVector = ImageVector.vectorResource(if (isBookmarked) designR.drawable.ic_bookmarked else designR.drawable.ic_bookmark),
                         contentDescription = if (isBookmarked) "Bookmarked" else "Bookmark",
                         tint = if (isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.clickableSingle { onAction(BoothUiAction.OnToggleBookmark) },
+                        modifier = Modifier.clickableSingle { onAction(BoothDetailUiAction.OnToggleBookmark) },
                     )
                     Text(
                         text = "$bookmarkCount",
@@ -82,9 +82,9 @@ internal fun BoothDetailBottomBar(
                 UnifestButton(
                     onClick = {
                         if (activity?.checkNotificationPermission() == true) {
-                            onAction(BoothUiAction.OnWaitingButtonClick)
+                            onAction(BoothDetailUiAction.OnWaitingButtonClick)
                         } else {
-                            onAction(BoothUiAction.OnRequestNotificationPermission)
+                            onAction(BoothDetailUiAction.OnRequestNotificationPermission)
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),

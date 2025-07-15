@@ -46,7 +46,7 @@ import com.unifest.android.core.ui.component.LocationPermissionTextProvider
 import com.unifest.android.core.ui.component.PermissionDialog
 import com.unifest.android.feature.booth_detail.component.BoothDetailLocationAppBar
 import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
 import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
@@ -139,7 +139,7 @@ internal fun BoothDetailLocationRoute(
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION),
             onDismiss = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.DISMISS,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
                     ),
@@ -147,7 +147,7 @@ internal fun BoothDetailLocationRoute(
             },
             navigateToAppSetting = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
                     ),
@@ -155,7 +155,7 @@ internal fun BoothDetailLocationRoute(
             },
             onConfirm = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.CONFIRM,
                         permission = Manifest.permission.ACCESS_FINE_LOCATION,
                     ),
@@ -174,7 +174,7 @@ internal fun BoothDetailLocationRoute(
 @Composable
 internal fun BoothDetailLocationScreen(
     uiState: BoothDetailUiState,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
@@ -216,7 +216,7 @@ internal fun BoothDetailLocationScreen(
         }
 
         BoothDetailLocationAppBar(
-            onBackClick = { onAction(BoothUiAction.OnBackClick) },
+            onBackClick = { onAction(BoothDetailUiAction.OnBackClick) },
             boothName = uiState.boothDetailInfo.name,
             boothLocation = uiState.boothDetailInfo.location,
             modifier = Modifier.align(Alignment.TopCenter),

@@ -43,7 +43,7 @@ import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.feature.booth_detail.R
-import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
@@ -60,7 +60,7 @@ internal fun BoothDetailDescription(
     location: String,
     isScheduleExpanded: Boolean,
     scheduleList: ImmutableList<ScheduleModel>,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
@@ -148,7 +148,7 @@ internal fun BoothDetailDescription(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
+                    .clickable { onAction(BoothDetailUiAction.OnScheduleToggleClick) },
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
@@ -210,7 +210,7 @@ internal fun BoothDetailDescription(
         Spacer(modifier = Modifier.height(16.dp))
         UnifestOutlinedButton(
             onClick = {
-                onAction(BoothUiAction.OnCheckLocationClick)
+                onAction(BoothDetailUiAction.OnCheckLocationClick)
             },
             modifier = Modifier.fillMaxWidth(),
         ) {

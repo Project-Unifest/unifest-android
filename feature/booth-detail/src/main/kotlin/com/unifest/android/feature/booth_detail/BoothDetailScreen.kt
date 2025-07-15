@@ -71,7 +71,7 @@ import com.unifest.android.feature.booth_detail.component.BoothDetailBottomBar
 import com.unifest.android.feature.booth_detail.component.BoothDetailDescription
 import com.unifest.android.feature.booth_detail.component.MenuItem
 import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParameterProvider
-import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
 import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
@@ -197,7 +197,7 @@ internal fun BoothDetailRoute(
             isPermanentlyDeclined = !activity.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS),
             onDismiss = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.DISMISS,
                         permission = Manifest.permission.POST_NOTIFICATIONS,
                     ),
@@ -205,7 +205,7 @@ internal fun BoothDetailRoute(
             },
             navigateToAppSetting = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.NAVIGATE_TO_APP_SETTING,
                         permission = Manifest.permission.POST_NOTIFICATIONS,
                     ),
@@ -213,7 +213,7 @@ internal fun BoothDetailRoute(
             },
             onConfirm = {
                 viewModel.onAction(
-                    BoothUiAction.OnPermissionDialogButtonClick(
+                    BoothDetailUiAction.OnPermissionDialogButtonClick(
                         buttonType = PermissionDialogButtonType.CONFIRM,
                         permission = Manifest.permission.POST_NOTIFICATIONS,
                     ),
@@ -235,7 +235,7 @@ internal fun BoothDetailScreen(
     padding: PaddingValues,
     uiState: BoothDetailUiState,
     snackBarState: SnackbarHostState,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -251,7 +251,7 @@ internal fun BoothDetailScreen(
             navigationType = TopAppBarNavigationType.Back,
             navigationIconRes = designR.drawable.ic_arrow_back_gray,
             containerColor = Color.Transparent,
-            onNavigationClick = { onAction(BoothUiAction.OnBackClick) },
+            onNavigationClick = { onAction(BoothDetailUiAction.OnBackClick) },
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(padding),
@@ -275,7 +275,7 @@ internal fun BoothDetailScreen(
 
         if (uiState.isMenuImageDialogVisible && uiState.selectedMenu != null) {
             MenuImageDialog(
-                onDismissRequest = { onAction(BoothUiAction.OnMenuImageDialogDismiss) },
+                onDismissRequest = { onAction(BoothDetailUiAction.OnMenuImageDialogDismiss) },
                 menu = uiState.selectedMenu,
             )
         }
@@ -286,13 +286,13 @@ internal fun BoothDetailScreen(
 
         if (uiState.isServerErrorDialogVisible) {
             ServerErrorDialog(
-                onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.SERVER)) },
+                onRetryClick = { onAction(BoothDetailUiAction.OnRetryClick(ErrorType.SERVER)) },
             )
         }
 
         if (uiState.isNetworkErrorDialogVisible) {
             NetworkErrorDialog(
-                onRetryClick = { onAction(BoothUiAction.OnRetryClick(ErrorType.NETWORK)) },
+                onRetryClick = { onAction(BoothDetailUiAction.OnRetryClick(ErrorType.NETWORK)) },
             )
         }
 
@@ -300,9 +300,9 @@ internal fun BoothDetailScreen(
             WaitingPinDialog(
                 boothName = uiState.boothDetailInfo.name,
                 pinNumber = uiState.boothPinNumber,
-                onPinNumberUpdated = { onAction(BoothUiAction.OnPinNumberUpdated(it)) },
-                onDialogPinButtonClick = { onAction(BoothUiAction.OnDialogPinButtonClick) },
-                onDismissRequest = { onAction(BoothUiAction.OnPinDialogDismiss) },
+                onPinNumberUpdated = { onAction(BoothDetailUiAction.OnPinNumberUpdated(it)) },
+                onDialogPinButtonClick = { onAction(BoothDetailUiAction.OnDialogPinButtonClick) },
+                onDismissRequest = { onAction(BoothDetailUiAction.OnPinDialogDismiss) },
                 isWrongPinInserted = uiState.isWrongPinInserted,
             )
         }
@@ -314,13 +314,13 @@ internal fun BoothDetailScreen(
                 phoneNumber = uiState.waitingTel,
                 partySize = uiState.waitingPartySize,
                 isPrivacyClicked = uiState.privacyConsentChecked,
-                onDismissRequest = { onAction(BoothUiAction.OnWaitingDialogDismiss) },
-                onWaitingMinusClick = { onAction(BoothUiAction.OnWaitingMinusClick) },
-                onWaitingPlusClick = { onAction(BoothUiAction.OnWaitingPlusClick) },
-                onDialogWaitingButtonClick = { onAction(BoothUiAction.OnDialogWaitingButtonClick) },
-                onWaitingTelUpdated = { onAction(BoothUiAction.OnWaitingTelUpdated(it)) },
-                onPolicyCheckBoxClick = { onAction(BoothUiAction.OnPolicyCheckBoxClick) },
-                onPrivacyPolicyClick = { onAction(BoothUiAction.OnPrivatePolicyClick) },
+                onDismissRequest = { onAction(BoothDetailUiAction.OnWaitingDialogDismiss) },
+                onWaitingMinusClick = { onAction(BoothDetailUiAction.OnWaitingMinusClick) },
+                onWaitingPlusClick = { onAction(BoothDetailUiAction.OnWaitingPlusClick) },
+                onDialogWaitingButtonClick = { onAction(BoothDetailUiAction.OnDialogWaitingButtonClick) },
+                onWaitingTelUpdated = { onAction(BoothDetailUiAction.OnWaitingTelUpdated(it)) },
+                onPolicyCheckBoxClick = { onAction(BoothDetailUiAction.OnPolicyCheckBoxClick) },
+                onPrivacyPolicyClick = { onAction(BoothDetailUiAction.OnPrivatePolicyClick) },
             )
         }
 
@@ -330,14 +330,14 @@ internal fun BoothDetailScreen(
                 waitingId = uiState.waitingId,
                 waitingPartySize = uiState.waitingPartySize,
                 waitingTeamNumber = uiState.waitingTeamNumber,
-                onConfirmClick = { onAction(BoothUiAction.OnConfirmDialogDismiss) },
+                onConfirmClick = { onAction(BoothDetailUiAction.OnConfirmDialogDismiss) },
             )
         }
 
         if (uiState.isNoShowDialogVisible) {
             NoShowAlertDialog(
-                onCancelClick = { onAction(BoothUiAction.OnNoShowDialogCancelClick) },
-                onConfirmClick = { onAction(BoothUiAction.OnMoveClick) },
+                onCancelClick = { onAction(BoothDetailUiAction.OnNoShowDialogCancelClick) },
+                onConfirmClick = { onAction(BoothDetailUiAction.OnMoveClick) },
             )
         }
     }
@@ -346,7 +346,7 @@ internal fun BoothDetailScreen(
 @Composable
 internal fun BoothDetailContent(
     uiState: BoothDetailUiState,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(

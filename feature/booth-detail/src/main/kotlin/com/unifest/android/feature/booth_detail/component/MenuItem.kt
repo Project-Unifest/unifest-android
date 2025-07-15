@@ -32,12 +32,12 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.MenuStatus
 import com.unifest.android.feature.booth_detail.R
-import com.unifest.android.feature.booth_detail.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 
 @Composable
 internal fun MenuItem(
     menu: MenuModel,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -50,7 +50,7 @@ internal fun MenuItem(
                 .clickable(
                     onClick = {
                         if (menu.imgUrl.isNotEmpty()) {
-                            onAction(BoothUiAction.OnMenuImageClick(menu))
+                            onAction(BoothDetailUiAction.OnMenuImageClick(menu))
                         }
                     },
                 ),

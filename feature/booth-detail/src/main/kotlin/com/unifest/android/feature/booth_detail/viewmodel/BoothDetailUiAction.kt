@@ -3,35 +3,35 @@ package com.unifest.android.feature.booth_detail.viewmodel
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.model.MenuModel
 
-sealed interface BoothUiAction {
-    data object OnBackClick : BoothUiAction
-    data object OnCheckLocationClick : BoothUiAction
-    data object OnToggleBookmark : BoothUiAction
-    data class OnRetryClick(val error: ErrorType) : BoothUiAction
-    data class OnMenuImageClick(val menu: MenuModel) : BoothUiAction
-    data object OnMenuImageDialogDismiss : BoothUiAction
-    data object OnWaitingButtonClick : BoothUiAction
-    data object OnDialogPinButtonClick : BoothUiAction
-    data object OnDialogWaitingButtonClick : BoothUiAction
-    data class OnPinNumberUpdated(val pinNumber: String) : BoothUiAction
-    data class OnWaitingTelUpdated(val tel: String) : BoothUiAction
-    data object OnWaitingDialogDismiss : BoothUiAction
-    data object OnConfirmDialogDismiss : BoothUiAction
-    data object OnPinDialogDismiss : BoothUiAction
-    data object OnWaitingMinusClick : BoothUiAction
-    data object OnWaitingPlusClick : BoothUiAction
-    data object OnPolicyCheckBoxClick : BoothUiAction
-    data object OnPrivatePolicyClick : BoothUiAction
-    data object OnThirdPartyPolicyClick : BoothUiAction
-    data object OnScheduleToggleClick : BoothUiAction
-    data object OnMoveClick : BoothUiAction
-    data object OnNoShowDialogCancelClick : BoothUiAction
-    data object OnRequestLocationPermission : BoothUiAction
-    data object OnRequestNotificationPermission : BoothUiAction
+sealed interface BoothDetailUiAction {
+    data object OnBackClick : BoothDetailUiAction
+    data object OnCheckLocationClick : BoothDetailUiAction
+    data object OnToggleBookmark : BoothDetailUiAction
+    data class OnRetryClick(val error: ErrorType) : BoothDetailUiAction
+    data class OnMenuImageClick(val menu: MenuModel) : BoothDetailUiAction
+    data object OnMenuImageDialogDismiss : BoothDetailUiAction
+    data object OnWaitingButtonClick : BoothDetailUiAction
+    data object OnDialogPinButtonClick : BoothDetailUiAction
+    data object OnDialogWaitingButtonClick : BoothDetailUiAction
+    data class OnPinNumberUpdated(val pinNumber: String) : BoothDetailUiAction
+    data class OnWaitingTelUpdated(val tel: String) : BoothDetailUiAction
+    data object OnWaitingDialogDismiss : BoothDetailUiAction
+    data object OnConfirmDialogDismiss : BoothDetailUiAction
+    data object OnPinDialogDismiss : BoothDetailUiAction
+    data object OnWaitingMinusClick : BoothDetailUiAction
+    data object OnWaitingPlusClick : BoothDetailUiAction
+    data object OnPolicyCheckBoxClick : BoothDetailUiAction
+    data object OnPrivatePolicyClick : BoothDetailUiAction
+    data object OnThirdPartyPolicyClick : BoothDetailUiAction
+    data object OnScheduleToggleClick : BoothDetailUiAction
+    data object OnMoveClick : BoothDetailUiAction
+    data object OnNoShowDialogCancelClick : BoothDetailUiAction
+    data object OnRequestLocationPermission : BoothDetailUiAction
+    data object OnRequestNotificationPermission : BoothDetailUiAction
     data class OnPermissionDialogButtonClick(
         val buttonType: PermissionDialogButtonType,
         val permission: String,
-    ) : BoothUiAction
+    ) : BoothDetailUiAction
 }
 
 enum class ErrorType {
