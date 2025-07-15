@@ -74,7 +74,7 @@ import com.unifest.android.feature.booth_detail.preview.BoothDetailPreviewParame
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiEvent
 import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiState
-import com.unifest.android.feature.booth_detail.viewmodel.BoothViewModel
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailViewModel
 import com.unifest.android.feature.booth_detail.viewmodel.ErrorType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -91,7 +91,7 @@ internal fun BoothDetailRoute(
     popBackStack: () -> Unit,
     navigateToBoothDetailLocation: () -> Unit,
     navigateToWaiting: () -> Unit,
-    viewModel: BoothViewModel = hiltViewModel(),
+    viewModel: BoothDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val systemUiController = rememberExSystemUiController()

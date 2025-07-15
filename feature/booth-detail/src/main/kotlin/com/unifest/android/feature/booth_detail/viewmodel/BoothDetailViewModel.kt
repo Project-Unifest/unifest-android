@@ -31,7 +31,7 @@ import javax.inject.Inject
 import com.unifest.android.core.designsystem.R as designR
 
 @HiltViewModel
-class BoothViewModel @Inject constructor(
+class BoothDetailViewModel @Inject constructor(
     private val boothRepository: BoothRepository,
     private val likedBoothRepository: LikedBoothRepository,
     private val waitingRepository: WaitingRepository,
@@ -109,7 +109,7 @@ class BoothViewModel @Inject constructor(
                     }
                 }
                 .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
         }
     }
@@ -127,7 +127,7 @@ class BoothViewModel @Inject constructor(
                     getBoothLikes()
                 }
                 .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
             _uiState.update {
                 it.copy(isLoading = false)
@@ -148,7 +148,7 @@ class BoothViewModel @Inject constructor(
                     }
                 }
                 .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
         }
     }
@@ -163,7 +163,7 @@ class BoothViewModel @Inject constructor(
                     checkLikedBooth()
                 }
                 .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
         }
     }
@@ -263,7 +263,7 @@ class BoothViewModel @Inject constructor(
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
                 }.onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
             }
         } else {
@@ -325,7 +325,7 @@ class BoothViewModel @Inject constructor(
                     }
                 }
                 .onFailure { exception ->
-                    handleException(exception, this@BoothViewModel)
+                    handleException(exception, this@BoothDetailViewModel)
                 }
         }
     }
