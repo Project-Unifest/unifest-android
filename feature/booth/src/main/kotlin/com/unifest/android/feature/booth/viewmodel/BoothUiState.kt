@@ -7,6 +7,8 @@ import kotlinx.collections.immutable.persistentListOf
 data class BoothUiState(
     val campusName: String = "",
     val totalBoothCount: Int = 0,
-    val waitingAvailabilityChecked: Boolean = false,
+    val waitingAvailabilityChecked: Boolean = true,
     val stampEnabledBoothList: ImmutableList<BoothTabModel> = persistentListOf(),
+    val isServerErrorDialogVisible: Boolean = false,
+    val isNetworkErrorDialogVisible: Boolean = false,
 )
