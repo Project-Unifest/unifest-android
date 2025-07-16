@@ -20,7 +20,6 @@ fun NavGraphBuilder.boothNavGraph(
     composable<MainTabRoute.Booth> {
         BoothRoute(
             padding = padding,
-            popBackStack = popBackStack,
             navigateToBoothDetail = navigateToBoothDetail,
         )
     }
