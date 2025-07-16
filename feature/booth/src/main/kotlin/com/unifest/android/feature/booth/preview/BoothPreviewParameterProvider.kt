@@ -11,7 +11,7 @@ internal class BoothPreviewParameterProvider : PreviewParameterProvider<BoothUiS
             campusName = "가천대학교 글로컬 캠퍼스",
             totalBoothCount = 3,
             waitingAvailabilityChecked = false,
-            stampEnabledBoothList = persistentListOf(
+            boothList = persistentListOf(
                 BoothTabModel(
                     id = 1,
                     name = "컴공 주점 부스",
@@ -21,7 +21,7 @@ internal class BoothPreviewParameterProvider : PreviewParameterProvider<BoothUiS
                     thumbnail = "https://cdn.pixabay.com/photo/2020/06/07/13/33/fireworks-5270439_1280.jpg",
                 ),
                 BoothTabModel(
-                    id = 1,
+                    id = 2,
                     name = "컴공 주점 부스",
                     location = "학생회관 앞",
                     description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다",
@@ -29,7 +29,7 @@ internal class BoothPreviewParameterProvider : PreviewParameterProvider<BoothUiS
                     thumbnail = "https://cdn.pixabay.com/photo/2020/06/07/13/33/fireworks-5270439_1280.jpg",
                 ),
                 BoothTabModel(
-                    id = 1,
+                    id = 3,
                     name = "컴공 주점 부스",
                     location = "학생회관 앞",
                     description = "저희 주점은 일본 이자카야를 모티브로 만든 컴공인을 위한 주점입니다",

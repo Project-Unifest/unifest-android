@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content8
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
+import com.unifest.android.feature.booth.component.BoothItem
 import com.unifest.android.feature.booth.preview.BoothPreviewParameterProvider
 import com.unifest.android.feature.booth.viewmodel.BoothUiAction
 import com.unifest.android.feature.booth.viewmodel.BoothUiEvent
@@ -149,6 +151,19 @@ internal fun BoothContent(
                     )
                 }
             }
+        }
+        items(
+            items = uiState.boothList,
+            key = { booth -> booth.id },
+        ) { booth ->
+            BoothItem(
+                booth = booth,
+                modifier = Modifier
+                    .padding(vertical = 1.dp)
+                    .clickable {
+                        onAction(BoothUiAction.OnBoothItemClick(booth.id))
+                    },
+            )
         }
     }
 }
