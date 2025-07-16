@@ -23,6 +23,7 @@ class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
         when (action) {
             is BoothUiAction.OnBoothItemClick -> navigateToBoothDetail(action.boothId)
             is BoothUiAction.OnWaitingCheckBoxClick -> setWaitingAvailabilityChecked()
+            is BoothUiAction.OnRetryClick -> refresh(action.error)
         }
     }
 
@@ -39,6 +40,14 @@ class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
             it.copy(isNetworkErrorDialogVisible = flag)
+        }
+    }
+
+    private fun refresh(error: ErrorType) {
+        // TODO: API 호출 로직 추가
+        when (error) {
+            ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
+            ErrorType.SERVER -> setServerErrorDialogVisible(false)
         }
     }
 }
