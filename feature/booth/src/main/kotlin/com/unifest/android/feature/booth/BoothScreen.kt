@@ -62,7 +62,6 @@ internal fun BoothRoute(
         uiState = uiState,
         onAction = viewModel::onAction,
     )
-
 }
 
 @Composable
@@ -153,7 +152,7 @@ internal fun BoothContent(
             }
         }
         items(
-            items = uiState.boothList,
+            items = uiState.showingBoothList,
             key = { booth -> booth.id },
         ) { booth ->
             BoothItem(
@@ -182,4 +181,3 @@ private fun StampScreenPreview(
         )
     }
 }
-

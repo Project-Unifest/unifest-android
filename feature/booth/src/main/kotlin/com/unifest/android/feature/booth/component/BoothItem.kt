@@ -38,7 +38,7 @@ internal fun BoothItem(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row {
             NetworkImage(
