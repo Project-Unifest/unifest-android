@@ -135,7 +135,6 @@ internal fun MainScreen(
             )
             boothNavGraph(
                 padding = innerPadding,
-                popBackStack = navigator::popBackStackIfNotMap,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
             )
         }
