@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-
+    <string name="booth_list">부스 목록</string>
+    <string name="total_booth_count">총 %d개</string>
+    <string name="waiting_availability">웨이팅 가능 여부</string>
 </resources>

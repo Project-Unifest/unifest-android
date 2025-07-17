@@ -14,13 +14,11 @@ fun NavController.navigateToBooth(navOptions: NavOptions) {
 
 fun NavGraphBuilder.boothNavGraph(
     padding: PaddingValues,
-    popBackStack: () -> Unit,
     navigateToBoothDetail: (Long) -> Unit,
 ) {
     composable<MainTabRoute.Booth> {
         BoothRoute(
             padding = padding,
-            popBackStack = popBackStack,
             navigateToBoothDetail = navigateToBoothDetail,
         )
     }
