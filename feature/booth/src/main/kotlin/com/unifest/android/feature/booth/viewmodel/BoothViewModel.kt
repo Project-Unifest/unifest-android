@@ -125,7 +125,7 @@ class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
 
         _uiState.update {
             it.copy(
-                campusName = "가천대 글로컬 캠퍼스",
+                campusName = "가천대 글로벌 캠퍼스",
                 boothList = boothList,
                 totalBoothCount = boothList.size,
                 showingBoothList = boothList,
@@ -152,7 +152,7 @@ class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
     }
 
     private fun refresh(error: ErrorType) {
-        // TODO: API 호출 로직 추가
+        fetchBoothList()
         when (error) {
             ErrorType.NETWORK -> setNetworkErrorDialogVisible(false)
             ErrorType.SERVER -> setServerErrorDialogVisible(false)

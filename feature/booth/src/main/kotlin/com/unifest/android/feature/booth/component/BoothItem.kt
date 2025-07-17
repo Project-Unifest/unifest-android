@@ -43,7 +43,7 @@ internal fun BoothItem(
         Row {
             NetworkImage(
                 imgUrl = booth.thumbnail,
-                contentDescription = "Stamp Booth Thumbnail",
+                contentDescription = "${booth.name} ${booth.description}",
                 modifier = Modifier
                     .size(86.dp)
                     .clip(RoundedCornerShape(16.dp)),
