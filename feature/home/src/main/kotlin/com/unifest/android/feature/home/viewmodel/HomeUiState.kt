@@ -1,6 +1,6 @@
 package com.unifest.android.feature.home.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.TextFieldState
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.StarInfoModel
@@ -12,7 +12,7 @@ data class HomeUiState(
     val incomingFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val todayFestivals: ImmutableList<FestivalTodayModel> = persistentListOf(),
     val allFestivals: ImmutableList<FestivalModel> = persistentListOf(),
-    val festivalSearchText: TextFieldValue = TextFieldValue(),
+    val festivalSearchText: TextFieldState = TextFieldState(""),
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val deleteSelectedFestival: FestivalModel? = null,
     val selectedDate: LocalDate = LocalDate.now(),

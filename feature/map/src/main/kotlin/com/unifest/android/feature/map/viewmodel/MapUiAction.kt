@@ -1,14 +1,13 @@
 package com.unifest.android.feature.map.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.feature.map.model.BoothMapModel
 
 sealed interface MapUiAction {
     data object OnTooltipClick : MapUiAction
-    data class OnSearchTextUpdated(val searchText: TextFieldValue) : MapUiAction
+    // data class OnSearchTextUpdated(val searchText: TextFieldValue) : MapUiAction
     data object OnSearchTextCleared : MapUiAction
-    data class OnSearch(val searchText: TextFieldValue) : MapUiAction
+    data class OnSearch(val searchText: String) : MapUiAction
     data class OnBoothMarkerClick(val booths: List<BoothMapModel>) : MapUiAction
 
     data class OnSingleBoothMarkerClick(val booth: BoothMapModel) : MapUiAction

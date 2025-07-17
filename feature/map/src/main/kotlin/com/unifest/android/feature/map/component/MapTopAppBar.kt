@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.SearchTextField
@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun MapTopAppBar(
     title: String,
-    boothSearchText: TextFieldValue,
+    boothSearchTextState: TextFieldState,
     isOnboardingCompleted: Boolean,
     onMapUiAction: (MapUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
@@ -54,10 +54,10 @@ internal fun MapTopAppBar(
                 onTooltipClick = { onMapUiAction(MapUiAction.OnTooltipClick) },
             )
             SearchTextField(
-                searchText = boothSearchText,
-                updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
+                searchTextState = boothSearchTextState,
+                // updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
-                onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchText)) },
+                onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchTextState.text.toString())) },
                 clearSearchText = { onMapUiAction(MapUiAction.OnSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
@@ -83,7 +83,7 @@ private fun MapTopAppBarPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",
-            boothSearchText = TextFieldValue(),
+            boothSearchTextState = TextFieldState(""),
             isOnboardingCompleted = false,
             onMapUiAction = {},
             onFestivalUiAction = {},

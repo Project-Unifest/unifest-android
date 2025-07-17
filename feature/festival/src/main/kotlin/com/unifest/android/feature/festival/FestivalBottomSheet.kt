@@ -89,8 +89,8 @@ fun FestivalSearchBottomSheet(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
-                searchText = uiState.festivalSearchText,
-                updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
+                searchTextState = uiState.festivalSearchText,
+                // updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = designR.string.festival_search_text_field_hint,
                 onSearch = {},
                 clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },

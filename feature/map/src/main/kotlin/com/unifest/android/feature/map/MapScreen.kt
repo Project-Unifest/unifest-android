@@ -538,7 +538,7 @@ internal fun MapContent(
         }
         MapTopAppBar(
             title = uiState.festivalInfo.schoolName,
-            boothSearchText = uiState.boothSearchText,
+            boothSearchTextState = uiState.boothSearchTextState,
             onMapUiAction = onMapUiAction,
             onFestivalUiAction = onFestivalUiAction,
             isOnboardingCompleted = uiState.isMapOnboardingCompleted,

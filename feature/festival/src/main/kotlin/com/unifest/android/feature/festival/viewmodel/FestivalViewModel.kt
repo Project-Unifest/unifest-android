@@ -1,12 +1,11 @@
 package com.unifest.android.feature.festival.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.common.handleException
-import com.unifest.android.core.common.utils.matchesSearchText
 import com.unifest.android.core.data.api.repository.FestivalRepository
 import com.unifest.android.core.data.api.repository.LikedFestivalRepository
 import com.unifest.android.core.data.api.repository.OnboardingRepository
@@ -52,7 +51,7 @@ class FestivalViewModel @Inject constructor(
         when (action) {
             is FestivalUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.searchText)
+            // is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -99,21 +98,22 @@ class FestivalViewModel @Inject constructor(
         }
     }
 
-    private fun updateFestivalSearchText(searchText: TextFieldValue) {
-        _uiState.update {
-            it.copy(
-                festivalSearchText = searchText,
-                festivalSearchResults = it.festivals.filter { festival ->
-                    matchesSearchText(festival, searchText)
-                }.toImmutableList(),
-            )
-        }
-    }
+//    private fun updateFestivalSearchText(searchText: String) {
+//        _uiState.update {
+//            it.copy(
+//                festivalSearchText = searchText,
+//                festivalSearchResults = it.festivals.filter { festival ->
+//                    matchesSearchText(festival, searchText)
+//                }.toImmutableList(),
+//            )
+//        }
+//    }
 
     private fun clearFestivalSearchText() {
         _uiState.update {
             it.copy(
-                festivalSearchText = TextFieldValue(),
+                // TODO .clearText() 로 처리해야 함
+                festivalSearchText = TextFieldState(),
                 festivalSearchResults = persistentListOf(),
             )
         }
