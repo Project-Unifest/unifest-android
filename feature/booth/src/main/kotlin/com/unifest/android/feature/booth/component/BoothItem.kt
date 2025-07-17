@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth.component
 
+import android.R.attr.maxLines
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,7 +43,7 @@ internal fun BoothItem(
     ) {
         Row {
             NetworkImage(
-                imgUrl = booth.thumbnail,
+                imgUrl = booth.thumbnail ?: "",
                 contentDescription = "${booth.name} ${booth.description}",
                 modifier = Modifier
                     .size(86.dp)
@@ -64,7 +65,7 @@ internal fun BoothItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.description,
+                    text = booth.description ?: "",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
