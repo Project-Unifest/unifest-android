@@ -280,7 +280,6 @@ class BoothDetailViewModel @Inject constructor(
         return partySize >= 1
     }
 
-
     private fun checkPinValidation() {
         if (_uiState.value.isWrongPinInserted) {
             return
