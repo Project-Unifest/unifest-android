@@ -12,7 +12,7 @@ data class HomeUiState(
     val incomingFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val todayFestivals: ImmutableList<FestivalTodayModel> = persistentListOf(),
     val allFestivals: ImmutableList<FestivalModel> = persistentListOf(),
-    val festivalSearchText: TextFieldState = TextFieldState(""),
+    val festivalSearchText: TextFieldState = TextFieldState(),
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val deleteSelectedFestival: FestivalModel? = null,
     val selectedDate: LocalDate = LocalDate.now(),

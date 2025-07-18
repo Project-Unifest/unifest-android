@@ -5,7 +5,6 @@ import com.unifest.android.feature.map.model.BoothMapModel
 
 sealed interface MapUiAction {
     data object OnTooltipClick : MapUiAction
-    // data class OnSearchTextUpdated(val searchText: TextFieldValue) : MapUiAction
     data object OnSearchTextCleared : MapUiAction
     data class OnSearch(val searchText: String) : MapUiAction
     data class OnBoothMarkerClick(val booths: List<BoothMapModel>) : MapUiAction

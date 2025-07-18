@@ -299,8 +299,7 @@ internal fun BoothDetailScreen(
         if (uiState.isPinCheckDialogVisible) {
             WaitingPinDialog(
                 boothName = uiState.boothDetailInfo.name,
-                pinNumber = uiState.boothPinNumber,
-                onPinNumberUpdated = { onAction(BoothDetailUiAction.OnPinNumberUpdated(it)) },
+                pinNumberState = uiState.boothPinNumber,
                 onDialogPinButtonClick = { onAction(BoothDetailUiAction.OnDialogPinButtonClick) },
                 onDismissRequest = { onAction(BoothDetailUiAction.OnPinDialogDismiss) },
                 isWrongPinInserted = uiState.isWrongPinInserted,
@@ -311,14 +310,13 @@ internal fun BoothDetailScreen(
             WaitingDialog(
                 boothName = uiState.boothDetailInfo.name,
                 waitingCount = uiState.waitingTeamNumber,
-                phoneNumber = uiState.waitingTel,
+                phoneNumberState = uiState.waitingTel,
                 partySize = uiState.waitingPartySize,
                 isPrivacyClicked = uiState.privacyConsentChecked,
                 onDismissRequest = { onAction(BoothDetailUiAction.OnWaitingDialogDismiss) },
                 onWaitingMinusClick = { onAction(BoothDetailUiAction.OnWaitingMinusClick) },
                 onWaitingPlusClick = { onAction(BoothDetailUiAction.OnWaitingPlusClick) },
                 onDialogWaitingButtonClick = { onAction(BoothDetailUiAction.OnDialogWaitingButtonClick) },
-                onWaitingTelUpdated = { onAction(BoothDetailUiAction.OnWaitingTelUpdated(it)) },
                 onPolicyCheckBoxClick = { onAction(BoothDetailUiAction.OnPolicyCheckBoxClick) },
                 onPrivacyPolicyClick = { onAction(BoothDetailUiAction.OnPrivatePolicyClick) },
             )

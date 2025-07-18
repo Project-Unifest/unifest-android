@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -55,7 +56,6 @@ internal fun MapTopAppBar(
             )
             SearchTextField(
                 searchTextState = boothSearchTextState,
-                // updateSearchText = { text -> onMapUiAction(MapUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = R.string.map_booth_search_text_field_hint,
                 onSearch = { onMapUiAction(MapUiAction.OnSearch(boothSearchTextState.text.toString())) },
                 clearSearchText = { onMapUiAction(MapUiAction.OnSearchTextCleared) },
@@ -83,7 +83,7 @@ private fun MapTopAppBarPreview() {
     UnifestTheme {
         MapTopAppBar(
             title = "건국대학교",
-            boothSearchTextState = TextFieldState(""),
+            boothSearchTextState = TextFieldState(),
             isOnboardingCompleted = false,
             onMapUiAction = {},
             onFestivalUiAction = {},

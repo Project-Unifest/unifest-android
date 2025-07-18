@@ -143,7 +143,6 @@ internal fun IntroContent(
             }
             SearchTextField(
                 searchTextState = uiState.searchTextState,
-                // updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
                 searchTextHintRes = designR.string.search_text_hint,
                 onSearch = {
                     onAction(IntroUiAction.OnSearch(it))

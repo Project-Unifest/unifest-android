@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -64,18 +65,15 @@ fun SearchTextField(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // TODO 어떻게 20자 제한을 설정할 수 있을까 => InputTransformation!
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
-//            value = searchText,
-//            onValueChange = {
-//                if (it.text.length <= 20) {
-//                    updateSearchText(it)
-//                }
-//            },
             state = searchTextState,
             modifier = Modifier.fillMaxWidth(),
-            inputTransformation = {},
+            inputTransformation = InputTransformation {
+                if (length > 20) {
+                    revertAllChanges()
+                }
+            },
             textStyle = TextStyle(color = textColor),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -157,14 +155,13 @@ fun FestivalSearchTextField(
 
     CompositionLocalProvider(LocalTextSelectionColors provides unifestTextSelectionColors) {
         BasicTextField(
-//            value = searchText,
-//            onValueChange = {
-//                if (it.text.length <= 20) {
-//                    updateSearchText(it)
-//                }
-//            },
             state = searchTextState,
             modifier = Modifier.fillMaxWidth(),
+            inputTransformation = InputTransformation {
+                if (length > 20) {
+                    revertAllChanges()
+                }
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             lineLimits = TextFieldLineLimits.SingleLine,
             textStyle = TextStyle(color = textColor),
@@ -232,7 +229,7 @@ fun FestivalSearchTextField(
 private fun SearchTextFieldEmptyPreview() {
     UnifestTheme {
         SearchTextField(
-            searchTextState = TextFieldState(""),
+            searchTextState = TextFieldState(),
             searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},
@@ -266,7 +263,7 @@ private fun SearchTextFieldFillPreview() {
 private fun FestivalSearchTextFieldEmptyPreview() {
     UnifestTheme {
         FestivalSearchTextField(
-            searchTextState = TextFieldState(""),
+            searchTextState = TextFieldState(),
             searchTextHintRes = R.string.search_text_hint,
             onSearch = {},
             clearSearchText = {},

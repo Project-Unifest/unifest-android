@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 data class IntroUiState(
     val isLoading: Boolean = false,
     val isSearchLoading: Boolean = false,
-    val searchTextState: TextFieldState = TextFieldState(""),
+    val searchTextState: TextFieldState = TextFieldState(),
     val festivals: ImmutableList<FestivalModel> = persistentListOf(),
     val selectedFestivals: PersistentList<FestivalModel> = persistentListOf(),
     val selectedRegion: String = "전체",

@@ -1,7 +1,7 @@
 package com.unifest.android.feature.map.viewmodel
 
 import android.Manifest
-import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
@@ -55,7 +55,6 @@ class MapViewModel @Inject constructor(
 
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
-            // is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
@@ -254,23 +253,8 @@ class MapViewModel @Inject constructor(
         }
     }
 
-//    private fun updateBoothSearchText(searchText: String) {
-//        _uiState.update {
-//            it.copy(
-//                boothSearchTextState = searchText,
-//                festivalSearchResults = it.festivals.filter { festival ->
-//                    festival.schoolName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true) ||
-//                        festival.festivalName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true)
-//                }.toImmutableList(),
-//            )
-//        }
-//    }
-
     private fun clearBoothSearchText() {
-        // TODO .clearText() 로 처리해줘야 함
-        _uiState.update {
-            it.copy(boothSearchTextState = TextFieldState(""))
-        }
+        _uiState.value.boothSearchTextState.clearText()
     }
 
     private fun searchBooth() {

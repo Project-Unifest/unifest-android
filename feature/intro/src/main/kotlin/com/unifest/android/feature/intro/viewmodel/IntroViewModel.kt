@@ -40,7 +40,6 @@ class IntroViewModel @Inject constructor(
 
     fun onAction(action: IntroUiAction) {
         when (action) {
-            // is IntroUiAction.OnSearchTextUpdated -> updateSearchText(action.searchText)
             is IntroUiAction.OnSearchTextCleared -> clearSearchText()
             is IntroUiAction.OnSearch -> searchSchool(action.searchText)
             is IntroUiAction.OnRegionTapClicked -> searchRegion(action.region)
@@ -51,12 +50,6 @@ class IntroViewModel @Inject constructor(
             is IntroUiAction.OnRetryClick -> refresh(action.error)
         }
     }
-
-//    private fun updateSearchText(text: TextFieldValue) {
-//        _uiState.update {
-//            it.copy(searchTextState = text)
-//        }
-//    }
 
     private fun clearSearchText() {
         _uiState.value.searchTextState.clearText()

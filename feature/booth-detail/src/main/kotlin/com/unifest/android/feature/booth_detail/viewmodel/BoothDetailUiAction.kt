@@ -13,8 +13,6 @@ sealed interface BoothDetailUiAction {
     data object OnWaitingButtonClick : BoothDetailUiAction
     data object OnDialogPinButtonClick : BoothDetailUiAction
     data object OnDialogWaitingButtonClick : BoothDetailUiAction
-    data class OnPinNumberUpdated(val pinNumber: String) : BoothDetailUiAction
-    data class OnWaitingTelUpdated(val tel: String) : BoothDetailUiAction
     data object OnWaitingDialogDismiss : BoothDetailUiAction
     data object OnConfirmDialogDismiss : BoothDetailUiAction
     data object OnPinDialogDismiss : BoothDetailUiAction

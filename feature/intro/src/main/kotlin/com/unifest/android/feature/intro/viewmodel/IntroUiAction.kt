@@ -3,7 +3,6 @@ package com.unifest.android.feature.intro.viewmodel
 import com.unifest.android.core.model.FestivalModel
 
 sealed interface IntroUiAction {
-    // data class OnSearchTextUpdated(val searchText: TextFieldValue) : IntroUiAction
     data object OnSearchTextCleared : IntroUiAction
     data class OnSearch(val searchText: String) : IntroUiAction
     data class OnRegionTapClicked(val region: String) : IntroUiAction

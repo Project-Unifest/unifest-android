@@ -1,6 +1,6 @@
 package com.unifest.android.feature.festival.viewmodel
 
-import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
@@ -51,7 +51,6 @@ class FestivalViewModel @Inject constructor(
         when (action) {
             is FestivalUiAction.OnAddLikedFestivalClick -> setFestivalSearchBottomSheetVisible(true)
             is FestivalUiAction.OnDismiss -> setFestivalSearchBottomSheetVisible(false)
-            // is FestivalUiAction.OnSearchTextUpdated -> updateFestivalSearchText(action.searchText)
             is FestivalUiAction.OnSearchTextCleared -> clearFestivalSearchText()
             is FestivalUiAction.OnEnableSearchMode -> setEnableSearchMode(action.flag)
             is FestivalUiAction.OnEnableEditMode -> setEnableEditMode()
@@ -98,25 +97,9 @@ class FestivalViewModel @Inject constructor(
         }
     }
 
-//    private fun updateFestivalSearchText(searchText: String) {
-//        _uiState.update {
-//            it.copy(
-//                festivalSearchText = searchText,
-//                festivalSearchResults = it.festivals.filter { festival ->
-//                    matchesSearchText(festival, searchText)
-//                }.toImmutableList(),
-//            )
-//        }
-//    }
-
     private fun clearFestivalSearchText() {
-        _uiState.update {
-            it.copy(
-                // TODO .clearText() 로 처리해야 함
-                festivalSearchText = TextFieldState(),
-                festivalSearchResults = persistentListOf(),
-            )
-        }
+        _uiState.value.festivalSearchText.clearText()
+        _uiState.update { it.copy(festivalSearchResults = persistentListOf()) }
     }
 
     private fun setFestivalSearchBottomSheetVisible(flag: Boolean) {

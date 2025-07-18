@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -66,10 +68,9 @@ import com.unifest.android.core.designsystem.R as designR
 @Composable
 fun WaitingPinDialog(
     boothName: String,
-    pinNumber: String,
+    pinNumberState: TextFieldState,
     isWrongPinInserted: Boolean,
     onDismissRequest: () -> Unit,
-    onPinNumberUpdated: (String) -> Unit,
     onDialogPinButtonClick: () -> Unit,
 ) {
     BasicAlertDialog(
@@ -105,10 +106,15 @@ fun WaitingPinDialog(
             Spacer(modifier = Modifier.height(30.dp))
             Column {
                 BasicTextField(
-                    value = pinNumber,
-                    onValueChange = { input ->
-                        if (input.matches(Regex("^\\d{0,4}\$"))) {
-                            onPinNumberUpdated(input)
+                    state = pinNumberState,
+                    inputTransformation = InputTransformation {
+                        if (length > 4) {
+                            revertAllChanges()
+                        } else {
+                            val text = toString()
+                            if (!text.matches(Regex("^\\d*\$"))) {
+                                revertAllChanges()
+                            }
                         }
                     },
                     modifier = Modifier
@@ -127,8 +133,8 @@ fun WaitingPinDialog(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                     ),
-                    decorationBox = { innerTextField ->
-                        if (pinNumber.isEmpty()) {
+                    decorator = { innerTextField ->
+                        if (pinNumberState.text.isEmpty()) {
                             Text(
                                 text = stringResource(id = R.string.waiting_dialog_enter_booth_pin_hint),
                                 color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -186,13 +192,12 @@ fun WaitingPinDialog(
 fun WaitingDialog(
     boothName: String,
     waitingCount: Long,
-    phoneNumber: String,
+    phoneNumberState: TextFieldState,
     partySize: Long,
     isPrivacyClicked: Boolean,
     onDismissRequest: () -> Unit,
     onWaitingMinusClick: () -> Unit,
     onWaitingPlusClick: () -> Unit,
-    onWaitingTelUpdated: (String) -> Unit,
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
@@ -200,7 +205,7 @@ fun WaitingDialog(
     val isButtonEnabled by remember {
         derivedStateOf {
             isPrivacyClicked &&
-                phoneNumber.matches(Regex("^\\d{10,11}$")) &&
+                phoneNumberState.text.toString().matches(Regex("^\\d{10,11}$")) &&
                 partySize in 1..10
         }
     }
@@ -283,10 +288,15 @@ fun WaitingDialog(
             }
             Spacer(modifier = Modifier.height(14.dp))
             BasicTextField(
-                value = phoneNumber,
-                onValueChange = { input ->
-                    if (input.matches(Regex("^\\d{0,11}\$"))) {
-                        onWaitingTelUpdated(input)
+                state = phoneNumberState,
+                inputTransformation = InputTransformation {
+                    if (length > 11) {
+                        revertAllChanges()
+                    } else {
+                        val text = toString()
+                        if (!text.matches(Regex("^\\d*\$"))) {
+                            revertAllChanges()
+                        }
                     }
                 },
                 modifier = Modifier
@@ -305,8 +315,8 @@ fun WaitingDialog(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                 ),
-                decorationBox = { innerTextField ->
-                    if (phoneNumber.isEmpty()) {
+                decorator = { innerTextField ->
+                    if (phoneNumberState.text.isEmpty()) {
                         Text(
                             text = stringResource(id = R.string.waiting_dialog_telephone_waiting_number_hint),
                             color = MaterialTheme.colorScheme.onSecondary,
@@ -315,7 +325,7 @@ fun WaitingDialog(
                     }
                     innerTextField()
                 },
-                visualTransformation = PhoneNumberVisualTransformation(),
+                outputTransformation = PhoneNumberVisualTransformation(),
             )
             Spacer(modifier = Modifier.height(12.dp))
             Column(
@@ -570,10 +580,9 @@ private fun WaitingPinDialogPreview() {
     UnifestTheme {
         WaitingPinDialog(
             boothName = "컴공 주점",
-            pinNumber = "",
+            pinNumberState = TextFieldState(),
             onDismissRequest = {},
             onDialogPinButtonClick = { },
-            onPinNumberUpdated = { },
             isWrongPinInserted = true,
         )
     }
@@ -586,13 +595,12 @@ private fun WaitingDialogPreview() {
         WaitingDialog(
             boothName = "컴공 주점",
             onDismissRequest = {},
-            phoneNumber = "",
+            phoneNumberState = TextFieldState(),
             waitingCount = 3,
             partySize = 3,
             onDialogWaitingButtonClick = { },
             onWaitingMinusClick = { },
             onWaitingPlusClick = { },
-            onWaitingTelUpdated = { },
             isPrivacyClicked = false,
             onPolicyCheckBoxClick = { },
             onPrivacyPolicyClick = { },

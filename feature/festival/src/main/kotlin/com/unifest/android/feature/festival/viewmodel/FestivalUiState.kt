@@ -8,7 +8,7 @@ import com.unifest.android.core.designsystem.R as designR
 
 data class FestivalUiState(
     val festivals: ImmutableList<FestivalModel> = persistentListOf(),
-    val festivalSearchText: TextFieldState = TextFieldState(""),
+    val festivalSearchText: TextFieldState = TextFieldState(),
     val searchTextHintRes: Int = designR.string.festival_search_text_field_hint,
     val likedFestivals: ImmutableList<FestivalModel> = persistentListOf(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),

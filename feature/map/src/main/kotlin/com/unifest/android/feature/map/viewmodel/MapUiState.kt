@@ -19,7 +19,7 @@ data class MapUiState(
     val boothList: ImmutableList<BoothMapModel> = persistentListOf(),
     val popularBoothList: ImmutableList<BoothModel> = persistentListOf(),
     val selectedBoothList: ImmutableList<BoothMapModel> = persistentListOf(),
-    val boothSearchTextState: TextFieldState = TextFieldState(""),
+    val boothSearchTextState: TextFieldState = TextFieldState(),
     val festivalSearchResults: ImmutableList<FestivalModel> = persistentListOf(),
     val selectedBoothTypeChips: ImmutableList<String> = persistentListOf("주점", "먹거리", "이벤트", "일반"),
     val filteredBoothList: ImmutableList<BoothMapModel> = persistentListOf(),
