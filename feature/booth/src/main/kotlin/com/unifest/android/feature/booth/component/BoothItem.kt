@@ -40,8 +40,7 @@ internal fun BoothItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .height(86.dp),
+        modifier = modifier.height(86.dp),
     ) {
         NetworkImage(
             imgUrl = booth.thumbnail ?: "",
