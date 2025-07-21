@@ -1,0 +1,33 @@
+name: Design Task
+description: Figma 시안에 맞춰 디자인을 적용하는 작업에 사용하는 템플릿입니다.
+title: "[design] "
+labels: [ "design" ]
+body:
+    -   type: input
+        id: description
+        attributes:
+            label: "📝 작업 설명"
+            description: "Figma 시안에 따라 적용할 디자인 작업을 간단히 작성해주세요."
+        validations:
+            required: false
+
+    -   type: textarea
+        id: tasks
+        attributes:
+            label: "✅ 작업 목록"
+            description: "진행할 디자인 작업을 체크리스트로 작성해주세요."
+            value: |
+                - [ ] UI 반영
+                - [ ] 스타일 적용
+                - [ ] 레이아웃 구성
+        validations:
+            required: false
+
+    -   type: input
+        id: links
+        attributes:
+            label: "🔗 참고 링크"
+            description: "관련 문서, 자료 등이 있다면 추가해주세요. (선택)"
+            placeholder: "https://..."
+        validations:
+            required: false
