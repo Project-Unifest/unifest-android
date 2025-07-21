@@ -1,6 +1,7 @@
 package com.unifest.android.feature.booth_detail.viewmodel
 
 import android.Manifest
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,8 +59,6 @@ class BoothDetailViewModel @Inject constructor(
             is BoothDetailUiAction.OnRetryClick -> refresh(action.error)
             is BoothDetailUiAction.OnMenuImageClick -> showMenuImageDialog(action.menu)
             is BoothDetailUiAction.OnMenuImageDialogDismiss -> hideMenuImageDialog()
-            is BoothDetailUiAction.OnPinNumberUpdated -> updatePinNumberText(action.pinNumber)
-            is BoothDetailUiAction.OnWaitingTelUpdated -> updateWaitingTelText(action.tel)
             is BoothDetailUiAction.OnWaitingButtonClick -> checkMyWaitingListNumbers()
             is BoothDetailUiAction.OnDialogPinButtonClick -> checkPinValidation()
             is BoothDetailUiAction.OnDialogWaitingButtonClick -> requestBoothWaiting()
@@ -241,7 +240,7 @@ class BoothDetailViewModel @Inject constructor(
     }
 
     private fun requestBoothWaiting() {
-        val tel = _uiState.value.waitingTel
+        val tel = _uiState.value.waitingTel.text.toString()
         val partySize = _uiState.value.waitingPartySize
 
         if (isTelValid(tel) && isPartySizeValid(partySize)) {
@@ -250,15 +249,15 @@ class BoothDetailViewModel @Inject constructor(
                     boothId = _uiState.value.boothDetailInfo.id,
                     tel = tel,
                     partySize = partySize,
-                    pinNumber = _uiState.value.boothPinNumber,
+                    pinNumber = _uiState.value.boothPinNumber.text.toString(),
                 ).onSuccess { waiting ->
                     _uiState.update {
                         it.copy(
                             waitingId = waiting.waitingId,
-                            waitingTel = "",
-                            boothPinNumber = "",
                         )
                     }
+                    _uiState.value.waitingTel.clearText()
+                    _uiState.value.boothPinNumber.clearText()
                     waitingRepository.registerFCMTopic(waiting.waitingId.toString())
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
@@ -281,29 +280,13 @@ class BoothDetailViewModel @Inject constructor(
         return partySize >= 1
     }
 
-    private fun updatePinNumberText(pinNumber: String) {
-        _uiState.update {
-            it.copy(
-                boothPinNumber = pinNumber,
-            )
-        }
-    }
-
-    private fun updateWaitingTelText(tel: String) {
-        _uiState.update {
-            it.copy(
-                waitingTel = tel,
-            )
-        }
-    }
-
     private fun checkPinValidation() {
         if (_uiState.value.isWrongPinInserted) {
             return
         }
 
         viewModelScope.launch {
-            boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber)
+            boothRepository.checkPinValidation(_uiState.value.boothDetailInfo.id, _uiState.value.boothPinNumber.text.toString())
                 .onSuccess { waitingTeamNumber ->
                     if (waitingTeamNumber > -1) {
                         _uiState.update {
@@ -313,11 +296,9 @@ class BoothDetailViewModel @Inject constructor(
                         setWaitingDialogVisible(true)
                     } else {
                         _uiState.update {
-                            it.copy(
-                                isWrongPinInserted = true,
-                                boothPinNumber = "",
-                            )
+                            it.copy(isWrongPinInserted = true)
                         }
+                        _uiState.value.boothPinNumber.clearText()
                         delay(2000L)
                         _uiState.update {
                             it.copy(isWrongPinInserted = false)

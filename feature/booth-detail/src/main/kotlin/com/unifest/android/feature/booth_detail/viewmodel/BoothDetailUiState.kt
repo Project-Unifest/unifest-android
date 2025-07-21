@@ -1,5 +1,6 @@
 package com.unifest.android.feature.booth_detail.viewmodel
 
+import androidx.compose.foundation.text.input.TextFieldState
 import com.naver.maps.geometry.LatLng
 import com.unifest.android.core.common.HANKYONG_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.KONKUK_UNIVERSITY_POLYLINE
@@ -27,10 +28,10 @@ data class BoothDetailUiState(
     val isMenuImageDialogVisible: Boolean = false,
     val isWrongPinInserted: Boolean = false,
     val selectedMenu: MenuModel? = null,
-    val boothPinNumber: String = "",
+    val boothPinNumber: TextFieldState = TextFieldState(),
     val boothPinNumberError: Boolean = false,
     val waitingPartySize: Long = 1,
-    val waitingTel: String = "",
+    val waitingTel: TextFieldState = TextFieldState(),
     val waitingTeamNumber: Long = 0,
     val waitingId: Long = 0,
     val privacyConsentChecked: Boolean = false,

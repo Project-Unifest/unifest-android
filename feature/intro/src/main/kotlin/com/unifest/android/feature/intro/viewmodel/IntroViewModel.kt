@@ -1,6 +1,6 @@
 package com.unifest.android.feature.intro.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
@@ -40,9 +40,8 @@ class IntroViewModel @Inject constructor(
 
     fun onAction(action: IntroUiAction) {
         when (action) {
-            is IntroUiAction.OnSearchTextUpdated -> updateSearchText(action.searchText)
             is IntroUiAction.OnSearchTextCleared -> clearSearchText()
-            is IntroUiAction.OnSearch -> searchSchool(action.searchText.text)
+            is IntroUiAction.OnSearch -> searchSchool(action.searchText)
             is IntroUiAction.OnRegionTapClicked -> searchRegion(action.region)
             is IntroUiAction.OnClearSelectionClick -> clearSelectedFestivals()
             is IntroUiAction.OnFestivalSelected -> addSelectedFestival(action.festival)
@@ -52,16 +51,8 @@ class IntroViewModel @Inject constructor(
         }
     }
 
-    private fun updateSearchText(text: TextFieldValue) {
-        _uiState.update {
-            it.copy(searchText = text)
-        }
-    }
-
     private fun clearSearchText() {
-        _uiState.update {
-            it.copy(searchText = TextFieldValue())
-        }
+        _uiState.value.searchTextState.clearText()
     }
 
     private fun getAllFestivals() {
@@ -128,15 +119,15 @@ class IntroViewModel @Inject constructor(
                 }
                 festivalRepository.searchRegion(region)
                     .onSuccess { festivals ->
-                        if (_uiState.value.searchText.text.isEmpty()) {
+                        if (_uiState.value.searchTextState.text.isEmpty()) {
                             _uiState.update {
                                 it.copy(festivals = festivals.toImmutableList())
                             }
                         } else {
                             festivals.filter { festival ->
                                 // 축제 이름이 영어 일 수 있으므로, 영어 대소문자를 구분하지 않는 옵션(ignoreCase = true) 추가
-                                festival.schoolName.contains(_uiState.value.searchText.text, ignoreCase = true) ||
-                                    festival.festivalName.contains(_uiState.value.searchText.text, ignoreCase = true)
+                                festival.schoolName.contains(_uiState.value.searchTextState.text, ignoreCase = true) ||
+                                    festival.festivalName.contains(_uiState.value.searchTextState.text, ignoreCase = true)
                             }.let { filteredFestivals ->
                                 _uiState.update {
                                     it.copy(festivals = filteredFestivals.toImmutableList())

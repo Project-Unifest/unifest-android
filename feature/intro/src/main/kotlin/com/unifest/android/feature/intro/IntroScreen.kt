@@ -142,10 +142,11 @@ internal fun IntroContent(
                 )
             }
             SearchTextField(
-                searchText = uiState.searchText,
-                updateSearchText = { text -> onAction(IntroUiAction.OnSearchTextUpdated(text)) },
+                searchTextState = uiState.searchTextState,
                 searchTextHintRes = designR.string.search_text_hint,
-                onSearch = { onAction(IntroUiAction.OnSearch(it)) },
+                onSearch = {
+                    onAction(IntroUiAction.OnSearch(it))
+                },
                 clearSearchText = { onAction(IntroUiAction.OnSearchTextCleared) },
                 modifier = Modifier
                     .height(46.dp)
