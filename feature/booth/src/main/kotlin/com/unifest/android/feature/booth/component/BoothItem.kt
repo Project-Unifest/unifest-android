@@ -1,9 +1,11 @@
 package com.unifest.android.feature.booth.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,24 +39,25 @@ internal fun BoothItem(
     booth: BoothTabModel,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
+    Row(
+        modifier = modifier.height(86.dp),
     ) {
-        Row {
-            NetworkImage(
-                imgUrl = booth.thumbnail,
-                contentDescription = "${booth.name} ${booth.description}",
-                modifier = Modifier
-                    .size(86.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                placeholder = painterResource(id = designR.drawable.item_placeholder),
-            )
-            Spacer(modifier = Modifier.width(14.dp))
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-            ) {
+        NetworkImage(
+            imgUrl = booth.thumbnail ?: "",
+            contentDescription = "${booth.name} ${booth.description}",
+            modifier = Modifier
+                .size(86.dp)
+                .clip(RoundedCornerShape(16.dp)),
+            placeholder = painterResource(id = designR.drawable.item_placeholder),
+        )
+        Spacer(modifier = Modifier.width(14.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column {
                 Text(
                     text = booth.name,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -64,27 +67,27 @@ internal fun BoothItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = booth.description,
+                    text = booth.description ?: "",
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = Content2,
                 )
-                Spacer(modifier = Modifier.height(6.dp))
-                Row {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
-                        contentDescription = "Location Icon",
-                        tint = Color.Unspecified,
-                    )
-                    Spacer(modifier = Modifier.width(3.dp))
-                    Text(
-                        text = booth.location,
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        style = Title5,
-                    )
-                }
+            }
+            Spacer(modifier = Modifier.height(6.dp))
+            Row {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = designR.drawable.ic_location_green),
+                    contentDescription = "Location Icon",
+                    tint = Color.Unspecified,
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = booth.location,
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    style = Title5,
+                )
             }
         }
     }

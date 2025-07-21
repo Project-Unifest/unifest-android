@@ -6,8 +6,8 @@ import androidx.compose.runtime.Stable
 data class BoothTabModel(
     val id: Long = 0L,
     val name: String = "",
-    val description: String = "",
-    val thumbnail: String = "",
+    val description: String? = "",
+    val thumbnail: String? = "",
     val location: String = "",
     val waitingEnabled: Boolean = false,
 )
