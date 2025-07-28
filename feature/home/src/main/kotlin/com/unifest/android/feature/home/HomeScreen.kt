@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -134,6 +136,8 @@ internal fun HomeContent(
     onHomeUiAction: (HomeUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
+    val isGacheonUniv by remember { mutableStateOf(true) }
+
     LazyColumn {
         item {
             Calendar(
@@ -210,40 +214,45 @@ internal fun HomeContent(
                 }
             }
         }
-        item {
-            UnifestOutlinedButton(
-                onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                contentColor = MaterialTheme.colorScheme.onSecondary,
-                borderColor = MaterialTheme.colorScheme.secondaryContainer,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_button),
-                    style = BoothLocation,
+
+        if (isGacheonUniv) {
+
+        } else {
+            item {
+                UnifestOutlinedButton(
+                    onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    borderColor = MaterialTheme.colorScheme.secondaryContainer,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_add_interest_festival_button),
+                        style = BoothLocation,
+                    )
+                }
+            }
+            item {
+                HorizontalDivider(
+                    thickness = 8.dp,
+                    color = MaterialTheme.colorScheme.outline,
                 )
             }
-        }
-        item {
-            HorizontalDivider(
-                thickness = 8.dp,
-                color = MaterialTheme.colorScheme.outline,
-            )
-        }
-        item { Spacer(modifier = Modifier.height(20.dp)) }
-        item {
-            Text(
-                text = stringResource(id = R.string.home_incoming_festival_text),
-                modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = Title3,
-            )
-        }
-        if (homeUiState.incomingFestivals.isNotEmpty()) {
-            items(homeUiState.incomingFestivals) { festival ->
-                IncomingFestivalCard(festival = festival)
-                Spacer(modifier = Modifier.height(8.dp))
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item {
+                Text(
+                    text = stringResource(id = R.string.home_incoming_festival_text),
+                    modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            if (homeUiState.incomingFestivals.isNotEmpty()) {
+                items(homeUiState.incomingFestivals) { festival ->
+                    IncomingFestivalCard(festival = festival)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
