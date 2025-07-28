@@ -37,6 +37,7 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.designsystem.component.UnifestOutlinedButton
 import com.unifest.android.core.designsystem.theme.BoothLocation
+import com.unifest.android.core.designsystem.theme.Content10
 import com.unifest.android.core.designsystem.theme.Content6
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.Title3
@@ -51,6 +52,7 @@ import com.unifest.android.feature.home.component.Calendar
 import com.unifest.android.feature.home.component.FestivalScheduleItem
 import com.unifest.android.feature.home.component.IncomingFestivalCard
 import com.unifest.android.feature.home.component.StarImageDialog
+import com.unifest.android.feature.home.component.TipComponent
 import com.unifest.android.feature.home.preview.HomePreviewParameterProvider
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
@@ -216,7 +218,14 @@ internal fun HomeContent(
         }
 
         if (isGacheonUniv) {
-
+            item {
+                TipComponent(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 24.dp, bottom = 35.dp),
+                    tipMessage = "",
+                )
+            }
         } else {
             item {
                 UnifestOutlinedButton(
