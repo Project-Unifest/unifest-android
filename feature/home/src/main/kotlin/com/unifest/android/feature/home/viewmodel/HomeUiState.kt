@@ -1,6 +1,7 @@
 package com.unifest.android.feature.home.viewmodel
 
 import androidx.compose.foundation.text.input.TextFieldState
+import com.unifest.android.core.model.CardNewsModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.core.model.StarInfoModel
@@ -23,4 +24,5 @@ data class HomeUiState(
     val isDataReady: Boolean = true,
     val isStarImageDialogVisible: Boolean = false,
     val selectedStar: StarInfoModel? = null,
+    val cardNews: ImmutableList<CardNewsModel> = persistentListOf(),
 )
