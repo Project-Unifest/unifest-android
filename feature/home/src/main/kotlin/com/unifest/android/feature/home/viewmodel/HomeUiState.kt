@@ -19,7 +19,7 @@ data class HomeUiState(
     val isServerErrorDialogVisible: Boolean = false,
     val isNetworkErrorDialogVisible: Boolean = false,
     val isStarImageClicked: ImmutableList<ImmutableList<Boolean>> = persistentListOf(persistentListOf()),
-    val isWeekMode: Boolean = false,
+    val isWeekMode: Boolean = true,
     val isDataReady: Boolean = true,
     val isStarImageDialogVisible: Boolean = false,
     val selectedStar: StarInfoModel? = null,
