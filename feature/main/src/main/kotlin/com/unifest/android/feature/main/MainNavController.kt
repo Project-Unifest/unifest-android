@@ -70,6 +70,10 @@ internal class MainNavController(
         navigate(MainTab.WAITING)
     }
 
+    fun navigateToHomeCardNews(imgUrl: String) {
+        navController.navigate(Route.HomeCardNews(imgUrl))
+    }
+
     private fun popBackStack() {
         navController.popBackStack()
     }

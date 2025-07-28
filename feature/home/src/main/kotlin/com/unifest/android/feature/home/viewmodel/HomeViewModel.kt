@@ -49,6 +49,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnStarImageClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
             is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
+            is HomeUiAction.OnCardNewsClick -> navigateToCardNews(action.selectedCardNews.originalUrl)
         }
     }
 
@@ -168,6 +169,12 @@ class HomeViewModel @Inject constructor(
     private fun setWeekMode(flag: Boolean) {
         _uiState.update {
             it.copy(isWeekMode = flag)
+        }
+    }
+
+    private fun navigateToCardNews(imgUrl: String) {
+        viewModelScope.launch {
+            _uiEvent.send(HomeUiEvent.NavigateToCardNews(imgUrl))
         }
     }
 }

@@ -64,6 +64,7 @@ import java.time.format.DateTimeFormatter
 internal fun HomeRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToHomeCardNews: (String) -> Unit,
     onShowSnackBar: (message: UiText) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
     festivalViewModel: FestivalViewModel = hiltViewModel(),
@@ -76,6 +77,7 @@ internal fun HomeRoute(
     ObserveAsEvents(flow = homeViewModel.uiEvent) { event ->
         when (event) {
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is HomeUiEvent.NavigateToCardNews -> navigateToHomeCardNews(event.imgUrl)
         }
     }
 
