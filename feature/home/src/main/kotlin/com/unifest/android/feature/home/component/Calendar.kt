@@ -99,6 +99,7 @@ internal fun Calendar(
         Column(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
             val monthState = rememberCalendarState(
                 startMonth = startMonth,
                 endMonth = endMonth,
