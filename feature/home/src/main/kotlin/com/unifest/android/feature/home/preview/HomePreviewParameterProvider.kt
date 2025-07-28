@@ -1,6 +1,7 @@
 package com.unifest.android.feature.home.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.unifest.android.core.model.CardNewsModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
 import com.unifest.android.feature.home.viewmodel.HomeUiState
@@ -65,6 +66,14 @@ internal class HomePreviewParameterProvider : PreviewParameterProvider<HomeUiSta
                     "2024-04-23",
                     126.957f,
                     37.460f,
+                ),
+            ),
+            cardNews = persistentListOf(
+                CardNewsModel(
+                    coverImgUrl = "https://example.com/image1.jpg",
+                ),
+                CardNewsModel(
+                    coverImgUrl = "https://example.com/image2.jpg",
                 ),
             ),
         ),

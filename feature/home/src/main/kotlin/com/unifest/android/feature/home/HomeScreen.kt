@@ -50,6 +50,7 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.home.component.Calendar
 import com.unifest.android.feature.home.component.FestivalScheduleItem
+import com.unifest.android.feature.home.component.HomeCardNews
 import com.unifest.android.feature.home.component.IncomingFestivalCard
 import com.unifest.android.feature.home.component.StarImageDialog
 import com.unifest.android.feature.home.component.TipComponent
@@ -226,6 +227,15 @@ internal fun HomeContent(
                     tipMessage = "",
                 )
             }
+            item {
+                HomeCardNews(
+                    cardNewsList = homeUiState.cardNews,
+                    onCardNewClick = { cardNews ->
+                        onHomeUiAction(HomeUiAction.OnCardNewsClick(cardNews))
+                    },
+                )
+            }
+            item { Spacer(modifier = Modifier.height(50.dp)) }
         } else {
             item {
                 UnifestOutlinedButton(

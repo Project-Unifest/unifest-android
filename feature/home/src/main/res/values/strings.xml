@@ -10,5 +10,7 @@
     <string name='home_empty_festival_text'>축제 일정 없음</string>
     <string name="home_empty_festival_schedule_description_text">오늘은 축제가 열리는 학교가 없어요</string>
     <string name="home_tip_text">Tip!</string>
+    <string name="home_gacheon_festival_news">가천대 축제 소식</string>
+    <string name="home_gacheon_festival_news_message">가천대 축제 소식 및 정보를 카드뉴스로 확인해보세요</string>
 
 </resources>
