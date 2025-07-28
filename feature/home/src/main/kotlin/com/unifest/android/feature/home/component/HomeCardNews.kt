@@ -1,7 +1,5 @@
 package com.unifest.android.feature.home.component
 
-import android.R.attr.contentDescription
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
@@ -23,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content10
 import com.unifest.android.core.designsystem.theme.Title2
@@ -31,6 +28,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.CardNewsModel
 import com.unifest.android.feature.home.R
 import com.unifest.android.feature.home.clickable
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 fun HomeCardNews(
@@ -76,7 +74,6 @@ fun HomeCardNews(
         }
     }
 }
-
 
 @ComponentPreview
 @Composable

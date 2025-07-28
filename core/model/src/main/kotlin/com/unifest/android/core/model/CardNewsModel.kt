@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Stable
 @Serializable
 data class CardNewsModel(
-    val coverImgUrl : String = "",
-    val originalUrl : String = "",
+    val coverImgUrl: String = "",
+    val originalUrl: String = "",
 )

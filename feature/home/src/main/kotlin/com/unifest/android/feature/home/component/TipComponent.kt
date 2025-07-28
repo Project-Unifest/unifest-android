@@ -32,14 +32,12 @@ fun TipComponent(
     darkTheme: Boolean = isSystemInDarkTheme(),
     tipMessage: String,
 ) {
-
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(44.dp)
             .background(
-                color =
-                    if (darkTheme) DarkPrimary50 else LightGrey100,
+                color = if (darkTheme) DarkPrimary50 else LightGrey100,
                 shape = RoundedCornerShape(7.dp),
             )
             .then(
@@ -61,7 +59,7 @@ fun TipComponent(
         Text(
             text = tipMessage,
             style = Content10,
-            color = if(darkTheme) LightPrimary500 else LightGrey800,
+            color = if (darkTheme) LightPrimary500 else LightGrey800,
         )
     }
 }
