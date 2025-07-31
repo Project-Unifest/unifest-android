@@ -38,7 +38,7 @@ internal fun OriginalCardNews(
 
     val state = rememberTransformableState { zoomChange, offsetChange, _ ->
         scale = (zoomChange * scale).coerceAtLeast(minimumValue = 1f)
-        val maxOffsetX = (((imageWidth * scale) - screenWidth) / 2).absoluteValue
+        val maxOffsetX = (((imageWidth * scale) - screenWidth) / 2)
         val maxOffsetY = (((imageHeight * scale) - screenHeight) / 2).absoluteValue
         offset = if (scale == 1f) {
             Offset.Zero
