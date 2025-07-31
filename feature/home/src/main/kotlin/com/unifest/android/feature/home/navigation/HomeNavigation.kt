@@ -5,10 +5,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.core.navigation.Route
+import com.unifest.android.feature.home.HomeCardNewsRoute
 import com.unifest.android.feature.home.HomeRoute
 
 fun NavController.navigateToHome(navOptions: NavOptions) {
@@ -33,7 +34,11 @@ fun NavGraphBuilder.homeNavGraph(
             navigateToHomeCardNews = navigateToHomeCardNews,
         )
     }
-    composable<Route.HomeCardNews> {
-
+    composable<Route.HomeCardNews> { navBackStackEntry ->
+        val imageUrl = navBackStackEntry.toRoute<Route.HomeCardNews>().imgUrl
+        HomeCardNewsRoute(
+            popBackStack = popBackStack,
+            imageUrl = imageUrl,
+        )
     }
 }
