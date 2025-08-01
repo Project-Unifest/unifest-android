@@ -24,5 +24,11 @@ data class HomeUiState(
     val isDataReady: Boolean = true,
     val isStarImageDialogVisible: Boolean = false,
     val selectedStar: StarInfoModel? = null,
-    val cardNews: ImmutableList<CardNewsModel> = persistentListOf(),
+    val cardNews: ImmutableList<CardNewsModel> = persistentListOf(
+        // 더미데이터
+        CardNewsModel(
+            coverImgUrl = "https://cdn.pixabay.com/photo/2025/07/22/22/21/iceberg-9729316_1280.jpg",
+            originalUrl = "https://cdn.pixabay.com/photo/2025/07/22/22/21/iceberg-9729316_1280.jpg"
+        )
+    ),
 )
