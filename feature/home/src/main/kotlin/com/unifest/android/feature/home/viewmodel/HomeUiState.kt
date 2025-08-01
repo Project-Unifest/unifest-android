@@ -28,7 +28,7 @@ data class HomeUiState(
         // 더미데이터
         CardNewsModel(
             coverImgUrl = "https://cdn.pixabay.com/photo/2025/07/22/22/21/iceberg-9729316_1280.jpg",
-            originalUrl = "https://cdn.pixabay.com/photo/2025/07/22/22/21/iceberg-9729316_1280.jpg"
-        )
+            originalUrl = "https://cdn.pixabay.com/photo/2025/07/22/22/21/iceberg-9729316_1280.jpg",
+        ),
     ),
 )
