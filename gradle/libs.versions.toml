@@ -57,7 +57,7 @@ landscapist = "2.5.1"
 balloon = "1.6.12"
 calendar-compose = "2.7.0"
 flexible-bottomsheet = "0.1.5"
-compose-effects = "0.1.1"
+compose-effects = "0.1.2"
 compose-unstyled = "1.37.0"
 
 naver-map-compose = "1.8.2"
