@@ -79,7 +79,7 @@ internal fun HomeCardNewsScreen(
                 .background(Color.Black)
                 .align(Alignment.TopEnd)
                 .clickable(onClick = { popBackStack() })
-                .padding(20.dp),
+                .padding(16.dp),
             painter = painterResource(id = R.drawable.ic_close_24),
             contentDescription = null,
             tint = Color.Unspecified,
