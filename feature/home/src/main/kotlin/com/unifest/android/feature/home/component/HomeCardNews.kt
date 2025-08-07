@@ -1,7 +1,6 @@
 package com.unifest.android.feature.home.component
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -55,7 +54,7 @@ fun HomeCardNews(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .scrollable(scrollState, orientation = Orientation.Horizontal),
+                .horizontalScroll(state = scrollState),
         ) {
             Spacer(modifier = Modifier.width(20.dp))
             cardNewsList.forEach { cardNews ->
