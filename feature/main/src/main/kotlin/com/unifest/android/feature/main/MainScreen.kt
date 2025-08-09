@@ -92,6 +92,7 @@ internal fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 popBackStack = navigator::popBackStackIfNotMap,
+                navigateToHomeCardNews = navigator::navigateToHomeCardNews,
                 onShowSnackBar = onShowSnackBar,
             )
             mapNavGraph(

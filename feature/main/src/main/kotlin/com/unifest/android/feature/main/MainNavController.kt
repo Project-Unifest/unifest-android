@@ -16,6 +16,7 @@ import com.unifest.android.feature.booth.navigation.navigateToBooth
 import com.unifest.android.feature.booth_detail.navigation.navigateToBoothDetail
 import com.unifest.android.feature.booth_detail.navigation.navigateToBoothDetailLocation
 import com.unifest.android.feature.home.navigation.navigateToHome
+import com.unifest.android.feature.home.navigation.navigateToHomeCardNews
 import com.unifest.android.feature.liked_booth.navigation.navigateToLikedBooth
 import com.unifest.android.feature.map.navigation.navigateToMap
 import com.unifest.android.feature.menu.navigation.navigateToMenu
@@ -68,6 +69,10 @@ internal class MainNavController(
 
     fun navigateToWaiting() {
         navigate(MainTab.WAITING)
+    }
+
+    fun navigateToHomeCardNews(imgUrl: String) {
+        navController.navigateToHomeCardNews(imgUrl)
     }
 
     private fun popBackStack() {

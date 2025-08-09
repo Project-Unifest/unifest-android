@@ -16,6 +16,7 @@ dependencies {
 
         libs.kotlinx.collections.immutable,
         libs.timber,
+        libs.coil.compose,
         libs.calendar.compose,
     )
 }

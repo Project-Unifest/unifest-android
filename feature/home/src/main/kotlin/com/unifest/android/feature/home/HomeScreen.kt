@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -47,8 +49,10 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.home.component.Calendar
 import com.unifest.android.feature.home.component.FestivalScheduleItem
+import com.unifest.android.feature.home.component.HomeCardNews
 import com.unifest.android.feature.home.component.IncomingFestivalCard
 import com.unifest.android.feature.home.component.StarImageDialog
+import com.unifest.android.feature.home.component.TipComponent
 import com.unifest.android.feature.home.preview.HomePreviewParameterProvider
 import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
@@ -60,6 +64,7 @@ import java.time.format.DateTimeFormatter
 internal fun HomeRoute(
     padding: PaddingValues,
     popBackStack: () -> Unit,
+    navigateToHomeCardNews: (String) -> Unit,
     onShowSnackBar: (message: UiText) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
     festivalViewModel: FestivalViewModel = hiltViewModel(),
@@ -72,6 +77,7 @@ internal fun HomeRoute(
     ObserveAsEvents(flow = homeViewModel.uiEvent) { event ->
         when (event) {
             is HomeUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
+            is HomeUiEvent.NavigateToCardNews -> navigateToHomeCardNews(event.imgUrl)
         }
     }
 
@@ -134,6 +140,8 @@ internal fun HomeContent(
     onHomeUiAction: (HomeUiAction) -> Unit,
     onFestivalUiAction: (FestivalUiAction) -> Unit,
 ) {
+    val isGacheonUniv by remember { mutableStateOf(true) }
+
     LazyColumn {
         item {
             Calendar(
@@ -210,40 +218,61 @@ internal fun HomeContent(
                 }
             }
         }
-        item {
-            UnifestOutlinedButton(
-                onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                contentColor = MaterialTheme.colorScheme.onSecondary,
-                borderColor = MaterialTheme.colorScheme.secondaryContainer,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.home_add_interest_festival_button),
-                    style = BoothLocation,
+
+        if (isGacheonUniv) {
+            item {
+                TipComponent(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 24.dp, bottom = 35.dp),
+                    tipMessage = "",
                 )
             }
-        }
-        item {
-            HorizontalDivider(
-                thickness = 8.dp,
-                color = MaterialTheme.colorScheme.outline,
-            )
-        }
-        item { Spacer(modifier = Modifier.height(20.dp)) }
-        item {
-            Text(
-                text = stringResource(id = R.string.home_incoming_festival_text),
-                modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = Title3,
-            )
-        }
-        if (homeUiState.incomingFestivals.isNotEmpty()) {
-            items(homeUiState.incomingFestivals) { festival ->
-                IncomingFestivalCard(festival = festival)
-                Spacer(modifier = Modifier.height(8.dp))
+            item {
+                HomeCardNews(
+                    cardNewsList = homeUiState.cardNews,
+                    onCardNewClick = { cardNews ->
+                        onHomeUiAction(HomeUiAction.OnCardNewsClick(cardNews))
+                    },
+                )
+            }
+            item { Spacer(modifier = Modifier.height(50.dp)) }
+        } else {
+            item {
+                UnifestOutlinedButton(
+                    onClick = { onFestivalUiAction(FestivalUiAction.OnAddLikedFestivalClick) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    borderColor = MaterialTheme.colorScheme.secondaryContainer,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_add_interest_festival_button),
+                        style = BoothLocation,
+                    )
+                }
+            }
+            item {
+                HorizontalDivider(
+                    thickness = 8.dp,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+            item {
+                Text(
+                    text = stringResource(id = R.string.home_incoming_festival_text),
+                    modifier = Modifier.padding(start = 20.dp, bottom = 16.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = Title3,
+                )
+            }
+            if (homeUiState.incomingFestivals.isNotEmpty()) {
+                items(homeUiState.incomingFestivals) { festival ->
+                    IncomingFestivalCard(festival = festival)
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }

@@ -84,7 +84,7 @@ internal fun Calendar(
     onDateSelected: (LocalDate) -> Unit,
     adjacentMonths: Long = 500,
     allFestivals: ImmutableList<FestivalModel>,
-    isWeekMode: Boolean = false,
+    isWeekMode: Boolean = true,
     onClickWeekMode: () -> Unit,
 ) {
     val currentDate = remember { LocalDate.now() }
@@ -99,6 +99,7 @@ internal fun Calendar(
         Column(
             modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
             val monthState = rememberCalendarState(
                 startMonth = startMonth,
                 endMonth = endMonth,
@@ -118,7 +119,11 @@ internal fun Calendar(
                 weekState = weekState,
             )
 
-            CalendarHeader(daysOfWeek = daysOfWeek.toImmutableList())
+            CalendarHeader(
+                isWeekMode = isWeekMode,
+                selectedDate = selectedDate,
+                daysOfWeek = daysOfWeek.toImmutableList(),
+            )
             AnimatedVisibility(visible = !isWeekMode) {
                 HorizontalCalendar(
                     state = monthState,
@@ -154,10 +159,13 @@ internal fun Calendar(
                 )
             }
 
-            ModeToggleButton(
-                isWeekMode = isWeekMode,
-                onModeChange = { onClickWeekMode() },
-            )
+            // 주간 모드 토글 버튼 (가천대 비활성화)
+            if (false) {
+                ModeToggleButton(
+                    isWeekMode = isWeekMode,
+                    onModeChange = { onClickWeekMode() },
+                )
+            }
         }
     }
 }
@@ -333,7 +341,11 @@ private fun ColorCircleWithText(color: Color, text: String) {
 }
 
 @Composable
-private fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
+private fun CalendarHeader(
+    isWeekMode: Boolean,
+    selectedDate: LocalDate,
+    daysOfWeek: ImmutableList<DayOfWeek>,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -342,7 +354,11 @@ private fun CalendarHeader(daysOfWeek: ImmutableList<DayOfWeek>) {
             Text(
                 text = dayOfWeek.displayText(),
                 modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (isWeekMode && dayOfWeek == selectedDate.dayOfWeek) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
                 textAlign = TextAlign.Center,
                 style = Content6,
             )
@@ -424,7 +440,7 @@ private fun CalendarPreview() {
             selectedDate = LocalDate.now(),
             onDateSelected = {},
             allFestivals = persistentListOf(),
-            isWeekMode = false,
+            isWeekMode = true,
             onClickWeekMode = {},
         )
     }
