@@ -3,6 +3,8 @@ package com.unifest.android.feature.booth.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
+import com.unifest.android.core.common.handleException
+import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.model.BoothTabModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
@@ -19,7 +21,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
+class BoothViewModel @Inject constructor(
+    private val boothRepository: BoothRepository,
+) : ViewModel(), ErrorHandlerActions {
     private val _uiState: MutableStateFlow<BoothUiState> = MutableStateFlow(BoothUiState())
     val uiState: StateFlow<BoothUiState> = _uiState
         .onStart {
@@ -123,14 +127,29 @@ class BoothViewModel @Inject constructor() : ViewModel(), ErrorHandlerActions {
             ),
         )
 
-        _uiState.update {
-            it.copy(
-                campusName = "가천대 글로벌 캠퍼스",
-                boothList = boothList,
-                totalBoothCount = boothList.size,
-                showingBoothList = boothList,
-            )
+        viewModelScope.launch {
+            boothRepository.getTabBooths(festivalId = 1)
+                .onSuccess { booths ->
+                    _uiState.update {
+                        it.copy(
+                            boothList = booths.toPersistentList(),
+                            showingBoothList = booths.toPersistentList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@BoothViewModel)
+                }
         }
+
+//        _uiState.update {
+//            it.copy(
+//                campusName = "가천대 글로벌 캠퍼스",
+//                boothList = boothList,
+//                totalBoothCount = boothList.size,
+//                showingBoothList = boothList,
+//            )
+//        }
     }
 
     private fun navigateToBoothDetail(boothId: Long) {

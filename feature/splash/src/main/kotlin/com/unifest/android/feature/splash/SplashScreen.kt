@@ -37,7 +37,7 @@ internal fun SplashRoute(
 
     LaunchedEffect(key1 = shouldUpdate) {
         if (shouldUpdate == false) {
-            val isFcmTokenRegistered = viewModel.refreshFCMToken()
+            val isFcmTokenRegistered = /*viewModel.refreshFCMToken()*/true
             if (isFcmTokenRegistered) {
                 viewModel.checkIntroCompletion()
             }
