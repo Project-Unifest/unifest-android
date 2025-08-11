@@ -26,12 +26,14 @@ import com.unifest.android.core.designsystem.theme.Content10
 import com.unifest.android.core.designsystem.theme.Title3
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.home.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun TipComponent(
     modifier: Modifier = Modifier,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    tipMessage: List<String>,
+    tipMessage: ImmutableList<String>,
 ) {
     Row(
         modifier = modifier
@@ -70,7 +72,7 @@ fun TipComponent(
 private fun TipComponentPreview() {
     UnifestTheme {
         TipComponent(
-            tipMessage = listOf("웨이팅 기능으로 부스 원격 줄서기를 할 수 있어요."),
+            tipMessage = persistentListOf("웨이팅 기능으로 부스 원격 줄서기를 할 수 있어요."),
         )
     }
 }
