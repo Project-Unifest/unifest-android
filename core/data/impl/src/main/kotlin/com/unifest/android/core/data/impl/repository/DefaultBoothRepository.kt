@@ -72,5 +72,4 @@ class DefaultBoothRepository @Inject constructor(
             festivalId = festivalId,
         ).data.booths.map { it.toBoothTabModel() }
     }
-
 }

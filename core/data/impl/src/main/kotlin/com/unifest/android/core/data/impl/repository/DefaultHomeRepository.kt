@@ -13,5 +13,4 @@ class DefaultHomeRepository @Inject constructor(
     override suspend fun getHomeInfo(): Result<HomeInfoModel> = runSuspendCatching {
         service.getHomeInfo().data.toModel()
     }
-
 }

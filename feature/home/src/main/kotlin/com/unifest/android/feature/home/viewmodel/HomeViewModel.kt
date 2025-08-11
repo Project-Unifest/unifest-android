@@ -41,7 +41,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getHomeCardNews() {
-        Log.d("HomeViewModel", "getHomeCardNews called")
         viewModelScope.launch {
             homeRepository.getHomeInfo()
                 .onSuccess { homeInfo ->
