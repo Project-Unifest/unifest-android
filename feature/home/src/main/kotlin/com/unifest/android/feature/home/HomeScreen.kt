@@ -205,7 +205,7 @@ internal fun HomeContent(
                         festival = festival,
                         scheduleIndex = scheduleIndex,
                         selectedDate = homeUiState.selectedDate,
-                        isDataReady = homeUiState.isDataReady,
+                        isDataReady = homeUiState.isFestivalScheduleDataReady,
                         // isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
                         onHomeUiAction = onHomeUiAction,
                     )

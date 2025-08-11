@@ -47,7 +47,6 @@ class HomeViewModel @Inject constructor(
                         it.copy(
                             cardNews = homeInfo.homeCardList.toImmutableList(),
                             tips = homeInfo.homeTipList.toImmutableList(),
-                            isDataReady = true,
                         )
                     }
                 }
@@ -61,7 +60,7 @@ class HomeViewModel @Inject constructor(
         when (action) {
             is HomeUiAction.OnDateSelected -> {
                 _uiState.update {
-                    it.copy(isDataReady = false)
+                    it.copy(isFestivalScheduleDataReady = false)
                 }
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
@@ -98,7 +97,7 @@ class HomeViewModel @Inject constructor(
                             isStarImageClicked = festivals.map { festival ->
                                 List(festival.starInfo.size) { false }.toImmutableList()
                             }.toImmutableList(),
-                            isDataReady = true,
+                            isFestivalScheduleDataReady = true,
                         )
                     }
                 }

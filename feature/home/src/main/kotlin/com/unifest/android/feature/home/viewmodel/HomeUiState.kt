@@ -22,7 +22,7 @@ data class HomeUiState(
     val isNetworkErrorDialogVisible: Boolean = false,
     val isStarImageClicked: ImmutableList<ImmutableList<Boolean>> = persistentListOf(persistentListOf()),
     val isWeekMode: Boolean = true,
-    val isDataReady: Boolean = true,
+    val isFestivalScheduleDataReady: Boolean = true,
     val isStarImageDialogVisible: Boolean = false,
     val selectedStar: StarInfoModel? = null,
     val cardNews: ImmutableList<HomeCardModel> = persistentListOf(
