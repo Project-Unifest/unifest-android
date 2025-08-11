@@ -3,9 +3,9 @@ package com.unifest.android.core.data.mapper
 import com.unifest.android.core.model.HomeCardModel
 import com.unifest.android.core.model.HomeInfoModel
 import com.unifest.android.core.model.HomeTipModel
-import com.unifest.android.core.network.response.HomeInfoResponse
+import com.unifest.android.core.network.response.HomeInfo
 
-internal fun HomeInfoResponse.toModel(): HomeInfoModel {
+internal fun HomeInfo.toModel(): HomeInfoModel {
     return HomeInfoModel(
         homeCardList = this.homeCardList.map { card ->
             HomeCardModel(

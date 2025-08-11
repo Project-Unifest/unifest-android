@@ -1,10 +1,12 @@
 package com.unifest.android.feature.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -22,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
+    private val homeRepository: HomeRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -33,7 +36,27 @@ class HomeViewModel @Inject constructor(
         getIncomingFestivals()
         getAllFestivals()
         initStarImageClicked()
+        getHomeCardNews()
         getTodayFestivals(_uiState.value.selectedDate.toString())
+    }
+
+    private fun getHomeCardNews() {
+        Log.d("HomeViewModel", "getHomeCardNews called")
+        viewModelScope.launch {
+            homeRepository.getHomeInfo()
+                .onSuccess { homeInfo ->
+                    _uiState.update {
+                        it.copy(
+                            cardNews = homeInfo.homeCardList.toImmutableList(),
+                            tips = homeInfo.homeTipList.toImmutableList(),
+                            isDataReady = true,
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
     }
 
     fun onHomeUiAction(action: HomeUiAction) {
@@ -49,7 +72,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnStarImageClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
             is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
-            is HomeUiAction.OnCardNewsClick -> navigateToCardNews(action.selectedCardNews.originalUrl)
+            is HomeUiAction.OnCardNewsClick -> navigateToCardNews(action.selectedCardNews.detailImgUrl)
         }
     }
 

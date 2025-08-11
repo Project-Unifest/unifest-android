@@ -6,6 +6,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeInfoResponse(
+    @SerialName("code")
+    val code: String,
+    @SerialName("message")
+    val message: String,
+    @SerialName("data")
+    val data: HomeInfo,
+)
+
+@Serializable
+data class HomeInfo(
     @SerialName("homeCardList")
     val homeCardList: List<HomeCard>,
     @SerialName("homeTipList")

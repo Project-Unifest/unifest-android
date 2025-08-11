@@ -225,7 +225,7 @@ internal fun HomeContent(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                         .padding(top = 24.dp, bottom = 35.dp),
-                    tipMessage = "",
+                    tipMessage = homeUiState.tips.map { it.tipContent },
                 )
             }
             item {

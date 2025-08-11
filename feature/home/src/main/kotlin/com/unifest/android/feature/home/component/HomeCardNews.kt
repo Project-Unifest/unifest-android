@@ -24,7 +24,7 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content10
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.core.model.CardNewsModel
+import com.unifest.android.core.model.HomeCardModel
 import com.unifest.android.feature.home.R
 import com.unifest.android.feature.home.clickable
 import com.unifest.android.core.designsystem.R as designR
@@ -32,8 +32,8 @@ import com.unifest.android.core.designsystem.R as designR
 @Composable
 fun HomeCardNews(
     modifier: Modifier = Modifier,
-    cardNewsList: List<CardNewsModel>,
-    onCardNewClick: (CardNewsModel) -> Unit,
+    cardNewsList: List<HomeCardModel>,
+    onCardNewClick: (HomeCardModel) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column {
@@ -63,7 +63,7 @@ fun HomeCardNews(
                         .size(204.dp)
                         .clip(RoundedCornerShape(7.dp))
                         .clickable { onCardNewClick(cardNews) },
-                    imgUrl = cardNews.coverImgUrl,
+                    imgUrl = cardNews.thumbnailImgUrl,
                     contentDescription = "",
                     placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
@@ -80,8 +80,8 @@ private fun HomeCardNewsPreview() {
     UnifestTheme {
         HomeCardNews(
             cardNewsList = listOf(
-                CardNewsModel(),
-                CardNewsModel(),
+                HomeCardModel(),
+                HomeCardModel(),
             ),
             onCardNewClick = {},
         )

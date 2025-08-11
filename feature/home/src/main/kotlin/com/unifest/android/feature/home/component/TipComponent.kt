@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.common.utils.getRandomItem
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.DarkPrimary50
 import com.unifest.android.core.designsystem.theme.LightGrey100
@@ -30,7 +31,7 @@ import com.unifest.android.feature.home.R
 fun TipComponent(
     modifier: Modifier = Modifier,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    tipMessage: String,
+    tipMessage: List<String>,
 ) {
     Row(
         modifier = modifier
@@ -57,7 +58,7 @@ fun TipComponent(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
-            text = tipMessage,
+            text = tipMessage.takeIf { it.isNotEmpty() }?.getRandomItem() ?: "",
             style = Content10,
             color = if (darkTheme) LightPrimary500 else LightGrey800,
         )
@@ -69,7 +70,7 @@ fun TipComponent(
 private fun TipComponentPreview() {
     UnifestTheme {
         TipComponent(
-            tipMessage = "웨이팅 기능으로 부스 원격 줄서기를 할 수 있어요.",
+            tipMessage = listOf("웨이팅 기능으로 부스 원격 줄서기를 할 수 있어요."),
         )
     }
 }

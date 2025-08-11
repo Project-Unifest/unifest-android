@@ -8,10 +8,10 @@ import com.unifest.android.core.network.service.UnifestService
 import javax.inject.Inject
 
 class DefaultHomeRepository @Inject constructor(
-    private val service: UnifestService
-): HomeRepository {
+    private val service: UnifestService,
+) : HomeRepository {
     override suspend fun getHomeInfo(): Result<HomeInfoModel> = runSuspendCatching {
-        service.getHomeInfo().toModel()
+        service.getHomeInfo().data.toModel()
     }
 
 }
