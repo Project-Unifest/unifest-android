@@ -10,7 +10,6 @@ import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.response.FCMTokenResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
-import com.unifest.android.core.network.response.HomeInfo
 import com.unifest.android.core.network.response.HomeInfoResponse
 import com.unifest.android.core.network.response.booth.AllBoothsResponse
 import com.unifest.android.core.network.response.booth.BoothDetailResponse
