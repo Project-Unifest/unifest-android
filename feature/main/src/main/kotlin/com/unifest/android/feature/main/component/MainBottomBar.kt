@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -107,7 +108,7 @@ private fun RowScope.MainBottomBarItem(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                text = tab.label,
+                text = stringResource(tab.labelResId),
                 color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary,
                 fontWeight = if (selected) FontWeight.SemiBold
                 else FontWeight.Normal,
