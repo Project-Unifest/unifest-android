@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.designsystem.component.TransformableImage
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
-import com.unifest.android.feature.home.component.OriginalCardNews
 
 @Composable
 internal fun HomeCardNewsRoute(
@@ -63,7 +63,7 @@ internal fun HomeCardNewsScreen(
             .systemBarsPadding()
             .fillMaxSize(),
     ) {
-        OriginalCardNews(
+        TransformableImage(
             modifier = Modifier
                 .fillMaxSize()
                 .clipToBounds(),
