@@ -5,7 +5,7 @@ import com.unifest.android.core.common.UiText
 sealed interface MapUiEvent {
     data object NavigateToAppSetting : MapUiEvent
     data class NavigateToBoothDetail(val boothId: Long) : MapUiEvent
-    data object NavigateToBoothLayout : MapUiEvent
+    data class NavigateToBoothLayout(val imgUrl: String) : MapUiEvent
     data class ShowSnackBar(val message: UiText) : MapUiEvent
     data object RequestPermissions : MapUiEvent
 }

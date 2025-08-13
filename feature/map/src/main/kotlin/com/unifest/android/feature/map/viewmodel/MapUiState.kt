@@ -45,4 +45,5 @@ data class MapUiState(
         SANGMYUNG_UNIVERSITY_POLYLINE,
         GACHEON_UNIVERSITY_POLYLINE,
     ),
+    val boothLayoutUrl: String = "",
 )

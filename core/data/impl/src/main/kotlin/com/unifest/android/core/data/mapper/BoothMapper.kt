@@ -4,12 +4,14 @@ import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.BoothModel
 import com.unifest.android.core.model.BoothTabModel
 import com.unifest.android.core.model.LikedBoothModel
+import com.unifest.android.core.model.MapModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.MenuStatus
 import com.unifest.android.core.model.ScheduleModel
 import com.unifest.android.core.model.WaitingModel
 import com.unifest.android.core.network.response.booth.Booth
 import com.unifest.android.core.network.response.booth.BoothDetail
+import com.unifest.android.core.network.response.booth.BoothInfo
 import com.unifest.android.core.network.response.booth.LikedBooth
 import com.unifest.android.core.network.response.booth.Menu
 import com.unifest.android.core.network.response.booth.Schedule
@@ -62,6 +64,13 @@ internal fun Booth.toModel(): BoothModel {
         location = location,
         latitude = latitude,
         longitude = longitude,
+    )
+}
+
+internal fun BoothInfo.toModel(): MapModel {
+    return MapModel(
+        booths = booths.map { it.toModel() },
+        boothLayoutUrl = boothLayoutUrl,
     )
 }
 

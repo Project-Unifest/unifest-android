@@ -70,8 +70,9 @@ class MapViewModel @Inject constructor(
     }
 
     private fun navigateToBoothLayout() {
+        val imgUrl = _uiState.value.boothLayoutUrl
         viewModelScope.launch {
-            _uiEvent.send(MapUiEvent.NavigateToBoothLayout)
+            _uiEvent.send(MapUiEvent.NavigateToBoothLayout(imgUrl))
         }
     }
 
@@ -213,12 +214,13 @@ class MapViewModel @Inject constructor(
     fun getAllBooths(festivalId: Long) {
         viewModelScope.launch {
             boothRepository.getAllBooths(festivalId)
-                .onSuccess { booths ->
+                .onSuccess { mapModel ->
                     _uiState.update {
                         it.copy(
-                            boothList = booths
+                            boothList = mapModel.booths
                                 .map { booth -> booth.toMapModel() }
                                 .toImmutableList(),
+                            boothLayoutUrl = mapModel.boothLayoutUrl,
                         )
                     }
                     filterBoothsByType(_uiState.value.selectedBoothTypeChips)

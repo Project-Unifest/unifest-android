@@ -1,35 +1,31 @@
 package com.unifest.android.feature.map.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import androidx.navigation.navOptions
+import androidx.navigation.toRoute
 import com.unifest.android.core.common.UiText
 import com.unifest.android.core.navigation.MainTabRoute
 import com.unifest.android.core.navigation.Route
 import com.unifest.android.feature.map.MapBoothLayoutRoute
 import com.unifest.android.feature.map.MapRoute
-import com.unifest.android.feature.map.viewmodel.MapViewModel
 
 fun NavController.navigateToMap(navOptions: NavOptions) {
     navigate(MainTabRoute.Map, navOptions)
 }
 
-fun NavController.navigateToMapBoothLayout() {
-    navigate(Route.MapBoothLayout)
+fun NavController.navigateToMapBoothLayout(imgUrl: String) {
+    navigate(Route.MapBoothLayout(imgUrl = imgUrl))
 }
 
 fun NavGraphBuilder.mapNavGraph(
     padding: PaddingValues,
     navigateToBoothDetail: (Long) -> Unit,
-    navigateToBoothLayout: () -> Unit,
+    navigateToBoothLayout: (String) -> Unit,
     popBackStack: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
-    getBackStackViewModel: @Composable (NavBackStackEntry) -> MapViewModel,
 ) {
     composable<MainTabRoute.Map> {
         MapRoute(
@@ -41,9 +37,11 @@ fun NavGraphBuilder.mapNavGraph(
     }
 
     composable<Route.MapBoothLayout> { navBackStackEntry ->
+        val imgUrl = navBackStackEntry.toRoute<Route.MapBoothLayout>().imgUrl
+
         MapBoothLayoutRoute(
             popBackStack = popBackStack,
-            viewModel = getBackStackViewModel(navBackStackEntry),
+            imgUrl = imgUrl,
         )
     }
 }

@@ -76,8 +76,8 @@ internal class MainNavController(
         navController.navigateToHomeCardNews(imgUrl)
     }
 
-    fun navigateToMapBoothLayout() {
-        navController.navigateToMapBoothLayout()
+    fun navigateToMapBoothLayout(imgUrl: String) {
+        navController.navigateToMapBoothLayout(imgUrl)
     }
 
     private fun popBackStack() {

@@ -29,7 +29,6 @@ import com.unifest.android.feature.home.navigation.homeNavGraph
 import com.unifest.android.feature.liked_booth.navigation.likedBoothNavGraph
 import com.unifest.android.feature.main.component.MainBottomBar
 import com.unifest.android.feature.map.navigation.mapNavGraph
-import com.unifest.android.feature.map.viewmodel.MapViewModel
 import com.unifest.android.feature.menu.navigation.menuNavGraph
 import com.unifest.android.feature.waiting.navigation.waitingNavGraph
 import kotlinx.collections.immutable.toImmutableList
@@ -102,11 +101,6 @@ internal fun MainScreen(
                 navigateToBoothLayout = navigator::navigateToMapBoothLayout,
                 popBackStack = navigator::popBackStackIfNotMap,
                 onShowSnackBar = onShowSnackBar,
-                getBackStackViewModel = { navBackStackEntry ->
-                    navBackStackEntry.sharedViewModel<MapViewModel>(
-                        navController = navigator.navController,
-                    )
-                },
             )
             boothDetailNavGraph(
                 padding = innerPadding,

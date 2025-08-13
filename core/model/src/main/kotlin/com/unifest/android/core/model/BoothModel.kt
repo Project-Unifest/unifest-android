@@ -13,3 +13,9 @@ data class BoothModel(
     val latitude: Float = 0F,
     val longitude: Float = 0F,
 )
+
+@Stable
+data class MapModel(
+    val booths: List<BoothModel> = emptyList(),
+    val boothLayoutUrl: String = "",
+)

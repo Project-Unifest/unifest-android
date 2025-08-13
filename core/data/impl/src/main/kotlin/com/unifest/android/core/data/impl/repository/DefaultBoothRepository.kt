@@ -24,7 +24,7 @@ class DefaultBoothRepository @Inject constructor(
     }
 
     override suspend fun getAllBooths(festivalId: Long) = runSuspendCatching {
-        service.getAllBooths(festivalId).data.booths.map { it.toModel() }
+        service.getAllBooths(festivalId).data.toModel()
     }
 
     override suspend fun getBoothDetail(boothId: Long) = runSuspendCatching {

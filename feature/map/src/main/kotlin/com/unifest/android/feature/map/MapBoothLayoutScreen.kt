@@ -28,7 +28,7 @@ import com.unifest.android.core.ui.DevicePreview
 @Composable
 internal fun MapBoothLayoutRoute(
     popBackStack: () -> Unit,
-    imageUrl: String,
+    imgUrl: String = "",
 ) {
     val density = LocalDensity.current
 
@@ -44,7 +44,7 @@ internal fun MapBoothLayoutRoute(
     }
 
     MapBoothLayoutScreen(
-        imageUrl = imageUrl,
+        imageUrl = imgUrl,
         screenWidth = screenWidth,
         screenHeight = usableHeight,
         popBackStack = popBackStack,

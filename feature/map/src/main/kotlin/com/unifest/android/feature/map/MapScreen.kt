@@ -130,7 +130,7 @@ val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRA
 internal fun MapRoute(
     padding: PaddingValues,
     navigateToBoothDetail: (Long) -> Unit,
-    navigateToBoothLayout: () -> Unit,
+    navigateToBoothLayout: (String) -> Unit,
     onShowSnackBar: (UiText) -> Unit,
     mapViewModel: MapViewModel = hiltViewModel(),
     festivalViewModel: FestivalViewModel = hiltViewModel(),
@@ -236,7 +236,7 @@ internal fun MapRoute(
             }
 
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
-            is MapUiEvent.NavigateToBoothLayout -> navigateToBoothLayout()
+            is MapUiEvent.NavigateToBoothLayout -> navigateToBoothLayout(event.imgUrl)
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
@@ -556,7 +556,9 @@ internal fun MapContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             BoothLayoutButton(
-                modifier = Modifier.padding(end = 20.dp),
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(end = 20.dp),
                 onClick = { onMapUiAction(MapUiAction.OnBoothLayoutButtonClick) },
             )
         }
