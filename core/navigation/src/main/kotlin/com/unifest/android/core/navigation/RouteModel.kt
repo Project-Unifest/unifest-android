@@ -17,6 +17,9 @@ sealed interface Route {
 
     @Serializable
     data class HomeCardNews(val imgUrl: String) : Route
+
+    @Serializable
+    data object MapBoothLayout : Route
 }
 
 sealed interface MainTabRoute : Route {
