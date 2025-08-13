@@ -65,6 +65,13 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+            is MapUiAction.OnBoothLayoutButtonClick -> navigateToBoothLayout()
+        }
+    }
+
+    private fun navigateToBoothLayout() {
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.NavigateToBoothLayout)
         }
     }
 

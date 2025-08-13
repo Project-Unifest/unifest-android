@@ -19,6 +19,7 @@ sealed interface MapUiAction {
     ) : MapUiAction
 
     data class OnBoothTypeChipClick(val chipName: String) : MapUiAction
+    data object OnBoothLayoutButtonClick : MapUiAction
 }
 
 enum class ErrorType {

@@ -98,6 +98,7 @@ import com.unifest.android.feature.festival.viewmodel.FestivalUiEvent
 import com.unifest.android.feature.festival.viewmodel.FestivalUiState
 import com.unifest.android.feature.festival.viewmodel.FestivalViewModel
 import com.unifest.android.feature.map.component.BoothItem
+import com.unifest.android.feature.map.component.BoothLayoutButton
 import com.unifest.android.feature.map.component.MapTopAppBar
 import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.model.ItemData
@@ -129,6 +130,7 @@ val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRA
 internal fun MapRoute(
     padding: PaddingValues,
     navigateToBoothDetail: (Long) -> Unit,
+    navigateToBoothLayout: () -> Unit,
     onShowSnackBar: (UiText) -> Unit,
     mapViewModel: MapViewModel = hiltViewModel(),
     festivalViewModel: FestivalViewModel = hiltViewModel(),
@@ -234,6 +236,7 @@ internal fun MapRoute(
             }
 
             is MapUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
+            is MapUiEvent.NavigateToBoothLayout -> navigateToBoothLayout()
             is MapUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
         }
     }
@@ -536,17 +539,27 @@ internal fun MapContent(
                 }
             }
         }
-        MapTopAppBar(
-            title = uiState.festivalInfo.schoolName,
-            boothSearchTextState = uiState.boothSearchTextState,
-            onMapUiAction = onMapUiAction,
-            onFestivalUiAction = onFestivalUiAction,
-            isOnboardingCompleted = uiState.isMapOnboardingCompleted,
-            selectedChips = uiState.selectedBoothTypeChips,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
-        )
+        ) {
+            MapTopAppBar(
+                title = uiState.festivalInfo.schoolName,
+                boothSearchTextState = uiState.boothSearchTextState,
+                onMapUiAction = onMapUiAction,
+                onFestivalUiAction = onFestivalUiAction,
+                isOnboardingCompleted = uiState.isMapOnboardingCompleted,
+                selectedChips = uiState.selectedBoothTypeChips,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            BoothLayoutButton(
+                modifier = Modifier.padding(end = 20.dp),
+                onClick = { onMapUiAction(MapUiAction.OnBoothLayoutButtonClick) },
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
