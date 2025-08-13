@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.unifest.android.firebase)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.google.secrets)
-    alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
 }
 

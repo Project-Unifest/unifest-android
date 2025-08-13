@@ -18,7 +18,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            val navigator: MainNavController = rememberMainNavController()
             val systemUiController = rememberExSystemUiController()
             val isDarkTheme = isSystemInDarkTheme()
 
@@ -33,9 +32,7 @@ class MainActivity : ComponentActivity() {
             }
 
             UnifestTheme {
-                MainScreen(
-                    navigator = navigator,
-                )
+                MainScreen()
             }
         }
     }
