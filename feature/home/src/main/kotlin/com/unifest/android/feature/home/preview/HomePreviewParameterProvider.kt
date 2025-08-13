@@ -1,9 +1,9 @@
 package com.unifest.android.feature.home.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.unifest.android.core.model.CardNewsModel
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.core.model.FestivalTodayModel
+import com.unifest.android.core.model.HomeCardModel
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import kotlinx.collections.immutable.persistentListOf
 
@@ -69,11 +69,11 @@ internal class HomePreviewParameterProvider : PreviewParameterProvider<HomeUiSta
                 ),
             ),
             cardNews = persistentListOf(
-                CardNewsModel(
-                    coverImgUrl = "https://example.com/image1.jpg",
+                HomeCardModel(
+                    thumbnailImgUrl = "https://example.com/image1.jpg",
                 ),
-                CardNewsModel(
-                    coverImgUrl = "https://example.com/image2.jpg",
+                HomeCardModel(
+                    thumbnailImgUrl = "https://example.com/image2.jpg",
                 ),
             ),
         ),

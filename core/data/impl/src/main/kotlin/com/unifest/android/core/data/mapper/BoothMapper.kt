@@ -2,6 +2,7 @@ package com.unifest.android.core.data.mapper
 
 import com.unifest.android.core.model.BoothDetailModel
 import com.unifest.android.core.model.BoothModel
+import com.unifest.android.core.model.BoothTabModel
 import com.unifest.android.core.model.LikedBoothModel
 import com.unifest.android.core.model.MenuModel
 import com.unifest.android.core.model.MenuStatus
@@ -61,6 +62,17 @@ internal fun Booth.toModel(): BoothModel {
         location = location,
         latitude = latitude,
         longitude = longitude,
+    )
+}
+
+internal fun Booth.toBoothTabModel(): BoothTabModel {
+    return BoothTabModel(
+        id = id,
+        name = name,
+        description = description,
+        thumbnail = thumbnail,
+        location = location,
+        waitingEnabled = waitingEnabled,
     )
 }
 

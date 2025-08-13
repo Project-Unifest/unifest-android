@@ -58,6 +58,7 @@ import com.unifest.android.feature.home.viewmodel.HomeUiAction
 import com.unifest.android.feature.home.viewmodel.HomeUiEvent
 import com.unifest.android.feature.home.viewmodel.HomeUiState
 import com.unifest.android.feature.home.viewmodel.HomeViewModel
+import kotlinx.collections.immutable.toImmutableList
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -204,7 +205,7 @@ internal fun HomeContent(
                         festival = festival,
                         scheduleIndex = scheduleIndex,
                         selectedDate = homeUiState.selectedDate,
-                        isDataReady = homeUiState.isDataReady,
+                        isDataReady = homeUiState.isFestivalScheduleDataReady,
                         // isStarImageClicked = homeUiState.isStarImageClicked[scheduleIndex],
                         onHomeUiAction = onHomeUiAction,
                     )
@@ -225,7 +226,7 @@ internal fun HomeContent(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                         .padding(top = 24.dp, bottom = 35.dp),
-                    tipMessage = "",
+                    tipMessage = homeUiState.tips.map { it.tipContent }.toImmutableList(),
                 )
             }
             item {

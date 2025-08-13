@@ -2,6 +2,7 @@ package com.unifest.android.core.data.di
 
 import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.HomeRepository
 import com.unifest.android.core.data.api.repository.LikedBoothRepository
 import com.unifest.android.core.data.api.repository.LikedFestivalRepository
 import com.unifest.android.core.data.api.repository.MessagingRepository
@@ -12,6 +13,7 @@ import com.unifest.android.core.data.api.repository.StampRepository
 import com.unifest.android.core.data.api.repository.WaitingRepository
 import com.unifest.android.core.data.impl.repository.DefaultBoothRepository
 import com.unifest.android.core.data.impl.repository.DefaultFestivalRepository
+import com.unifest.android.core.data.impl.repository.DefaultHomeRepository
 import com.unifest.android.core.data.impl.repository.DefaultLikedBoothRepository
 import com.unifest.android.core.data.impl.repository.DefaultLikedFestivalRepository
 import com.unifest.android.core.data.impl.repository.DefaultMessagingRepository
@@ -68,4 +70,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindStampRepository(defaultStampRepository: DefaultStampRepository): StampRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeRepository(defaultHomeRepository: DefaultHomeRepository): HomeRepository
 }

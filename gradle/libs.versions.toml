@@ -7,7 +7,7 @@ versionCode = "44"
 versionName = "1.5.0"
 packageName = "com.unifest.android"
 
-android-gradle-plugin = "8.12.0"
+android-gradle-plugin = "8.11.1"
 kotlin-core = "2.2.0"
 gradle-dependency-handler-extensions = "1.1.0"
 
@@ -119,7 +119,7 @@ compose-system-ui-controller = { group = "tech.thdev", name = "extensions-compos
 compose-keyboard-state = { group = "tech.thdev", name = "extensions-compose-keyboard-state", version.ref = "compose-extensions" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlinx-serialization-converter" }
+retrofit-kotlinx-serialization-converter = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar-jdk-libs" }

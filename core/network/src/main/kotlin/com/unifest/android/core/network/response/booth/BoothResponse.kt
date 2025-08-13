@@ -20,7 +20,13 @@ data class AllBoothsResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: List<Booth>,
+    val data: BoothList,
+)
+
+@Serializable
+data class BoothList(
+    @SerialName("booths")
+    val booths: List<Booth>,
 )
 
 @Serializable
@@ -55,4 +61,12 @@ data class Booth(
     val latitude: Float,
     @SerialName("longitude")
     val longitude: Float,
+    @SerialName("enabled")
+    val enabled: Boolean,
+    @SerialName("waitingEnabled")
+    val waitingEnabled: Boolean,
+    @SerialName("scheduleList")
+    val scheduleList: List<Schedule>,
+    @SerialName("stampEnabled")
+    val stampEnabled: Boolean,
 )

@@ -5,6 +5,7 @@ import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
 import com.unifest.android.core.common.getDeviceId
+import com.unifest.android.core.data.mapper.toBoothTabModel
 import com.unifest.android.core.datastore.api.TokenDataSource
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
@@ -23,7 +24,7 @@ class DefaultBoothRepository @Inject constructor(
     }
 
     override suspend fun getAllBooths(festivalId: Long) = runSuspendCatching {
-        service.getAllBooths(festivalId).data.map { it.toModel() }
+        service.getAllBooths(festivalId).data.booths.map { it.toModel() }
     }
 
     override suspend fun getBoothDetail(boothId: Long) = runSuspendCatching {
@@ -64,5 +65,11 @@ class DefaultBoothRepository @Inject constructor(
                 fcmToken = fcmToken,
             ),
         ).data.toModel()
+    }
+
+    override suspend fun getTabBooths(festivalId: Long) = runSuspendCatching {
+        service.getAllBooths(
+            festivalId = festivalId,
+        ).data.booths.map { it.toBoothTabModel() }
     }
 }
