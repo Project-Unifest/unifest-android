@@ -134,6 +134,7 @@ class BoothViewModel @Inject constructor(
                         it.copy(
                             boothList = booths.toPersistentList(),
                             showingBoothList = booths.toPersistentList(),
+                            totalBoothCount = booths.size,
                         )
                     }
                 }
