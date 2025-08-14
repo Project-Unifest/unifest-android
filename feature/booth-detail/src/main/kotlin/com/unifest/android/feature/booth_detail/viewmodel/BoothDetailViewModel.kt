@@ -38,7 +38,7 @@ class BoothDetailViewModel @Inject constructor(
     private val waitingRepository: WaitingRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ErrorHandlerActions {
-    private val boothId = savedStateHandle.toRoute<Route.BoothDetail.BoothDetail>().boothId
+    private val boothId = savedStateHandle.toRoute<Route.BoothDetail.Detail>().boothId
 
     private val _uiState = MutableStateFlow(BoothDetailUiState())
     val uiState: StateFlow<BoothDetailUiState> = _uiState.asStateFlow()

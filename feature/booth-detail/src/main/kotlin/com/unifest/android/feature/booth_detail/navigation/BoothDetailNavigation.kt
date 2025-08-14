@@ -15,11 +15,11 @@ import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailViewModel
 fun NavController.navigateToBoothDetail(
     boothId: Long,
 ) {
-    navigate(Route.BoothDetail.BoothDetail(boothId))
+    navigate(Route.BoothDetail.Detail(boothId))
 }
 
 fun NavController.navigateToBoothDetailLocation() {
-    navigate(Route.BoothDetail.BoothLocation)
+    navigate(Route.BoothDetail.Location)
 }
 
 fun NavGraphBuilder.boothDetailNavGraph(
@@ -30,9 +30,9 @@ fun NavGraphBuilder.boothDetailNavGraph(
     getBackStackViewModel: @Composable (NavBackStackEntry) -> BoothDetailViewModel,
 ) {
     navigation<Route.BoothDetail>(
-        startDestination = Route.BoothDetail.BoothDetail::class,
+        startDestination = Route.BoothDetail.Detail::class,
     ) {
-        composable<Route.BoothDetail.BoothDetail> { navBackStackEntry ->
+        composable<Route.BoothDetail.Detail> { navBackStackEntry ->
             BoothDetailRoute(
                 padding = padding,
                 popBackStack = popBackStack,
@@ -41,7 +41,7 @@ fun NavGraphBuilder.boothDetailNavGraph(
                 viewModel = getBackStackViewModel(navBackStackEntry),
             )
         }
-        composable<Route.BoothDetail.BoothLocation> { navBackStackEntry ->
+        composable<Route.BoothDetail.Location> { navBackStackEntry ->
             BoothDetailLocationRoute(
                 popBackStack = popBackStack,
                 viewModel = getBackStackViewModel(navBackStackEntry),

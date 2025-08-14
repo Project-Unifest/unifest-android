@@ -6,10 +6,10 @@ sealed interface Route {
     @Serializable
     data object BoothDetail {
         @Serializable
-        data class BoothDetail(val boothId: Long) : Route
+        data class Detail(val boothId: Long) : Route
 
         @Serializable
-        data object BoothLocation : Route
+        data object Location : Route
     }
 
     @Serializable
