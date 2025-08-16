@@ -85,7 +85,7 @@ fun TransformableImage(
             },
     ) {
         AsyncImage(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .graphicsLayer(
                     scaleX = scale,
                     scaleY = scale,
@@ -111,7 +111,7 @@ private fun TransformableImagePreview() {
         val screenHeight = LocalWindowInfo.current.containerSize.height
 
         TransformableImage(
-            modifier = Modifier.Companion,
+            modifier = Modifier,
             screenWidth = screenWidth,
             screenHeight = screenHeight,
             imageUrl = "",
