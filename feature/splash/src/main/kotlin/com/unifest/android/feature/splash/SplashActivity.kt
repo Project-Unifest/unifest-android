@@ -70,9 +70,7 @@ class SplashActivity : ComponentActivity() {
                                 activity = this@SplashActivity,
                                 withFinish = true,
                             ) {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                                 intent.extras?.let { putExtras(it) }
                                 this
                             }
