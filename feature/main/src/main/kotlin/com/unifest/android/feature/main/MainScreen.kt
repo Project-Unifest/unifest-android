@@ -98,6 +98,8 @@ internal fun MainScreen(
             mapNavGraph(
                 padding = innerPadding,
                 navigateToBoothDetail = navigator::navigateToBoothDetail,
+                navigateToBoothLayout = navigator::navigateToMapBoothLayout,
+                popBackStack = navigator::popBackStackIfNotMap,
                 onShowSnackBar = onShowSnackBar,
             )
             boothDetailNavGraph(

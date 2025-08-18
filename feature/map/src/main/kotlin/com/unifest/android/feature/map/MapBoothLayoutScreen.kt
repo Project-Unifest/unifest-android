@@ -1,6 +1,7 @@
-package com.unifest.android.feature.home
+package com.unifest.android.feature.map
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -25,9 +26,9 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.ui.DevicePreview
 
 @Composable
-internal fun HomeCardNewsRoute(
+internal fun MapBoothLayoutRoute(
     popBackStack: () -> Unit,
-    imageUrl: String,
+    imgUrl: String = "",
 ) {
     val density = LocalDensity.current
 
@@ -42,8 +43,8 @@ internal fun HomeCardNewsRoute(
             .toInt()
     }
 
-    HomeCardNewsScreen(
-        imageUrl = imageUrl,
+    MapBoothLayoutScreen(
+        imageUrl = imgUrl,
         screenWidth = screenWidth,
         screenHeight = usableHeight,
         popBackStack = popBackStack,
@@ -51,7 +52,7 @@ internal fun HomeCardNewsRoute(
 }
 
 @Composable
-internal fun HomeCardNewsScreen(
+internal fun MapBoothLayoutScreen(
     imageUrl: String,
     screenWidth: Int,
     screenHeight: Int,
@@ -94,7 +95,7 @@ private fun HomeCardNewsPreview() {
         val screenWidth = LocalWindowInfo.current.containerSize.width
         val screenHeight = LocalWindowInfo.current.containerSize.height
 
-        HomeCardNewsScreen(
+        MapBoothLayoutScreen(
             imageUrl = "https://example.com/image.jpg",
             popBackStack = {},
             screenWidth = screenWidth,

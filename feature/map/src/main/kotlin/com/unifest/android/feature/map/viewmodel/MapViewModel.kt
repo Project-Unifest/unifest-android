@@ -65,6 +65,14 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+            is MapUiAction.OnBoothLayoutButtonClick -> navigateToBoothLayout()
+        }
+    }
+
+    private fun navigateToBoothLayout() {
+        val imgUrl = _uiState.value.boothLayoutUrl
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.NavigateToBoothLayout(imgUrl))
         }
     }
 
@@ -206,12 +214,13 @@ class MapViewModel @Inject constructor(
     fun getAllBooths(festivalId: Long) {
         viewModelScope.launch {
             boothRepository.getAllBooths(festivalId)
-                .onSuccess { booths ->
+                .onSuccess { mapModel ->
                     _uiState.update {
                         it.copy(
-                            boothList = booths
+                            boothList = mapModel.booths
                                 .map { booth -> booth.toMapModel() }
                                 .toImmutableList(),
+                            boothLayoutUrl = mapModel.boothLayoutUrl,
                         )
                     }
                     filterBoothsByType(_uiState.value.selectedBoothTypeChips)

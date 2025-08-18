@@ -20,13 +20,15 @@ data class AllBoothsResponse(
     @SerialName("message")
     val message: String,
     @SerialName("data")
-    val data: BoothList,
+    val data: BoothInfo,
 )
 
 @Serializable
-data class BoothList(
+data class BoothInfo(
     @SerialName("booths")
     val booths: List<Booth>,
+    @SerialName("boothLayoutUrl")
+    val boothLayoutUrl: String = "",
 )
 
 @Serializable

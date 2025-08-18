@@ -2,6 +2,7 @@ package com.unifest.android.feature.booth_detail.viewmodel
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.naver.maps.geometry.LatLng
+import com.unifest.android.core.common.GACHON_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.HANKYONG_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.KONKUK_UNIVERSITY_POLYLINE
 import com.unifest.android.core.common.KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE
@@ -51,5 +52,6 @@ data class BoothDetailUiState(
         KOREA_NATIONAL_UNIVERSITY_OF_TRANSPORTATION_POLYLINE,
         KOREA_UNIVERSITY_POLYLINE,
         SANGMYUNG_UNIVERSITY_POLYLINE,
+        GACHON_UNIVERSITY_POLYLINE,
     ),
 )

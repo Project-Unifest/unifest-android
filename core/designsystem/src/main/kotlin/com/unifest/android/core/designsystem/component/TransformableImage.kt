@@ -1,4 +1,4 @@
-package com.unifest.android.feature.home.component
+package com.unifest.android.core.designsystem.component
 
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
@@ -25,7 +25,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun OriginalCardNews(
+fun TransformableImage(
     modifier: Modifier = Modifier,
     screenWidth: Int,
     screenHeight: Int,
@@ -35,7 +35,7 @@ internal fun OriginalCardNews(
     var imageHeight by remember { mutableIntStateOf(0) }
 
     var scale by remember { mutableFloatStateOf(1f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
+    var offset by remember { mutableStateOf(Offset.Companion.Zero) }
 
     val scaledWidth by remember(imageWidth, scale) { derivedStateOf { imageWidth * scale } }
     val scaledHeight by remember(imageHeight, scale) { derivedStateOf { imageHeight * scale } }
@@ -68,7 +68,7 @@ internal fun OriginalCardNews(
                     val maxOffsetX = ((scaledWidth - screenWidth) / 2f).absoluteValue
                     val maxOffsetY = ((scaledHeight - screenHeight) / 2f).absoluteValue
                     offset = if (scale == 1f) {
-                        Offset.Zero
+                        Offset.Companion.Zero
                     } else {
                         Offset(
                             x = (offset.x + offestChange.x).coerceIn(
@@ -92,7 +92,7 @@ internal fun OriginalCardNews(
                     translationX = offset.x,
                     translationY = offset.y,
                 )
-                .align(Alignment.Center)
+                .align(Alignment.Companion.Center)
                 .onGloballyPositioned { layoutCoordinates ->
                     imageWidth = layoutCoordinates.size.width
                     imageHeight = layoutCoordinates.size.height
@@ -105,12 +105,12 @@ internal fun OriginalCardNews(
 
 @ComponentPreview
 @Composable
-private fun OriginalCardNewsPreview() {
+private fun TransformableImagePreview() {
     UnifestTheme {
         val screenWidth = LocalWindowInfo.current.containerSize.width
         val screenHeight = LocalWindowInfo.current.containerSize.height
 
-        OriginalCardNews(
+        TransformableImage(
             modifier = Modifier,
             screenWidth = screenWidth,
             screenHeight = screenHeight,
