@@ -20,7 +20,7 @@ data class Festival(
     @SerialName("festivalId")
     val festivalId: Long,
     @SerialName("thumbnail")
-    val thumbnail: String,
+    val thumbnail: String?,
     @SerialName("schoolName")
     val schoolName: String,
     @SerialName("region")

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.formatToString
@@ -33,6 +34,7 @@ import com.unifest.android.core.designsystem.theme.Content4
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.FestivalModel
 import com.unifest.android.feature.intro.viewmodel.IntroUiAction
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun FestivalRowItem(
@@ -64,6 +66,7 @@ internal fun FestivalRowItem(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape),
+                    placeholder = painterResource(id = designR.drawable.item_placeholder),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 AutoResizedText(
