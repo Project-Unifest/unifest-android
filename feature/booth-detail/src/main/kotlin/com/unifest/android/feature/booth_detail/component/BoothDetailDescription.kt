@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.Modifier.Companion.then
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -166,10 +165,7 @@ internal fun BoothDetailDescription(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    modifier = then(
-                        if (isScheduleExpanded) Modifier.scale(scaleX = 1f, scaleY = -1f)
-                        else Modifier,
-                    ),
+                    modifier = if (isScheduleExpanded) Modifier.scale(scaleX = 1f, scaleY = -1f) else Modifier,
                     imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
                     contentDescription = "Arrow Down",
                     tint = Color.Unspecified,
