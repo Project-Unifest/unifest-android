@@ -125,7 +125,10 @@ fun FestivalSearchBottomSheet(
                         },
                     ) {
                         Text(
-                            text = stringResource(id = R.string.edit),
+                            text = stringResource(
+                                id = if (uiState.isEditMode) R.string.finish
+                                else R.string.edit,
+                            ),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = Content3,
                         )

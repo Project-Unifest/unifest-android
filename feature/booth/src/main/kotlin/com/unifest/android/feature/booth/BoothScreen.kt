@@ -103,7 +103,8 @@ internal fun BoothContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.padding(top = 18.dp),
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp),
     ) {
         item {

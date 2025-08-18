@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -49,10 +50,9 @@ fun TipComponent(
                     color = LightPrimary500,
                     shape = RoundedCornerShape(7.dp),
                 ) else Modifier,
-            ),
+            ).padding(horizontal = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(modifier = Modifier.width(15.dp))
         Text(
             text = stringResource(R.string.home_tip_text),
             style = Title3,

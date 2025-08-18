@@ -382,7 +382,7 @@ private fun Day(
         !(day.isBefore(beginDate) || day.isAfter(endDate))
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .clickable(
                 enabled = isSelectable,
@@ -393,7 +393,12 @@ private fun Day(
         Box(
             modifier = Modifier
                 .aspectRatio(1f)
-                .padding(16.dp)
+                .padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = if (festivalCount > 0) 8.dp else 16.dp,
+                )
                 .clip(CircleShape)
                 .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
                 .then(
@@ -426,8 +431,10 @@ private fun Day(
                     .size(9.dp)
                     .clip(CircleShape)
                     .background(festivalDotColor)
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp),
             )
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
