@@ -128,7 +128,7 @@ class BoothViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            boothRepository.getTabBooths(festivalId = 1)
+            boothRepository.getTabBooths()
                 .onSuccess { booths ->
                     _uiState.update {
                         it.copy(
