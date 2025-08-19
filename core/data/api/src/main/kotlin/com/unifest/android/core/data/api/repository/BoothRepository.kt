@@ -14,5 +14,5 @@ interface BoothRepository {
     suspend fun getBoothLikes(boothId: Long): Result<Int>
     suspend fun checkPinValidation(boothId: Long, pinNumber: String): Result<Long>
     suspend fun requestBoothWaiting(boothId: Long, tel: String, partySize: Long, pinNumber: String): Result<WaitingModel>
-    suspend fun getTabBooths(festivalId: Long): Result<List<BoothTabModel>>
+    suspend fun getTabBooths(): Result<List<BoothTabModel>>
 }

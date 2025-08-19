@@ -88,15 +88,42 @@ jobs:
                     echo -e "$NOTES" >> $GITHUB_OUTPUT
                     echo "EOF" >> $GITHUB_OUTPUT
 
-            -   name: Build Debug APK
+#            -   name: Build Debug APK
+#                run: |
+#                    ./gradlew :app:assembleDebug
+#
+#            -   name: Upload Debug Build to Artifacts
+#                uses: actions/upload-artifact@v4
+#                with:
+#                    name: debug-artifacts
+#                    path: app/build/outputs/apk/debug/
+#                    if-no-files-found: error
+#
+#            -   name: Create Github Release
+#                uses: softprops/action-gh-release@v1
+#                with:
+#                    tag_name: ${{ steps.extract_version.outputs.version }}
+#                    release_name: ${{ steps.extract_version.outputs.version }}
+#                    generate_release_notes: true
+#
+#            -   name: Upload artifact to Firebase App Distribution
+#                uses: wzieba/Firebase-Distribution-Github-Action@v1
+#                with:
+#                    appId: ${{secrets.FIREBASE_DEBUG_APP_ID}}
+#                    serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+#                    groups: testers
+#                    file: app/build/outputs/apk/debug/app-debug.apk
+#                    releaseNotes: ${{ steps.firebase_release_note.outputs.notes }}
+
+            -   name: Build Release APK
                 run: |
-                    ./gradlew :app:assembleDebug
+                    ./gradlew :app:assembleRelease
 
             -   name: Upload Debug Build to Artifacts
                 uses: actions/upload-artifact@v4
                 with:
-                    name: debug-artifacts
-                    path: app/build/outputs/apk/debug/
+                    name: release-artifacts
+                    path: app/build/outputs/apk/release/
                     if-no-files-found: error
 
             -   name: Create Github Release
@@ -109,8 +136,8 @@ jobs:
             -   name: Upload artifact to Firebase App Distribution
                 uses: wzieba/Firebase-Distribution-Github-Action@v1
                 with:
-                    appId: ${{secrets.FIREBASE_DEBUG_APP_ID}}
+                    appId: ${{secrets.FIREBASE_RELEASE_APP_ID}}
                     serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
                     groups: testers
-                    file: app/build/outputs/apk/debug/app-debug.apk
+                    file: app/build/outputs/apk/release/app-release.apk
                     releaseNotes: ${{ steps.firebase_release_note.outputs.notes }}

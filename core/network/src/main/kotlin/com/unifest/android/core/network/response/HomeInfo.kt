@@ -24,13 +24,13 @@ data class HomeInfo(
 @Serializable
 data class HomeCard(
     @SerialName("createdDate")
-    val createdDate: String,
+    val createdDate: String?,
     @SerialName("detailImgUrl")
     val detailImgUrl: String,
     @SerialName("id")
     val id: Long,
     @SerialName("modifiedDate")
-    val modifiedDate: String,
+    val modifiedDate: String?,
     @SerialName("thumbnailImgUrl")
     val thumbnailImgUrl: String,
 )
@@ -38,11 +38,11 @@ data class HomeCard(
 @Serializable
 data class HomeTip(
     @SerialName("createdDate")
-    val createdDate: String,
+    val createdDate: String?,
     @SerialName("id")
     val id: Long,
     @SerialName("modifiedDate")
-    val modifiedDate: String,
+    val modifiedDate: String?,
     @SerialName("tipContent")
     val tipContent: String,
 )
