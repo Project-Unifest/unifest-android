@@ -420,22 +420,21 @@ private fun Day(
                 style = Title5,
             )
         }
-        if (festivalCount > 0) {
-            val festivalDotColor = when (festivalCount) {
-                1 -> if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen
-                2 -> if (isSystemInDarkTheme()) DarkOrange else LightOrange
-                else -> if (isSystemInDarkTheme()) DarkRed else LightRed
-            }
-            Box(
-                modifier = Modifier
-                    .size(9.dp)
-                    .clip(CircleShape)
-                    .background(festivalDotColor)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp),
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+        val festivalDotColor = when (festivalCount) {
+            0 -> Color.Transparent
+            1 -> if (isSystemInDarkTheme()) DarkBlueGreen else LightBlueGreen
+            2 -> if (isSystemInDarkTheme()) DarkOrange else LightOrange
+            else -> if (isSystemInDarkTheme()) DarkRed else LightRed
         }
+        Box(
+            modifier = Modifier
+                .size(9.dp)
+                .clip(CircleShape)
+                .background(festivalDotColor)
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 24.dp),
+        )
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
