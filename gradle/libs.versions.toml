@@ -58,7 +58,7 @@ balloon = "1.6.13"
 calendar-compose = "2.7.0"
 flexible-bottomsheet = "0.1.5"
 compose-effects = "0.1.4"
-compose-unstyled = "1.40.0"
+compose-unstyled = "1.42.0"
 
 naver-map-compose = "1.8.2"
 naver-map-location = "21.0.1"
