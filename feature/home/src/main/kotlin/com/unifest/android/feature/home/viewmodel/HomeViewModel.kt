@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.FestivalRepository
+import com.unifest.android.core.data.api.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -22,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val festivalRepository: FestivalRepository,
+    private val homeRepository: HomeRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -33,14 +35,32 @@ class HomeViewModel @Inject constructor(
         getIncomingFestivals()
         getAllFestivals()
         initStarImageClicked()
+        getHomeCardNews()
         getTodayFestivals(_uiState.value.selectedDate.toString())
+    }
+
+    private fun getHomeCardNews() {
+        viewModelScope.launch {
+            homeRepository.getHomeInfo()
+                .onSuccess { homeInfo ->
+                    _uiState.update {
+                        it.copy(
+                            cardNews = homeInfo.homeCardList.toImmutableList(),
+                            tips = homeInfo.homeTipList.toImmutableList(),
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    handleException(exception, this@HomeViewModel)
+                }
+        }
     }
 
     fun onHomeUiAction(action: HomeUiAction) {
         when (action) {
             is HomeUiAction.OnDateSelected -> {
                 _uiState.update {
-                    it.copy(isDataReady = false)
+                    it.copy(isFestivalScheduleDataReady = false)
                 }
                 setSelectedDate(action.date)
                 getTodayFestivals(action.date.toString())
@@ -49,6 +69,7 @@ class HomeViewModel @Inject constructor(
             is HomeUiAction.OnStarImageClick -> showStarImageDialog(action.scheduleIndex, action.starIndex)
             is HomeUiAction.OnStarImageDialogDismiss -> hideStarImageDialog()
             is HomeUiAction.OnClickWeekMode -> setWeekMode(!_uiState.value.isWeekMode)
+            is HomeUiAction.OnCardNewsClick -> navigateToCardNews(action.selectedCardNews.detailImgUrl)
         }
     }
 
@@ -76,7 +97,7 @@ class HomeViewModel @Inject constructor(
                             isStarImageClicked = festivals.map { festival ->
                                 List(festival.starInfo.size) { false }.toImmutableList()
                             }.toImmutableList(),
-                            isDataReady = true,
+                            isFestivalScheduleDataReady = true,
                         )
                     }
                 }
@@ -168,6 +189,12 @@ class HomeViewModel @Inject constructor(
     private fun setWeekMode(flag: Boolean) {
         _uiState.update {
             it.copy(isWeekMode = flag)
+        }
+    }
+
+    private fun navigateToCardNews(imgUrl: String) {
+        viewModelScope.launch {
+            _uiEvent.send(HomeUiEvent.NavigateToCardNews(imgUrl))
         }
     }
 }

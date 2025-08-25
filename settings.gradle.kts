@@ -39,6 +39,7 @@ include(
     ":core:ui",
 
     ":feature:booth",
+    ":feature:booth-detail",
     ":feature:festival",
     ":feature:home",
     ":feature:intro",

@@ -1,10 +1,12 @@
 package com.unifest.android.core.data.impl.repository
 
 import android.content.Context
+import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.data.api.repository.BoothRepository
+import com.unifest.android.core.data.impl.BuildConfig
+import com.unifest.android.core.data.mapper.toBoothTabModel
 import com.unifest.android.core.data.mapper.toModel
 import com.unifest.android.core.data.util.runSuspendCatching
-import com.unifest.android.core.common.getDeviceId
 import com.unifest.android.core.datastore.api.TokenDataSource
 import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
@@ -23,7 +25,7 @@ class DefaultBoothRepository @Inject constructor(
     }
 
     override suspend fun getAllBooths(festivalId: Long) = runSuspendCatching {
-        service.getAllBooths(festivalId).data.map { it.toModel() }
+        service.getAllBooths(festivalId).data.toModel()
     }
 
     override suspend fun getBoothDetail(boothId: Long) = runSuspendCatching {
@@ -65,4 +67,12 @@ class DefaultBoothRepository @Inject constructor(
             ),
         ).data.toModel()
     }
+
+    override suspend fun getTabBooths() = runSuspendCatching {
+        service.getAllBooths(
+            festivalId = GACHON_GLOBAL_FESTIVAL_ID,
+        ).data.booths.map { it.toBoothTabModel() }
+    }
 }
+
+private val GACHON_GLOBAL_FESTIVAL_ID = if (BuildConfig.DEBUG) 1L else 15L

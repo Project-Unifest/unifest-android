@@ -27,7 +27,7 @@ data class MenuModel(
     val name: String,
     val price: Int,
     val imgUrl: String,
-    val status: String,
+    val status: MenuStatus,
 )
 
 @Stable
@@ -51,3 +51,19 @@ data class ScheduleModel(
     val openTime: String,
     val closeTime: String,
 )
+
+@Stable
+enum class MenuStatus(val value: String) {
+    ENOUGH("ENOUGH"),
+    UNDER_50("UNDER_50"),
+    UNDER_10("UNDER_10"),
+    SOLD_OUT("SOLD_OUT"),
+    NO_DATA("NO_DATA"),
+    ;
+
+    companion object {
+        fun fromString(value: String?): MenuStatus {
+            return value?.let { MenuStatus.entries.find { it.value == value } } ?: NO_DATA
+        }
+    }
+}

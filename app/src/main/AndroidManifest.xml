@@ -39,10 +39,6 @@
                 android:name="com.unifest.android.initializer.FirebaseCrashlyticsInitializer"
                 android:value="androidx.startup" />
 
-            <meta-data
-                android:name="com.unifest.android.initializer.FirebaseMessagingInitializer"
-                android:value="androidx.startup" />
-
         </provider>
 
         <meta-data

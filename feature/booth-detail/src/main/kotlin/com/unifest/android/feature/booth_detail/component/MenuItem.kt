@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,13 +30,14 @@ import com.unifest.android.core.designsystem.theme.MenuPrice
 import com.unifest.android.core.designsystem.theme.MenuTitle
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
-import com.unifest.android.feature.booth.R
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.core.model.MenuStatus
+import com.unifest.android.feature.booth_detail.R
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 
 @Composable
 internal fun MenuItem(
     menu: MenuModel,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -49,7 +50,7 @@ internal fun MenuItem(
                 .clickable(
                     onClick = {
                         if (menu.imgUrl.isNotEmpty()) {
-                            onAction(BoothUiAction.OnMenuImageClick(menu))
+                            onAction(BoothDetailUiAction.OnMenuImageClick(menu))
                         }
                     },
                 ),
@@ -62,7 +63,7 @@ internal fun MenuItem(
                 modifier = Modifier.matchParentSize(),
             )
 
-            if (menu.status == "SOLD_OUT") {
+            if (menu.status == MenuStatus.SOLD_OUT) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -83,7 +84,7 @@ internal fun MenuItem(
         ) {
             Text(
                 text = menu.name,
-                color = if (menu.status == "SOLD_OUT") {
+                color = if (menu.status == MenuStatus.SOLD_OUT) {
                     MaterialTheme.colorScheme.secondaryContainer
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
@@ -93,7 +94,7 @@ internal fun MenuItem(
             Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = menu.price.formatAsCurrency(),
-                color = if (menu.status == "SOLD_OUT") {
+                color = if (menu.status == MenuStatus.SOLD_OUT) {
                     MaterialTheme.colorScheme.surfaceVariant
                 } else {
                     MaterialTheme.colorScheme.onBackground
@@ -116,7 +117,7 @@ private fun MenuItemPreview() {
                 name = "닭강정",
                 price = 6000,
                 imgUrl = "",
-                status = "ENOUGH",
+                status = MenuStatus.ENOUGH,
             ),
             onAction = {},
         )
@@ -133,7 +134,7 @@ private fun MenuItemSoldOutPreview() {
                 name = "닭강정",
                 price = 6000,
                 imgUrl = "",
-                status = "SOLD_OUT",
+                status = MenuStatus.SOLD_OUT,
             ),
             onAction = {},
         )

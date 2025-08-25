@@ -1,7 +1,7 @@
 package com.unifest.android.feature.map.viewmodel
 
 import android.Manifest
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
@@ -55,7 +55,6 @@ class MapViewModel @Inject constructor(
 
     fun onMapUiAction(action: MapUiAction) {
         when (action) {
-            is MapUiAction.OnSearchTextUpdated -> updateBoothSearchText(action.searchText)
             is MapUiAction.OnSearchTextCleared -> clearBoothSearchText()
             is MapUiAction.OnSearch -> searchBooth()
             is MapUiAction.OnTooltipClick -> completeMapOnboarding()
@@ -66,6 +65,14 @@ class MapViewModel @Inject constructor(
             is MapUiAction.OnRetryClick -> refresh(action.error)
             is MapUiAction.OnBoothTypeChipClick -> updateSelectedBoothChipList(action.chipName)
             is MapUiAction.OnPermissionDialogButtonClick -> handlePermissionDialogButtonClick(action.buttonType, action.permission)
+            is MapUiAction.OnBoothLayoutButtonClick -> navigateToBoothLayout()
+        }
+    }
+
+    private fun navigateToBoothLayout() {
+        val imgUrl = _uiState.value.boothLayoutUrl
+        viewModelScope.launch {
+            _uiEvent.send(MapUiEvent.NavigateToBoothLayout(imgUrl))
         }
     }
 
@@ -207,12 +214,13 @@ class MapViewModel @Inject constructor(
     fun getAllBooths(festivalId: Long) {
         viewModelScope.launch {
             boothRepository.getAllBooths(festivalId)
-                .onSuccess { booths ->
+                .onSuccess { mapModel ->
                     _uiState.update {
                         it.copy(
-                            boothList = booths
+                            boothList = mapModel.booths
                                 .map { booth -> booth.toMapModel() }
                                 .toImmutableList(),
+                            boothLayoutUrl = mapModel.boothLayoutUrl,
                         )
                     }
                     filterBoothsByType(_uiState.value.selectedBoothTypeChips)
@@ -254,28 +262,14 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    private fun updateBoothSearchText(searchText: TextFieldValue) {
-        _uiState.update {
-            it.copy(
-                boothSearchText = searchText,
-                festivalSearchResults = it.festivals.filter { festival ->
-                    festival.schoolName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true) ||
-                        festival.festivalName.replace(" ", "").contains(searchText.text.replace(" ", ""), ignoreCase = true)
-                }.toImmutableList(),
-            )
-        }
-    }
-
     private fun clearBoothSearchText() {
-        _uiState.update {
-            it.copy(boothSearchText = TextFieldValue())
-        }
+        _uiState.value.boothSearchTextState.clearText()
     }
 
     private fun searchBooth() {
         val searchBoothResult = _uiState.value.boothList.filter {
-            it.name.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true) ||
-                it.description.replace(" ", "").contains(_uiState.value.boothSearchText.text.replace(" ", ""), ignoreCase = true)
+            it.name.replace(" ", "").contains(_uiState.value.boothSearchTextState.text.toString().replace(" ", ""), ignoreCase = true) ||
+                it.description.replace(" ", "").contains(_uiState.value.boothSearchTextState.text.toString().replace(" ", ""), ignoreCase = true)
         }
         updateSelectedBoothList(searchBoothResult)
         if (searchBoothResult.isEmpty()) {

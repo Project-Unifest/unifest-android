@@ -10,6 +10,7 @@ import com.unifest.android.core.network.request.WaitingRequest
 import com.unifest.android.core.network.response.FCMTokenResponse
 import com.unifest.android.core.network.response.FestivalSearchResponse
 import com.unifest.android.core.network.response.FestivalTodayResponse
+import com.unifest.android.core.network.response.HomeInfoResponse
 import com.unifest.android.core.network.response.booth.AllBoothsResponse
 import com.unifest.android.core.network.response.booth.BoothDetailResponse
 import com.unifest.android.core.network.response.booth.LikeBoothResponse
@@ -65,7 +66,7 @@ interface UnifestService {
     // 해당 축제 부스 전체 조회
     @GET("api/booths/{festival-id}/booths")
     suspend fun getAllBooths(
-        @Path("festival-id") festivalId: Long,
+        @Path("festival-id") festivalId: Long = 1,
     ): AllBoothsResponse
 
     // 특정 부스 조회
@@ -158,4 +159,8 @@ interface UnifestService {
     suspend fun registerFCMToken(
         @Body registerFCMTokenRequest: RegisterFCMTokenRequest,
     ): FCMTokenResponse
+
+    // Home 화면 조회 (가천대)
+    @GET("home/info")
+    suspend fun getHomeInfo(): HomeInfoResponse
 }

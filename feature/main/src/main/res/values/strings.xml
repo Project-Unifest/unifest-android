@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_label">홈</string>
+    <string name="waiting_label">웨이팅</string>
+    <string name="map_label">지도</string>
+    <string name="booth_label">부스</string>
+    <string name="menu_label">메뉴</string>
+</resources>

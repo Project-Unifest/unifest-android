@@ -1,0 +1,32 @@
+name: Chore Task
+description: 개발 환경 설정 작업을 위한 템플릿입니다.
+title: "[chore] "
+labels: [ "chore" ]
+body:
+    -   type: input
+        id: description
+        attributes:
+            label: "⚙ 설정 작업 설명"
+            description: "무엇을 설정/변경하는지 설명해주세요"
+        validations:
+            required: true
+
+    -   type: textarea
+        id: tasks
+        attributes:
+            label: "🔧 설정 작업 목록"
+            description: "진행할 설정 작업들을 작성해주세요"
+            value: |
+                - [ ] 환경 변수 설정
+                - [ ] ..
+        validations:
+            required: true
+
+    -   type: input
+        id: links
+        attributes:
+            label: "🔗 참고 링크"
+            description: "관련 설정 문서, 참고 링크 등이 있다면 첨부해주세요 (선택)"
+            placeholder: "https://..."
+        validations:
+            required: false

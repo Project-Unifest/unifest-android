@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth
+package com.unifest.android.feature.booth_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -28,6 +29,7 @@ import com.unifest.android.core.designsystem.theme.Content1
 import com.unifest.android.core.designsystem.theme.Title2
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.MenuModel
+import com.unifest.android.core.model.MenuStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,11 +38,14 @@ internal fun MenuImageDialog(
     menu: MenuModel,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
-    val dialogSize = remember(configuration) {
-        val screenWidth = configuration.screenWidthDp.dp
-        val screenHeight = configuration.screenHeightDp.dp
-        min(screenWidth, screenHeight) - 36.dp
+    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
+    val dialogSize = remember(windowInfo) {
+        with(density) {
+            val screenWidth = windowInfo.containerSize.width.toDp()
+            val screenHeight = windowInfo.containerSize.height.toDp()
+            min(screenWidth, screenHeight) - 36.dp
+        }
     }
 
     BasicAlertDialog(
@@ -59,7 +64,7 @@ internal fun MenuImageDialog(
         ) {
             NetworkImage(
                 imgUrl = menu.imgUrl,
-                contentDescription = null,
+                contentDescription = "Menu Image",
                 modifier = Modifier
                     .size(dialogSize)
                     .clip(RoundedCornerShape(16.dp)),
@@ -93,7 +98,7 @@ private fun MenuImageDialogPreview() {
                 name = "모둠 사시미",
                 price = 45000,
                 imgUrl = "",
-                status = "10개 미만 남음",
+                status = MenuStatus.UNDER_10,
             ),
         )
     }

@@ -89,8 +89,7 @@ fun FestivalSearchBottomSheet(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             FestivalSearchTextField(
-                searchText = uiState.festivalSearchText,
-                updateSearchText = { text -> onFestivalUiAction(FestivalUiAction.OnSearchTextUpdated(text)) },
+                searchTextState = uiState.festivalSearchText,
                 searchTextHintRes = designR.string.festival_search_text_field_hint,
                 onSearch = {},
                 clearSearchText = { onFestivalUiAction(FestivalUiAction.OnSearchTextCleared) },
@@ -126,7 +125,10 @@ fun FestivalSearchBottomSheet(
                         },
                     ) {
                         Text(
-                            text = stringResource(id = R.string.edit),
+                            text = stringResource(
+                                id = if (uiState.isEditMode) R.string.finish
+                                else R.string.edit,
+                            ),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = Content3,
                         )

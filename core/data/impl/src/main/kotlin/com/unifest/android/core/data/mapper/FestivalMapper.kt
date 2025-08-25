@@ -11,7 +11,7 @@ internal fun Festival.toModel(): FestivalModel {
     return FestivalModel(
         festivalId = festivalId,
         schoolId = schoolId,
-        thumbnail = thumbnail,
+        thumbnail = thumbnail ?: "",
         schoolName = schoolName,
         region = region,
         festivalName = festivalName,

@@ -1,4 +1,4 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -23,10 +23,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -41,8 +43,8 @@ import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title5
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.ScheduleModel
-import com.unifest.android.feature.booth.R
-import com.unifest.android.feature.booth.viewmodel.BoothUiAction
+import com.unifest.android.feature.booth_detail.R
+import com.unifest.android.feature.booth_detail.viewmodel.BoothDetailUiAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
@@ -52,22 +54,26 @@ import java.time.ZonedDateTime
 import com.unifest.android.core.designsystem.R as designR
 
 @Composable
-internal fun BoothDescription(
+internal fun BoothDetailDescription(
     name: String,
     warning: String,
     description: String,
     location: String,
     isScheduleExpanded: Boolean,
     scheduleList: ImmutableList<ScheduleModel>,
-    onAction: (BoothUiAction) -> Unit,
+    onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
-    val maxWidth = remember(configuration) {
-        val screenWidth = configuration.screenWidthDp.dp - 40.dp
-        screenWidth * (2 / 3f)
+    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
+    val maxWidth = remember(windowInfo) {
+        with(density) {
+            val screenWidth = windowInfo.containerSize.width.toDp() - 40.dp
+            screenWidth * (2 / 3f)
+        }
     }
 
+    // TODO Composable 밖에서 계산
     // 현재 시간과 날짜 가져오기
     val koreaZoneId = ZoneId.of("Asia/Seoul")
     val currentDateTime = ZonedDateTime.now(koreaZoneId)
@@ -143,7 +149,7 @@ internal fun BoothDescription(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .clickable { onAction(BoothUiAction.OnScheduleToggleClick) },
+                    .clickable { onAction(BoothDetailUiAction.OnScheduleToggleClick) },
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock),
@@ -159,6 +165,7 @@ internal fun BoothDescription(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
+                    modifier = if (isScheduleExpanded) Modifier.scale(scaleX = 1f, scaleY = -1f) else Modifier,
                     imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_below),
                     contentDescription = "Arrow Down",
                     tint = Color.Unspecified,
@@ -205,7 +212,7 @@ internal fun BoothDescription(
         Spacer(modifier = Modifier.height(16.dp))
         UnifestOutlinedButton(
             onClick = {
-                onAction(BoothUiAction.OnCheckLocationClick)
+                onAction(BoothDetailUiAction.OnCheckLocationClick)
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -219,9 +226,9 @@ internal fun BoothDescription(
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionNoSchedulePreview() {
+private fun BoothDetailDescriptionNoSchedulePreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -235,9 +242,9 @@ private fun BoothDescriptionNoSchedulePreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionClosedPreview() {
+private fun BoothDetailDescriptionClosedPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -264,9 +271,9 @@ private fun BoothDescriptionClosedPreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionOpenPreview() {
+private fun BoothDetailDescriptionOpenPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",
@@ -293,9 +300,9 @@ private fun BoothDescriptionOpenPreview() {
 
 @ComponentPreview
 @Composable
-private fun BoothDescriptionOpenDropdownExpandedPreview() {
+private fun BoothDetailDescriptionOpenDropdownExpandedPreview() {
     UnifestTheme {
-        BoothDescription(
+        BoothDetailDescription(
             name = "공대주점",
             warning = "누구나 환영",
             description = "컴퓨터 공학과와 물리학과가 함께하는 협동부스입니다. 방문자 이벤트로 무료 안주 하나씩 제공중이에요!!",

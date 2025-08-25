@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.unifest.android.firebase)
     alias(libs.plugins.unifest.android.hilt)
     alias(libs.plugins.google.secrets)
-    alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
 }
 
@@ -85,7 +84,7 @@ dependencies {
         projects.core.network,
         projects.core.ui,
 
-        projects.feature.booth,
+        projects.feature.boothDetail,
         projects.feature.festival,
         projects.feature.home,
         projects.feature.intro,

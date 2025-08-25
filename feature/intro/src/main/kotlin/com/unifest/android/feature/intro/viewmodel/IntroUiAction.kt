@@ -1,12 +1,10 @@
 package com.unifest.android.feature.intro.viewmodel
 
-import androidx.compose.ui.text.input.TextFieldValue
 import com.unifest.android.core.model.FestivalModel
 
 sealed interface IntroUiAction {
-    data class OnSearchTextUpdated(val searchText: TextFieldValue) : IntroUiAction
     data object OnSearchTextCleared : IntroUiAction
-    data class OnSearch(val searchText: TextFieldValue) : IntroUiAction
+    data class OnSearch(val searchText: String) : IntroUiAction
     data class OnRegionTapClicked(val region: String) : IntroUiAction
     data object OnClearSelectionClick : IntroUiAction
     data class OnFestivalSelected(val festival: FestivalModel) : IntroUiAction

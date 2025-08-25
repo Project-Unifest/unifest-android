@@ -1,13 +1,12 @@
-package com.unifest.android.feature.booth.component
+package com.unifest.android.feature.booth_detail.component
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import com.unifest.android.core.designsystem.ComponentPreview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -15,15 +14,17 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.theme.BottomMenuBar
 import com.unifest.android.core.designsystem.theme.Content7
 import com.unifest.android.core.designsystem.theme.UnifestTheme
-import com.unifest.android.feature.booth.R
+import com.unifest.android.core.model.MenuStatus
+import com.unifest.android.feature.booth_detail.R
 
 @Composable
 internal fun Tag(
     modifier: Modifier = Modifier,
-    menuStatus: String = "",
+    menuStatus: MenuStatus,
 ) {
     Box(
         modifier = modifier
@@ -32,7 +33,7 @@ internal fun Tag(
             .padding(horizontal = 12.dp, vertical = 4.dp),
     ) {
         when (menuStatus) {
-            "SOLD_OUT" -> {
+            MenuStatus.SOLD_OUT -> {
                 Text(
                     text = stringResource(R.string.sold_out),
                     style = Content7,
@@ -40,7 +41,7 @@ internal fun Tag(
                 )
             }
 
-            "UNDER_10" -> {
+            MenuStatus.UNDER_10 -> {
                 val parts = "10개 미만 남음".split("남음")
                 Text(
                     buildAnnotatedString {
@@ -54,7 +55,7 @@ internal fun Tag(
                 )
             }
 
-            "UNDER_50" -> {
+            MenuStatus.UNDER_50 -> {
                 val parts = "50개 미만 남음".split("남음")
                 Text(
                     buildAnnotatedString {
@@ -68,7 +69,7 @@ internal fun Tag(
                 )
             }
 
-            "ENOUGH" -> {
+            MenuStatus.ENOUGH -> {
                 Text(
                     text = stringResource(R.string.enough_status),
                     style = Content7,
@@ -76,7 +77,7 @@ internal fun Tag(
                 )
             }
 
-            else -> {
+            MenuStatus.NO_DATA -> {
                 Text(
                     text = stringResource(id = R.string.no_menu_status),
                     style = Content7,
@@ -91,6 +92,6 @@ internal fun Tag(
 @Composable
 private fun TagPreview() {
     UnifestTheme {
-        Tag(menuStatus = "10개 미만 남음")
+        Tag(menuStatus = MenuStatus.UNDER_10)
     }
 }

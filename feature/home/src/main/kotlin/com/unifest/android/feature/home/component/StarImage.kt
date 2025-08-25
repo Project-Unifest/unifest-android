@@ -1,8 +1,6 @@
 package com.unifest.android.feature.home.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,25 +18,22 @@ import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content9
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.core.model.StarInfoModel
+import com.unifest.android.feature.home.clickable
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StarImage(
     starInfo: StarInfoModel,
     onClick: () -> Unit,
-    // onLongClick: () -> Unit,
-    // isClicked: Boolean,
+    contentDescription: String,
     modifier: Modifier = Modifier,
     placeholder: Painter? = null,
     contentScale: ContentScale = ContentScale.Crop,
-    contentDescription: String? = null,
 ) {
     var isStarImageLoadError by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
-            .combinedClickable(
-                // onLongClick = onLongClick,
+            .clickable(
                 onClick = onClick,
             ),
         contentAlignment = Alignment.Center,
@@ -51,18 +46,6 @@ fun StarImage(
             contentDescription = contentDescription,
             onError = { isError -> isStarImageLoadError = isError },
         )
-//        if (isClicked) {
-//            Box(
-//                modifier = Modifier
-//                    .matchParentSize()
-//                    .background(Color.Black.copy(alpha = 0.6f)),
-//            )
-//            AutoResizedText(
-//                text = starInfo.name,
-//                color = Color.White,
-//                style = Content9,
-//            )
-//        }
         if (starInfo.name.isEmpty() || isStarImageLoadError) {
             Box(
                 modifier = Modifier
@@ -89,7 +72,7 @@ private fun StarImagePreview() {
                 name = "",
             ),
             onClick = {},
-            // label = "",
+            contentDescription = "Star Image",
         )
     }
 }
@@ -105,9 +88,7 @@ private fun StarImageClickedPreview() {
                 name = "",
             ),
             onClick = {},
-            // onLongClick = {},
-            // isClicked = true,
-            // label = "키스오브라이프",
+            contentDescription = "",
         )
     }
 }

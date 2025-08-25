@@ -158,7 +158,7 @@ internal fun MenuScreen(
                     )
                     .padding(top = 13.dp, bottom = 5.dp),
             )
-            MapContent(
+            MenuContent(
                 menuUiState = menuUiState,
                 appVersion = appVersion,
                 onMenuUiAction = onMenuUiAction,
@@ -193,7 +193,7 @@ internal fun MenuScreen(
 }
 
 @Composable
-internal fun MapContent(
+internal fun MenuContent(
     menuUiState: MenuUiState,
     appVersion: String,
     onMenuUiAction: (MenuUiAction) -> Unit,
