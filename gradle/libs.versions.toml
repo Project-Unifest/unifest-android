@@ -40,7 +40,7 @@ androidx-hilt-navigation-compose = "1.2.0"
 androidx-test-core = "1.7.0"
 
 desugar-jdk-libs = "2.1.5"
-hilt = "2.56.2"
+hilt = "2.57.1"
 javax-inject = "1"
 retrofit = "2.12.0"
 okhttp = "5.1.0"
