@@ -53,8 +53,15 @@ class MenuViewModel @Inject constructor(
             is MenuUiAction.OnShowMoreClick -> navigateToLikedBooth()
             is MenuUiAction.OnContactClick -> navigateToContact()
             is MenuUiAction.OnAdministratorModeClick -> navigateToAdministratorMode()
+            is MenuUiAction.OnWhoAreUInferClick -> navigateToWhoAreUForm()
             is MenuUiAction.OnRetryClick -> refresh(action.error)
             is MenuUiAction.OnToggleClustering -> updateIsClusteringEnabled(action.isChecked)
+        }
+    }
+
+    private fun navigateToWhoAreUForm() {
+        viewModelScope.launch {
+            _uiEvent.send(MenuUiEvent.NavigateToWhoAreUForm)
         }
     }
 
