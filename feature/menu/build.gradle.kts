@@ -24,6 +24,11 @@ android {
             "UNIFEST_WEB_URL",
             properties["UNIFEST_WEB_URL"] as String,
         )
+        buildConfigField(
+            "String",
+            "WHO_ARE_U_INFER_FORM_URL",
+            properties["WHO_ARE_U_INFER_FORM_URL"] as String,
+        )
     }
 }
 
