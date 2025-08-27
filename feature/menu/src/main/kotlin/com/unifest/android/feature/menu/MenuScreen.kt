@@ -373,7 +373,7 @@ internal fun MenuContent(
         }
         item {
             MenuItem(
-                icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
+                icon = ImageVector.vectorResource(R.drawable.ic_google_form),
                 title = stringResource(id = R.string.who_are_u_infer),
                 onClick = {
                     onMenuUiAction(MenuUiAction.OnWhoAreUInferClick)
