@@ -61,7 +61,7 @@ compose-effects = "0.1.4"
 compose-unstyled = "1.42.0"
 
 naver-map-compose = "1.8.2"
-naver-map-location = "21.0.1"
+naver-map-location = "21.0.2"
 tedclustering-naver = "1.0.2"
 zxing = "4.3.0"
 junit = "4.13.2"
