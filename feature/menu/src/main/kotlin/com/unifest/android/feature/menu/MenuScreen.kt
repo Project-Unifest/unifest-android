@@ -106,6 +106,7 @@ internal fun MenuRoute(
             is MenuUiEvent.NavigateToBoothDetail -> navigateToBoothDetail(event.boothId)
             is MenuUiEvent.NavigateToContact -> uriHandler.openUri(BuildConfig.UNIFEST_CONTACT_URL)
             is MenuUiEvent.NavigateToAdministratorMode -> uriHandler.openUri(BuildConfig.UNIFEST_WEB_URL)
+            is MenuUiEvent.NavigateToWhoAreUForm -> uriHandler.openUri(BuildConfig.WHO_ARE_U_INFER_FORM_URL)
             is MenuUiEvent.ShowSnackBar -> onShowSnackBar(event.message)
             is MenuUiEvent.ShowToast -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
         }
@@ -361,6 +362,21 @@ internal fun MenuContent(
                 title = stringResource(id = R.string.menu_admin_mode),
                 onClick = {
                     onMenuUiAction(MenuUiAction.OnAdministratorModeClick)
+                },
+            )
+        }
+        item {
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+        item {
+            MenuItem(
+                icon = ImageVector.vectorResource(R.drawable.ic_admin_mode),
+                title = stringResource(id = R.string.who_are_u_infer),
+                onClick = {
+                    onMenuUiAction(MenuUiAction.OnWhoAreUInferClick)
                 },
             )
         }
