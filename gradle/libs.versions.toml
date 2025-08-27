@@ -15,7 +15,7 @@ google-secrets = "2.0.1"
 google-service = "4.4.3"
 
 kotlin-detekt = "1.23.8"
-kotlin-ktlint-gradle = "11.6.1"
+kotlin-ktlint-gradle = "13.1.0"
 kotlin-ktlint-source = "0.50.0"
 
 kotlinx-coroutines = "1.10.2"
