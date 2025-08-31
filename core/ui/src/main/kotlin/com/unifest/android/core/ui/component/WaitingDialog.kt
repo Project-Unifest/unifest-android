@@ -202,11 +202,12 @@ fun WaitingDialog(
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
 ) {
-    val isButtonEnabled by remember {
+    val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
         derivedStateOf {
-            isPrivacyClicked &&
-                phoneNumberState.text.toString().matches(Regex("^\\d{10,11}$")) &&
-                partySize in 1..10
+            val phoneNumber = phoneNumberState.text.toString().replace("-", "")
+            val isPhoneNumberValid = phoneNumber.matches(Regex("^01[0-9]\\d{8}$"))
+
+            partySize in 1..10 && isPhoneNumberValid && isPrivacyClicked
         }
     }
 
