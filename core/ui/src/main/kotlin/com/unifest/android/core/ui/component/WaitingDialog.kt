@@ -214,7 +214,7 @@ fun WaitingDialog(
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
-        modifier = modifier.keyboardHide()
+        modifier = modifier.keyboardHide(),
     ) {
         Column(
             modifier = Modifier
@@ -273,9 +273,7 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = ImageVector.vectorResource(id = designR.drawable.ic_minus),
                         contentDescription = "Minus Button",
-                        onClick = {
-                            onWaitingMinusClick()
-                        },
+                        onClick = onWaitingMinusClick,
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
@@ -287,9 +285,7 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = ImageVector.vectorResource(id = designR.drawable.ic_plus),
                         contentDescription = "Plus Button",
-                        onClick = {
-                            onWaitingPlusClick()
-                        },
+                        onClick = onWaitingPlusClick,
                     )
                 }
             }

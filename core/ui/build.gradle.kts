@@ -20,6 +20,6 @@ dependencies {
         libs.flexible.bottomsheet,
         libs.timber,
         libs.ballon.compose,
-        libs.compose.keyboard.state
+        libs.compose.keyboard.state,
     )
 }
