@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import dagger.hilt.android.AndroidEntryPoint
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            val systemUiController = rememberExSystemUiController()
+            val systemUiController = rememberSystemUiController()
             val isDarkTheme = isSystemInDarkTheme()
 
             DisposableEffect(systemUiController) {

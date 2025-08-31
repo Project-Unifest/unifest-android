@@ -80,7 +80,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
 import com.unifest.android.core.designsystem.R as designR
 
 private const val SnackBarDuration = 1000L
@@ -94,7 +94,7 @@ internal fun BoothDetailRoute(
     viewModel: BoothDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val systemUiController = rememberExSystemUiController()
+    val systemUiController = rememberSystemUiController()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackBarState = remember { SnackbarHostState() }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,6 +62,7 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber3
 import com.unifest.android.core.designsystem.theme.WaitingTeam
 import com.unifest.android.core.ui.R
 import com.unifest.android.core.designsystem.R as designR
+import tech.thdev.compose.extensions.keyboard.state.foundation.keyboardHide
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -201,6 +201,7 @@ fun WaitingDialog(
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
         derivedStateOf {
@@ -213,6 +214,7 @@ fun WaitingDialog(
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
+        modifier = modifier.keyboardHide()
     ) {
         Column(
             modifier = Modifier
@@ -271,7 +273,9 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = ImageVector.vectorResource(id = designR.drawable.ic_minus),
                         contentDescription = "Minus Button",
-                        onClick = onWaitingMinusClick,
+                        onClick = {
+                            onWaitingMinusClick()
+                        },
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
@@ -283,7 +287,9 @@ fun WaitingDialog(
                     CircularOutlineButton(
                         icon = ImageVector.vectorResource(id = designR.drawable.ic_plus),
                         contentDescription = "Plus Button",
-                        onClick = onWaitingPlusClick,
+                        onClick = {
+                            onWaitingPlusClick()
+                        },
                     )
                 }
             }
@@ -333,8 +339,8 @@ fun WaitingDialog(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                FlowRow(
-                    verticalArrangement = Arrangement.Center,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(

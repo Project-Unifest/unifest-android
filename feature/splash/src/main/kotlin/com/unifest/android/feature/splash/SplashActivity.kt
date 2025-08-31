@@ -14,7 +14,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.navigator.IntroNavigator
 import com.unifest.android.feature.navigator.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class SplashActivity : ComponentActivity() {
         Timber.d("waitingId: ${intent?.extras?.getString("waitingId")}")
 
         setContent {
-            val systemUiController = rememberExSystemUiController()
+            val systemUiController = rememberSystemUiController()
             val isDarkTheme = isSystemInDarkTheme()
 
             DisposableEffect(systemUiController) {

@@ -10,7 +10,7 @@ import com.unifest.android.core.designsystem.theme.DarkGrey100
 import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.navigator.MainNavigator
 import dagger.hilt.android.AndroidEntryPoint
-import tech.thdev.compose.exteions.system.ui.controller.rememberExSystemUiController
+import tech.thdev.compose.exteions.system.ui.controller.rememberSystemUiController
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,7 +21,7 @@ internal class IntroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val systemUiController = rememberExSystemUiController()
+            val systemUiController = rememberSystemUiController()
             val isDarkTheme = isSystemInDarkTheme()
 
             DisposableEffect(systemUiController) {
