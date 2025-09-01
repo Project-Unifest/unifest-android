@@ -168,7 +168,7 @@ class MenuViewModel @Inject constructor(
 
     override fun setNetworkErrorDialogVisible(flag: Boolean) {
         _uiState.update {
-            it.copy(isServerErrorDialogVisible = flag)
+            it.copy(isNetworkErrorDialogVisible = flag)
         }
     }
 
