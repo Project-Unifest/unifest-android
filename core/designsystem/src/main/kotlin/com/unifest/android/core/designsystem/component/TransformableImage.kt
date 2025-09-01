@@ -74,8 +74,10 @@ fun TransformableImage(
 
                         // 스케일 변화에 따른 오프셋 조정 (핀치 포인트가 고정되도록)
                         val scaleChange = newScale / scale
-                        val newOffsetX = offset.x + relativePoint.x * (1f - scaleChange)
-                        val newOffsetY = offset.y + relativePoint.y * (1f - scaleChange)
+                        var newOffsetX = offset.x + relativePoint.x * (1f - scaleChange)
+                        var newOffsetY = offset.y + relativePoint.y * (1f - scaleChange)
+                        newOffsetX += offestChange.x
+                        newOffsetY += offestChange.y
 
                         scale = newScale
 
@@ -84,13 +86,16 @@ fun TransformableImage(
                         val maxOffsetY = ((imageHeight * newScale - screenHeight) / 2f).coerceAtLeast(0f)
 
                         offset = if (newScale == 1f) {
-                            Offset.Companion.Zero
+                            Offset.Zero
                         } else {
                             Offset(
                                 x = newOffsetX.coerceIn(-maxOffsetX, maxOffsetX),
                                 y = newOffsetY.coerceIn(-maxOffsetY, maxOffsetY),
                             )
                         }
+
+                        // 스케일 변경 후 드래그 처리로 이동
+                        return@detectTransformGestures
                     }
 
                     // 드래그 적용
