@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -25,12 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -51,9 +55,13 @@ internal fun BoothItem(
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
-    val textStyle = Content2
-    val textHeight = remember(textStyle) {
+    val descriptionTextStyle = Content2
+    val descriptionTextHeight = remember(descriptionTextStyle) {
         with(density) { Content2.fontSize.toDp() * 2 }
+    }
+    val titleTextStyle = Title2
+    val titleTextHeight = remember(titleTextStyle) {
+        with(density) { Title2.fontSize.toDp() * 2 }
     }
 
     Card(
@@ -79,16 +87,28 @@ internal fun BoothItem(
                 Column(
                     modifier = Modifier.padding(start = 15.dp),
                 ) {
-                    Text(
-                        text = boothInfo.name,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        style = Title2,
-                    )
+                   Box(
+                        modifier = Modifier.heightIn(min = titleTextHeight)
+                   ) {
+                        Text(
+                            text = boothInfo.name,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            style = Title2,
+                            modifier = Modifier.align(Alignment.CenterStart),
+                            maxLines = 2,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 13.sp,
+                                maxFontSize = 18.sp,
+                                stepSize = 0.5.sp,
+                            ),
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                     Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = boothInfo.description,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.heightIn(min = textHeight),
+                        modifier = Modifier.heightIn(min = descriptionTextHeight),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = Content2,
