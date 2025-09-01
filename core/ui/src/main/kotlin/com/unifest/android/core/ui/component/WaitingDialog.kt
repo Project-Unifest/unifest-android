@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,6 +62,7 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber3
 import com.unifest.android.core.designsystem.theme.WaitingTeam
 import com.unifest.android.core.ui.R
 import com.unifest.android.core.designsystem.R as designR
+import tech.thdev.compose.extensions.keyboard.state.foundation.keyboardHide
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -201,17 +201,20 @@ fun WaitingDialog(
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val isButtonEnabled by remember {
+    val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
         derivedStateOf {
-            isPrivacyClicked &&
-                phoneNumberState.text.toString().matches(Regex("^\\d{10,11}$")) &&
-                partySize in 1..10
+            val phoneNumber = phoneNumberState.text.toString().replace("-", "")
+            val isPhoneNumberValid = phoneNumber.matches(Regex("^01[0-9]\\d{8}$"))
+
+            partySize in 1..10 && isPhoneNumberValid && isPrivacyClicked
         }
     }
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
+        modifier = modifier.keyboardHide(),
     ) {
         Column(
             modifier = Modifier
@@ -332,8 +335,8 @@ fun WaitingDialog(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                FlowRow(
-                    verticalArrangement = Arrangement.Center,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(
