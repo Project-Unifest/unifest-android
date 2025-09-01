@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,17 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.unifest.android.core.designsystem.ComponentPreview
-import com.unifest.android.core.designsystem.R as designR
 import com.unifest.android.core.designsystem.component.NetworkImage
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Title2
@@ -45,6 +41,7 @@ import com.unifest.android.core.designsystem.theme.UnifestTheme
 import com.unifest.android.feature.map.R
 import com.unifest.android.feature.map.model.BoothMapModel
 import com.unifest.android.feature.map.viewmodel.MapUiAction
+import com.unifest.android.core.designsystem.R as designR
 
 @Composable
 internal fun BoothItem(

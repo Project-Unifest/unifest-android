@@ -60,31 +60,29 @@ fun TransformableImage(
             .pointerInput(Unit) {
                 detectTransformGestures { centroid, offestChange, zoomChange, _ ->
                     if (!imageRect.contains(centroid)) return@detectTransformGestures
-                    
                     // 줌 변경 시 핀치 포인트를 기준으로 확대/축소
                     if (zoomChange != 1f) {
                         val newScale = (scale * zoomChange).coerceAtLeast(minimumValue = 1f)
-                        
                         // 현재 이미지의 실제 위치 (중심점 + 오프셋)
                         val currentImageCenter = Offset(
                             x = screenWidth / 2f + offset.x,
-                            y = screenHeight / 2f + offset.y
+                            y = screenHeight / 2f + offset.y,
                         )
-                        
+
                         // 핀치 포인트에서 현재 이미지 중심까지의 거리
                         val relativePoint = centroid - currentImageCenter
-                        
+
                         // 스케일 변화에 따른 오프셋 조정 (핀치 포인트가 고정되도록)
                         val scaleChange = newScale / scale
                         val newOffsetX = offset.x + relativePoint.x * (1f - scaleChange)
                         val newOffsetY = offset.y + relativePoint.y * (1f - scaleChange)
-                        
+
                         scale = newScale
-                        
+
                         // 경계 체크 및 오프셋 제한
                         val maxOffsetX = ((imageWidth * newScale - screenWidth) / 2f).coerceAtLeast(0f)
                         val maxOffsetY = ((imageHeight * newScale - screenHeight) / 2f).coerceAtLeast(0f)
-                        
+
                         offset = if (newScale == 1f) {
                             Offset.Companion.Zero
                         } else {
