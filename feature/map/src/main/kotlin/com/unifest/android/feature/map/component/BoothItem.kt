@@ -87,9 +87,9 @@ internal fun BoothItem(
                 Column(
                     modifier = Modifier.padding(start = 15.dp),
                 ) {
-                   Box(
-                        modifier = Modifier.heightIn(min = titleTextHeight)
-                   ) {
+                    Box(
+                        modifier = Modifier.height(titleTextHeight),
+                    ) {
                         Text(
                             text = boothInfo.name,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -108,7 +108,7 @@ internal fun BoothItem(
                     Text(
                         text = boothInfo.description,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.heightIn(min = descriptionTextHeight),
+                        modifier = Modifier.height(descriptionTextHeight),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         style = Content2,
