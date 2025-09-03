@@ -3,9 +3,6 @@ package com.unifest.android.core.common.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.get
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -109,15 +106,4 @@ object ImageLuminanceUtils {
 
         return LuminanceResult(averageLuminance, isDark)
     }
-}
-
-@Composable
-fun rememberImageLuminance(imageUrl: String): LuminanceResult? {
-    val context = LocalContext.current
-
-    return produceState<LuminanceResult?>(initialValue = null, key1 = imageUrl) {
-        if (imageUrl.isNotBlank()) {
-            value = ImageLuminanceUtils.calculateLuminance(imageUrl, context)
-        }
-    }.value
 }

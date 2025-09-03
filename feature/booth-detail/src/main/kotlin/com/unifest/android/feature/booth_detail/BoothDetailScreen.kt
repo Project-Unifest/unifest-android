@@ -31,6 +31,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,8 +50,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.checkNotificationPermission
+import com.unifest.android.core.common.utils.ImageLuminanceUtils
+import com.unifest.android.core.common.utils.LuminanceResult
 import com.unifest.android.core.common.utils.isBoothCurrentlyRunning
-import com.unifest.android.core.common.utils.rememberImageLuminance
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -107,7 +109,11 @@ internal fun BoothDetailRoute(
     var isNotificationPermissionGranted by remember { mutableStateOf(activity?.checkNotificationPermission() ?: false) }
 
     // 이미지의 luminance를 계산하여 동적 색상 결정
-    val imageLuminance = rememberImageLuminance(uiState.boothDetailInfo.thumbnail)
+    val imageLuminance = produceState<LuminanceResult?>(initialValue = null, key1 = uiState.boothDetailInfo.thumbnail) {
+        if (uiState.boothDetailInfo.thumbnail.isNotBlank()) {
+            value = ImageLuminanceUtils.calculateLuminance(uiState.boothDetailInfo.thumbnail, context)
+        }
+    }.value
     // 밝은 이미지일 때 어두운 아이콘 사용
     val shouldUseDarkIcons = imageLuminance?.isDark == false
 
