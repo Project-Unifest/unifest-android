@@ -13,22 +13,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.LastBaseline
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -64,15 +59,6 @@ internal fun BoothDetailDescription(
     onAction: (BoothDetailUiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val density = LocalDensity.current
-    val windowInfo = LocalWindowInfo.current
-    val maxWidth = remember(windowInfo) {
-        with(density) {
-            val screenWidth = windowInfo.containerSize.width.toDp() - 40.dp
-            screenWidth * (2 / 3f)
-        }
-    }
-
     // TODO Composable 밖에서 계산
     // 현재 시간과 날짜 가져오기
     val koreaZoneId = ZoneId.of("Asia/Seoul")
@@ -119,23 +105,17 @@ internal fun BoothDetailDescription(
             .padding(horizontal = 20.dp)
             .animateContentSize(),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = name,
-                modifier = Modifier
-                    .widthIn(max = maxWidth)
-                    .alignBy(LastBaseline),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = BoothTitle1,
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(
-                text = warning,
-                modifier = Modifier.alignBy(LastBaseline),
-                style = BoothCaution,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.onBackground,
+            style = BoothTitle1,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = warning,
+            style = BoothCaution,
+            color = MaterialTheme.colorScheme.primary,
+        )
         Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = description,
