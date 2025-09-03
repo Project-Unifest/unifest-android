@@ -397,7 +397,7 @@ private fun Day(
                     top = 16.dp,
                     start = 16.dp,
                     end = 16.dp,
-                    bottom = if (festivalCount > 0) 8.dp else 16.dp,
+                    bottom = 16.dp,
                 )
                 .clip(CircleShape)
                 .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
