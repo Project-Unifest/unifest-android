@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
+import com.unifest.android.core.common.utils.RegexConstants
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.CircularOutlineButton
 import com.unifest.android.core.designsystem.component.UnifestButton
@@ -112,7 +113,7 @@ fun WaitingPinDialog(
                             revertAllChanges()
                         } else {
                             val text = toString()
-                            if (!text.matches(Regex("^\\d*\$"))) {
+                            if (!text.matches(RegexConstants.DIGIT_ONLY)) {
                                 revertAllChanges()
                             }
                         }
@@ -203,14 +204,13 @@ fun WaitingDialog(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val phoneNumberRegex = remember { Regex("^01[0-9]\\d{8}\$") }
-
     val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
         derivedStateOf {
             val phoneNumber = phoneNumberState.text.toString().replace("-", "")
-            val isPhoneNumberValid = phoneNumber.matches(phoneNumberRegex)
+            val isPhoneNumberValid = phoneNumber.matches(RegexConstants.PHONE_NUMBER)
+            val isPartySizeValid = partySize in 1..10
 
-            partySize in 1..10 && isPhoneNumberValid && isPrivacyClicked
+            isPartySizeValid && isPhoneNumberValid && isPrivacyClicked
         }
     }
 
@@ -299,7 +299,7 @@ fun WaitingDialog(
                         revertAllChanges()
                     } else {
                         val text = toString()
-                        if (!text.matches(Regex("^\\d*\$"))) {
+                        if (!text.matches(RegexConstants.DIGIT_ONLY)) {
                             revertAllChanges()
                         }
                     }
