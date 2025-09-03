@@ -28,6 +28,8 @@ data class LuminanceResult(
 }
 
 object ImageLuminanceUtils {
+
+    @Suppress("TooGenericExceptionCaught")
     suspend fun calculateLuminance(imageUrl: String, context: Context): LuminanceResult? {
         return withContext(Dispatchers.IO) {
             try {
