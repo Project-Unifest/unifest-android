@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.checkNotificationPermission
+import com.unifest.android.core.common.utils.rememberImageLuminance
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.NetworkImage
@@ -104,10 +105,15 @@ internal fun BoothDetailRoute(
 
     var isNotificationPermissionGranted by remember { mutableStateOf(activity?.checkNotificationPermission() ?: false) }
 
-    DisposableEffect(systemUiController) {
+    // 이미지의 luminance를 계산하여 동적 색상 결정
+    val imageLuminance = rememberImageLuminance(uiState.boothDetailInfo.thumbnail)
+    // 밝은 이미지일 때 어두운 아이콘 사용
+    val shouldUseDarkIcons = imageLuminance?.isDark == false
+
+    DisposableEffect(shouldUseDarkIcons) {
         systemUiController.setStatusBarColor(
             color = Color.Transparent,
-            darkIcons = false,
+            darkIcons = shouldUseDarkIcons,
         )
         onDispose {
             systemUiController.setStatusBarColor(
@@ -227,6 +233,7 @@ internal fun BoothDetailRoute(
         uiState = uiState,
         snackBarState = snackBarState,
         onAction = viewModel::onAction,
+        shouldUseDarkIcons = shouldUseDarkIcons,
     )
 }
 
@@ -236,6 +243,7 @@ internal fun BoothDetailScreen(
     uiState: BoothDetailUiState,
     snackBarState: SnackbarHostState,
     onAction: (BoothDetailUiAction) -> Unit,
+    shouldUseDarkIcons: Boolean = false,
 ) {
     Box(
         modifier = Modifier
@@ -249,8 +257,9 @@ internal fun BoothDetailScreen(
         )
         UnifestTopAppBar(
             navigationType = TopAppBarNavigationType.Back,
-            navigationIconRes = designR.drawable.ic_arrow_back_gray,
+            navigationIconRes = if (shouldUseDarkIcons) designR.drawable.ic_arrow_back_gray else designR.drawable.ic_arrow_back_white,
             containerColor = Color.Transparent,
+            contentColor = Color.Unspecified,
             onNavigationClick = { onAction(BoothDetailUiAction.OnBackClick) },
             modifier = Modifier
                 .align(Alignment.TopCenter)

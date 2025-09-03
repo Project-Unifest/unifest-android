@@ -23,5 +23,6 @@ dependencies {
         libs.timber,
         libs.bundles.androidx.lifecycle,
         libs.bundles.naver.map.compose,
+        libs.coil.compose,
     )
 }

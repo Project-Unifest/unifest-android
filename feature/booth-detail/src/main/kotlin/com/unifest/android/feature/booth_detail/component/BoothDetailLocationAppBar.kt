@@ -47,7 +47,7 @@ internal fun BoothDetailLocationAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_gray),
+                    imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_white),
                     contentDescription = "뒤로 가기",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
