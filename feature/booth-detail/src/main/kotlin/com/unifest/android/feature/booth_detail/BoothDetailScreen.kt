@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.extension.checkNotificationPermission
+import com.unifest.android.core.common.utils.isBoothCurrentlyRunning
 import com.unifest.android.core.common.utils.rememberImageLuminance
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
@@ -378,6 +379,7 @@ internal fun BoothDetailContent(
                 location = uiState.boothDetailInfo.location,
                 isScheduleExpanded = uiState.isScheduleExpanded,
                 scheduleList = uiState.boothDetailInfo.scheduleList.toImmutableList(),
+                isBoothRunning = isBoothCurrentlyRunning(uiState.boothDetailInfo.scheduleList),
                 onAction = onAction,
             )
         }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.get
@@ -115,7 +114,7 @@ object ImageLuminanceUtils {
 @Composable
 fun rememberImageLuminance(imageUrl: String): LuminanceResult? {
     val context = LocalContext.current
-    
+
     return produceState<LuminanceResult?>(initialValue = null, key1 = imageUrl) {
         if (imageUrl.isNotBlank()) {
             value = ImageLuminanceUtils.calculateLuminance(imageUrl, context)
