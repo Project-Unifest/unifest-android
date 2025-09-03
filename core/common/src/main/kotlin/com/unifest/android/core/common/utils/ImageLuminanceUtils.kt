@@ -4,11 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.State
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.get
 import coil.imageLoader
@@ -31,7 +28,7 @@ object ImageLuminanceUtils {
 
     @Suppress("TooGenericExceptionCaught")
     suspend fun calculateLuminance(imageUrl: String, context: Context): LuminanceResult? {
-        return withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.Default) {
             try {
                 val imageLoader = context.imageLoader
 
@@ -118,13 +115,10 @@ object ImageLuminanceUtils {
 @Composable
 fun rememberImageLuminance(imageUrl: String): LuminanceResult? {
     val context = LocalContext.current
-    var luminanceResult by remember(imageUrl) { mutableStateOf<LuminanceResult?>(null) }
-
-    LaunchedEffect(imageUrl) {
+    
+    return produceState<LuminanceResult?>(initialValue = null, key1 = imageUrl) {
         if (imageUrl.isNotBlank()) {
-            luminanceResult = ImageLuminanceUtils.calculateLuminance(imageUrl, context)
+            value = ImageLuminanceUtils.calculateLuminance(imageUrl, context)
         }
-    }
-
-    return luminanceResult
+    }.value
 }
