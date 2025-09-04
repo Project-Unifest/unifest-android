@@ -40,7 +40,7 @@ fun UnifestTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     titleStyle: TextStyle = Title1,
-    @DrawableRes navigationIconRes: Int = R.drawable.ic_arrow_back_dark_gray,
+    @DrawableRes navigationIconRes: Int = R.drawable.ic_arrow_back_gray,
     navigationIconContentDescription: String? = null,
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = MaterialTheme.colorScheme.onBackground,
@@ -60,7 +60,6 @@ fun UnifestTopAppBar(
                     Icon(
                         imageVector = imageVector,
                         contentDescription = navigationIconContentDescription,
-                        tint = MaterialTheme.colorScheme.onBackground,
                     )
                 }
             }

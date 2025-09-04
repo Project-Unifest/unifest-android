@@ -179,7 +179,7 @@ fun FestivalSearchTextField(
                     Spacer(modifier = Modifier.width(14.dp))
                     if (isSearchMode) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_dark_gray),
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_gray),
                             contentDescription = "Search Icon",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.clickable {
