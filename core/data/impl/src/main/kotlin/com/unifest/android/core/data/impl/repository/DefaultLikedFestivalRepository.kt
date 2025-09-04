@@ -47,8 +47,28 @@ internal class DefaultLikedFestivalRepository @Inject constructor(
         likedFestivalDao.deleteLikedFestival(festival.toEntity())
     }
 
-    override fun getRecentLikedFestivalStream(): Flow<FestivalModel> =
+    override suspend fun getRecentLikedFestivalStream(): Flow<FestivalModel> =
         recentLikedFestivalDataSource.recentLikedFestivalStream
+            .map { localLikedFestival ->
+                runSuspendCatching {
+                    service.searchSchool(
+                        name = localLikedFestival.schoolName,
+                    ).data.map { it.toModel() }
+                }.fold(
+                    onSuccess = { festivals ->
+                        festivals.find { it.festivalId == localLikedFestival.festivalId }
+                            ?.let { remoteFestival ->
+                                if (localLikedFestival == remoteFestival) {
+                                    localLikedFestival
+                                } else {
+                                    recentLikedFestivalDataSource.setRecentLikedFestival(remoteFestival)
+                                    remoteFestival
+                                }
+                            } ?: localLikedFestival
+                    },
+                    onFailure = { localLikedFestival },
+                )
+            }
 
     override suspend fun setRecentLikedFestival(festival: FestivalModel) {
         recentLikedFestivalDataSource.setRecentLikedFestival(festival)
