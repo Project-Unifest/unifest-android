@@ -7,12 +7,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import tech.thdev.compose.extensions.keyboard.state.MutableExKeyboardStateSource
-import tech.thdev.compose.extensions.keyboard.state.foundation.removeFocusWhenKeyboardIsHidden
-import tech.thdev.compose.extensions.keyboard.state.localowners.LocalMutableExKeyboardStateSourceOwner
+import tech.thdev.compose.extensions.keyboard.state.foundation.keyboardHide
 
 @Composable
 fun UnifestScaffold(
@@ -26,20 +23,16 @@ fun UnifestScaffold(
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    CompositionLocalProvider(
-        LocalMutableExKeyboardStateSourceOwner provides MutableExKeyboardStateSource(),
-    ) {
-        Scaffold(
-            topBar = topBar,
-            bottomBar = bottomBar,
-            snackbarHost = snackbarHost,
-            floatingActionButton = floatingActionButton,
-            containerColor = containerColor,
-            contentColor = contentColor,
-            contentWindowInsets = contentWindowInsets,
-            modifier = modifier.removeFocusWhenKeyboardIsHidden(),
-        ) { innerPadding ->
-            content(innerPadding)
-        }
+    Scaffold(
+        modifier = modifier.keyboardHide(),
+        topBar = topBar,
+        bottomBar = bottomBar,
+        snackbarHost = snackbarHost,
+        floatingActionButton = floatingActionButton,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        contentWindowInsets = contentWindowInsets,
+    ) { innerPadding ->
+        content(innerPadding)
     }
 }

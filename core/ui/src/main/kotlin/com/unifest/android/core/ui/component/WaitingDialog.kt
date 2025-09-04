@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.unifest.android.core.common.utils.PhoneNumberVisualTransformation
+import com.unifest.android.core.common.utils.RegexConstants
 import com.unifest.android.core.designsystem.ComponentPreview
 import com.unifest.android.core.designsystem.component.CircularOutlineButton
 import com.unifest.android.core.designsystem.component.UnifestButton
@@ -63,6 +63,7 @@ import com.unifest.android.core.designsystem.theme.WaitingNumber3
 import com.unifest.android.core.designsystem.theme.WaitingTeam
 import com.unifest.android.core.ui.R
 import com.unifest.android.core.designsystem.R as designR
+import tech.thdev.compose.extensions.keyboard.state.foundation.keyboardHide
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,7 +113,7 @@ fun WaitingPinDialog(
                             revertAllChanges()
                         } else {
                             val text = toString()
-                            if (!text.matches(Regex("^\\d*\$"))) {
+                            if (!text.matches(RegexConstants.DIGIT_ONLY)) {
                                 revertAllChanges()
                             }
                         }
@@ -201,17 +202,21 @@ fun WaitingDialog(
     onDialogWaitingButtonClick: () -> Unit,
     onPolicyCheckBoxClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val isButtonEnabled by remember {
+    val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
         derivedStateOf {
-            isPrivacyClicked &&
-                phoneNumberState.text.toString().matches(Regex("^\\d{10,11}$")) &&
-                partySize in 1..10
+            val phoneNumber = phoneNumberState.text.toString().replace("-", "")
+            val isPhoneNumberValid = phoneNumber.matches(RegexConstants.PHONE_NUMBER)
+            val isPartySizeValid = partySize in 1..10
+
+            isPartySizeValid && isPhoneNumberValid && isPrivacyClicked
         }
     }
 
     BasicAlertDialog(
         onDismissRequest = onDismissRequest,
+        modifier = modifier.keyboardHide(),
     ) {
         Column(
             modifier = Modifier
@@ -294,7 +299,7 @@ fun WaitingDialog(
                         revertAllChanges()
                     } else {
                         val text = toString()
-                        if (!text.matches(Regex("^\\d*\$"))) {
+                        if (!text.matches(RegexConstants.DIGIT_ONLY)) {
                             revertAllChanges()
                         }
                     }
@@ -332,8 +337,8 @@ fun WaitingDialog(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                FlowRow(
-                    verticalArrangement = Arrangement.Center,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Icon(

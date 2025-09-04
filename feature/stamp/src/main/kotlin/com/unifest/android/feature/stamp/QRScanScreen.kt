@@ -123,7 +123,7 @@ private fun QRScanTopBar(
         ) {
             Spacer(modifier = Modifier.width(21.dp))
             Icon(
-                imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_dark_gray),
+                imageVector = ImageVector.vectorResource(designR.drawable.ic_arrow_back_gray),
                 contentDescription = "Arrow Back Icon",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.clickable { onAction(QRScanUiAction.OnBackClick) },

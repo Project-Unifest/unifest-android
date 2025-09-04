@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.PermissionDialogButtonType
 import com.unifest.android.core.common.UiText
+import com.unifest.android.core.common.utils.RegexConstants
 import com.unifest.android.core.common.handleException
 import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.api.repository.LikedBoothRepository
@@ -273,11 +274,11 @@ class BoothDetailViewModel @Inject constructor(
     }
 
     private fun isTelValid(tel: String): Boolean {
-        return tel.matches(Regex("^010\\d{8}$"))
+        return tel.matches(RegexConstants.PHONE_NUMBER)
     }
 
     private fun isPartySizeValid(partySize: Long): Boolean {
-        return partySize >= 1
+        return partySize in 1..10
     }
 
     private fun checkPinValidation() {
