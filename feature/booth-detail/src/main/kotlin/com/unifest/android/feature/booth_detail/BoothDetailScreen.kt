@@ -115,7 +115,7 @@ internal fun BoothDetailRoute(
         }
     }.value
     // 밝은 이미지일 때 어두운 아이콘 사용
-    val shouldUseDarkIcons = imageLuminance?.isDark == false
+    val shouldUseDarkIcons = imageLuminance?.isDark?.not() ?: !isDarkTheme
 
     DisposableEffect(shouldUseDarkIcons) {
         systemUiController.setStatusBarColor(

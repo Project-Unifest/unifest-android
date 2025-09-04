@@ -92,6 +92,7 @@ object ImageLuminanceUtils {
                 val blue = pixel and 0xFF
 
                 // ITU-R BT.709 luminance formula
+                // https://en.wikipedia.org/wiki/Rec._709
                 // 0.2126 (Red): 인간의 눈이 빨간색에 가장 덜 민감
                 // 0.7152 (Green): 인간의 눈이 초록색에 가장 민감 (약 71%)
                 // 0.0722 (Blue): 인간의 눈이 파란색에 두 번째로 덜 민감
