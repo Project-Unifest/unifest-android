@@ -1,6 +1,8 @@
 package com.unifest.android.core.data.di
 
+import com.unifest.android.core.data.api.datasource.DeviceIdDataSource
 import com.unifest.android.core.data.api.datasource.RemoteConfigDataSource
+import com.unifest.android.core.data.datasource.DefaultDeviceIdDataSource
 import com.unifest.android.core.data.datasource.DefaultRemoteConfigDataSource
 import dagger.Binds
 import dagger.Module
@@ -14,4 +16,8 @@ internal abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindRemoteConfigDataSource(defaultRemoteConfigDataSource: DefaultRemoteConfigDataSource): RemoteConfigDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindDeviceIdDataSource(defaultDeviceIdDataSource: DefaultDeviceIdDataSource): DeviceIdDataSource
 }
