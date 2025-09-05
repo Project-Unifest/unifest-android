@@ -259,7 +259,6 @@ class BoothDetailViewModel @Inject constructor(
                     }
                     _uiState.value.waitingTel.clearText()
                     _uiState.value.boothPinNumber.clearText()
-                    waitingRepository.registerFCMTopic(waiting.waitingId.toString())
                     setWaitingDialogVisible(false)
                     setConfirmDialogVisible(true)
                 }.onFailure { exception ->
