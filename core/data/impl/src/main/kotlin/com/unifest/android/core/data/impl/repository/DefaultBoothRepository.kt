@@ -1,7 +1,6 @@
 package com.unifest.android.core.data.impl.repository
 
-import android.content.Context
-import com.unifest.android.core.common.getDeviceId
+import com.unifest.android.core.data.api.datasource.DeviceIdDataSource
 import com.unifest.android.core.data.api.repository.BoothRepository
 import com.unifest.android.core.data.impl.BuildConfig
 import com.unifest.android.core.data.mapper.toBoothTabModel
@@ -12,13 +11,12 @@ import com.unifest.android.core.network.request.BoothWaitingRequest
 import com.unifest.android.core.network.request.CheckPinValidationRequest
 import com.unifest.android.core.network.request.LikeBoothRequest
 import com.unifest.android.core.network.service.UnifestService
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class DefaultBoothRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val service: UnifestService,
     private val tokenDataSource: TokenDataSource,
+    private val deviceIdDataSource: DeviceIdDataSource,
 ) : BoothRepository {
     override suspend fun getPopularBooths(festivalId: Long) = runSuspendCatching {
         service.getPopularBooths(festivalId).data.map { it.toModel() }
@@ -36,7 +34,7 @@ class DefaultBoothRepository @Inject constructor(
         service.likeBooth(
             LikeBoothRequest(
                 boothId = boothId,
-                token = getDeviceId(context),
+                token = deviceIdDataSource.getDeviceId(),
             ),
         )
     }
@@ -60,7 +58,7 @@ class DefaultBoothRepository @Inject constructor(
             BoothWaitingRequest(
                 boothId = boothId,
                 tel = tel,
-                deviceId = getDeviceId(context),
+                deviceId = deviceIdDataSource.getDeviceId(),
                 partySize = partySize,
                 pinNumber = pinNumber,
                 fcmToken = fcmToken,
