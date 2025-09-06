@@ -114,7 +114,7 @@ internal fun BoothDetailRoute(
             value = ImageLuminanceUtils.calculateLuminance(uiState.boothDetailInfo.thumbnail, context)
         }
     }.value
-    // 밝은 이미지일 때 어두운 아이콘 사용
+    // 밝은 이미지일 때 어두운 아이콘 사용 vice versa
     val shouldUseDarkIcons = imageLuminance?.isDark?.not() ?: !isDarkTheme
 
     DisposableEffect(shouldUseDarkIcons) {
