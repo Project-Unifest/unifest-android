@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.unifest.android.core.common.ErrorHandlerActions
 import com.unifest.android.core.common.handleException
+import com.unifest.android.core.data.api.repository.LikedFestivalRepository
 import com.unifest.android.core.data.api.repository.MessagingRepository
 import com.unifest.android.core.data.api.repository.OnboardingRepository
 import com.unifest.android.core.data.api.repository.RemoteConfigRepository
+import com.unifest.android.core.model.FestivalModel
+import com.unifest.android.feature.splash.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +27,7 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val onboardingRepository: OnboardingRepository,
     private val messagingRepository: MessagingRepository,
+    private val likedFestivalRepository: LikedFestivalRepository,
     remoteConfigRepository: RemoteConfigRepository,
 ) : ViewModel(), ErrorHandlerActions {
     private val _uiState = MutableStateFlow(SplashUiState())
@@ -44,6 +48,8 @@ class SplashViewModel @Inject constructor(
 
     fun checkIntroCompletion() {
         viewModelScope.launch {
+            launch { registerLikedFestival() }
+
             if (onboardingRepository.checkIntroCompletion()) {
                 _uiEvent.send(SplashUiEvent.NavigateToMain)
             } else {
@@ -85,6 +91,17 @@ class SplashViewModel @Inject constructor(
             handleException(exception, this@SplashViewModel)
             false
         }
+    }
+
+    private suspend fun registerLikedFestival() {
+        val festivalId = if (BuildConfig.DEBUG) 1L else 15L
+        likedFestivalRepository.registerLikedFestival(FestivalModel(festivalId = festivalId))
+            .onSuccess {
+                Timber.d("festival registered: festivalId=$festivalId")
+            }
+            .onFailure { exception ->
+                Timber.e(exception)
+            }
     }
 
     private fun navigateToPlayStore() {
