@@ -94,6 +94,8 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun registerLikedFestival() {
+        // 현재 가천대만 서비스하므로 모든 사용자에게 등록
+        // TODO: 향후 다중 대학 서비스 시 사용자별 타게팅 로직 추가 필요
         val festivalId = if (BuildConfig.DEBUG) 1L else 15L
         likedFestivalRepository.registerLikedFestival(FestivalModel(festivalId = festivalId))
             .onSuccess {
