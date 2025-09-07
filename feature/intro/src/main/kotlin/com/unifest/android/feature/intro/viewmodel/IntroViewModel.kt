@@ -165,6 +165,7 @@ class IntroViewModel @Inject constructor(
 
     private fun addLikedFestivals() {
         viewModelScope.launch {
+            // TODO 관심 축제 등록 API 호출 이후 성공시 하위 로직 태우는 방식으로 변경
             likedFestivalRepository.apply {
                 insertLikedFestivals(_uiState.value.selectedFestivals)
                 setRecentLikedFestival(_uiState.value.selectedFestivals.first())
