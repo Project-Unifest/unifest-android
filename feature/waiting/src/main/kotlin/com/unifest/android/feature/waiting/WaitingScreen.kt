@@ -21,7 +21,6 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,6 +38,7 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
+import com.unifest.android.core.designsystem.component.UnifestTextButton
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -173,7 +173,7 @@ internal fun WaitingContent(
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Content7,
                 )
-                TextButton(
+                UnifestTextButton(
                     onClick = {
                         onWaitingUiAction(WaitingUiAction.OnRefresh)
                     },
@@ -226,7 +226,7 @@ internal fun WaitingContent(
                     style = WaitingNumber4,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
-                TextButton(
+                UnifestTextButton(
                     onClick = {
                         onWaitingUiAction(WaitingUiAction.OnLookForBoothClick)
                     },
