@@ -39,6 +39,7 @@ import com.unifest.android.core.common.ObserveAsEvents
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
+import com.unifest.android.core.designsystem.component.UnifestTextButton
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -173,7 +174,7 @@ internal fun WaitingContent(
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Content7,
                 )
-                TextButton(
+                UnifestTextButton(
                     onClick = {
                         onWaitingUiAction(WaitingUiAction.OnRefresh)
                     },
