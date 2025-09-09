@@ -2,7 +2,6 @@ package com.unifest.android.feature.waiting
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,10 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.skydoves.compose.effects.RememberedEffect
 import com.unifest.android.core.common.ObserveAsEvents
-import com.unifest.android.core.common.extension.clickableSingle
 import com.unifest.android.core.designsystem.component.LoadingWheel
 import com.unifest.android.core.designsystem.component.NetworkErrorDialog
 import com.unifest.android.core.designsystem.component.ServerErrorDialog
+import com.unifest.android.core.designsystem.component.UnifestTextButton
 import com.unifest.android.core.designsystem.theme.BoothTitle2
 import com.unifest.android.core.designsystem.theme.Content2
 import com.unifest.android.core.designsystem.theme.Content7
@@ -162,10 +162,11 @@ internal fun WaitingContent(
                 }
             }
         }
-        item { Spacer(modifier = Modifier.height(10.dp)) }
+        item { Spacer(modifier = Modifier.height(2.dp)) }
         item {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
@@ -173,23 +174,26 @@ internal fun WaitingContent(
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Content7,
                 )
-                Row(
-                    modifier = Modifier.clickableSingle {
+                UnifestTextButton(
+                    onClick = {
                         onWaitingUiAction(WaitingUiAction.OnRefresh)
                     },
-                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.refresh),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = Content2,
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
-                        contentDescription = "refresh icon",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.refresh),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = Content2,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_refresh),
+                            contentDescription = "refresh icon",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
             }
         }
@@ -223,17 +227,19 @@ internal fun WaitingContent(
                     style = WaitingNumber4,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(id = R.string.waiting_no_waiting_description),
-                    style = Content2.copy(
-                        textDecoration = TextDecoration.Underline,
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.clickable {
+                TextButton(
+                    onClick = {
                         onWaitingUiAction(WaitingUiAction.OnLookForBoothClick)
                     },
-                )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.waiting_no_waiting_description),
+                        style = Content2.copy(
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
     }

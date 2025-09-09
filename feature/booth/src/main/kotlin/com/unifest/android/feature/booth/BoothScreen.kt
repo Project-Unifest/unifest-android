@@ -133,6 +133,9 @@ internal fun BoothContent(
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.clickable {
+                        onAction(BoothUiAction.OnWaitingCheckBoxClick)
+                    },
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(
@@ -140,9 +143,6 @@ internal fun BoothContent(
                         ),
                         contentDescription = "check box icon",
                         tint = Color.Unspecified,
-                        modifier = Modifier.clickable {
-                            onAction(BoothUiAction.OnWaitingCheckBoxClick)
-                        },
                     )
                     Text(
                         text = stringResource(id = R.string.waiting_availability),
