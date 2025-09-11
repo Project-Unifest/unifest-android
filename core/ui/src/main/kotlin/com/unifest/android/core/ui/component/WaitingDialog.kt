@@ -204,7 +204,7 @@ fun WaitingDialog(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isButtonEnabled by remember(phoneNumberState.text, partySize, isPrivacyClicked) {
+    val isButtonEnabled by remember(partySize, isPrivacyClicked) {
         derivedStateOf {
             val phoneNumber = phoneNumberState.text.toString().replace("-", "")
             val isPhoneNumberValid = phoneNumber.matches(RegexConstants.PHONE_NUMBER)
