@@ -24,6 +24,10 @@
 ## Features
 
 ## Article
+- [[Android] 이미지의 Luminance 를 계산하는 방법](https://velog.io/@mraz3068/How-To-Know-Image-Luminance)
+- [[Compose] derivedStateOf 에 대해 잘못 알고 있던 부분](https://velog.io/@mraz3068/derivedStateOf-Misconceptions)
+- [[Android] FCM Background 에서 수신하여 진입 화면 변경 하는 법](https://velog.io/@mraz3068/Android-FCM-Background-Receive-Way)
+- [[Compose] M3 ModalBottomSheet 드래그(터치 이벤트) 막는 법](https://velog.io/@mraz3068/Compose-M3-ModalBottomSheet-Drag-Disabled)
 - [[Android] NaverMap Compose 클러스터링 구현](https://velog.io/@mraz3068/Android-NaverMap-Compose-Clurstering-Implementation)
 - [[Android] SSAID 는 debug 환경에서 달라질 수 있다!](https://velog.io/@mraz3068/Android-SSAID-Debug-Build-Variant-Issue)
 - [[Android] Type-Safe Compose Navigation 적용 - 중첩(Nested) 네비게이션 구조](https://velog.io/@mraz3068/Android-Type-Safe-Compose-Navigation-Applying-in-Nested-Navigation)
@@ -32,7 +36,9 @@
 - [[Android] Jetpack Compose 에서 Snackbar Duration 을 Custom 하는 방법](https://velog.io/@mraz3068/Android-Compose-Snackbar-Duration-Custom)
 - [[Android] TextField Keyboard 가 다시 올라오지 않는 문제 해결](https://velog.io/@mraz3068/Android-BasicTextField2-Keyboard-Does-Not-Appear-Issue)
 - [[Android] Compose BasicTextField2 적용해보기](https://velog.io/@mraz3068/Using-Android-Compose-BasicTextField2)
-
+- [유니페스의 구조는 어떻게 세웠을까?(3)](https://rogue-one.tistory.com/145)
+- [유니페스는 어떻게 협업했을까?(2)](https://rogue-one.tistory.com/144)
+- [대학 축제 지도를 펼처라! 유니페스 소개(1)](https://rogue-one.tistory.com/140)
 ## Development
 
 ### Required
