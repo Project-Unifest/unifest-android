@@ -99,10 +99,10 @@ Google Recommend Architecture based on [Now in Android](https://github.com/andro
 
 ## Developers
 
-|Android|Android|
-|:---:|:---:|
-|[이지훈](https://github.com/easyhooon)|[정상훈](https://github.com/wjdtkdgns777)|
-|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/bd9fbce9-a173-4203-b321-314d8ff8cba1?size=144">|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/1beb01a4-6063-400b-aa67-b9f20d6c3d38">|
+|Android|Android|Android|
+|:---:|:---:|:---:|
+|[이지훈](https://github.com/easyhooon)|[정상훈](https://github.com/wjdtkdgns777)|[조익성](https://github.com/ikseong00)
+|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/bd9fbce9-a173-4203-b321-314d8ff8cba1?size=144">|<img width="144" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/1beb01a4-6063-400b-aa67-b9f20d6c3d38">|<img width="144" src="https://avatars.githubusercontent.com/u/127182222?v=4">
 
 ## Module
 <img width="1189" alt="image" src="https://github.com/Project-Unifest/unifest-android/assets/51016231/9b9cd9c8-cda1-46ce-b848-210114ff1d7d">
