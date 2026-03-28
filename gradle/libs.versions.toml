@@ -7,7 +7,7 @@ versionCode = "53"
 versionName = "1.6.8"
 packageName = "com.unifest.android"
 
-android-gradle-plugin = "8.12.2"
+android-gradle-plugin = "8.13.2"
 kotlin-core = "2.2.10"
 gradle-dependency-handler-extensions = "1.1.0"
 
