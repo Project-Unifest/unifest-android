@@ -127,7 +127,7 @@ jobs:
                     if-no-files-found: error
 
             -   name: Create Github Release
-                uses: softprops/action-gh-release@v1
+                uses: softprops/action-gh-release@v2
                 with:
                     tag_name: ${{ steps.extract_version.outputs.version }}
                     release_name: ${{ steps.extract_version.outputs.version }}
