@@ -56,7 +56,7 @@ compose-stable-marker = "1.0.7"
 landscapist = "2.5.1"
 balloon = "1.6.13"
 calendar-compose = "2.8.0"
-flexible-bottomsheet = "0.1.5"
+flexible-bottomsheet = "0.2.0"
 compose-effects = "0.1.4"
 compose-unstyled = "1.49.6"
 
